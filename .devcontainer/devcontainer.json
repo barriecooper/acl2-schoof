@@ -1,0 +1,6 @@
+{
+  "name": "ACL2 Hasse-Schoof",
+  "build": { "dockerfile": "../Dockerfile", "context": ".." },
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "make setup"
+}

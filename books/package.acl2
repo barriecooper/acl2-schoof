@@ -1,0 +1,30 @@
+(in-package "ACL2")
+
+; Pre-certification command: CERT.PL records this DEFPKG in package.port.
+(defpkg "HS"
+  '(and
+    assert-event
+    atom
+    car
+    cdr
+    cons
+    consp
+    cond
+    declare
+    defthm
+    defun
+    endp
+    equal
+    if
+    include-book
+    len
+    let
+    nil
+    not
+    null
+    or
+    t
+    xargs
+    +
+    1-
+    <=))
