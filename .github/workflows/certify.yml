@@ -1,0 +1,24 @@
+name: certify
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  acl2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: .deps
+          key: acl2-${{ runner.os }}-${{ hashFiles('ACL2_VERSION', 'scripts/install-acl2.sh') }}
+      - run: sudo apt-get update && sudo apt-get install -y sbcl
+      - run: make setup
+      - run: make check-trust
+      - run: make certify
+      - run: make test
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: acl2-certification-logs
+          path: .deps/logs

@@ -1,0 +1,9 @@
+.deps/
+*.cert
+*.pcert0
+*.o
+*.fasl
+*.lx64fsl
+*.log
+cert.acl2
+Makefile-tmp

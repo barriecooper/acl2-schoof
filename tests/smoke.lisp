@@ -1,0 +1,8 @@
+(in-package "ACL2")
+(include-book "../books/top")
+(in-package "HS")
+(assert-event (equal (poly-normalize '(1 2 0 0)) '(1 2)))
+(assert-event (equal (poly-add '(1 2) '(4 3) 5) nil))
+(assert-event (equal (poly-mul '(1 1) '(1 1) 5) '(1 2 1)))
+(assert-event (equal (poly-eval '(1 2 1) 2 5) 4))
+(assert-event (equal (poly-degree '(1 2 1)) 2))
