@@ -4,3 +4,4 @@ root=$(cd "$(dirname "$0")/.." && pwd)
 "$root/scripts/certify-one.sh" tests/smoke.lisp
 "$root/scripts/certify-one.sh" tests/field-kernel.lisp
 "$root/scripts/certify-one.sh" tests/pfield-adapter.lisp
+"$root/scripts/certify-one.sh" tests/generic-polynomial.lisp

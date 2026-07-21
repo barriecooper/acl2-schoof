@@ -6,3 +6,4 @@
 ; certified package book.
 (defpkg "HS" *acl2-exports*)
 (defpkg "GFIELD" *acl2-exports*)
+(defpkg "GPOLY" *acl2-exports*)
