@@ -1,2 +1,2 @@
-(in-package "ACL2")
+(in-package "HS")
 (include-book "polynomial/degree")

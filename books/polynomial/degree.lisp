@@ -1,4 +1,4 @@
-(in-package "ACL2")
+(in-package "HS")
 (include-book "eval")
 
 ; The zero polynomial has degree -1.

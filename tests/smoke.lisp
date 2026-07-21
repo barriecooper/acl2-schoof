@@ -1,4 +1,4 @@
-(in-package "ACL2")
+(in-package "HS")
 (include-book "../books/top")
 (assert-event (equal (poly-normalize '(1 2 0 0)) '(1 2)))
 (assert-event (equal (poly-add '(1 2) '(4 3) 5) nil))
