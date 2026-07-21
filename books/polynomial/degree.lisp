@@ -1,6 +1,5 @@
 (in-package "ACL2")
 (include-book "eval")
-(in-package "HS")
 
 ; The zero polynomial has degree -1.
 (defun poly-degree (poly)

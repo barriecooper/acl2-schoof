@@ -1,6 +1,5 @@
 (in-package "ACL2")
 (include-book "../package")
-(in-package "HS")
 
 ; Coefficients are low-to-high.  NIL is the unique zero polynomial.
 (defun poly-normalize (xs)
@@ -16,6 +15,8 @@
          (or (consp (cdr xs)) (not (equal (car xs) 0))))))
 
 (defun poly-add (x y p)
+  (declare (xargs :measure (+ (len x) (len y))
+                  :ruler-extenders :all))
   (poly-normalize
    (cond ((endp x) y) ((endp y) x)
          (t (cons (pfield::add (car x) (car y) p)

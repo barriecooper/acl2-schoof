@@ -1,6 +1,6 @@
 (in-package "ACL2")
-(include-book "projects/numbers/prime-fields/prime-fields" :dir :system)
+(include-book "kestrel/prime-fields/prime-fields" :dir :system)
 
-; Keep the project package small.  Prime-field operations are intentionally
-; referenced with their PFIELD:: qualification in project books.
-(defpkg "HS" *acl2-exports*)
+; The bootstrap books deliberately stay in ACL2's package.  This book is the
+; single certifiable import boundary for the PFIELD library; introducing a
+; project package later requires a proper portcullis, not an in-book DEFPKG.

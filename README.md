@@ -42,16 +42,17 @@ admitted; see `docs/obligations.md`.
 
 ## Last bootstrap verification
 
-On 2026-07-21, in the bootstrap execution environment, the following command
-completed successfully with the shown process status:
+On 2026-07-21, after building ACL2 8.6 with SBCL, all acceptance commands
+completed successfully with the shown process statuses:
 
 ```text
+make setup        # exit 0
 make check-trust  # exit 0
+make certify      # exit 0
+make test         # exit 0
 ```
 
-The exact acceptance attempts `make setup`, `make certify`, and `make test`
-each exited with status 2 because the environment's HTTPS proxy rejected the
-required GitHub connection with HTTP 403. Consequently no ACL2 certification
-success is claimed from that run. On a host able to reach GitHub, run the five
-commands in [Reproduce](#reproduce); do not treat this environment report as a
-substitute for their successful completion.
+The successful `make certify` run certified `books/top.lisp` and its project
+dependencies; the successful `make test` run certified `tests/smoke.lisp`.
+The complete driver logs contained no ACL2 failure markers. Generated
+certificates are build artifacts and are not tracked.

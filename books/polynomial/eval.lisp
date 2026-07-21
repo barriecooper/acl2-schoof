@@ -1,6 +1,6 @@
 (in-package "ACL2")
 (include-book "base")
-(in-package "HS")
+(include-book "kestrel/arithmetic-light/mod" :dir :system)
 
 (defun poly-eval (poly x p)
   (if (endp poly) 0

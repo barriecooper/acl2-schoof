@@ -12,4 +12,4 @@ test: setup check-trust
 check-trust:
 	./scripts/check-trust.sh
 clean:
-	find books tests -type f \( -name '*.cert' -o -name '*.pcert0' -o -name '*.o' -o -name '*.log' -o -name 'cert.acl2' \) -delete
+	find books tests -type f \( -name '*.cert' -o -name '*.cert.out' -o -name '*.pcert0' -o -name '*.port' -o -name '*.o' -o -name '*.log' -o -name 'cert.acl2' \) -delete

@@ -1,6 +1,8 @@
 .deps/
 *.cert
+*.cert.out
 *.pcert0
+*.port
 *.o
 *.fasl
 *.lx64fsl

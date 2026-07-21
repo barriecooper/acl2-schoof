@@ -11,7 +11,10 @@ perl .deps/acl2/books/build/cert.pl --acl2 .deps/acl2/saved_acl2 "$book.lisp" >"
 rc=$?; set -e
 if ((rc)); then
   echo "certification failed; markers:" >&2
-  grep -E -i 'ACL2 Error|FAILED|HARD ACL2 ERROR|********' "$log" | tail -20 >&2 || true
+  {
+    grep -E -i 'ACL2 Error|FAILED|HARD ACL2 ERROR' "$log" || true
+    grep -F '********' "$log" || true
+  } | tail -20 >&2
   echo "---- tail of $log ----" >&2; tail -80 "$log" >&2; exit "$rc"
 fi
 tail -8 "$log"

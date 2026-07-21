@@ -4,12 +4,12 @@
 
 ACL2 is pinned by `ACL2_VERSION` to official release tag **8.6** and built with
 SBCL. We include Community Book
-`projects/numbers/prime-fields/prime-fields` (package `PFIELD`) and reuse
+`kestrel/prime-fields/prime-fields` (package `PFIELD`) and reuse
 `PFIELD::FEP`, `PFIELD::ADD`, `PFIELD::MUL`, and their certified rules. No second
-modular arithmetic layer is introduced. The package book includes this system
-book before defining `HS`, so it is independently readable and certifiable;
-project books retain explicit `PFIELD::` qualification instead of importing
-field-operation names.
+modular arithmetic layer is introduced. The package book is the independently
+certifiable import boundary. Bootstrap books remain in package `ACL2` and retain
+explicit `PFIELD::` qualification; a separate project package will only be
+introduced with a proper ACL2 portcullis.
 
 ## Representations and layers
 
