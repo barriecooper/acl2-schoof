@@ -9,8 +9,9 @@ polynomial algebra is paused at the coefficient-field architecture decision in
 ACL2 obligations are genuinely proved and certified.
 
 1. Prime-field polynomial arithmetic, canonical forms, evaluation, and degree
-   (current certified implementation), followed by the abstract coefficient
-   kernel and PFIELD instance described in the architecture decision.
+   (current certified implementation), plus the completed abstract field
+   kernel.  The PFIELD instance described in the architecture decision remains
+   the next focused adapter task.
 2. Certified extension fields and generic polynomial instances, then rational
    functions over `F_q(t)` and well-defined operations.
 3. Valuation at infinity, including product and cancellation laws.
