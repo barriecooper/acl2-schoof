@@ -16,6 +16,19 @@ Kestrel prime-field rules2, `projects/numbers/euclid.lisp`, and
 downstream workshop book: it includes `pfield-polynomial.lisp` and uses its
 root results.
 
+The selected Community Books checkout contains the workshop source but does
+not ship its generated certificate.  `make setup` therefore runs
+`scripts/certify-system-deps.sh`, which uses the Community Books `cert.pl`
+dependency scanner to certify this book and only its required include chain
+before any project book is certified.  The operation is idempotent: `cert.pl`
+does no certification work when the required certificates are current.
+The exact immediate certificate prerequisites reported by `cert.pl` are
+`nonstd/polynomials/polynomial-defuns.cert`,
+`nonstd/polynomials/polynomial-lemmas.cert`,
+`kestrel/prime-fields/prime-fields.cert`,
+`kestrel/prime-fields/rules2.cert`, `projects/numbers/euclid.cert`, and
+`arithmetic-5/top.cert`; `cert.pl` recursively handles their prerequisites.
+
 The source definitions confirm the following interface (none of these details
 is inferred from a theorem name):
 
