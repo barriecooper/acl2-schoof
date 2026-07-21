@@ -1,5 +1,6 @@
 (in-package "GPOLY")
 (include-book "package")
+(include-book "instantiate")
 (include-book "../../field/kernel")
 
 ; Dense coefficients are in ascending-degree order.  POLYNOMIAL-P is the
@@ -20,32 +21,11 @@
 
 ; On an atom, all list-processing functions stop and discard that malformed
 ; tail.  Thus these definitions are total without relying on guards.
-(defun fix-coefficients (xs)
-  (if (atom xs) nil
-    (cons (gfield::field-fix (car xs))
-          (fix-coefficients (cdr xs)))))
-
-(defun trim-trailing-zeros (xs)
-  (if (atom xs) nil
-    (let ((tail (trim-trailing-zeros (cdr xs))))
-      (if (and (equal (gfield::field-fix (car xs))
-                      (gfield::field-zero))
-               (endp tail))
-          nil
-        (cons (car xs) tail)))))
-
-(defun normalize (xs)
-  (trim-trailing-zeros (fix-coefficients xs)))
-
-; Constant-first Horner evaluation.  Both the point and every coefficient are
-; fixed by the GFIELD operations, including on malformed inputs.
-(defun eval (poly x)
-  (if (atom poly)
-      (gfield::field-zero)
-    (gfield::field-add
-     (gfield::field-fix (car poly))
-     (gfield::field-mul (gfield::field-fix x)
-                        (eval (cdr poly) x)))))
+; Constant-first normalization and Horner evaluation.  This invocation and
+; concrete invocations expand to the same four ordinary DEFUN templates.
+(def-normalize-eval-instance
+  fix-coefficients trim-trailing-zeros normalize eval
+  gfield::field-fix gfield::field-zero gfield::field-add gfield::field-mul)
 
 (defthm coefficient-list-p-implies-true-listp
   (implies (coefficient-list-p xs) (true-listp xs)))
