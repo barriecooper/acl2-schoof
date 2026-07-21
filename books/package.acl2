@@ -1,0 +1,7 @@
+(in-package "ACL2")
+(include-book "kestrel/prime-fields/prime-fields" :dir :system)
+
+; These commands form the portcullis recorded in package.cert.  Consumers can
+; therefore establish HS, and the prime-field dependency, by including the
+; certified package book.
+(defpkg "HS" *acl2-exports*)

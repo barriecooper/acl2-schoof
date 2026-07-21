@@ -1,4 +1,4 @@
-(in-package "ACL2")
+(in-package "HS")
 (include-book "base")
 (include-book "kestrel/arithmetic-light/mod" :dir :system)
 

@@ -1,5 +1,4 @@
-(in-package "ACL2")
-(include-book "../package")
+(in-package "HS")
 
 ; Coefficients are low-to-high.  NIL is the unique zero polynomial.
 (defun poly-normalize (xs)

@@ -1,6 +1,4 @@
 (in-package "ACL2")
-(include-book "kestrel/prime-fields/prime-fields" :dir :system)
 
-; The bootstrap books deliberately stay in ACL2's package.  This book is the
-; single certifiable import boundary for the PFIELD library; introducing a
-; project package later requires a proper portcullis, not an in-book DEFPKG.
+; The HS package and its prime-field dependency are established by the
+; portcullis commands in package.acl2 and recorded in this book's certificate.
