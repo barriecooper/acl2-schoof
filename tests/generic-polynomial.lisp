@@ -15,3 +15,7 @@
 (assert-event (equal (f7-eval '(6 6) 6) 0))
 (assert-event (equal (f7-eval (f7-normalize '(1 2 3 0 0)) 2)
                      (f7-eval '(1 2 3 0 0) 2)))
+(assert-event (equal (f7-poly-add '(1 2) '(6 5)) nil))
+(assert-event (equal (f7-poly-add '(1 2) '(2 5)) '(3)))
+(assert-event (equal (f7-poly-neg '(1 2)) '(6 5)))
+(assert-event (equal (f7-poly-sub '(1 2) '(1 2)) nil))

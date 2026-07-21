@@ -2,7 +2,8 @@
 
 `books/polynomial/generic/package.lisp` establishes the dedicated `GPOLY`
 namespace, `base.lisp` defines the abstract theory over `GFIELD`, and
-`pfield-instance.lisp` is its PFIELD/F_7 regression.  The existing `HS` books
+`add.lisp` supplies the additive structure, and `pfield-instance.lisp` is its
+PFIELD/F_7 regression.  The existing `HS` books
 are unchanged.
 
 A list `(c0 ... cn)` is dense and constant-first.  `POLYNOMIAL-P` deliberately
@@ -31,6 +32,20 @@ non-increasing length.  Evaluation is field-valued and is invariant under point
 fixing, coefficient fixing, trimming, and normalization; constant and zero
 point formulas are also proved.
 
+`RAW-ADD` adds coefficients and fixes an unequal-length remainder; `RAW-NEG`
+negates coefficients.  Atomic tails stop either recursion, so malformed inputs
+have deterministic total behavior without being assigned extra mathematical
+meaning.  `POLY-ADD` and `POLY-NEG` normalize their raw results, and `POLY-SUB`
+is addition with the canonical negation.  Consequently cancellation of a final
+coefficient shortens the result and complete cancellation produces `nil`.
+
+The certified homomorphism theorems say evaluation preserves addition,
+negation, and subtraction.  On canonical inputs, ordinary ACL2 `EQUAL` supports
+the commutative additive-group laws: zero identities, commutativity,
+associativity, inverses, double negation, subtraction laws.
+Canonicality hypotheses are used exactly where recovering an input list from
+its normalized representative requires them.
+
 The adapter regression defines exact copies using the fixed-arity PFIELD
 operations and transports normalization-preserves-evaluation with
 `:functional-instance`.  Separate executable copies specialize the same
@@ -46,19 +61,30 @@ bridge may therefore use the identity conversion at a fixed PFIELD instance,
 but must prove equivalence of canonical predicates, normalization, evaluation,
 and eventually addition and multiplication.
 
-This foundation deliberately contains no polynomial addition, multiplication,
+This additive layer deliberately contains no polynomial multiplication,
 degree, leading coefficient, division, gcd, derivatives, root counting, field
 enumeration, or extension-field implementation.  It provides syntax and
 semantics over an assumed field, not an implementation of every finite field.
 
-## Preliminary HS proof review
+## HS addition proof review and future bridge
 
-The reusable decomposition was classified before implementation.  Proper-list
-recursion, suffix trimming, canonical-last reasoning, normalization identity,
-idempotence, and length bounds are **structural (A)**.  Horner closure and
-invariance under trimming use only zero, fixing, addition, and multiplication
-laws and are **generic field arguments (B)**.  The existing root-count bridge
-and PFIELD polynomial recognizers are **PFIELD-specific (C)**.  The HS closure
-hypotheses and arithmetic calls that carry `p` through every operation are
-**explicit-modulus dependent (D)**.  GPOLY adapts A and B, and intentionally
-leaves C and D in the existing HS layer.
+The HS `POLY-ADD-RAW` has the same coefficientwise, unequal-length recursion as
+GPOLY `RAW-ADD`; GPOLY additionally fixes a copied remainder to honor its total
+input policy.  Both public additions normalize the raw list.  Proper-list,
+length, and recursion facts are **purely structural**.  Commutativity,
+associativity, identities, inverse/cancellation, and Horner compatibility are
+**generic field algebra**.  HS closure rules involving `FEP`, positivity or
+primality hypotheses, and every operation carrying an explicit `p` are
+**explicit-modulus PFIELD reasoning**.
+
+The fixed-prime adapter removes that explicit argument with exact-arity
+wrappers.  Functional instantiation transports raw-add commutativity; the transported
+normalization/evaluation theorem and the specialized raw-add evaluation theorem
+then establish addition-preserves-evaluation.  Executable F_7 copies check all
+operations.  HS closure,
+commutativity, associativity, and evaluation-of-add theorems should eventually
+be concrete instances.  An identity-on-proper-lists bridge appears feasible
+after proving that fixed HS coefficients make GPOLY's remainder fixing an
+identity and that both normalizers coincide.  This PR intentionally neither
+changes nor removes any HS theorem, and polynomial multiplication remains a
+separate future task.
