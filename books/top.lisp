@@ -3,3 +3,4 @@
 (include-book "polynomial/pfield-bridge")
 (include-book "field/kernel")
 (include-book "field/examples/f2")
+(include-book "field/pfield-adapter")
