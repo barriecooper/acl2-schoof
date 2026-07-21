@@ -13,10 +13,15 @@ introduced with a proper ACL2 portcullis.
 
 ## Representations and layers
 
-Polynomials are true lists `(c0 ... cn)` in ascending degree order. `nil` is the
-only zero polynomial; every other canonical polynomial has field elements as
-coefficients and a nonzero final coefficient. Normalisation removes trailing
-integer zeroes. Rational functions will be normalized numerator/denominator
+Polynomials are true lists `(c0 ... cn)` in ascending degree order, so `c0` is
+the constant coefficient and the high-degree coefficient is at the end. The
+coefficients are elements recognized by `PFIELD::FEP`. `nil` is the only
+canonical representation of the zero polynomial; every other canonical
+polynomial has a nonzero final coefficient. Normalisation removes exactly the
+redundant zero coefficients at the high-degree end, returning `nil` when every
+coefficient is zero. This canonical form is needed so that structural equality
+agrees with coefficient equality and so later degree theorems do not depend on
+irrelevant trailing zeroes. Rational functions will be normalized numerator/denominator
 pairs over these polynomials, with a nonzero denominator and an explicit
 cross-multiplication equivalence before a canonical gcd layer is attempted.
 
