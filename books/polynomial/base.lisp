@@ -1,5 +1,4 @@
 (in-package "ACL2")
-(include-book "projects/numbers/prime-fields/prime-fields" :dir :system)
 (include-book "../package")
 (in-package "HS")
 

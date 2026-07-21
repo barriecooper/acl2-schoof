@@ -1,4 +1,6 @@
 (in-package "ACL2")
-(defpkg "HS"
-  (append '(pfield::add pfield::mul pfield::neg pfield::fep)
-          *acl2-exports*))
+(include-book "projects/numbers/prime-fields/prime-fields" :dir :system)
+
+; Keep the project package small.  Prime-field operations are intentionally
+; referenced with their PFIELD:: qualification in project books.
+(defpkg "HS" *acl2-exports*)
