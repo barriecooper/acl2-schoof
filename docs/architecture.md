@@ -25,6 +25,15 @@ irrelevant trailing zeroes. Rational functions will be normalized numerator/deno
 pairs over these polynomials, with a nonzero denominator and an explicit
 cross-multiplication equivalence before a canonical gcd layer is attempted.
 
+Polynomial addition has two deliberately separate layers. `POLY-ADD-RAW`
+performs structurally recursive coefficientwise `PFIELD::ADD`, treating absent
+higher coefficients as zero by copying the remainder of the longer list.
+`POLY-ADD` normalises that raw list.  This final step is necessary because field
+addition can cancel the leading coefficients and otherwise leave redundant
+high-degree zeroes.  Closure and evaluation results assume coefficient lists
+whose entries satisfy `PFIELD::FEP` and a positive field modulus; no broader
+ring interface is introduced.
+
 The intended Hasse stack is: field polynomials; rational functions; valuation
 at infinity; a generic quadratic twist; Frobenius and scalar multiplication;
 the quadratic degree sequence; point-count/separability bridges; and the
