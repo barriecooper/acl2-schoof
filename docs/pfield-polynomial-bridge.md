@@ -53,10 +53,9 @@ The exact root-count theorem is
              (len (cdr poly))))
 ```
 
-It has rule class `nil`.  In particular, importing it for HS will require a
-proved connection between HS canonical nonzero polynomials and
-`NON-TRIVIAL-PFIELD-POLYNOMIAL-P`, plus the elementary length/degree
-interpretation needed to state its conclusion appropriately.
+It has rule class `nil`.  The bridge now supplies the required connection from
+canonical HS nonzeroness to `NON-TRIVIAL-PFIELD-POLYNOMIAL-P`, as well as the
+length/degree interpretation used by the HS corollary.
 
 ## Certified conversion boundary
 
@@ -80,14 +79,43 @@ applies before HS normalization.  On canonical inputs its reconstruction
 theorem makes the boundary faithful without pretending that arbitrary target
 lists have a unique semantic representation.
 
+## Canonical HS degree and the transported bound
+
+HS coefficients remain constant first.  `POLY-DEGREE` uses `-1` as an explicit
+sentinel for `nil`; it does not assign the zero polynomial an ordinary
+nonnegative degree.  Mathematical degree identities therefore require
+nonzeroness.  The leading coefficient is the final coefficient, with the
+executable value `0` chosen conventionally for `nil`.  For canonical nonzero
+`poly`, the certified interface proves
+
+```text
+len(poly) = poly-degree(poly) + 1.
+```
+
+It also proves that the last/leading coefficient is a field element and is
+nonzero, both as an ACL2 integer and modulo the modulus.  Corresponding facts
+describe the final surviving coefficient of nonzero normalized output.
+
+`LEN-OF-HS-TO-PFIELD-POLYNOMIAL` is unconditional.  The existing
+`INTEGER-POLYNOMIAL-P-OF-HS-TO-PFIELD-POLYNOMIAL` theorem discharges target
+well-formedness.  Canonicality and HS nonzeroness make the copied last
+coefficient an `FEP` representative unequal to zero, so `FEP-FIX` leaves it
+nonzero and discharges target non-triviality.  Degree at least one translates
+to target length at least two, and target tail length equals HS degree.  The
+existing evaluator and root-predicate bridge remains the semantic
+correspondence; evaluator agreement is not reproved.
+
+`HS-PFIELD-POLYNOMIAL-NUM-ROOTS-UPPER-BOUND` directly instantiates
+`PFIELD::NUM-ROOTS-OF-POLY-UPPER-BOUND`.  It bounds the target library's root
+count of the HS conversion by HS degree for canonical, nonzero, nonconstant
+polynomials over a prime modulus.  The explicit nonconstant hypothesis is
+retained because the reused theorem requires list length at least two.
+
 ## Deliberately deferred work
 
-This pull request does not transport the root-count bound.  The next focused
-bridge obligation is to prove that a nonconstant canonical HS polynomial has
-a final coefficient that remains nonzero under `PFIELD::FEP-FIX`, relate its
-list length to the already separate HS degree layer, and then instantiate the
-Community Books theorem.  No division, gcd, derivative, separability, or
-elliptic-curve theory belongs in that step.
+Degree laws for sums and products, polynomial powers, division, Euclidean
+algorithms, gcds, derivatives, separability, rational functions, elliptic
+curves, Hasse's theorem, and Schoof's algorithm remain deliberately deferred.
 
 A reverse conversion is not currently needed for root-theorem reuse.  It may
 be worthwhile later: it should map `PFIELD::FEP-FIX` across arbitrary integer

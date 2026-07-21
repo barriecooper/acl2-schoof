@@ -11,6 +11,11 @@
 (assert-event (equal (poly-mul '(1 1) '(1 1) 5) '(1 2 1)))
 (assert-event (equal (poly-eval '(1 2 1) 2 5) 4))
 (assert-event (equal (poly-degree '(1 2 1)) 2))
+(assert-event (equal (poly-degree nil) -1))
+(assert-event (equal (poly-degree '(3)) 0))
+(assert-event (equal (poly-degree (poly-normalize '(1 2 0 0))) 1))
+(assert-event (equal (poly-leading-coefficient '(3)) 3))
+(assert-event (equal (poly-leading-coefficient '(1 2 3)) 3))
 (assert-event (equal (poly-mul nil '(1 2) 5) nil))
 (assert-event (equal (poly-mul '(1 2) nil 5) nil))
 (assert-event (equal (poly-mul (poly-one) '(1 2 0) 5) '(1 2)))
@@ -25,6 +30,12 @@
 (assert-event (equal (hs-to-pfield-polynomial nil) nil))
 (assert-event (equal (hs-to-pfield-polynomial '(1 2 3)) '(1 2 3)))
 (assert-event
+ (equal (len (hs-to-pfield-polynomial '(1 2 3)))
+        (len '(1 2 3))))
+(assert-event
+ (pfield::non-trivial-pfield-polynomial-p
+  (hs-to-pfield-polynomial '(1 2 3)) 5))
+(assert-event
  (equal (pfield::eval-pfield-polynomial
          (hs-to-pfield-polynomial '(1 2 3)) 2 5)
         (poly-eval '(1 2 3) 2 5)))
@@ -33,3 +44,7 @@
        (hs-to-pfield-polynomial '(1 0 1)) 2 5)
       (not (pfield::pfield-polynomial-root-p
             (hs-to-pfield-polynomial '(1 0 1)) 1 5))))
+(assert-event
+ (<= (pfield::pfield-polynomial-num-roots
+      (hs-to-pfield-polynomial '(1 0 1)) 5)
+     (poly-degree '(1 0 1))))

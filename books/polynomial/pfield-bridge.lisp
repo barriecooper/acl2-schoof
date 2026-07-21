@@ -1,6 +1,6 @@
 (in-package "HS")
 
-(include-book "eval")
+(include-book "degree")
 (include-book
  "workshops/2022/gamboa-primitive-roots/pfield-polynomial"
  :dir :system)
@@ -15,6 +15,10 @@
 
 (defthm hs-to-pfield-polynomial-of-nil
   (equal (hs-to-pfield-polynomial nil) nil))
+
+(defthm len-of-hs-to-pfield-polynomial
+  (equal (len (hs-to-pfield-polynomial poly))
+         (len poly)))
 
 (defthm integer-polynomial-p-of-hs-to-pfield-polynomial
   (implies (field-polynomial-p poly p)
@@ -106,3 +110,45 @@
                 (equal (poly-eval poly x p) 0)))
   :hints (("Goal"
            :in-theory (enable pfield::pfield-polynomial-root-p))))
+
+(defthm non-trivial-pfield-polynomial-p-of-hs-to-pfield-polynomial
+  (implies (and (canonical-polynomial-p poly p)
+                (poly-nonzero-p poly))
+           (pfield::non-trivial-pfield-polynomial-p
+            (hs-to-pfield-polynomial poly) p))
+  :hints (("Goal"
+           :in-theory (enable pfield::non-trivial-pfield-polynomial-p))))
+
+(defthm target-length-bound-from-poly-degree
+  (implies (and (canonical-polynomial-p poly p)
+                (poly-nonzero-p poly)
+                (<= 1 (poly-degree poly)))
+           (<= 2 (len (hs-to-pfield-polynomial poly))))
+  :rule-classes :linear
+  :hints (("Goal" :in-theory (disable poly-degree-is-final-index))))
+
+(defthm target-tail-length-is-poly-degree
+  (implies (and (canonical-polynomial-p poly p)
+                (poly-nonzero-p poly))
+           (equal (len (cdr (hs-to-pfield-polynomial poly)))
+                  (poly-degree poly)))
+  :hints (("Goal" :in-theory (disable len-is-poly-degree-plus-one))))
+
+; This is the HS-facing form of the Community Books root count.  The degree
+; lower bound says that POLY is nonconstant; it is exactly what supplies the
+; target theorem's (<= 2 (len poly)) hypothesis.
+(defthm hs-pfield-polynomial-num-roots-upper-bound
+  (implies (and (dm::primep p)
+                (canonical-polynomial-p poly p)
+                (poly-nonzero-p poly)
+                (<= 1 (poly-degree poly)))
+           (<= (pfield::pfield-polynomial-num-roots
+                (hs-to-pfield-polynomial poly) p)
+               (poly-degree poly)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance pfield::num-roots-of-poly-upper-bound
+                            (pfield::poly (hs-to-pfield-polynomial poly))
+                            (pfield::p p)))
+           :in-theory (disable poly-degree-is-final-index
+                               len-is-poly-degree-plus-one))))
