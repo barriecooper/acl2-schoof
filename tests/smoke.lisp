@@ -22,3 +22,14 @@
  (equal (poly-eval (poly-mul '(1 2) '(3 4) 5) 2 5)
         (pfield::mul (poly-eval '(1 2) 2 5)
                      (poly-eval '(3 4) 2 5) 5)))
+(assert-event (equal (hs-to-pfield-polynomial nil) nil))
+(assert-event (equal (hs-to-pfield-polynomial '(1 2 3)) '(1 2 3)))
+(assert-event
+ (equal (pfield::eval-pfield-polynomial
+         (hs-to-pfield-polynomial '(1 2 3)) 2 5)
+        (poly-eval '(1 2 3) 2 5)))
+(assert-event
+ (and (pfield::pfield-polynomial-root-p
+       (hs-to-pfield-polynomial '(1 0 1)) 2 5)
+      (not (pfield::pfield-polynomial-root-p
+            (hs-to-pfield-polynomial '(1 0 1)) 1 5))))

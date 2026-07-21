@@ -13,3 +13,4 @@ if [[ ! -x "$dest/saved_acl2" ]]; then
 fi
 ln -sfn "acl2-$version" "$root/.deps/acl2"
 test -x "$root/.deps/acl2/saved_acl2"
+"$root/scripts/certify-system-deps.sh"
