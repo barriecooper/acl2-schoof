@@ -2,8 +2,10 @@
 
 This repository is a certifying foundation for a formal Manin-style proof of
 Hasse's theorem, followed by Schoof point counting, for short Weierstrass curves
-over prime fields.  The present milestone is intentionally only a small
-polynomial pilot; Hasse's theorem is **not** claimed.
+over arbitrary finite fields.  The current certified implementation is only
+the prime-field `F_p` polynomial instance; extension to `F_q`, `q = p^n`, is
+designed in `docs/finite-field-architecture.md`.  The present milestone is
+intentionally only a small polynomial pilot; Hasse's theorem is **not** claimed.
 
 ## Reproduce
 
