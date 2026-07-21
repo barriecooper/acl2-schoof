@@ -5,3 +5,4 @@
 ; therefore establish HS, and the prime-field dependency, by including the
 ; certified package book.
 (defpkg "HS" *acl2-exports*)
+(defpkg "GFIELD" *acl2-exports*)
