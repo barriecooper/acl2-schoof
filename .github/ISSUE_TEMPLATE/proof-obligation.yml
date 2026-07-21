@@ -1,0 +1,16 @@
+name: Proof obligation
+description: Track one precise ACL2 theorem or tight lemma group
+title: "[proof] "
+labels: [proof-obligation]
+body:
+  - type: textarea
+    id: statement
+    attributes: {label: Exact theorem statement}
+    validations: {required: true}
+  - type: textarea
+    id: dependencies
+    attributes: {label: Dependencies and mathematical justification}
+    validations: {required: true}
+  - type: textarea
+    id: output
+    attributes: {label: Complete ACL2 failure and commands}
