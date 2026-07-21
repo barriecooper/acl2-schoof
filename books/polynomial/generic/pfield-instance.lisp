@@ -102,25 +102,31 @@
                         (fix-coefficients pfield-fix-coefficients)
                         (raw-add pfield-raw-add)))))
 
-; Executable copies for the concrete F_7 adapter instance.
-(defun f7-fix-coefficients (xs)
-  (if (atom xs) nil
-    (cons (gfield::f7-fix (car xs))
-          (f7-fix-coefficients (cdr xs)))))
-(defun f7-trim-trailing-zeros (xs)
-  (if (atom xs) nil
-    (let ((tail (f7-trim-trailing-zeros (cdr xs))))
-      (if (and (equal (gfield::f7-fix (car xs)) (gfield::f7-zero))
-               (endp tail))
-          nil
-        (cons (car xs) tail)))))
-(defun f7-normalize (xs)
-  (f7-trim-trailing-zeros (f7-fix-coefficients xs)))
-(defun f7-eval (poly x)
-  (if (atom poly) (gfield::f7-zero)
-    (gfield::f7-add (gfield::f7-fix (car poly))
-                    (gfield::f7-mul (gfield::f7-fix x)
-                                    (f7-eval (cdr poly) x)))))
+; Ordinary executable F_7 DEFUNs generated from the same templates as the
+; abstract algorithms.  Use :TRANS1 on this event to inspect the expansion.
+(def-normalize-eval-instance
+  f7-fix-coefficients f7-trim-trailing-zeros f7-normalize f7-eval
+  gfield::f7-fix gfield::f7-zero gfield::f7-add gfield::f7-mul)
+
+(defthm f7-normalize-preserves-eval-from-generic
+  (equal (f7-eval (f7-normalize poly) x)
+         (f7-eval poly x))
+  :hints (("Goal" :by (:functional-instance
+                        pfield-normalize-preserves-eval-from-generic
+                        (gfield::pfield-modulus (lambda () 7))
+                        (gfield::pfield-element-p gfield::f7-element-p)
+                        (gfield::pfield-fix gfield::f7-fix)
+                        (gfield::pfield-zero gfield::f7-zero)
+                        (gfield::pfield-one gfield::f7-one)
+                        (gfield::pfield-add gfield::f7-add)
+                        (gfield::pfield-mul gfield::f7-mul)
+                        (gfield::pfield-neg gfield::f7-neg)
+                        (gfield::pfield-inv gfield::f7-inv)
+                        (pfield-fix-coefficients f7-fix-coefficients)
+                        (pfield-trim-trailing-zeros f7-trim-trailing-zeros)
+                        (pfield-normalize f7-normalize)
+                        (pfield-eval f7-eval))
+           :in-theory (enable dm::primep))))
 (defun f7-raw-add (x y)
   (cond ((atom x) (f7-fix-coefficients y))
         ((atom y) (f7-fix-coefficients x))
