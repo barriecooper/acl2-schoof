@@ -11,8 +11,9 @@ ACL2 obligations are genuinely proved and certified.
 1. Prime-field polynomial arithmetic, canonical forms, evaluation, and degree
    (current certified implementation), plus the completed abstract field
    kernel and its completed certified fixed-prime PFIELD adapter.  The generic dense-polynomial foundation (representation, normalization, and
-   evaluation) is also complete.  Generic polynomial arithmetic and arbitrary
-   finite fields are not completed by these foundations.
+   evaluation) and its generic additive structure (addition, negation, and
+   subtraction) are also complete.  Generic polynomial multiplication,
+   division, extension fields, and arbitrary finite fields are not complete.
 2. Certified extension fields and generic polynomial instances, then rational
    functions over `F_q(t)` and well-defined operations.
 3. Valuation at infinity, including product and cancellation laws.
