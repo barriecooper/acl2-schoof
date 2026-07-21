@@ -40,3 +40,23 @@ the quadratic degree sequence; point-count/separability bridges; and the
 integer quadratic argument. Schoof will then add division polynomials,
 coordinate quotient rings, trace residues modulo small primes, and CRT
 reconstruction.
+
+Polynomial multiplication likewise has raw and canonical layers.  With the
+constant coefficient first, `POLY-MUL-RAW` splits the left operand as
+`(a . rest)`, scales every coefficient of the right operand by `a`, and adds
+that list to a zero-prefixed recursive product of `rest`.  This is ordinary
+coefficient convolution: prefixing zero shifts the recursive contribution up
+one degree.  `POLY-SCALE-RAW`, `POLY-ADD-RAW`, and all coefficient arithmetic
+use explicitly qualified `PFIELD::MUL` and `PFIELD::ADD` operations.
+
+`POLY-MUL` normalises the raw convolution because zero coefficients at the
+high-degree end can be inherited from a noncanonical operand or produced by
+field arithmetic.  Thus `nil` remains the sole canonical zero, while
+`POLY-ONE` is `(1)`, the canonical constant polynomial one.  Certification now
+covers closure, zero and one laws, commutativity, associativity,
+distributivity over canonical addition, compatibility with normalisation, and
+the homomorphism from polynomial multiplication to `PFIELD::MUL` under Horner
+evaluation.  Degree arithmetic, leading coefficients, division, gcds,
+derivatives, rational functions, and elliptic-curve constructions remain
+separate later milestones rather than being anticipated by a broad algebra
+hierarchy here.
