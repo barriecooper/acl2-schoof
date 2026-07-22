@@ -16,9 +16,13 @@ ACL2 obligations are genuinely proved and certified.
    polynomial multiplication definition with evaluation semantics are also
    complete.  Generic multiplication is now algebraically complete: its
    commutativity, associativity, and both distributive laws are certified and
-   transported through PFIELD to executable F_7.  Constant-polynomial
-   embedding and a compact polynomial commutative-ring consolidation follow,
-   then degree and leading coefficient.  The executable-instantiation policy is
+   transported through PFIELD to executable F_7.  The explicit canonical
+   constant embedding and compact commutative-ring consolidation are complete.
+   Reusable exponentiation by squaring is next: first audit GFIELD power, then
+   separate a linear specification from a logarithmic executable algorithm,
+   give natural exponents explicit `nfix` behavior, and certify their equality
+   for reuse by fields, polynomials, and later extension fields.  Degree and
+   leading coefficient follow fast exponentiation.  The executable-instantiation policy is
    recorded in `executable-instantiation.md`: abstract algorithms, ordinary
    executable concrete definitions, and certified correctness bridges are all
    required for future computational layers.  Generic polynomial division,

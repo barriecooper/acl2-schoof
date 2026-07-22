@@ -78,3 +78,12 @@
                    (cons (,field-zero) (,raw-mul (cdr x) y)))))
      (defun ,poly-mul (x y)
        (,normalize (,raw-mul (,normalize x) (,normalize y))))))
+
+; The coefficient-field embedding is intentionally its own tiny generator.
+; Its expansion is one ordinary DEFUN, not a general algebra-instance layer.
+(defmacro def-const-instance (const field-fix field-zero)
+  `(defun ,const (a)
+     (let ((fixed-a (,field-fix a)))
+       (if (equal fixed-a (,field-zero))
+           nil
+         (list fixed-a)))))

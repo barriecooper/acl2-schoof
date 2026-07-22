@@ -57,3 +57,15 @@
 (assert-event
  (equal (f7-poly-mul (f7-poly-mul '(1 2) '(3 4)) '(5 6))
         (f7-poly-mul '(1 2) (f7-poly-mul '(3 4) '(5 6)))))
+(assert-event (equal (f7-const 0) nil))
+(assert-event (equal (f7-const 1) '(1)))
+(assert-event (equal (f7-const 8) '(1)))
+(assert-event (equal (f7-eval (f7-const 5) 0) 5))
+(assert-event (equal (f7-eval (f7-const 5) 6) 5))
+(assert-event
+ (equal (f7-poly-add (f7-const 3) (f7-const 4)) nil))
+(assert-event
+ (equal (f7-poly-mul (f7-const 3) (f7-const 5)) (f7-const 1)))
+(assert-event
+ (equal (f7-poly-mul '(1 2 3) (f7-const 4))
+        (f7-poly-scale 4 '(1 2 3))))
