@@ -6,3 +6,4 @@
 (include-book "field/pfield-adapter")
 
 (include-book "polynomial/generic/pfield-instance")
+(include-book "curve/f11-golden")
