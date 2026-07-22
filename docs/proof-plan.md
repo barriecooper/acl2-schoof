@@ -21,10 +21,10 @@ ACL2 obligations are genuinely proved and certified.
    Reusable natural exponentiation by squaring is complete: a linear proof
    specification, logarithmic executable algorithm, explicit `nfix` behavior,
    generic laws, canonical polynomial instance, and evaluation semantics are
-   certified for reuse by fields and later extension fields.  The next focused
-   milestones are (1) an executable F_11 golden field/polynomial fixture for
-   `y^2 = x^3 + x + 6`, (2) generic polynomial degree and leading coefficient,
-   (3) degree of multiplication and no-zero-divisor results, and (4) division
+   certified for reuse by fields and later extension fields.  The executable
+   F_11 golden field/polynomial fixture for `y^2 = x^3 + x + 6` is complete.
+   The next focused milestones are (1) generic polynomial degree and leading
+   coefficient, (2) degree of multiplication and no-zero-divisor results, and (3) division
    and Euclidean theory.  Later power uses include extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.
