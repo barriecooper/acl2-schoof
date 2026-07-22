@@ -258,6 +258,105 @@
           ("Subgoal 2" :by pfield-mul-fixed-congruence)
           ("Subgoal 1" :by pfield-add-fixed-congruence)))
 
+; PFIELD power assurance.  A direct specialization is intentionally used here:
+; functional replacement of the two recursive DEFUNs generates separate
+; definitional-equation constraints, and unconstrained rewriting of those
+; constraints unfolds only one recursive side.  The resulting obligations are
+; recursive equivalence proofs rather than transport of the algebraic result.
+(defthm pfield-mul-one-right-for-power
+  (equal (pfield-mul x (pfield-one)) (pfield-fix x))
+  :hints (("Goal" :in-theory (enable pfield-mul pfield-one))))
+
+(defthm pfield-pow-spec-successor
+  (equal (pfield-pow-spec base (+ 1 (nfix n)))
+         (pfield-mul (pfield-fix base) (pfield-pow-spec base n)))
+  :hints (("Goal" :in-theory (enable pfield-pow-spec))))
+
+(defthm pfield-pow-spec-plus-two
+  (implies (and (pfield-element-p base)
+                (natp n))
+           (equal (pfield-pow-spec base (+ 2 n))
+                  (pfield-mul
+                   base (pfield-mul base (pfield-pow-spec base n)))))
+  :hints (("Goal" :use
+           ((:instance pfield-pow-spec-successor (n (+ 1 n)))
+            (:instance pfield-pow-spec-successor (n n)))
+           :in-theory (disable pfield-mul-commutative))))
+
+(defthm pfield-pow-spec-of-square
+  (implies (and (pfield-element-p base)
+                (natp n))
+           (equal (pfield-pow-spec (pfield-mul base base) n)
+                  (pfield-pow-spec base (* 2 n))))
+  :hints (("Goal" :induct (pfield-pow-spec base n)
+           :in-theory (e/d (pfield-pow-spec pfield-pow-spec-plus-two
+                                            pfield-mul-associative)
+                           (pfield-mul-commutative pfield-mul)))
+          ("Subgoal *1/2" :use
+           ((:instance pfield-pow-spec-plus-two
+             (base base) (n (+ -2 (* 2 n)))))
+           :in-theory (disable pfield-mul-commutative pfield-mul))))
+
+(defthm pfield-pow-spec-odd-form
+  (implies (and (pfield-element-p base)
+                (natp n))
+           (equal (pfield-pow-spec base (+ 1 (* 2 n)))
+                  (pfield-mul base (pfield-pow-spec base (* 2 n)))))
+  :hints (("Goal" :use
+           ((:instance pfield-pow-spec-successor
+             (base base) (n (* 2 n))))
+           :in-theory (disable pfield-mul-commutative))))
+
+(defthm pfield-pow-fast-accumulator-invariant
+  (implies (and (pfield-element-p acc)
+                (pfield-element-p base)
+                (natp n))
+           (equal (pfield-pow-fast acc base n)
+                  (pfield-mul acc (pfield-pow-spec base n))))
+  :hints (("Goal" :induct (pfield-pow-fast acc base n)
+           :in-theory (e/d (pfield-pow-fast pfield-pow-spec
+                                             pfield-pow-spec-of-square
+                                             pfield-pow-spec-odd-form
+                                             pfield-mul-associative)
+                           (pfield-mul-commutative pfield-mul)))
+          ("Subgoal *1/2" :use
+           ((:instance natural-split-at-low-bit (n n))
+            (:instance pfield-pow-spec-odd-form
+             (base base) (n (floor n 2))))
+           :in-theory (disable pfield-mul-commutative pfield-mul))
+          ("Subgoal *1/3" :use
+           ((:instance natural-split-at-low-bit (n n)))
+           :in-theory (disable pfield-mul-commutative pfield-mul))
+          ("Subgoal *1/1" :use
+           ((:instance natural-split-at-low-bit (n n))
+            (:instance pfield-mul-one-right-for-power (x acc)))
+           :in-theory (disable pfield-mul-commutative pfield-mul))))
+
+(defthm pfield-element-p-of-pow-spec
+  (pfield-element-p (pfield-pow-spec x n))
+  :hints (("Goal" :induct (pfield-pow-spec x n)
+           :in-theory (enable pfield-pow-spec))))
+
+(defthm pfield-pow-fast-correct
+  (equal (pfield-pow-fast (pfield-one) (pfield-fix x) (nfix n))
+         (pfield-pow-spec (pfield-fix x) (nfix n)))
+  :hints (("Goal" :use
+           ((:instance pfield-pow-fast-accumulator-invariant
+             (acc (pfield-one)) (base (pfield-fix x)) (n (nfix n)))
+            (:instance pfield-mul-one-left
+             (x (pfield-pow-spec (pfield-fix x) (nfix n))))
+            (:instance pfield-fix-when-pfield-element-p
+             (x (pfield-pow-spec (pfield-fix x) (nfix n)))))
+           :in-theory (disable pfield-mul-commutative pfield-mul
+                               pfield-pow-spec))))
+
+(verify-guards pfield-fix)
+(verify-guards pfield-one)
+(verify-guards pfield-mul)
+(verify-guards pfield-pow-fast)
+(verify-guards pfield-pow
+  :hints (("Goal" :use pfield-pow-fast-correct)))
+
 ; Executable F_7 regression instance.
 (defun f7-element-p (x) (pfield::fep x 7))
 (defun f7-fix (x) (pfield::fep-fix x 7))

@@ -18,7 +18,8 @@ shape, not benchmark measurements.
 | GPOLY multiplication | GFIELD template instance | PFIELD/F7 shared-template instances | `eval-of-poly-mul` and transported instances | GPOLY explicitly verified; concrete default guards | Generic-polynomial tests | 2 — same DEFUN template; no MBE split |
 | Constant embedding | `const` over GFIELD | PFIELD/F7 shared-template instances | `eval-of-const` and preservation/transport theorems | Ordinary DEFUN guards | Generic-polynomial tests | 2 — same DEFUN template; no MBE split |
 | Field power (`field-pow`) | `field-pow-spec` | `field-pow-fast`, selected by `field-pow` MBE | `field-pow-fast-accumulator-invariant`; `field-pow-fast-correct` | Staged, then explicitly verified | None directly; generated instances are separate below | 4 — justified logical/executable boundary over constrained operations |
-| Generated PFIELD/F2/F7 field powers | Named generated `*-pow-spec` | Named generated `*-pow-fast`, selected by `*-pow` MBE | No instance-specific certified accumulator/equivalence theorem | Staged but not later explicitly verified | F2/F7 concrete power tests | 7 — unresolved execution-correctness assurance; follow-up required |
+| PFIELD adapter field power | `pfield-pow-spec` | `pfield-pow-fast`, selected by `pfield-pow` MBE | `pfield-pow-fast-accumulator-invariant`; `pfield-pow-fast-correct` | Fast and public guards explicitly verified (with `pfield-fix`, `pfield-one`, and `pfield-mul` verified as callees) | None: the constrained modulus is not a named runtime field | 4 — justified boundary over a constrained adapter |
+| Generated F2/F7 field powers | Named generated `*-pow-spec` | Named generated `*-pow-fast`, selected by `*-pow` MBE | No instance-specific certified accumulator/equivalence theorem | Staged but not later explicitly verified | F2/F7 concrete power tests | 7 — unresolved execution-correctness assurance; follow-up required |
 | Polynomial power (`poly-pow`) | `poly-pow-spec` | `poly-pow-fast`, selected by `poly-pow` MBE | `poly-pow-fast-accumulator-invariant`; `poly-pow-fast-correct`; `eval-of-poly-pow` | Staged, then explicitly verified | Concrete F7 polynomial-power tests | 4 — justified logical/executable boundary |
 | PFIELD/F7 generated polynomial instances (non-power) | Shared templates | PFIELD is constrained-modulus; F7 is concrete | Operation-specific transported theorems | Ordinary/default guards | F7 operation tests | 2 — same DEFUN templates; no MBE split |
 | Generated PFIELD/F7 polynomial powers | Named generated `*-poly-pow-spec` | Named generated fast functions selected by MBE | No instance-specific certified accumulator/equivalence theorem; concrete equalities are regressions only | Staged but not later explicitly verified | F7 polynomial-power tests | 7 — unresolved execution-correctness assurance; follow-up required |
@@ -31,8 +32,9 @@ searched. The only logical/executable split is the `MBE` emitted by
 `DEF-POW-INSTANCE`; its expansions are field, PFIELD, F2, GPOLY, and PFIELD/F7
 polynomial power. The two `:verify-guards nil` occurrences are inside that
 macro and are classification 3 (intentional staging). Explicit `VERIFY-GUARDS`
-occurs for `field-pow-fast`, `field-pow`, and the twelve GPOLY functions in
-`generic/power.lisp`; those occurrences are classifications 3/4.
+occurs for `field-pow-fast`, `field-pow`, the PFIELD power boundary and its
+three direct callees, and the twelve GPOLY functions in `generic/power.lisp`;
+those occurrences are classifications 3/4.
 
 The two `ENCAPSULATE` events (GFIELD operations and the PFIELD modulus) are
 classification 1. There are no project occurrences of `DEFEXEC`, `DEFATTACH`
@@ -43,7 +45,7 @@ PFIELD-named adapters and generated PFIELD polynomial definitions still depend
 on the constrained modulus and are not claimed as concrete runtime code.
 
 The audit found no arithmetic defect. It found one logical/executable assurance
-gap for a separate small PR: generated F2/F7/PFIELD field powers and PFIELD/F7
+gap for a separate small PR: generated F2/F7 field powers and PFIELD/F7
 polynomial powers have concrete regressions, but do not have instance-specific
 certified accumulator/equivalence theorems and do not later complete the guard
 verification staged by the generator. The generic GFIELD and GPOLY invariants
@@ -52,7 +54,13 @@ MBE boundary. A follow-up should functionally instantiate or prove those small
 bridges, explicitly verify guards, and retain focused regressions without
 changing the definitions or weakening theorem statements. Until then, claims
 about those generated concrete powers are execution observations, not certified
-semantic-correctness claims.
+semantic-correctness claims.  The PFIELD field-power boundary is no longer part
+of that gap: its direct accumulator induction uses the generic natural low-bit
+split, keeps `pfield-mul-commutative` disabled, and supports explicit guard
+verification.  Direct specialization was chosen because replacing the two
+recursive generic functions generated additional definitional-equation
+obligations; uncontrolled unfolding reduced only one recursive side and turned
+transport into separate recursive-equivalence proofs.
 
 ## Scanner policy
 
