@@ -62,7 +62,11 @@ commutativity theorem available.
 guards.  Verification of each public `MBE` uses its fast/spec theorem; the
 compiled branch therefore calls only the logarithmic auxiliary.  Polynomial
 execution normalizes the base once at the public boundary, after which squares
-and accumulator updates use canonical `POLY-MUL` directly.
+and accumulator updates use canonical `POLY-MUL` directly.  The generated PFIELD and F7
+polynomial instances use normalization fixed points as their canonical
+predicates, supplying the same fixer and closure condition. Their direct
+specialized correctness proofs never enable or use the rule-class-free
+multiplication commutativity theorems; commutativity is not required.
 
 Commutativity is used separately for rearranging the disabled exponent-addition
 law.  Exponent addition and implementation-bridge theorems are disabled to
