@@ -385,3 +385,118 @@
                        (pfield-neg f7-neg)
                        (pfield-inv f7-inv))
             :in-theory (enable dm::primep))))
+
+; F7 power assurance.  The small PFIELD proof pattern is specialized directly;
+; neither recursive power function is mapped by functional instantiation.
+(defthm f7-element-p-of-f7-fix
+  (f7-element-p (f7-fix x)))
+
+(defthm f7-element-p-of-f7-one
+  (f7-element-p (f7-one)))
+
+(defthm f7-element-p-of-f7-mul
+  (f7-element-p (f7-mul x y)))
+
+(defthm f7-fix-when-f7-element-p
+  (implies (f7-element-p x) (equal (f7-fix x) x)))
+
+(defthm f7-mul-one-left
+  (equal (f7-mul (f7-one) x) (f7-fix x)))
+
+(defthm f7-mul-one-right
+  (equal (f7-mul x (f7-one)) (f7-fix x)))
+
+(defthm f7-mul-associative
+  (equal (f7-mul (f7-mul x y) z)
+         (f7-mul x (f7-mul y z))))
+
+(defthm f7-mul-commutative
+  (equal (f7-mul x y) (f7-mul y x))
+  :rule-classes ((:rewrite :loop-stopper nil)))
+(in-theory (disable f7-mul-commutative))
+
+(defthm f7-pow-spec-successor
+  (equal (f7-pow-spec base (+ 1 (nfix n)))
+         (f7-mul (f7-fix base) (f7-pow-spec base n)))
+  :hints (("Goal" :in-theory (enable f7-pow-spec))))
+
+(defthm f7-pow-spec-plus-two
+  (implies (and (f7-element-p base) (natp n))
+           (equal (f7-pow-spec base (+ 2 n))
+                  (f7-mul base
+                          (f7-mul base (f7-pow-spec base n)))))
+  :hints (("Goal" :use
+           ((:instance f7-pow-spec-successor (n (+ 1 n)))
+            (:instance f7-pow-spec-successor (n n)))
+           :in-theory (disable f7-mul-commutative))))
+
+(defthm f7-pow-spec-of-square
+  (implies (and (f7-element-p base) (natp n))
+           (equal (f7-pow-spec (f7-mul base base) n)
+                  (f7-pow-spec base (* 2 n))))
+  :hints (("Goal" :induct (f7-pow-spec base n)
+           :in-theory (e/d (f7-pow-spec f7-pow-spec-plus-two
+                                         f7-mul-associative)
+                           (f7-mul-commutative f7-mul)))
+          ("Subgoal *1/2" :use
+           ((:instance f7-pow-spec-plus-two
+             (base base) (n (+ -2 (* 2 n)))))
+           :in-theory (disable f7-mul-commutative f7-mul))))
+
+(defthm f7-pow-spec-odd-form
+  (implies (and (f7-element-p base) (natp n))
+           (equal (f7-pow-spec base (+ 1 (* 2 n)))
+                  (f7-mul base (f7-pow-spec base (* 2 n)))))
+  :hints (("Goal" :use
+           ((:instance f7-pow-spec-successor (base base) (n (* 2 n))))
+           :in-theory (disable f7-mul-commutative))))
+
+(defthm f7-pow-fast-accumulator-invariant
+  (implies (and (f7-element-p acc)
+                (f7-element-p base)
+                (natp n))
+           (equal (f7-pow-fast acc base n)
+                  (f7-mul acc (f7-pow-spec base n))))
+  :hints (("Goal" :induct (f7-pow-fast acc base n)
+           :in-theory (e/d (f7-pow-fast f7-pow-spec
+                                         f7-pow-spec-of-square
+                                         f7-pow-spec-odd-form
+                                         f7-mul-associative)
+                           (f7-mul-commutative f7-mul)))
+          ("Subgoal *1/2" :use
+           ((:instance natural-split-at-low-bit (n n))
+            (:instance f7-pow-spec-odd-form
+             (base base) (n (floor n 2))))
+           :in-theory (disable f7-mul-commutative f7-mul))
+          ("Subgoal *1/3" :use
+           ((:instance natural-split-at-low-bit (n n)))
+           :in-theory (disable f7-mul-commutative f7-mul))
+          ("Subgoal *1/1" :use
+           ((:instance natural-split-at-low-bit (n n))
+            (:instance f7-mul-one-right (x acc)))
+           :in-theory (disable f7-mul-commutative f7-mul))))
+
+(defthm f7-element-p-of-pow-spec
+  (f7-element-p (f7-pow-spec x n))
+  :hints (("Goal" :induct (f7-pow-spec x n)
+           :in-theory (enable f7-pow-spec))))
+
+(defthm f7-pow-fast-correct
+  (equal (f7-pow-fast (f7-one) (f7-fix x) (nfix n))
+         (f7-pow-spec (f7-fix x) (nfix n)))
+  :hints (("Goal" :use
+           ((:instance f7-pow-fast-accumulator-invariant
+             (acc (f7-one)) (base (f7-fix x)) (n (nfix n)))
+            (:instance f7-mul-one-left
+             (x (f7-pow-spec (f7-fix x) (nfix n))))
+            (:instance f7-fix-when-f7-element-p
+             (x (f7-pow-spec (f7-fix x) (nfix n)))))
+           :in-theory (disable f7-mul-commutative f7-mul f7-pow-spec))))
+
+(verify-guards f7-fix)
+(verify-guards f7-one)
+(verify-guards f7-mul)
+(verify-guards f7-pow-fast)
+(verify-guards f7-pow
+  :hints (("Goal" :use f7-pow-fast-correct
+           :in-theory (disable f7-mul-commutative))))

@@ -9,4 +9,13 @@
 (assert-event (equal (f2-sub t t) nil))
 (assert-event (equal (f2-div t t) t))
 (assert-event (equal (f2-pow t 7) t))
+(assert-event (equal (f2-pow nil 0) t))
+(assert-event (equal (f2-pow nil 1) nil))
+(assert-event (equal (f2-pow t 1048576) t))
+(assert-event (equal (f2-pow 'noncanonical 6) t))
+; NFIX maps a negative exponent to zero; this is not inverse or signed power.
+(assert-event (equal (f2-pow nil -3) t))
+(assert-event
+ (equal (f2-pow-fast (f2-one) (f2-fix t) 37)
+        (f2-pow-spec (f2-fix t) 37)))
 (assert-event (equal (f2-neg (f2-neg 'not-a-boolean)) (f2-fix 'not-a-boolean)))
