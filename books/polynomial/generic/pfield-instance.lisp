@@ -1,5 +1,6 @@
 (in-package "GPOLY")
 (include-book "power")
+(include-book "degree")
 (include-book "../../field/pfield-adapter")
 
 ; Generate the exact-arity PFIELD adapter boundary from the same templates as
@@ -10,6 +11,18 @@
   pfield-normalize pfield-eval
   gfield::pfield-fix gfield::pfield-zero
   gfield::pfield-add gfield::pfield-mul)
+(def-degree-instance pfield-poly-degree pfield-poly-leading-coefficient
+                     pfield-normalize gfield::pfield-zero)
+
+(defthm pfield-poly-degree-semantics
+  (equal (pfield-poly-degree poly)
+         (let ((p (pfield-normalize poly)))
+           (if (consp p) (1- (len p)) -1))))
+
+(defthm pfield-poly-leading-coefficient-semantics
+  (equal (pfield-poly-leading-coefficient poly)
+         (let ((p (pfield-normalize poly)))
+           (if (consp p) (car (last p)) (gfield::pfield-zero)))))
 
 (defun pfield-coefficient-list-p (xs)
   (if (atom xs) (null xs)
@@ -594,6 +607,8 @@
 (verify-guards pfield-fix-coefficients)
 (verify-guards pfield-trim-trailing-zeros)
 (verify-guards pfield-normalize)
+(verify-guards pfield-poly-degree)
+(verify-guards pfield-poly-leading-coefficient)
 (verify-guards pfield-raw-add)
 (verify-guards pfield-poly-add)
 (verify-guards pfield-raw-scale)
@@ -611,6 +626,18 @@
 (def-normalize-eval-instance
   f7-fix-coefficients f7-trim-trailing-zeros f7-normalize f7-eval
   gfield::f7-fix gfield::f7-zero gfield::f7-add gfield::f7-mul)
+(def-degree-instance f7-poly-degree f7-poly-leading-coefficient
+                     f7-normalize gfield::f7-zero)
+
+(defthm f7-poly-degree-semantics-from-pfield
+  (equal (f7-poly-degree poly)
+         (let ((p (f7-normalize poly)))
+           (if (consp p) (1- (len p)) -1))))
+
+(defthm f7-poly-leading-coefficient-semantics-from-pfield
+  (equal (f7-poly-leading-coefficient poly)
+         (let ((p (f7-normalize poly)))
+           (if (consp p) (car (last p)) (gfield::f7-zero)))))
 
 (defthm f7-normalize-preserves-eval-from-generic
   (equal (f7-eval (f7-normalize poly) x)
@@ -1048,6 +1075,8 @@
 (verify-guards f7-fix-coefficients)
 (verify-guards f7-trim-trailing-zeros)
 (verify-guards f7-normalize)
+(verify-guards f7-poly-degree)
+(verify-guards f7-poly-leading-coefficient)
 (verify-guards f7-raw-add)
 (verify-guards f7-poly-add)
 (verify-guards f7-raw-scale)
@@ -1061,6 +1090,16 @@
                                     (f gfield::x) (n gfield::n))))))
 
 (assert-event (equal (f7-normalize '(1 2 0 0)) '(1 2)))
+(assert-event (equal (f7-poly-degree nil) -1))
+(assert-event (equal (f7-poly-degree '(3)) 0))
+(assert-event (equal (f7-poly-degree '(1 2 3)) 2))
+(assert-event (equal (f7-poly-degree '(1 2 0 0)) 1))
+(assert-event (equal (f7-poly-leading-coefficient nil) 0))
+(assert-event (equal (f7-poly-leading-coefficient '(3)) 3))
+(assert-event (equal (f7-poly-leading-coefficient '(1 2 3)) 3))
+(assert-event (equal (f7-poly-leading-coefficient '(1 8 14 0)) 1))
+(assert-event (equal (f7-poly-degree '(1 2 . bad-tail)) 1))
+(assert-event (equal (f7-poly-leading-coefficient '(1 2 . bad-tail)) 2))
 (assert-event (equal (f7-normalize '(0 0 0)) nil))
 (assert-event (equal (f7-eval '(1 2 3) 2) 3))
 (assert-event (equal (f7-eval '(6 6) 6) 0))

@@ -154,8 +154,20 @@ bridge may therefore use the identity conversion at a fixed PFIELD instance,
 but must prove equivalence of canonical predicates, normalization, evaluation,
 and eventually addition and multiplication.
 
-This arithmetic layer deliberately contains no degree, leading coefficient,
-division, gcd, derivatives, root counting, field
+The public structural operations `POLY-DEGREE` and
+`POLY-LEADING-COEFFICIENT` each normalize arbitrary input exactly once.  Thus
+atomic inputs and malformed tails follow the existing fixer policy: atoms end
+the coefficient list and a malformed tail is discarded.  Degree of canonical
+zero (`nil`) is the sentinel `-1`, and its leading coefficient is field zero.
+For a canonical nonzero polynomial, degree is length minus one and leading
+coefficient is the final coefficient, which is certified nonzero.  These are
+formal structural properties of the constant-first dense representation, not
+facts inferred from evaluation (which is not extensional over finite fields).
+The same transparent two-`DEFUN` template supplies constrained PFIELD and
+ordinary executable F7/F11 operations.
+
+This arithmetic layer deliberately contains no degree-of-multiplication,
+leading-coefficient-of-multiplication, division, gcd, derivatives, root counting, field
 enumeration, or extension-field implementation.  It provides syntax and
 semantics over an assumed field, not an implementation of every finite field.
 
@@ -181,15 +193,7 @@ after proving that fixed HS coefficients make GPOLY's remainder fixing an
 identity and that both normalizers coincide.  This work intentionally neither
 changes nor removes any HS theorem.
 
-The immediate next milestone is reusable efficient exponentiation by squaring.
-That PR should first audit the existing GFIELD power implementation, then choose
-a shared approach suitable for GFIELD elements, canonical polynomials, and
-later extension-field elements.  It should distinguish a simple linear
-recursive specification (where useful for proofs) from a logarithmic executable
-implementation, use natural exponents with explicit total `NFIX` behavior, and
-prove the fast implementation equal to the specification.  Anticipated uses
-include polynomial powers, quotient-field arithmetic, Frobenius powers such as
-`x^q`, executable field inversion by exponentiation, irreducibility and
-factorisation tests, and later Schoof computations.  Degree and leading
-coefficient follow fast power; division, monic normalization, and
-extension-field reduction remain later work.
+The immediate next milestone is leading-term/no-zero-divisor reasoning and the
+degree-of-multiplication theorem under nonzero hypotheses.  Polynomial
+division, monic normalization, and extension-field reduction remain later
+work.

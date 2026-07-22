@@ -23,8 +23,10 @@ ACL2 obligations are genuinely proved and certified.
    generic laws, canonical polynomial instance, and evaluation semantics are
    certified for reuse by fields and later extension fields.  The executable
    F_11 golden field/polynomial fixture for `y^2 = x^3 + x + 6` is complete.
-   The next focused milestones are (1) generic polynomial degree and leading
-   coefficient, (2) degree of multiplication and no-zero-divisor results, and (3) division
+   Generic canonical polynomial degree and leading coefficient, including the
+   PFIELD adapter and executable F_7 instances, are complete.  The next focused
+   milestones are (1) leading-term/no-zero-divisor results and degree of
+   multiplication, and (2) division
    and Euclidean theory.  Later power uses include extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.

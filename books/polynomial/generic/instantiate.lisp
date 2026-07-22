@@ -87,3 +87,16 @@
        (if (equal fixed-a (,field-zero))
            nil
          (list fixed-a)))))
+
+; Degree and leading coefficient share one deliberately narrow, transparent
+; generator.  Its expansion is exactly two ordinary DEFUN events.  Each
+; public operation normalizes its arbitrary input once before inspecting the
+; resulting canonical coefficient list.
+(defmacro def-degree-instance (degree leading-coefficient normalize field-zero)
+  `(progn
+     (defun ,degree (poly)
+       (let ((p (,normalize poly)))
+         (if (consp p) (1- (len p)) -1)))
+     (defun ,leading-coefficient (poly)
+       (let ((p (,normalize poly)))
+         (if (consp p) (car (last p)) (,field-zero))))))
