@@ -9,6 +9,10 @@
 (assert-event (equal (f7-normalize (f7-normalize '(1 2 0 0))) '(1 2)))
 (defthm normalized-output-is-canonical-regression
   (canonical-polynomial-p (normalize xs)))
+(defthm pfield-generated-normalization-preserves-evaluation-regression
+  (equal (pfield-eval (pfield-normalize poly) x)
+         (pfield-eval poly x))
+  :hints (("Goal" :by pfield-normalize-preserves-eval-from-generic)))
 (assert-event (equal (f7-eval nil 3) 0))
 (assert-event (equal (f7-eval '(9) 4) 2))
 (assert-event (equal (f7-eval '(1 2 3) 2) 3))

@@ -33,7 +33,9 @@ extension-field instances without committing this project to a framework.
 
 The GFIELD-based `fix-coefficients`, `trim-trailing-zeros`, `normalize`, and
 `eval` form the logical generic theory.  Because GFIELD operations are
-constrained, direct generic execution is not required.  The generated
+constrained, direct generic execution is not required.  The PFIELD adapter now
+generates the same four definitions at its exact-arity, constrained-modulus
+boundary.  The generated
 `f7-fix-coefficients`, `f7-trim-trailing-zeros`, `f7-normalize`, and `f7-eval`
 are ordinary executable functions with verified default guards.  The theorem
 `f7-normalize-preserves-eval-from-generic` transports the generic semantic
@@ -52,9 +54,9 @@ Future computational layers are incomplete until they have all three:
 2. ordinary executable concrete functions; and
 3. certified correctness bridges between them.
 
-This PR intentionally leaves the older handwritten PFIELD normalization and
-evaluation recurrences, and the PFIELD/F_7 additive recurrences, unchanged.
-The staged migration is: next generate PFIELD normalization/evaluation; then,
-in a separate PR, extend one template group to generic/PFIELD/F_7 addition and
-transport `eval-of-poly-add`; only afterward use the established pattern for
+The normalization/evaluation migration is complete: the generic, PFIELD, and
+F_7 layers all use the shared template.  The PFIELD/F_7 additive recurrences
+remain handwritten and unchanged.  The smallest next migration is to extend
+one template group to generic/PFIELD/F_7 addition and transport
+`eval-of-poly-add`; only afterward should the established pattern be used for
 new algorithms.
