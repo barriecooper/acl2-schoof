@@ -392,6 +392,220 @@
                         (raw-mul pfield-raw-mul)
                         (poly-mul pfield-poly-mul)))))
 
+; Canonicality for this generated adapter is exactly fixed-point status under
+; its existing normalization operation; no parallel representation is added.
+(defun pfield-canonical-polynomial-p (xs)
+  (equal (pfield-normalize xs) xs))
+
+(defthm pfield-canonical-polynomial-p-of-normalize
+  (pfield-canonical-polynomial-p (pfield-normalize xs))
+  :hints (("Goal" :in-theory (enable pfield-canonical-polynomial-p
+                                      pfield-normalize
+                                      pfield-fix-coefficients
+                                      pfield-trim-trailing-zeros))))
+
+(defthm pfield-normalize-when-canonical
+  (implies (pfield-canonical-polynomial-p xs)
+           (equal (pfield-normalize xs) xs))
+  :hints (("Goal" :in-theory (enable pfield-canonical-polynomial-p))))
+
+(defthm pfield-canonical-polynomial-p-of-polynomial-one
+  (pfield-canonical-polynomial-p (pfield-polynomial-one))
+  :hints (("Goal" :in-theory (enable pfield-canonical-polynomial-p
+                                      pfield-polynomial-one
+                                      pfield-normalize
+                                      pfield-fix-coefficients
+                                      pfield-trim-trailing-zeros))))
+
+(defthm pfield-canonical-polynomial-p-of-literal-one
+  (pfield-canonical-polynomial-p '(1))
+  :hints (("Goal" :use pfield-canonical-polynomial-p-of-polynomial-one
+           :in-theory (enable pfield-polynomial-one))))
+
+(defthm pfield-canonical-polynomial-p-of-poly-mul
+  (pfield-canonical-polynomial-p (pfield-poly-mul x y))
+  :hints (("Goal" :in-theory (e/d (pfield-canonical-polynomial-p
+                                           pfield-poly-mul)
+                                          (pfield-normalize)))))
+
+(defthm pfield-poly-mul-of-one-left-for-power
+  (equal (pfield-poly-mul (pfield-polynomial-one) x)
+         (pfield-normalize x))
+  :hints (("Goal" :use ((:functional-instance
+                        poly-mul-of-one-left
+                        (gfield::field-element-p gfield::pfield-element-p)
+                        (gfield::field-fix gfield::pfield-fix)
+                        (gfield::field-zero gfield::pfield-zero)
+                        (gfield::field-one gfield::pfield-one)
+                        (gfield::field-add gfield::pfield-add)
+                        (gfield::field-mul gfield::pfield-mul)
+                        (gfield::field-neg gfield::pfield-neg)
+                        (gfield::field-inv gfield::pfield-inv)
+                        (fix-coefficients pfield-fix-coefficients)
+                        (trim-trailing-zeros pfield-trim-trailing-zeros)
+                        (normalize pfield-normalize)
+                        (raw-add pfield-raw-add) (poly-add pfield-poly-add)
+                        (raw-scale pfield-raw-scale)
+                        (poly-scale pfield-poly-scale)
+                        (raw-mul pfield-raw-mul) (poly-mul pfield-poly-mul)
+                        (polynomial-one pfield-polynomial-one)))
+           :in-theory (enable pfield-polynomial-one))))
+
+(defthm pfield-poly-mul-of-one-right-for-power
+  (equal (pfield-poly-mul x (pfield-polynomial-one))
+         (pfield-normalize x))
+  :hints (("Goal" :use ((:functional-instance
+                        poly-mul-of-one-right
+                        (gfield::field-element-p gfield::pfield-element-p)
+                        (gfield::field-fix gfield::pfield-fix)
+                        (gfield::field-zero gfield::pfield-zero)
+                        (gfield::field-one gfield::pfield-one)
+                        (gfield::field-add gfield::pfield-add)
+                        (gfield::field-mul gfield::pfield-mul)
+                        (gfield::field-neg gfield::pfield-neg)
+                        (gfield::field-inv gfield::pfield-inv)
+                        (fix-coefficients pfield-fix-coefficients)
+                        (trim-trailing-zeros pfield-trim-trailing-zeros)
+                        (normalize pfield-normalize)
+                        (raw-add pfield-raw-add) (poly-add pfield-poly-add)
+                        (raw-scale pfield-raw-scale)
+                        (poly-scale pfield-poly-scale)
+                        (raw-mul pfield-raw-mul) (poly-mul pfield-poly-mul)
+                        (polynomial-one pfield-polynomial-one)))
+           :in-theory (enable pfield-polynomial-one))))
+
+(defthm pfield-poly-mul-one-left-when-canonical
+  (implies (pfield-canonical-polynomial-p x)
+           (equal (pfield-poly-mul (pfield-polynomial-one) x) x))
+  :hints (("Goal" :use pfield-poly-mul-of-one-left-for-power
+           :in-theory (enable pfield-canonical-polynomial-p))))
+
+(defthm pfield-poly-mul-one-right-when-canonical
+  (implies (pfield-canonical-polynomial-p x)
+           (equal (pfield-poly-mul x (pfield-polynomial-one)) x))
+  :hints (("Goal" :use pfield-poly-mul-of-one-right-for-power
+           :in-theory (enable pfield-canonical-polynomial-p))))
+
+(defthm pfield-poly-mul-associate-right-for-power
+  (equal (pfield-poly-mul (pfield-poly-mul a b) c)
+         (pfield-poly-mul a (pfield-poly-mul b c)))
+  :hints (("Goal" :use ((:instance pfield-poly-mul-associative-from-generic
+                                    (x a) (y b) (z c)))
+           :in-theory (disable))))
+
+(defthm pfield-poly-pow-spec-successor
+  (equal (pfield-poly-pow-spec base (+ 1 (nfix n)))
+         (pfield-poly-mul (pfield-normalize base)
+                       (pfield-poly-pow-spec base n)))
+  :hints (("Goal" :in-theory (enable pfield-poly-pow-spec))))
+
+(defthm pfield-poly-pow-spec-plus-two
+  (implies (and (pfield-canonical-polynomial-p base) (natp n))
+           (equal (pfield-poly-pow-spec base (+ 2 n))
+                  (pfield-poly-mul base
+                    (pfield-poly-mul base (pfield-poly-pow-spec base n)))))
+  :hints (("Goal" :use ((:instance pfield-poly-pow-spec-successor
+                                    (base base) (n (+ 1 n)))
+                          (:instance pfield-poly-pow-spec-successor
+                                    (base base) (n n)))
+           :in-theory (disable))))
+
+(defthm pfield-poly-pow-spec-of-square
+  (implies (and (pfield-canonical-polynomial-p base) (natp n))
+           (equal (pfield-poly-pow-spec (pfield-poly-mul base base) n)
+                  (pfield-poly-pow-spec base (* 2 n))))
+  :hints (("Goal" :induct (pfield-poly-pow-spec base n)
+           :in-theory (e/d (pfield-poly-pow-spec
+                            pfield-poly-pow-spec-plus-two
+                            pfield-poly-mul-associate-right-for-power)
+                           (pfield-poly-mul)))
+          ("Subgoal *1/2" :use ((:instance pfield-poly-pow-spec-plus-two
+                                            (base base)
+                                            (n (+ -2 (* 2 n)))))
+           :in-theory (disable pfield-poly-mul))))
+
+(defthm pfield-poly-pow-spec-odd-form
+  (implies (and (pfield-canonical-polynomial-p base) (natp n))
+           (equal (pfield-poly-pow-spec base (+ 1 (* 2 n)))
+                  (pfield-poly-mul base (pfield-poly-pow-spec base (* 2 n)))))
+  :hints (("Goal" :use ((:instance pfield-poly-pow-spec-successor
+                                    (base base) (n (* 2 n))))
+           :in-theory (disable))))
+
+(defthm pfield-poly-pow-fast-accumulator-invariant
+  (implies (and (pfield-canonical-polynomial-p acc)
+                (pfield-canonical-polynomial-p base)
+                (natp n))
+           (equal (pfield-poly-pow-fast acc base n)
+                  (pfield-poly-mul acc (pfield-poly-pow-spec base n))))
+  :hints (("Goal" :induct (pfield-poly-pow-fast acc base n)
+           :in-theory (e/d (pfield-poly-pow-fast pfield-poly-pow-spec
+                            pfield-poly-pow-spec-of-square
+                            pfield-poly-pow-spec-odd-form
+                            pfield-poly-mul-associate-right-for-power)
+                           (pfield-poly-mul pfield-normalize
+                            pfield-canonical-polynomial-p
+                            pfield-polynomial-one)))
+          ("Subgoal *1/2" :use ((:instance gfield::natural-split-at-low-bit (n n))
+                                  (:instance pfield-poly-pow-spec-odd-form
+                                             (base base) (n (floor n 2))))
+           :in-theory (disable pfield-poly-mul pfield-normalize
+                               pfield-canonical-polynomial-p pfield-polynomial-one))
+          ("Subgoal *1/3" :use ((:instance gfield::natural-split-at-low-bit (n n)))
+           :in-theory (disable pfield-poly-mul pfield-normalize
+                               pfield-canonical-polynomial-p pfield-polynomial-one))
+          ("Subgoal *1/1" :use ((:instance gfield::natural-split-at-low-bit (n n))
+                                  (:instance pfield-poly-mul-one-right-when-canonical
+                                             (x acc)))
+           :in-theory (disable pfield-poly-mul pfield-normalize
+                               pfield-canonical-polynomial-p pfield-polynomial-one))))
+
+(defthm pfield-canonical-polynomial-p-of-poly-pow-spec
+  (pfield-canonical-polynomial-p (pfield-poly-pow-spec base n))
+  :hints (("Goal" :induct (pfield-poly-pow-spec base n)
+           :in-theory (e/d (pfield-poly-pow-spec)
+                           (pfield-poly-mul pfield-normalize
+                            pfield-canonical-polynomial-p
+                            pfield-polynomial-one)))
+          ("Subgoal *1/1" :use pfield-canonical-polynomial-p-of-literal-one)))
+
+(defthm pfield-poly-pow-fast-correct
+  (equal (pfield-poly-pow-fast (pfield-polynomial-one)
+                            (pfield-normalize f) (nfix n))
+         (pfield-poly-pow-spec (pfield-normalize f) (nfix n)))
+  :hints (("Goal"
+           :use ((:instance pfield-poly-pow-fast-accumulator-invariant
+                            (acc (pfield-polynomial-one))
+                            (base (pfield-normalize f))
+                            (n (nfix n)))
+                 (:instance pfield-poly-mul-one-left-when-canonical
+                            (x (pfield-poly-pow-spec
+                                (pfield-normalize f) (nfix n))))
+                 (:instance pfield-canonical-polynomial-p-of-poly-pow-spec
+                            (base (pfield-normalize f)) (n (nfix n))))
+           :in-theory (disable pfield-poly-pow-fast pfield-poly-pow-spec
+                               pfield-poly-mul pfield-normalize
+                               pfield-canonical-polynomial-p
+                               pfield-polynomial-one))))
+
+
+(verify-guards gfield::pfield-zero)
+(verify-guards gfield::pfield-add)
+(verify-guards pfield-fix-coefficients)
+(verify-guards pfield-trim-trailing-zeros)
+(verify-guards pfield-normalize)
+(verify-guards pfield-raw-add)
+(verify-guards pfield-poly-add)
+(verify-guards pfield-raw-scale)
+(verify-guards pfield-poly-scale)
+(verify-guards pfield-raw-mul)
+(verify-guards pfield-poly-mul)
+(verify-guards pfield-polynomial-one)
+(verify-guards pfield-poly-pow-fast)
+(verify-guards pfield-poly-pow
+  :hints (("Goal" :use ((:instance pfield-poly-pow-fast-correct
+                                    (f gfield::x) (n gfield::n))))))
+
 ; Ordinary executable F_7 DEFUNs generated from the same templates as the
 ; abstract algorithms.  Use :TRANS1 on this event to inspect the expansion.
 (def-normalize-eval-instance
@@ -623,6 +837,228 @@
                         (pfield-raw-mul f7-raw-mul)
                         (pfield-poly-mul f7-poly-mul))
            :in-theory (enable dm::primep))))
+
+
+
+; Canonicality for this generated adapter is exactly fixed-point status under
+; its existing normalization operation; no parallel representation is added.
+(defun f7-canonical-polynomial-p (xs)
+  (equal (f7-normalize xs) xs))
+
+(defthm f7-canonical-polynomial-p-of-normalize
+  (f7-canonical-polynomial-p (f7-normalize xs))
+  :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p
+                                      f7-normalize
+                                      f7-fix-coefficients
+                                      f7-trim-trailing-zeros))))
+
+(defthm f7-normalize-when-canonical
+  (implies (f7-canonical-polynomial-p xs)
+           (equal (f7-normalize xs) xs))
+  :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p))))
+
+(defthm f7-canonical-polynomial-p-of-polynomial-one
+  (f7-canonical-polynomial-p (f7-polynomial-one))
+  :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p
+                                      f7-polynomial-one
+                                      f7-normalize
+                                      f7-fix-coefficients
+                                      f7-trim-trailing-zeros))))
+
+(defthm f7-normalize-idempotent-for-power
+  (equal (f7-normalize (f7-normalize xs)) (f7-normalize xs))
+  :hints (("Goal" :use ((:instance f7-normalize-when-canonical
+                                    (xs (f7-normalize xs))))
+           :in-theory (disable f7-normalize
+                               f7-canonical-polynomial-p))))
+
+(defthm f7-canonical-polynomial-p-of-literal-one
+  (f7-canonical-polynomial-p '(1))
+  :hints (("Goal" :use f7-canonical-polynomial-p-of-polynomial-one
+           :in-theory (enable f7-polynomial-one))))
+
+(defthm f7-canonical-polynomial-p-of-poly-mul
+  (f7-canonical-polynomial-p (f7-poly-mul x y))
+  :hints (("Goal" :in-theory (e/d (f7-canonical-polynomial-p
+                                           f7-poly-mul)
+                                          (f7-normalize)))))
+
+(defthm f7-poly-mul-of-one-left-for-power
+  (equal (f7-poly-mul (f7-polynomial-one) x)
+         (f7-normalize x))
+  :hints (("Goal" :by (:functional-instance
+                        pfield-poly-mul-of-one-left-for-power
+                        (gfield::pfield-modulus (lambda () 7))
+                        (gfield::pfield-fix gfield::f7-fix)
+                        (gfield::pfield-zero gfield::f7-zero)
+                        (gfield::pfield-one gfield::f7-one)
+                        (gfield::pfield-add gfield::f7-add)
+                        (gfield::pfield-mul gfield::f7-mul)
+                        (pfield-fix-coefficients f7-fix-coefficients)
+                        (pfield-trim-trailing-zeros f7-trim-trailing-zeros)
+                        (pfield-normalize f7-normalize)
+                        (pfield-raw-add f7-raw-add)
+                        (pfield-poly-add f7-poly-add)
+                        (pfield-raw-scale f7-raw-scale)
+                        (pfield-poly-scale f7-poly-scale)
+                        (pfield-raw-mul f7-raw-mul)
+                        (pfield-poly-mul f7-poly-mul)
+                        (pfield-polynomial-one f7-polynomial-one))
+           :in-theory (enable dm::primep))))
+
+(defthm f7-poly-mul-of-one-right-for-power
+  (equal (f7-poly-mul x (f7-polynomial-one))
+         (f7-normalize x))
+  :hints (("Goal" :by (:functional-instance
+                        pfield-poly-mul-of-one-right-for-power
+                        (gfield::pfield-modulus (lambda () 7))
+                        (gfield::pfield-fix gfield::f7-fix)
+                        (gfield::pfield-zero gfield::f7-zero)
+                        (gfield::pfield-one gfield::f7-one)
+                        (gfield::pfield-add gfield::f7-add)
+                        (gfield::pfield-mul gfield::f7-mul)
+                        (pfield-fix-coefficients f7-fix-coefficients)
+                        (pfield-trim-trailing-zeros f7-trim-trailing-zeros)
+                        (pfield-normalize f7-normalize)
+                        (pfield-raw-add f7-raw-add)
+                        (pfield-poly-add f7-poly-add)
+                        (pfield-raw-scale f7-raw-scale)
+                        (pfield-poly-scale f7-poly-scale)
+                        (pfield-raw-mul f7-raw-mul)
+                        (pfield-poly-mul f7-poly-mul)
+                        (pfield-polynomial-one f7-polynomial-one))
+           :in-theory (enable dm::primep))))
+
+(defthm f7-poly-mul-one-left-when-canonical
+  (implies (f7-canonical-polynomial-p x)
+           (equal (f7-poly-mul (f7-polynomial-one) x) x))
+  :hints (("Goal" :use f7-poly-mul-of-one-left-for-power
+           :in-theory (enable f7-canonical-polynomial-p))))
+
+(defthm f7-poly-mul-one-right-when-canonical
+  (implies (f7-canonical-polynomial-p x)
+           (equal (f7-poly-mul x (f7-polynomial-one)) x))
+  :hints (("Goal" :use f7-poly-mul-of-one-right-for-power
+           :in-theory (enable f7-canonical-polynomial-p))))
+
+(defthm f7-poly-mul-associate-right-for-power
+  (equal (f7-poly-mul (f7-poly-mul a b) c)
+         (f7-poly-mul a (f7-poly-mul b c)))
+  :hints (("Goal" :use ((:instance f7-poly-mul-associative-from-generic
+                                    (x a) (y b) (z c)))
+           :in-theory (disable))))
+
+(defthm f7-poly-pow-spec-successor
+  (equal (f7-poly-pow-spec base (+ 1 (nfix n)))
+         (f7-poly-mul (f7-normalize base)
+                       (f7-poly-pow-spec base n)))
+  :hints (("Goal" :in-theory (enable f7-poly-pow-spec))))
+
+(defthm f7-poly-pow-spec-plus-two
+  (implies (and (f7-canonical-polynomial-p base) (natp n))
+           (equal (f7-poly-pow-spec base (+ 2 n))
+                  (f7-poly-mul base
+                    (f7-poly-mul base (f7-poly-pow-spec base n)))))
+  :hints (("Goal" :use ((:instance f7-poly-pow-spec-successor
+                                    (base base) (n (+ 1 n)))
+                          (:instance f7-poly-pow-spec-successor
+                                    (base base) (n n)))
+           :in-theory (disable))))
+
+(defthm f7-poly-pow-spec-of-square
+  (implies (and (f7-canonical-polynomial-p base) (natp n))
+           (equal (f7-poly-pow-spec (f7-poly-mul base base) n)
+                  (f7-poly-pow-spec base (* 2 n))))
+  :hints (("Goal" :induct (f7-poly-pow-spec base n)
+           :in-theory (e/d (f7-poly-pow-spec
+                            f7-poly-pow-spec-plus-two
+                            f7-poly-mul-associate-right-for-power)
+                           (f7-poly-mul)))
+          ("Subgoal *1/2" :use ((:instance f7-poly-pow-spec-plus-two
+                                            (base base)
+                                            (n (+ -2 (* 2 n)))))
+           :in-theory (disable f7-poly-mul))))
+
+(defthm f7-poly-pow-spec-odd-form
+  (implies (and (f7-canonical-polynomial-p base) (natp n))
+           (equal (f7-poly-pow-spec base (+ 1 (* 2 n)))
+                  (f7-poly-mul base (f7-poly-pow-spec base (* 2 n)))))
+  :hints (("Goal" :use ((:instance f7-poly-pow-spec-successor
+                                    (base base) (n (* 2 n))))
+           :in-theory (disable))))
+
+(defthm f7-poly-pow-fast-accumulator-invariant
+  (implies (and (f7-canonical-polynomial-p acc)
+                (f7-canonical-polynomial-p base)
+                (natp n))
+           (equal (f7-poly-pow-fast acc base n)
+                  (f7-poly-mul acc (f7-poly-pow-spec base n))))
+  :hints (("Goal" :induct (f7-poly-pow-fast acc base n)
+           :in-theory (e/d (f7-poly-pow-fast f7-poly-pow-spec
+                            f7-poly-pow-spec-of-square
+                            f7-poly-pow-spec-odd-form
+                            f7-poly-mul-associate-right-for-power)
+                           (f7-poly-mul f7-normalize
+                            f7-canonical-polynomial-p
+                            f7-polynomial-one)))
+          ("Subgoal *1/2" :use ((:instance gfield::natural-split-at-low-bit (n n))
+                                  (:instance f7-poly-pow-spec-odd-form
+                                             (base base) (n (floor n 2))))
+           :in-theory (disable f7-poly-mul f7-normalize
+                               f7-canonical-polynomial-p f7-polynomial-one))
+          ("Subgoal *1/3" :use ((:instance gfield::natural-split-at-low-bit (n n)))
+           :in-theory (disable f7-poly-mul f7-normalize
+                               f7-canonical-polynomial-p f7-polynomial-one))
+          ("Subgoal *1/1" :use ((:instance gfield::natural-split-at-low-bit (n n))
+                                  (:instance f7-poly-mul-one-right-when-canonical
+                                             (x acc)))
+           :in-theory (disable f7-poly-mul f7-normalize
+                               f7-canonical-polynomial-p f7-polynomial-one))))
+
+(defthm f7-canonical-polynomial-p-of-poly-pow-spec
+  (f7-canonical-polynomial-p (f7-poly-pow-spec base n))
+  :hints (("Goal" :induct (f7-poly-pow-spec base n)
+           :in-theory (e/d (f7-poly-pow-spec)
+                           (f7-poly-mul f7-normalize
+                            f7-canonical-polynomial-p
+                            f7-polynomial-one)))
+          ("Subgoal *1/1" :use f7-canonical-polynomial-p-of-literal-one)))
+
+(defthm f7-poly-pow-fast-correct
+  (equal (f7-poly-pow-fast (f7-polynomial-one)
+                            (f7-normalize f) (nfix n))
+         (f7-poly-pow-spec (f7-normalize f) (nfix n)))
+  :hints (("Goal"
+           :use ((:instance f7-poly-pow-fast-accumulator-invariant
+                            (acc (f7-polynomial-one))
+                            (base (f7-normalize f))
+                            (n (nfix n)))
+                 (:instance f7-poly-mul-one-left-when-canonical
+                            (x (f7-poly-pow-spec
+                                (f7-normalize f) (nfix n))))
+                 (:instance f7-canonical-polynomial-p-of-poly-pow-spec
+                            (base (f7-normalize f)) (n (nfix n))))
+           :in-theory (disable f7-poly-pow-fast f7-poly-pow-spec
+                               f7-poly-mul f7-normalize
+                               f7-canonical-polynomial-p
+                               f7-polynomial-one))))
+
+(verify-guards gfield::f7-zero)
+(verify-guards gfield::f7-add)
+(verify-guards f7-fix-coefficients)
+(verify-guards f7-trim-trailing-zeros)
+(verify-guards f7-normalize)
+(verify-guards f7-raw-add)
+(verify-guards f7-poly-add)
+(verify-guards f7-raw-scale)
+(verify-guards f7-poly-scale)
+(verify-guards f7-raw-mul)
+(verify-guards f7-poly-mul)
+(verify-guards f7-polynomial-one)
+(verify-guards f7-poly-pow-fast)
+(verify-guards f7-poly-pow
+  :hints (("Goal" :use ((:instance f7-poly-pow-fast-correct
+                                    (f gfield::x) (n gfield::n))))))
 
 (assert-event (equal (f7-normalize '(1 2 0 0)) '(1 2)))
 (assert-event (equal (f7-normalize '(0 0 0)) nil))

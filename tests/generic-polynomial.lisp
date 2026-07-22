@@ -95,3 +95,7 @@
 (assert-event
  (equal (f7-poly-pow (f7-poly-pow '(1 2) 3) 4)
         (f7-poly-pow '(1 2) 12)))
+; Negative exponents retain the public NFIX-to-zero semantics.
+(assert-event (equal (f7-poly-pow '(1 2) -3) '(1)))
+; A constant base keeps the output small while exercising 21 low-bit steps.
+(assert-event (equal (f7-poly-pow '(2) 1048576) '(2)))

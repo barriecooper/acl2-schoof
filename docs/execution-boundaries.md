@@ -22,8 +22,22 @@ shape, not benchmark measurements.
 | Generated F2/F7 field powers | `f2-pow-spec`; `f7-pow-spec` | `f2-pow-fast` / `f7-pow-fast`, selected by the corresponding public MBE wrapper | `f2-pow-fast-accumulator-invariant`, `f2-pow-fast-correct`; `f7-pow-fast-accumulator-invariant`, `f7-pow-fast-correct` | Both fast and public guards explicitly verified (with each concrete fix, one, and multiply callee verified first) | `tests/field-kernel.lisp` (F2); `tests/pfield-adapter.lisp` (F7) | 4 — named concrete executable fields; closed |
 | Polynomial power (`poly-pow`) | `poly-pow-spec` | `poly-pow-fast`, selected by `poly-pow` MBE | `poly-pow-fast-accumulator-invariant`; `poly-pow-fast-correct`; `eval-of-poly-pow` | Staged, then explicitly verified | Concrete F7 polynomial-power tests | 4 — justified logical/executable boundary |
 | PFIELD/F7 generated polynomial instances (non-power) | Shared templates | PFIELD is constrained-modulus; F7 is concrete | Operation-specific transported theorems | Ordinary/default guards | F7 operation tests | 2 — same DEFUN templates; no MBE split |
-| Generated PFIELD/F7 polynomial powers | Named generated `*-poly-pow-spec` | Named generated fast functions selected by MBE | No instance-specific certified accumulator/equivalence theorem; concrete equalities are regressions only | Staged but not later explicitly verified | F7 polynomial-power tests | 7 — unresolved execution-correctness assurance; follow-up required |
+| Generated PFIELD/F7 polynomial powers | `pfield-poly-pow-spec`; `f7-poly-pow-spec` | `pfield-poly-pow-fast` / `f7-poly-pow-fast`, selected by the corresponding public MBE wrapper | `pfield-poly-pow-fast-accumulator-invariant`, `pfield-poly-pow-fast-correct`; `f7-poly-pow-fast-accumulator-invariant`, `f7-poly-pow-fast-correct` | Both dependency chains, fast auxiliaries, and public wrappers explicitly verified | `tests/generic-polynomial.lisp` (concrete F7 only) | 4 — PFIELD constrained adapter and F7 named concrete runtime; closed |
 | PFIELD root counting | Imported root predicate/count specification | Executable finite enumeration in the certified PFIELD book | Conversion theorems and `hs-pfield-polynomial-num-roots-upper-bound` | Dependency-book status; no project MBE boundary | Root-count bridge tests | 4 — executable enumeration with certified semantic bridge |
+
+## Named generated polynomial-power expansions
+
+| Instance | Specification | Fast auxiliary | Public wrapper | Accumulator invariant | Fast/spec theorem | Fast guards | Public guards | Runtime classification |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| PFIELD polynomial | `pfield-poly-pow-spec` | `pfield-poly-pow-fast` | `pfield-poly-pow` | `pfield-poly-pow-fast-accumulator-invariant` | `pfield-poly-pow-fast-correct` | Verified | Verified using the fast/spec theorem | Constrained-modulus adapter; not a named concrete field runtime |
+| F7 polynomial | `f7-poly-pow-spec` | `f7-poly-pow-fast` | `f7-poly-pow` | `f7-poly-pow-fast-accumulator-invariant` | `f7-poly-pow-fast-correct` | Verified | Verified using the fast/spec theorem | Named concrete executable runtime |
+
+Macro-expansion inspection confirms that each public executable branch calls
+only its corresponding fast auxiliary after one base normalization and one
+`NFIX`.  No specification call occurs in either executable branch.  Positive
+fast recursion passes `(floor n 2)`, and squares and accumulator updates call
+the existing canonical polynomial multiplication directly, without a redundant
+post-multiplication normalization.
 
 ## Named concrete field-power expansions
 
@@ -64,10 +78,9 @@ are closed by direct specialized accumulator inductions, certified fast/spec
 equalities, explicit guard verification, and focused execution regressions.
 These proofs follow the PFIELD pattern and avoid mapping recursive power
 functions because doing so generates definitional-equation compatibility
-obligations with one-sided unfolding. The remaining power gap is deliberately
-limited to generated PFIELD/F7 polynomial powers (and any other generated
-polynomial-power instance): their concrete equalities are regressions, not
-instance-specific certified bridges, and their staged guards remain open.
+obligations with one-sided unfolding. The generated PFIELD and F7
+polynomial-power gaps are now closed by direct specialized accumulator inductions, fast/spec theorems, explicit dependency
+and boundary guard verification, and focused concrete F7 regressions.
 
 ## Scanner policy
 
