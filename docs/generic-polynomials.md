@@ -80,13 +80,36 @@ list multiplies its tail value by the point, supplying the shift step.  The
 proof pattern is raw Horner semantics followed by transport across
 evaluation-preserving normalization.
 
-The remaining multiplicative laws concern formal canonical coefficient lists
-under ordinary ACL2 `EQUAL` and must be established structurally; equality at
-every field point cannot identify formal polynomials over a finite field,
-where distinct polynomials may induce the same function.  Their proof needs a
-small reusable group of raw-add interchange and shifted-product identities;
-rather than add that infrastructure unreviewed here, it is the immediate next
-tiny proof-engineering milestone.
+The structural multiplication laws were kept out of the executable
+multiplication change so that the algorithm, total-input policy, and evaluation
+bridge could be reviewed separately from the coefficient proof infrastructure.
+They are now certified.  The actual dependency chain is raw-add middle-four
+and nested interchange; scaling over addition and nested scaling; literal
+zero-prefix addition/scaling; right recursion and raw commutativity; raw
+distributivity; scaling/product compatibility and the small length lemmas that
+remove a zero-scaled prefix; raw associativity; and finally transport through
+normalization.  The central raw commutativity, distributivity, and associativity
+equalities hold literally for proper fixed coefficient lists.  Normalized
+congruence lemmas are still required at the public boundary because trimming
+an input can change the length of a raw result.
+
+Consequently `POLY-MUL` is a total commutative and associative operation and
+distributes on both sides over `POLY-ADD`, as ordinary ACL2 `EQUAL` of canonical
+representatives.  These are formal coefficient proofs: equality at every field
+point cannot identify formal polynomials over a finite field, where distinct
+polynomials can induce the same function.  Commutativity, associativity, both
+distributive laws, raw-add interchange, and the rearranging shift lemmas are
+disabled rules because their orientations either expand terms or invite
+loops.  The constant-left multiplication rule remains enabled because it
+strictly reduces multiplication to the existing scalar action.
+
+Zero-prefix addition and scaling are stable, narrowly reusable raw facts.  No
+public shift operation is introduced: shifted-product rearrangements and the
+length/zero-scale lemmas remain local proof infrastructure until a later degree
+or division development demonstrates a stable API need.  The completed public
+laws are transported by certified functional instantiation to the fixed PFIELD
+adapter and then to the executable F_7 instance; the existing computations
+remain regressions rather than generic proofs.
 
 The adapter regression defines exact copies using the fixed-arity PFIELD
 operations and transports normalization-preserves-evaluation with
@@ -130,7 +153,7 @@ after proving that fixed HS coefficients make GPOLY's remainder fixing an
 identity and that both normalizers coincide.  This work intentionally neither
 changes nor removes any HS theorem.
 
-After the structural multiplication-law milestone, the next intended work is
-a small polynomial-ring consolidation and constant-polynomial embedding,
-followed by degree and leading coefficient.  Division, monic normalization,
-and extension-field reduction remain later work.
+The next intended work is the constant-polynomial embedding and a compact
+polynomial commutative-ring consolidation, followed by degree and leading
+coefficient.  Division, monic normalization, and extension-field reduction
+remain later work.

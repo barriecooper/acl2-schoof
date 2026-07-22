@@ -165,6 +165,182 @@
                         (fix-coefficients pfield-fix-coefficients)
                         (raw-add pfield-raw-add)))))
 
+(defthm pfield-zero-is-0
+  (equal (gfield::pfield-zero) 0))
+
+(defthm pfield-fix-of-literal-zero
+  (equal (gfield::pfield-fix 0) 0))
+
+(defthm pfield-one-is-1
+  (equal (gfield::pfield-one) 1))
+
+(defthm pfield-fix-of-literal-one
+  (equal (gfield::pfield-fix 1) 1))
+
+(defthm pfield-element-p-of-literal-one
+  (gfield::pfield-element-p 1))
+
+(defthm pfield-element-p-of-literal-zero
+  (gfield::pfield-element-p 0))
+
+(defthm pfield-mul-literal-one-left
+  (equal (gfield::pfield-mul 1 x) (gfield::pfield-fix x)))
+
+(defthm pfield-inv-of-literal-zero
+  (equal (gfield::pfield-inv 0) 0))
+
+(defthm pfield-add-literal-zero-left
+  (equal (gfield::pfield-add 0 x) (gfield::pfield-fix x)))
+
+(defthm pfield-poly-mul-commutative-from-generic
+  (equal (pfield-poly-mul x y) (pfield-poly-mul y x))
+  :rule-classes nil
+  :hints (("Goal" :by (:functional-instance
+                        poly-mul-commutative
+                        (gfield::field-element-p gfield::pfield-element-p)
+                        (gfield::field-fix gfield::pfield-fix)
+                        (gfield::field-zero gfield::pfield-zero)
+                        (gfield::field-one gfield::pfield-one)
+                        (gfield::field-add gfield::pfield-add)
+                        (gfield::field-mul gfield::pfield-mul)
+                        (gfield::field-neg gfield::pfield-neg)
+                        (gfield::field-inv gfield::pfield-inv)
+                        (fix-coefficients pfield-fix-coefficients)
+                        (trim-trailing-zeros pfield-trim-trailing-zeros)
+                        (normalize pfield-normalize)
+                        (raw-add pfield-raw-add)
+                        (poly-add pfield-poly-add)
+                        (raw-scale pfield-raw-scale)
+                        (poly-scale pfield-poly-scale)
+                        (raw-mul pfield-raw-mul)
+                        (poly-mul pfield-poly-mul))
+           :do-not '(preprocess)
+           :in-theory '(pfield-zero-is-0 pfield-fix-of-literal-zero
+                        pfield-one-is-1
+                        pfield-fix-of-literal-one
+                        pfield-element-p-of-literal-one
+                        pfield-element-p-of-literal-zero
+                        pfield-mul-literal-one-left
+                        pfield-inv-of-literal-zero
+                        pfield-add-literal-zero-left
+                        pfield-fix-coefficients
+                        pfield-trim-trailing-zeros pfield-normalize
+                        pfield-raw-add pfield-poly-add
+                        pfield-raw-scale pfield-poly-scale
+                        pfield-raw-mul pfield-poly-mul
+                        gfield::booleanp-of-pfield-element-p
+                        gfield::pfield-element-p-of-pfield-fix
+                        gfield::pfield-fix-idempotent
+                        gfield::pfield-element-p-of-pfield-zero
+                        gfield::pfield-element-p-of-pfield-one
+                        gfield::pfield-zero-not-equal-pfield-one
+                        gfield::pfield-fix-of-zero
+                        gfield::pfield-fix-of-one
+                        gfield::pfield-element-p-of-pfield-add
+                        gfield::pfield-element-p-of-pfield-mul
+                        gfield::pfield-element-p-of-pfield-neg
+                        gfield::pfield-element-p-of-pfield-inv
+                        gfield::pfield-fix-of-pfield-add
+                        gfield::pfield-fix-of-pfield-mul
+                        gfield::pfield-fix-of-pfield-neg
+                        gfield::pfield-fix-of-pfield-inv
+                        gfield::pfield-add-of-fixes
+                        gfield::pfield-mul-of-fixes
+                        gfield::pfield-neg-of-fix
+                        gfield::pfield-inv-of-fix
+                        gfield::pfield-add-zero-left
+                        gfield::pfield-add-inverse-left
+                        gfield::pfield-mul-one-left
+                        gfield::pfield-inv-of-zero
+                        gfield::pfield-add-fix-right
+                        gfield::pfield-add-fix-left
+                        gfield::pfield-mul-fix-left))
+          ("Subgoal 13" :by gfield::pfield-mul-fix-right)
+          ("Subgoal 12" :by gfield::pfield-mul-left-distributive)
+          ("Subgoal 11" :by gfield::pfield-mul-commutative)
+          ("Subgoal 10" :by gfield::pfield-mul-associative)
+          ("Subgoal 9" :by gfield::pfield-add-commutative)
+          ("Subgoal 8" :by gfield::pfield-add-associative)
+          ("Subgoal 7" :by gfield::booleanp-of-pfield-element-p)
+          ("Subgoal 6" :by gfield::pfield-fix-when-pfield-element-p)
+          ("Subgoal 5" :use gfield::pfield-mul-inverse-left)
+          ("Subgoal 3" :by gfield::pfield-mul-fixed-congruence)
+          ("Subgoal 2" :by gfield::pfield-add-fixed-congruence)))
+
+(defthm pfield-poly-mul-left-distributive-from-generic
+  (equal (pfield-poly-mul x (pfield-poly-add y z))
+         (pfield-poly-add (pfield-poly-mul x y)
+                          (pfield-poly-mul x z)))
+  :rule-classes nil
+  :hints (("Goal" :by (:functional-instance
+                        poly-mul-left-distributive
+                        (gfield::field-element-p gfield::pfield-element-p)
+                        (gfield::field-fix gfield::pfield-fix)
+                        (gfield::field-zero gfield::pfield-zero)
+                        (gfield::field-one gfield::pfield-one)
+                        (gfield::field-add gfield::pfield-add)
+                        (gfield::field-mul gfield::pfield-mul)
+                        (gfield::field-neg gfield::pfield-neg)
+                        (gfield::field-inv gfield::pfield-inv)
+                        (fix-coefficients pfield-fix-coefficients)
+                        (trim-trailing-zeros pfield-trim-trailing-zeros)
+                        (normalize pfield-normalize)
+                        (raw-add pfield-raw-add)
+                        (poly-add pfield-poly-add)
+                        (raw-scale pfield-raw-scale)
+                        (poly-scale pfield-poly-scale)
+                        (raw-mul pfield-raw-mul)
+                        (poly-mul pfield-poly-mul)))))
+
+(defthm pfield-poly-mul-right-distributive-from-generic
+  (equal (pfield-poly-mul (pfield-poly-add x y) z)
+         (pfield-poly-add (pfield-poly-mul x z)
+                          (pfield-poly-mul y z)))
+  :rule-classes nil
+  :hints (("Goal" :by (:functional-instance
+                        poly-mul-right-distributive
+                        (gfield::field-element-p gfield::pfield-element-p)
+                        (gfield::field-fix gfield::pfield-fix)
+                        (gfield::field-zero gfield::pfield-zero)
+                        (gfield::field-one gfield::pfield-one)
+                        (gfield::field-add gfield::pfield-add)
+                        (gfield::field-mul gfield::pfield-mul)
+                        (gfield::field-neg gfield::pfield-neg)
+                        (gfield::field-inv gfield::pfield-inv)
+                        (fix-coefficients pfield-fix-coefficients)
+                        (trim-trailing-zeros pfield-trim-trailing-zeros)
+                        (normalize pfield-normalize)
+                        (raw-add pfield-raw-add)
+                        (poly-add pfield-poly-add)
+                        (raw-scale pfield-raw-scale)
+                        (poly-scale pfield-poly-scale)
+                        (raw-mul pfield-raw-mul)
+                        (poly-mul pfield-poly-mul)))))
+
+(defthm pfield-poly-mul-associative-from-generic
+  (equal (pfield-poly-mul (pfield-poly-mul x y) z)
+         (pfield-poly-mul x (pfield-poly-mul y z)))
+  :rule-classes nil
+  :hints (("Goal" :by (:functional-instance
+                        poly-mul-associative
+                        (gfield::field-element-p gfield::pfield-element-p)
+                        (gfield::field-fix gfield::pfield-fix)
+                        (gfield::field-zero gfield::pfield-zero)
+                        (gfield::field-one gfield::pfield-one)
+                        (gfield::field-add gfield::pfield-add)
+                        (gfield::field-mul gfield::pfield-mul)
+                        (gfield::field-neg gfield::pfield-neg)
+                        (gfield::field-inv gfield::pfield-inv)
+                        (fix-coefficients pfield-fix-coefficients)
+                        (trim-trailing-zeros pfield-trim-trailing-zeros)
+                        (normalize pfield-normalize)
+                        (raw-add pfield-raw-add)
+                        (poly-add pfield-poly-add)
+                        (raw-scale pfield-raw-scale)
+                        (poly-scale pfield-poly-scale)
+                        (raw-mul pfield-raw-mul)
+                        (poly-mul pfield-poly-mul)))))
+
 ; Ordinary executable F_7 DEFUNs generated from the same templates as the
 ; abstract algorithms.  Use :TRANS1 on this event to inspect the expansion.
 (def-normalize-eval-instance
@@ -261,6 +437,93 @@
                         (pfield-trim-trailing-zeros f7-trim-trailing-zeros)
                         (pfield-normalize f7-normalize)
                         (pfield-eval f7-eval)
+                        (pfield-raw-add f7-raw-add)
+                        (pfield-poly-add f7-poly-add)
+                        (pfield-raw-scale f7-raw-scale)
+                        (pfield-poly-scale f7-poly-scale)
+                        (pfield-raw-mul f7-raw-mul)
+                        (pfield-poly-mul f7-poly-mul))
+           :in-theory (enable dm::primep))))
+
+(defthm f7-poly-mul-commutative-from-generic
+  (equal (f7-poly-mul x y) (f7-poly-mul y x))
+  :rule-classes nil
+  :hints (("Goal" :by (:functional-instance
+                        pfield-poly-mul-commutative-from-generic
+                        (gfield::pfield-modulus (lambda () 7))
+                        (gfield::pfield-fix gfield::f7-fix)
+                        (gfield::pfield-zero gfield::f7-zero)
+                        (gfield::pfield-add gfield::f7-add)
+                        (gfield::pfield-mul gfield::f7-mul)
+                        (pfield-fix-coefficients f7-fix-coefficients)
+                        (pfield-trim-trailing-zeros f7-trim-trailing-zeros)
+                        (pfield-normalize f7-normalize)
+                        (pfield-raw-add f7-raw-add)
+                        (pfield-poly-add f7-poly-add)
+                        (pfield-raw-scale f7-raw-scale)
+                        (pfield-poly-scale f7-poly-scale)
+                        (pfield-raw-mul f7-raw-mul)
+                        (pfield-poly-mul f7-poly-mul))
+           :in-theory (enable dm::primep))))
+
+(defthm f7-poly-mul-left-distributive-from-generic
+  (equal (f7-poly-mul x (f7-poly-add y z))
+         (f7-poly-add (f7-poly-mul x y) (f7-poly-mul x z)))
+  :rule-classes nil
+  :hints (("Goal" :by (:functional-instance
+                        pfield-poly-mul-left-distributive-from-generic
+                        (gfield::pfield-modulus (lambda () 7))
+                        (gfield::pfield-fix gfield::f7-fix)
+                        (gfield::pfield-zero gfield::f7-zero)
+                        (gfield::pfield-add gfield::f7-add)
+                        (gfield::pfield-mul gfield::f7-mul)
+                        (pfield-fix-coefficients f7-fix-coefficients)
+                        (pfield-trim-trailing-zeros f7-trim-trailing-zeros)
+                        (pfield-normalize f7-normalize)
+                        (pfield-raw-add f7-raw-add)
+                        (pfield-poly-add f7-poly-add)
+                        (pfield-raw-scale f7-raw-scale)
+                        (pfield-poly-scale f7-poly-scale)
+                        (pfield-raw-mul f7-raw-mul)
+                        (pfield-poly-mul f7-poly-mul))
+           :in-theory (enable dm::primep))))
+
+(defthm f7-poly-mul-right-distributive-from-generic
+  (equal (f7-poly-mul (f7-poly-add x y) z)
+         (f7-poly-add (f7-poly-mul x z) (f7-poly-mul y z)))
+  :rule-classes nil
+  :hints (("Goal" :by (:functional-instance
+                        pfield-poly-mul-right-distributive-from-generic
+                        (gfield::pfield-modulus (lambda () 7))
+                        (gfield::pfield-fix gfield::f7-fix)
+                        (gfield::pfield-zero gfield::f7-zero)
+                        (gfield::pfield-add gfield::f7-add)
+                        (gfield::pfield-mul gfield::f7-mul)
+                        (pfield-fix-coefficients f7-fix-coefficients)
+                        (pfield-trim-trailing-zeros f7-trim-trailing-zeros)
+                        (pfield-normalize f7-normalize)
+                        (pfield-raw-add f7-raw-add)
+                        (pfield-poly-add f7-poly-add)
+                        (pfield-raw-scale f7-raw-scale)
+                        (pfield-poly-scale f7-poly-scale)
+                        (pfield-raw-mul f7-raw-mul)
+                        (pfield-poly-mul f7-poly-mul))
+           :in-theory (enable dm::primep))))
+
+(defthm f7-poly-mul-associative-from-generic
+  (equal (f7-poly-mul (f7-poly-mul x y) z)
+         (f7-poly-mul x (f7-poly-mul y z)))
+  :rule-classes nil
+  :hints (("Goal" :by (:functional-instance
+                        pfield-poly-mul-associative-from-generic
+                        (gfield::pfield-modulus (lambda () 7))
+                        (gfield::pfield-fix gfield::f7-fix)
+                        (gfield::pfield-zero gfield::f7-zero)
+                        (gfield::pfield-add gfield::f7-add)
+                        (gfield::pfield-mul gfield::f7-mul)
+                        (pfield-fix-coefficients f7-fix-coefficients)
+                        (pfield-trim-trailing-zeros f7-trim-trailing-zeros)
+                        (pfield-normalize f7-normalize)
                         (pfield-raw-add f7-raw-add)
                         (pfield-poly-add f7-poly-add)
                         (pfield-raw-scale f7-raw-scale)

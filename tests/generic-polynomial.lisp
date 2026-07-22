@@ -54,3 +54,6 @@
                      (f7-poly-mul '(3 4) '(5 6)))))
 (assert-event (equal (f7-poly-mul '(1 2) '(3 4))
                      (f7-poly-mul '(3 4) '(1 2))))
+(assert-event
+ (equal (f7-poly-mul (f7-poly-mul '(1 2) '(3 4)) '(5 6))
+        (f7-poly-mul '(1 2) (f7-poly-mul '(3 4) '(5 6)))))

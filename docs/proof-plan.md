@@ -14,11 +14,11 @@ ACL2 obligations are genuinely proved and certified.
    evaluation), its generic additive structure (addition, negation, and
    subtraction), generic canonical scalar multiplication, and the canonical
    polynomial multiplication definition with evaluation semantics are also
-   complete.  Structural commutativity, distributivity, and associativity are
-   the immediate next tiny proof-engineering PR; multiplication is not marked
-   algebraically complete until those laws certify.  A small polynomial-ring
-   consolidation and constant-polynomial embedding follows, then degree and
-   leading coefficient.  The executable-instantiation policy is
+   complete.  Generic multiplication is now algebraically complete: its
+   commutativity, associativity, and both distributive laws are certified and
+   transported through PFIELD to executable F_7.  Constant-polynomial
+   embedding and a compact polynomial commutative-ring consolidation follow,
+   then degree and leading coefficient.  The executable-instantiation policy is
    recorded in `executable-instantiation.md`: abstract algorithms, ordinary
    executable concrete definitions, and certified correctness bridges are all
    required for future computational layers.  Generic polynomial division,
