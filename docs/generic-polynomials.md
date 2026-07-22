@@ -3,7 +3,7 @@
 `books/polynomial/generic/package.lisp` establishes the dedicated `GPOLY`
 namespace, `base.lisp` defines the abstract theory over `GFIELD`, and
 `add.lisp` supplies the additive structure, `scale.lisp` supplies the scalar
-action, and `pfield-instance.lisp` is their
+action, `mul.lisp` supplies multiplication, and `pfield-instance.lisp` is their
 PFIELD/F_7 regression.  The existing `HS` books
 are unchanged.
 
@@ -68,6 +68,26 @@ fixer-total, canonical, directly executable GPOLY operations.  GPOLY follows
 the recurring semantic pattern: establish raw Horner semantics, then transport
 it through evaluation-preserving normalization.
 
+Multiplication follows the recursive shifted-scaling construction in
+`nonstd/polynomials/polynomial-defuns.lisp`: for constant-first coefficients,
+`(a . f)g` is the raw sum of `a*g` and the zero-prefixed product `f*g`.
+Compared with direct coefficient convolution, this choice is smaller and
+reuses certified raw scaling and addition without a second coefficient-indexing
+recursion.  `RAW-MUL` calls only raw operations, itself, and the minimal zero
+prefix; `POLY-MUL` fixes both operands, invokes the raw algorithm, and
+normalizes exactly once at its public boundary.  Evaluating a zero-prefixed
+list multiplies its tail value by the point, supplying the shift step.  The
+proof pattern is raw Horner semantics followed by transport across
+evaluation-preserving normalization.
+
+The remaining multiplicative laws concern formal canonical coefficient lists
+under ordinary ACL2 `EQUAL` and must be established structurally; equality at
+every field point cannot identify formal polynomials over a finite field,
+where distinct polynomials may induce the same function.  Their proof needs a
+small reusable group of raw-add interchange and shifted-product identities;
+rather than add that infrastructure unreviewed here, it is the immediate next
+tiny proof-engineering milestone.
+
 The adapter regression defines exact copies using the fixed-arity PFIELD
 operations and transports normalization-preserves-evaluation with
 `:functional-instance`.  Separate executable copies specialize the same
@@ -83,8 +103,8 @@ bridge may therefore use the identity conversion at a fixed PFIELD instance,
 but must prove equivalence of canonical predicates, normalization, evaluation,
 and eventually addition and multiplication.
 
-This additive-and-scaling layer deliberately contains no generic polynomial multiplication,
-degree, leading coefficient, division, gcd, derivatives, root counting, field
+This arithmetic layer deliberately contains no degree, leading coefficient,
+division, gcd, derivatives, root counting, field
 enumeration, or extension-field implementation.  It provides syntax and
 semantics over an assumed field, not an implementation of every finite field.
 
@@ -107,13 +127,10 @@ operations.  HS closure,
 commutativity, associativity, and evaluation-of-add theorems should eventually
 be concrete instances.  An identity-on-proper-lists bridge appears feasible
 after proving that fixed HS coefficients make GPOLY's remainder fixing an
-identity and that both normalizers coincide.  This PR intentionally neither
-changes nor removes any HS theorem, and polynomial multiplication remains a
-separate future task.
+identity and that both normalizers coincide.  This work intentionally neither
+changes nor removes any HS theorem.
 
-Scaling is intended to support later polynomial multiplication, division,
-monic normalization, and extension-field reduction.  In particular,
-`nonstd/polynomials/polynomial-defuns.lisp` recursively builds multiplication
-from scaling, addition, and a zero-coefficient shift.  That construction is
-prior art to compare with direct convolution in the next multiplication design
-review; neither multiplication nor shifting is implemented by this milestone.
+After the structural multiplication-law milestone, the next intended work is
+a small polynomial-ring consolidation and constant-polynomial embedding,
+followed by degree and leading coefficient.  Division, monic normalization,
+and extension-field reduction remain later work.
