@@ -64,3 +64,17 @@
                (,raw-scale a (cdr x)))))
      (defun ,poly-scale (a x)
        (,normalize (,raw-scale (,field-fix a) (,normalize x))))))
+
+; Dense multiplication uses the constant-first Horner decomposition
+; (a . f)g = a*g + X(f*g).  Only raw operations occur in the recursion;
+; normalization is performed once, by the public operation.
+(defmacro def-mul-instance
+  (raw-mul poly-mul raw-add raw-scale normalize field-zero)
+  `(progn
+     (defun ,raw-mul (x y)
+       (if (or (atom x) (atom y))
+           nil
+         (,raw-add (,raw-scale (car x) y)
+                   (cons (,field-zero) (,raw-mul (cdr x) y)))))
+     (defun ,poly-mul (x y)
+       (,normalize (,raw-mul (,normalize x) (,normalize y))))))

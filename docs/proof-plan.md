@@ -12,13 +12,17 @@ ACL2 obligations are genuinely proved and certified.
    (current certified implementation), plus the completed abstract field
    kernel and its completed certified fixed-prime PFIELD adapter.  The generic dense-polynomial foundation (representation, normalization, and
    evaluation), its generic additive structure (addition, negation, and
-   subtraction), and generic canonical scalar multiplication are also
-   complete.  Generic polynomial multiplication is the next intended
-   mathematical PR.  The executable-instantiation policy is
+   subtraction), generic canonical scalar multiplication, and the canonical
+   polynomial multiplication definition with evaluation semantics are also
+   complete.  Structural commutativity, distributivity, and associativity are
+   the immediate next tiny proof-engineering PR; multiplication is not marked
+   algebraically complete until those laws certify.  A small polynomial-ring
+   consolidation and constant-polynomial embedding follows, then degree and
+   leading coefficient.  The executable-instantiation policy is
    recorded in `executable-instantiation.md`: abstract algorithms, ordinary
    executable concrete definitions, and certified correctness bridges are all
-   required for future computational layers.  Generic polynomial multiplication,
-   division, extension fields, and arbitrary finite fields are not complete.
+   required for future computational layers.  Generic polynomial division,
+   extension fields, and arbitrary finite fields are not complete.
 2. Certified extension fields and generic polynomial instances, then rational
    functions over `F_q(t)` and well-defined operations.
 3. Valuation at infinity, including product and cancellation laws.

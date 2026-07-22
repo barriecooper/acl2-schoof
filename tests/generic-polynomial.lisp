@@ -34,3 +34,23 @@
 (assert-event (equal (f7-poly-scale 1 '(1 2 0 0)) '(1 2)))
 (assert-event (equal (f7-poly-scale 2 '(1 0 4)) '(2 0 1)))
 (assert-event (equal (f7-poly-scale 2 '(1 . bad-tail)) '(2)))
+(assert-event (equal (f7-poly-mul '(1 2) '(3 4)) '(3 3 1)))
+(assert-event (equal (f7-poly-mul nil '(1 2)) nil))
+(assert-event (equal (f7-poly-mul '(1 2) nil) nil))
+(assert-event (equal (f7-poly-mul '(1) '(1 2)) '(1 2)))
+(assert-event (equal (f7-poly-mul '(1 2) '(1)) '(1 2)))
+(assert-event (equal (f7-poly-mul '(7 14) '(3 4)) nil))
+(assert-event (equal (f7-poly-mul '(1 . bad-tail) '(3 4)) '(3 4)))
+(assert-event
+ (equal (f7-eval (f7-poly-mul '(1 2) '(3 4)) 2)
+        (gfield::f7-mul (f7-eval '(1 2) 2) (f7-eval '(3 4) 2))))
+(assert-event
+ (equal (f7-poly-mul '(1 2) (f7-poly-add '(3 4) '(5 6)))
+        (f7-poly-add (f7-poly-mul '(1 2) '(3 4))
+                     (f7-poly-mul '(1 2) '(5 6)))))
+(assert-event
+ (equal (f7-poly-mul (f7-poly-add '(1 2) '(3 4)) '(5 6))
+        (f7-poly-add (f7-poly-mul '(1 2) '(5 6))
+                     (f7-poly-mul '(3 4) '(5 6)))))
+(assert-event (equal (f7-poly-mul '(1 2) '(3 4))
+                     (f7-poly-mul '(3 4) '(1 2))))
