@@ -89,5 +89,66 @@
   (equal (poly-leading-coefficient (normalize (list a)))
          (gfield::field-fix a)))
 
+; A canonical nonempty coefficient list has a nonzero final coefficient by
+; definition.  The raw leading-coefficient theorem and the field
+; no-zero-divisor consequence EQUAL-FIELD-MUL-ZERO therefore show that the
+; convolution itself is already canonical; normalization has no work to do.
+(defthm canonical-polynomial-p-of-raw-mul-when-nonzero
+  (implies (and (canonical-polynomial-p f)
+                (canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (canonical-polynomial-p (raw-mul f g)))
+  :hints (("Goal"
+           :use ((:instance raw-leading-coefficient-of-raw-mul)
+                 (:instance equal-field-mul-zero
+                            (a (car (last f)))
+                            (x (car (last g)))))
+           :in-theory (disable raw-leading-coefficient-of-raw-mul
+                               equal-field-mul-zero))))
+
+(defthm normalize-of-raw-mul-when-canonical-nonzero
+  (implies (and (canonical-polynomial-p f)
+                (canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (equal (normalize (raw-mul f g)) (raw-mul f g))))
+
+(defthm poly-leading-coefficient-of-poly-mul
+  (implies (and (canonical-polynomial-p f)
+                (canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (equal (poly-leading-coefficient (poly-mul f g))
+                  (gfield::field-mul
+                   (poly-leading-coefficient f)
+                   (poly-leading-coefficient g))))
+  :hints (("Goal"
+           :use ((:instance raw-leading-coefficient-of-raw-mul))
+           :in-theory (e/d (poly-mul)
+                           (raw-leading-coefficient-of-raw-mul)))))
+
+(defthm poly-degree-of-poly-mul
+  (implies (and (canonical-polynomial-p f)
+                (canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (equal (poly-degree (poly-mul f g))
+                  (+ (poly-degree f) (poly-degree g))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance len-of-raw-mul (x f) (y g)))
+           :in-theory (e/d (poly-mul)
+                           (len-of-raw-mul)))))
+
+(defthm consp-of-poly-mul-when-canonical-nonzero
+  (implies (and (canonical-polynomial-p f)
+                (canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (consp (poly-mul f g)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable poly-mul))))
+
 (verify-guards poly-degree)
 (verify-guards poly-leading-coefficient)

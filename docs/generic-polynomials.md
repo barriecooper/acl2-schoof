@@ -193,7 +193,14 @@ after proving that fixed HS coefficients make GPOLY's remainder fixing an
 identity and that both normalizers coincide.  This work intentionally neither
 changes nor removes any HS theorem.
 
-The immediate next milestone is leading-term/no-zero-divisor reasoning and the
-degree-of-multiplication theorem under nonzero hypotheses.  Polynomial
-division, monic normalization, and extension-field reduction remain later
-work.
+The highest coefficient of a nonempty raw product is now proved structurally
+to be the field product of the two input final coefficients.  This is a formal
+coefficient/list argument, not an appeal to evaluation extensionality (which
+would be invalid over a finite field).  Canonical nonempty inputs have nonzero
+final coefficients, and the field no-zero-divisor result therefore makes the
+raw product canonical.  Normalization consequently preserves that raw product,
+leading coefficients multiply, degrees add, and the public product is nonempty.
+
+The immediate next milestone is specifying division and remainder contracts
+before implementing long division.  Polynomial division, monic normalization,
+and extension-field reduction remain later work.
