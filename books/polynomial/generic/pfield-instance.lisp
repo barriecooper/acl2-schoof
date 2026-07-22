@@ -1,5 +1,5 @@
 (in-package "GPOLY")
-(include-book "const")
+(include-book "power")
 (include-book "../../field/pfield-adapter")
 
 ; Generate the exact-arity PFIELD adapter boundary from the same templates as
@@ -44,6 +44,9 @@
 (def-neg-sub-instance pfield-raw-neg pfield-poly-neg pfield-poly-sub
                       pfield-poly-add pfield-normalize gfield::pfield-neg)
 (def-const-instance pfield-const gfield::pfield-fix gfield::pfield-zero)
+(defun pfield-polynomial-one () (list (gfield::pfield-one)))
+(gfield::def-pow-instance pfield-poly-pow-spec pfield-poly-pow-fast
+  pfield-poly-pow pfield-polynomial-one pfield-poly-mul pfield-normalize)
 
 (defthm pfield-eval-of-const
   (equal (pfield-eval (pfield-const a) x) (gfield::pfield-fix a))
@@ -423,6 +426,9 @@
 (def-mul-instance f7-raw-mul f7-poly-mul f7-raw-add f7-raw-scale
                   f7-normalize gfield::f7-zero)
 (def-const-instance f7-const gfield::f7-fix gfield::f7-zero)
+(defun f7-polynomial-one () (list (gfield::f7-one)))
+(gfield::def-pow-instance f7-poly-pow-spec f7-poly-pow-fast f7-poly-pow
+  f7-polynomial-one f7-poly-mul f7-normalize)
 
 (defthm f7-eval-of-const-from-pfield
   (equal (f7-eval (f7-const a) x) (gfield::f7-fix a))

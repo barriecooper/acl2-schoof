@@ -69,3 +69,23 @@
 (assert-event
  (equal (f7-poly-mul '(1 2 3) (f7-const 4))
         (f7-poly-scale 4 '(1 2 3))))
+(assert-event (equal (f7-poly-pow '(1 2) 0) '(1)))
+(assert-event (equal (f7-poly-pow '(1 2 0) 1) '(1 2)))
+(assert-event (equal (f7-poly-pow nil 0) '(1)))
+(assert-event (equal (f7-poly-pow nil 5) nil))
+; Hand check: (1+2X)^2 = 1+4X+4X^2 over F_7.
+(assert-event (equal (f7-poly-pow '(1 2) 2) '(1 4 4)))
+(assert-event (equal (f7-poly-pow '(1 1) 3) '(1 3 3 1)))
+(assert-event
+ (equal (f7-eval (f7-poly-pow '(1 1) 16) 2)
+        (gfield::f7-pow (f7-eval '(1 1) 2) 16)))
+(assert-event
+ (equal (f7-eval (f7-poly-pow '(1 2) 11) 3)
+        (gfield::f7-pow (f7-eval '(1 2) 3) 11)))
+(assert-event
+ (equal (f7-poly-pow '(1 2) (+ 3 4))
+        (f7-poly-mul (f7-poly-pow '(1 2) 3)
+                     (f7-poly-pow '(1 2) 4))))
+(assert-event
+ (equal (f7-poly-pow (f7-poly-pow '(1 2) 3) 4)
+        (f7-poly-pow '(1 2) 12)))

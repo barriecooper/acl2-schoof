@@ -50,10 +50,8 @@
 
 (defun pfield-sub (x y) (pfield-add x (pfield-neg y)))
 (defun pfield-div (x y) (pfield-mul x (pfield-inv y)))
-(defun pfield-pow (x n)
-  (declare (xargs :guard (natp n) :verify-guards nil))
-  (if (zp n) (pfield-one)
-    (pfield-mul x (pfield-pow x (1- n)))))
+(def-pow-instance pfield-pow-spec pfield-pow-fast pfield-pow
+  pfield-one pfield-mul pfield-fix)
 
 ; Canonical representatives and closure.
 (defthm booleanp-of-pfield-element-p
@@ -271,9 +269,8 @@
 (defun f7-inv (x) (pfield::inv (f7-fix x) 7))
 (defun f7-sub (x y) (f7-add x (f7-neg y)))
 (defun f7-div (x y) (f7-mul x (f7-inv y)))
-(defun f7-pow (x n)
-  (declare (xargs :guard (natp n) :verify-guards nil))
-  (if (zp n) (f7-one) (f7-mul x (f7-pow x (1- n)))))
+(def-pow-instance f7-pow-spec f7-pow-fast f7-pow
+  f7-one f7-mul f7-fix)
 
 (defthm f7-double-negation-from-generic-kernel
   (equal (f7-neg (f7-neg x)) (f7-fix x))

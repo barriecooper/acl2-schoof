@@ -8,6 +8,9 @@
 (defun polynomial-one ()
   (list (gfield::field-one)))
 
+(defthm canonical-polynomial-p-of-polynomial-one
+  (canonical-polynomial-p (polynomial-one)))
+
 (defthm canonical-polynomial-p-of-const
   (canonical-polynomial-p (const a))
   :hints (("Goal" :in-theory (enable const))))
