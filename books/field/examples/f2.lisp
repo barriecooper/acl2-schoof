@@ -11,9 +11,8 @@
 (defun f2-inv (x) (f2-fix x))
 (defun f2-sub (x y) (f2-add x (f2-neg y)))
 (defun f2-div (x y) (f2-mul x (f2-inv y)))
-(defun f2-pow (x n)
-  (declare (xargs :guard (natp n) :verify-guards nil))
-  (if (zp n) (f2-one) (f2-mul x (f2-pow x (1- n)))))
+(def-pow-instance f2-pow-spec f2-pow-fast f2-pow
+  f2-one f2-mul f2-fix)
 
 (defthm f2-double-negation-from-generic-kernel
   (equal (f2-neg (f2-neg x)) (f2-fix x))

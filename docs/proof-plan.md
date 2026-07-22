@@ -18,11 +18,17 @@ ACL2 obligations are genuinely proved and certified.
    commutativity, associativity, and both distributive laws are certified and
    transported through PFIELD to executable F_7.  The explicit canonical
    constant embedding and compact commutative-ring consolidation are complete.
-   Reusable exponentiation by squaring is next: first audit GFIELD power, then
-   separate a linear specification from a logarithmic executable algorithm,
-   give natural exponents explicit `nfix` behavior, and certify their equality
-   for reuse by fields, polynomials, and later extension fields.  Degree and
-   leading coefficient follow fast exponentiation.  The executable-instantiation policy is
+   Reusable natural exponentiation by squaring is complete: a linear proof
+   specification, logarithmic executable algorithm, explicit `nfix` behavior,
+   generic laws, canonical polynomial instance, and evaluation semantics are
+   certified for reuse by fields and later extension fields.  The next focused
+   milestones are (1) an executable F_11 golden field/polynomial fixture for
+   `y^2 = x^3 + x + 6`, (2) generic polynomial degree and leading coefficient,
+   (3) degree of multiplication and no-zero-divisor results, and (4) division
+   and Euclidean theory.  Later power uses include extension-field arithmetic,
+   Frobenius, derived finite-field inversion, irreducibility tests,
+   elliptic-curve scalar/endomorphism calculations, and Schoof computations.
+   The executable-instantiation policy is
    recorded in `executable-instantiation.md`: abstract algorithms, ordinary
    executable concrete definitions, and certified correctness bridges are all
    required for future computational layers.  Generic polynomial division,

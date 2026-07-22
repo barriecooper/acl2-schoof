@@ -1,5 +1,8 @@
 (in-package "GFIELD")
 
+(include-book "kestrel/arithmetic-light/floor" :dir :system)
+(include-book "kestrel/arithmetic-light/evenp" :dir :system)
+
 ; A canonical-representative field interface.  Local definitions are only
 ; consistency witnesses; clients replace the constrained symbols by functional
 ; instantiation.
@@ -97,10 +100,43 @@
 (defequiv field-equiv)
 (defun field-sub (x y) (field-add x (field-neg y)))
 (defun field-div (x y) (field-mul x (field-inv y)))
-(defun field-pow (x n)
-  (declare (xargs :guard (natp n)))
-  (if (zp n) (field-one)
-    (field-mul x (field-pow x (1- n)))))
+; A deliberately narrow power-instance generator.  Every expansion is three
+; ordinary DEFUN events: a linear logical specification, a binary accumulator,
+; and the public MBE wrapper.  The logical branch makes proofs inspectable;
+; compiled execution uses only the accumulator, whose exponent is shifted
+; right once at every recursive call.  Guard verification is deliberately
+; staged after each instance's accumulator theorem, because that theorem is
+; also the proof obligation equating the MBE branches.
+(defmacro def-pow-instance (spec fast pow one mul fix)
+  `(progn
+     (defun ,spec (x n)
+       (declare (xargs :measure (nfix n)))
+       (let ((n (nfix n)))
+         (if (zp n)
+             (,one)
+           (,mul (,fix x) (,spec x (1- n))))))
+     (defun ,fast (acc base n)
+       (declare (xargs :guard (natp n)
+                       :verify-guards nil
+                       :measure (nfix n)
+                       :hints (("Goal" :in-theory
+                                (enable acl2::<-of-floor-arg1)))))
+       (if (not (natp n))
+           acc
+         (if (zp n)
+             acc
+           (let ((half (floor n 2))
+                 (square (,mul base base)))
+             (if (oddp n)
+                 (,fast (,mul acc base) square half)
+               (,fast acc square half))))))
+     (defun ,pow (x n)
+       (declare (xargs :guard t :verify-guards nil))
+       (mbe :logic (,spec (,fix x) (nfix n))
+            :exec (,fast (,one) (,fix x) (nfix n))))))
+
+(def-pow-instance field-pow-spec field-pow-fast field-pow
+  field-one field-mul field-fix)
 
 (defthm field-add-zero-right
   (equal (field-add x (field-zero)) (field-fix x)))
@@ -209,9 +245,175 @@
 (defthm field-div-by-one
   (equal (field-div x (field-one)) (field-fix x)))
 
-(defthm field-pow-zero (equal (field-pow x 0) (field-one)))
+(defthm field-pow-correct
+  (equal (field-pow x n) (field-pow-spec (field-fix x) (nfix n)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable field-pow))))
+(defthm field-pow-of-field-fix
+  (equal (field-pow (field-fix x) n) (field-pow x n))
+  :hints (("Goal" :in-theory (enable field-pow))))
+(defthm field-pow-of-nfix
+  (equal (field-pow x (nfix n)) (field-pow x n))
+  :hints (("Goal" :in-theory (enable field-pow))))
+(defthm field-pow-zero (equal (field-pow x 0) (field-one))
+  :hints (("Goal" :in-theory (enable field-pow field-pow-spec))))
+(defthm field-pow-successor-total
+  (equal (field-pow x (+ 1 (nfix n)))
+         (field-mul x (field-pow x n)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable field-pow field-pow-spec))))
 (defthm field-pow-successor
   (implies (natp n)
            (equal (field-pow x (+ 1 n))
-                  (field-mul x (field-pow x n)))))
-(defthm field-element-p-of-pow (field-element-p (field-pow x n)))
+                  (field-mul x (field-pow x n))))
+  :hints (("Goal" :use field-pow-successor-total)))
+(defthm field-pow-one
+  (equal (field-pow x 1) (field-fix x))
+  :hints (("Goal" :use ((:instance field-pow-successor-total (n 0))))))
+(defthm field-pow-of-one
+  (equal (field-pow (field-one) n) (field-one))
+  :hints (("Goal" :induct (field-pow-spec (field-one) n)
+           :in-theory (enable field-pow field-pow-spec))))
+(defthm field-element-p-of-pow (field-element-p (field-pow x n))
+  :hints (("Goal" :in-theory (enable field-pow))))
+(defthm field-element-p-of-pow-spec
+  (field-element-p (field-pow-spec x n))
+  :hints (("Goal" :induct (field-pow-spec x n)
+           :in-theory (enable field-pow-spec))))
+
+; Squaring two adjacent copies of the same base needs associativity only.
+; Keep commutativity explicitly unavailable: this lemma is part of the
+; fast-accumulator correctness argument, not a commutative-ring power law.
+(defthm field-pow-spec-successor
+  (equal (field-pow-spec base (+ 1 (nfix n)))
+         (field-mul (field-fix base) (field-pow-spec base n)))
+  :hints (("Goal" :in-theory (enable field-pow-spec))))
+
+(defthm field-pow-spec-plus-two
+  (implies (and (field-element-p base)
+                (natp n))
+           (equal (field-pow-spec base (+ 2 n))
+                  (field-mul base
+                             (field-mul base (field-pow-spec base n)))))
+  :hints (("Goal" :use ((:instance field-pow-spec-successor
+                          (n (+ 1 n)))
+                          (:instance field-pow-spec-successor (n n))))))
+
+(defthm field-pow-spec-of-square
+  (implies (and (field-element-p base)
+                (natp n))
+           (equal (field-pow-spec (field-mul base base) n)
+                  (field-pow-spec base (* 2 n))))
+  :hints (("Goal" :induct (field-pow-spec base n)
+           :in-theory (e/d (field-pow-spec field-pow-spec-plus-two
+                                           field-mul-associative)
+                           (field-mul-commutative)))
+          ("Subgoal *1/2" :use ((:instance field-pow-spec-plus-two
+                                  (base base)
+                                  (n (+ -2 (* 2 n)))))
+           :in-theory (disable field-mul-commutative))))
+
+(defthm natural-split-at-low-bit
+  (implies (natp n)
+           (equal n
+                  (if (oddp n)
+                      (+ 1 (* 2 (floor n 2)))
+                    (* 2 (floor n 2)))))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance acl2::split-low-bit (i n)))
+           :in-theory (e/d (oddp) (floor)))))
+
+(defthm field-pow-spec-odd-form
+  (implies (and (field-element-p base)
+                (natp n))
+           (equal (field-pow-spec base (+ 1 (* 2 n)))
+                  (field-mul base (field-pow-spec base (* 2 n)))))
+  :hints (("Goal" :use ((:instance field-pow-spec-successor
+                          (base base) (n (* 2 n)))))))
+
+; Accumulator invariant for the executable binary recursion:
+;   fast(acc, base, n) = acc * spec(base, n).
+; The hypotheses say that ACC and BASE are fixed monoid elements.  The proof
+; deliberately excludes multiplication commutativity; associativity and the
+; two identity laws are the only multiplicative rearrangements available.
+(defthm field-pow-fast-accumulator-invariant
+  (implies (and (field-element-p acc)
+                (field-element-p base)
+                (natp n))
+           (equal (field-pow-fast acc base n)
+                  (field-mul acc (field-pow-spec base n))))
+  :hints (("Goal" :induct (field-pow-fast acc base n)
+           :in-theory (e/d (field-pow-fast field-pow-spec
+                                           field-pow-spec-of-square
+                                           field-pow-spec-odd-form
+                                           field-mul-associative)
+                           (field-mul-commutative)))
+          ("Subgoal *1/2" :use ((:instance natural-split-at-low-bit (n n))
+                                  (:instance field-pow-spec-odd-form
+                                   (base base) (n (floor n 2))))
+           :in-theory (disable field-mul-commutative))
+          ("Subgoal *1/3" :use ((:instance natural-split-at-low-bit (n n)))
+           :in-theory (disable field-mul-commutative))
+          ("Subgoal *1/1" :use ((:instance natural-split-at-low-bit (n n)))
+           :in-theory (disable field-mul-commutative))))
+
+(defthm field-pow-fast-correct
+  (equal (field-pow-fast (field-one) (field-fix x) (nfix n))
+         (field-pow-spec (field-fix x) (nfix n)))
+  :hints (("Goal" :use ((:instance field-pow-fast-accumulator-invariant
+                          (acc (field-one))
+                          (base (field-fix x))
+                          (n (nfix n))))
+           :in-theory (disable field-mul-commutative))))
+
+(verify-guards field-pow-fast)
+(verify-guards field-pow
+  :hints (("Goal" :use field-pow-fast-correct)))
+(defthm field-mul-power-interchange
+  (equal (field-mul x (field-mul a (field-mul x b)))
+         (field-mul x (field-mul x (field-mul a b))))
+  :hints (("Goal" :use ((:instance field-mul-associative (x a) (y x) (z b))
+                          (:instance field-mul-associative (x x) (y a)
+                           (z (field-mul x b)))
+                          (:instance field-mul-associative (x x) (y x)
+                           (z (field-mul a b)))
+                          (:instance field-mul-associative (x a) (y b) (z x))
+                          (:instance field-mul-commutative
+                           (x (field-mul a b)) (y x))
+                          (:instance field-mul-commutative (x a) (y x))))))
+(defthm field-mul-move-left
+  (equal (field-mul x (field-mul a b))
+         (field-mul a (field-mul x b)))
+  :hints (("Goal" :use ((:instance field-mul-associative
+                          (x x) (y a) (z b))
+                          (:instance field-mul-associative
+                           (x a) (y x) (z b))
+                          (:instance field-mul-commutative (x x) (y b))
+                          (:instance field-mul-commutative (x x) (y a)))
+           :in-theory (disable field-mul-associative
+                               field-mul-commutative))))
+(defthm field-pow-of-zero
+  (equal (field-pow (field-zero) n)
+         (if (zp n) (field-one) (field-zero)))
+  :hints (("Goal" :induct (field-pow-spec (field-zero) n)
+           :in-theory (enable field-pow field-pow-spec))))
+
+(defthm field-pow-add-reversed
+  (equal (field-pow x (+ (nfix m) (nfix n)))
+         (field-mul (field-pow x n) (field-pow x m)))
+  :rule-classes nil
+  :hints (("Goal" :induct (field-pow-spec x n)
+           :in-theory (enable field-pow field-pow-spec
+                              field-mul-associative
+                              field-mul-commutative
+                              field-mul-move-left
+                              field-mul-power-interchange))))
+
+(defthm field-pow-add
+  (equal (field-pow x (+ (nfix m) (nfix n)))
+         (field-mul (field-pow x m) (field-pow x n)))
+  :hints (("Goal" :use (field-pow-add-reversed
+                          (:instance field-mul-commutative
+                           (x (field-pow x m)) (y (field-pow x n)))))))
+
+(in-theory (disable field-pow-spec field-pow-add))
