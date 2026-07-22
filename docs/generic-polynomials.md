@@ -117,6 +117,34 @@ operations and transports normalization-preserves-evaluation with
 recurrences to F_7 and compute fixing, trimming, internal-zero, constant,
 nonconstant, and wraparound examples.
 
+## Constant embedding and compact ring API
+
+`CONST` is the explicit unital embedding of the coefficient field into
+canonical GPOLY values.  It fixes its arbitrary ACL2 input once and returns a
+singleton for a nonzero result, but returns canonical `nil` for field zero;
+`(0)` is deliberately never exposed as polynomial zero.  `POLYNOMIAL-ONE`
+names the existing singleton-one representation without introducing a second
+zero constructor.  The constructor is directly executable and the same small
+DEFUN-only template supplies the PFIELD and F_7 versions.
+
+The embedding preserves field addition, negation, subtraction, multiplication,
+zero, and one.  Multiplication by `CONST` on either side reduces to
+`POLY-SCALE`; the right-hand statement follows mathematically from polynomial
+commutativity rather than another coefficient proof.  These reducing bridge,
+fixer, zero/one, and evaluation rules are enabled.  The operation-preservation
+rules are disabled because expanding a field expression into polynomial
+operations is not a useful global simplification.
+
+Together, the established additive group laws, multiplicative zero and one,
+commutativity, associativity, and both distributive laws are the compact public
+commutative-ring API.  For every fixed point, `EVAL-OF-NIL`,
+`EVAL-OF-POLYNOMIAL-ONE`, the existing addition/negation/subtraction/product
+theorems, and `EVAL-OF-CONST` state that evaluation is a unital ring
+homomorphism.  This is theorem-level consolidation, not a new executable
+algebra algorithm.  Equality of canonical values remains ordinary ACL2
+`EQUAL`.  It is formal polynomial equality and remains distinct from equality
+of the functions induced over a finite field.
+
 ## Relationship to HS and deferred bridge
 
 Both GPOLY and HS are dense, constant-first coefficient lists with `nil` as the
@@ -153,7 +181,15 @@ after proving that fixed HS coefficients make GPOLY's remainder fixing an
 identity and that both normalizers coincide.  This work intentionally neither
 changes nor removes any HS theorem.
 
-The next intended work is the constant-polynomial embedding and a compact
-polynomial commutative-ring consolidation, followed by degree and leading
-coefficient.  Division, monic normalization, and extension-field reduction
-remain later work.
+The immediate next milestone is reusable efficient exponentiation by squaring.
+That PR should first audit the existing GFIELD power implementation, then choose
+a shared approach suitable for GFIELD elements, canonical polynomials, and
+later extension-field elements.  It should distinguish a simple linear
+recursive specification (where useful for proofs) from a logarithmic executable
+implementation, use natural exponents with explicit total `NFIX` behavior, and
+prove the fast implementation equal to the specification.  Anticipated uses
+include polynomial powers, quotient-field arithmetic, Frobenius powers such as
+`x^q`, executable field inversion by exponentiation, irreducibility and
+factorisation tests, and later Schoof computations.  Degree and leading
+coefficient follow fast power; division, monic normalization, and
+extension-field reduction remain later work.

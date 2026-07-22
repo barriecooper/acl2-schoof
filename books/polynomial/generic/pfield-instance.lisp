@@ -1,5 +1,5 @@
 (in-package "GPOLY")
-(include-book "mul")
+(include-book "const")
 (include-book "../../field/pfield-adapter")
 
 ; Generate the exact-arity PFIELD adapter boundary from the same templates as
@@ -41,6 +41,54 @@
                     gfield::pfield-fix gfield::pfield-mul)
 (def-mul-instance pfield-raw-mul pfield-poly-mul pfield-raw-add
                   pfield-raw-scale pfield-normalize gfield::pfield-zero)
+(def-neg-sub-instance pfield-raw-neg pfield-poly-neg pfield-poly-sub
+                      pfield-poly-add pfield-normalize gfield::pfield-neg)
+(def-const-instance pfield-const gfield::pfield-fix gfield::pfield-zero)
+
+(defthm pfield-eval-of-const
+  (equal (pfield-eval (pfield-const a) x) (gfield::pfield-fix a))
+  :hints (("Goal" :in-theory (enable pfield-const))))
+
+(defthm pfield-poly-mul-const-left
+  (equal (pfield-poly-mul (pfield-const a) p)
+         (pfield-poly-scale a p))
+  :hints (("Goal" :by (:functional-instance
+                        poly-mul-const-left
+                        (gfield::field-element-p gfield::pfield-element-p)
+                        (gfield::field-fix gfield::pfield-fix)
+                        (gfield::field-zero gfield::pfield-zero)
+                        (gfield::field-one gfield::pfield-one)
+                        (gfield::field-add gfield::pfield-add)
+                        (gfield::field-mul gfield::pfield-mul)
+                        (gfield::field-neg gfield::pfield-neg)
+                        (gfield::field-inv gfield::pfield-inv)
+                        (fix-coefficients pfield-fix-coefficients)
+                        (trim-trailing-zeros pfield-trim-trailing-zeros)
+                        (normalize pfield-normalize)
+                        (raw-add pfield-raw-add) (poly-add pfield-poly-add)
+                        (raw-scale pfield-raw-scale)
+                        (poly-scale pfield-poly-scale)
+                        (raw-mul pfield-raw-mul) (poly-mul pfield-poly-mul)
+                        (const pfield-const)))
+          ("Subgoal 31.2" :use gfield::pfield-mul-inverse-left)
+          ("Subgoal 26.9" :use gfield::pfield-mul-fixed-congruence)
+          ("Subgoal 25.11" :use gfield::pfield-add-fixed-congruence)
+          ("Subgoal 22.2.1"
+           :use gfield::pfield-element-p-of-pfield-fix
+           :in-theory (enable gfield::pfield-fix
+                              gfield::pfield-element-p))
+          ("Subgoal 22.2.1'''" :in-theory (enable mod))
+          ("Subgoal 21.2.1'" :in-theory (enable mod))
+          ("Subgoal 8.2.1'" :in-theory (enable mod))))
+
+(defthm pfield-poly-mul-of-consts
+  (equal (pfield-poly-mul (pfield-const a) (pfield-const b))
+         (pfield-const (gfield::pfield-mul a b)))
+  :hints (("Goal"
+           :in-theory (enable pfield-const pfield-poly-mul pfield-raw-mul
+                              pfield-poly-scale pfield-raw-scale
+                              pfield-normalize pfield-trim-trailing-zeros
+                              pfield-fix-coefficients))))
 
 (defthm pfield-eval-of-poly-scale-from-generic
   (equal (pfield-eval (pfield-poly-scale a poly) x)
@@ -374,6 +422,44 @@
                     gfield::f7-fix gfield::f7-mul)
 (def-mul-instance f7-raw-mul f7-poly-mul f7-raw-add f7-raw-scale
                   f7-normalize gfield::f7-zero)
+(def-const-instance f7-const gfield::f7-fix gfield::f7-zero)
+
+(defthm f7-eval-of-const-from-pfield
+  (equal (f7-eval (f7-const a) x) (gfield::f7-fix a))
+  :hints (("Goal" :in-theory (enable f7-const))))
+
+(defthm f7-poly-mul-const-left-from-pfield
+  (equal (f7-poly-mul (f7-const a) p) (f7-poly-scale a p))
+  :hints (("Goal" :by (:functional-instance
+                        pfield-poly-mul-const-left
+                        (gfield::pfield-modulus (lambda () 7))
+                        (gfield::pfield-element-p gfield::f7-element-p)
+                        (gfield::pfield-fix gfield::f7-fix)
+                        (gfield::pfield-zero gfield::f7-zero)
+                        (gfield::pfield-one gfield::f7-one)
+                        (gfield::pfield-add gfield::f7-add)
+                        (gfield::pfield-mul gfield::f7-mul)
+                        (gfield::pfield-neg gfield::f7-neg)
+                        (gfield::pfield-inv gfield::f7-inv)
+                        (pfield-fix-coefficients f7-fix-coefficients)
+                        (pfield-trim-trailing-zeros f7-trim-trailing-zeros)
+                        (pfield-normalize f7-normalize)
+                        (pfield-raw-add f7-raw-add)
+                        (pfield-poly-add f7-poly-add)
+                        (pfield-raw-scale f7-raw-scale)
+                        (pfield-poly-scale f7-poly-scale)
+                        (pfield-raw-mul f7-raw-mul)
+                        (pfield-poly-mul f7-poly-mul)
+                        (pfield-const f7-const))
+           :in-theory (enable dm::primep))))
+
+(defthm f7-poly-mul-of-consts-from-pfield
+  (equal (f7-poly-mul (f7-const a) (f7-const b))
+         (f7-const (gfield::f7-mul a b)))
+  :hints (("Goal" :in-theory (enable f7-const f7-poly-mul f7-raw-mul
+                                      f7-poly-scale f7-raw-scale
+                                      f7-normalize f7-trim-trailing-zeros
+                                      f7-fix-coefficients))))
 
 (defthm f7-eval-of-poly-add-from-generic
   (equal (f7-eval (f7-poly-add x y) a)
@@ -581,3 +667,18 @@
 (assert-event
  (equal (f7-eval (f7-poly-mul '(1 2) '(3 4)) 2)
         (gfield::f7-mul (f7-eval '(1 2) 2) (f7-eval '(3 4) 2))))
+(assert-event (equal (f7-const 0) nil))
+(assert-event (equal (f7-const 1) '(1)))
+(assert-event (equal (f7-const 8) '(1)))
+(assert-event (equal (f7-const 'malformed) nil))
+(assert-event (equal (f7-eval (f7-const 5) 0) 5))
+(assert-event (equal (f7-eval (f7-const 5) 6) 5))
+(assert-event
+ (equal (f7-poly-add (f7-const 3) (f7-const 4)) (f7-const 0)))
+(assert-event
+ (equal (f7-poly-mul (f7-const 3) (f7-const 5)) (f7-const 1)))
+(assert-event
+ (equal (f7-poly-mul (f7-const 0) (f7-const 5)) nil))
+(assert-event
+ (equal (f7-poly-mul '(1 2 3) (f7-const 4))
+        (f7-poly-scale 4 '(1 2 3))))
