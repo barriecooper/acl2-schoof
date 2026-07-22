@@ -1,4 +1,4 @@
-.PHONY: setup certify certify-one test check-trust clean
+.PHONY: setup certify certify-one test check-trust test-check-trust clean
 BOOK ?=
 setup:
 	./scripts/install-acl2.sh
@@ -11,5 +11,7 @@ test: setup check-trust
 	./scripts/test.sh
 check-trust:
 	./scripts/check-trust.sh
+test-check-trust:
+	./scripts/test-check-trust.sh
 clean:
 	find books tests -type f \( -name '*.cert' -o -name '*.cert.out' -o -name '*.pcert0' -o -name '*.port' -o -name '*.o' -o -name '*.log' -o -name 'cert.acl2' \) -delete
