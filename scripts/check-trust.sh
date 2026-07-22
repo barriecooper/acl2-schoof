@@ -2,9 +2,14 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 # Deliberately conservative: comments and strings are scanned too.
-pat='[(][[:space:]]*(skip-proofs|defaxiom|defttag|set-raw-mode(-on)?|progn!)([[:space:])]|$)'
+pat='[(][[:space:]]*(skip-proofs|set-ld-skip-proofsp|defaxiom|defttag|set-raw-mode(-(on|off))?!?|progn!|defattach(!|-system)?|include-raw)([[:space:])]|$)'
+if (($# == 0)); then
+  paths=(books tests)
+else
+  paths=("$@")
+fi
 set +e
-grep -E -r -n -i --include='*.lisp' "$pat" books tests
+grep -E -r -n -i --include='*.lisp' --include='*.acl2' "$pat" "${paths[@]}"
 rc=$?
 set -e
 case "$rc" in
@@ -13,7 +18,7 @@ case "$rc" in
     exit 1
     ;;
   1)
-    echo 'trust scan passed (conservative: comments and strings are included)'
+    echo 'trust scan passed (*.lisp and *.acl2; comments and strings included)'
     ;;
   *)
     echo "trust scanner failed (grep exit status $rc)" >&2

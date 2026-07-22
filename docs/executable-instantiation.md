@@ -54,6 +54,18 @@ Future computational layers are incomplete until they have all three:
 2. ordinary executable concrete functions; and
 3. certified correctness bridges between them.
 
+More specifically, a public operation that separates logical and executable
+implementations with `MBE`, `DEFEXEC`, an attachment, or another mechanism
+normally lands together with named specification and implementation functions,
+a certified invariant/equivalence theorem, verified guards for the executable
+branch, focused concrete execution regressions, and documentation that keeps
+logical correctness, guard/execution assurance, and performance/complexity
+evidence distinct. Guard verification establishes guard obligations; it does
+**not** establish that the executable algorithm implements the logical
+specification. That fact must already follow from the certified bridge.
+Likewise, an execution regression is evidence that the intended branch runs
+and behaves practically, not a substitute for equivalence.
+
 The additive migration is also complete.  Generic addition, negation, and
 subtraction, the existing PFIELD addition adapter, and concrete F_7 addition,
 negation, and subtraction now use two small shared templates.  Keeping the

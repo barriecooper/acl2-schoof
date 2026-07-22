@@ -27,6 +27,16 @@ behavior: malformed and negative exponents are explicitly mapped through
 executable branch is the generated generic accumulator.  The generator expands
 only to three ordinary `DEFUN` events.
 
+`DEF-POW-INSTANCE` generates definitions only; it does not discharge their
+proof contract. Every instance must certify its accumulator invariant. That
+proof needs multiplication associativity, left and right identity, and the
+fixer closure/canonicality facts that keep intermediate values in the
+represented carrier. It does not need commutativity. The existing GFIELD and
+GPOLY books discharge this contract for fields and canonical polynomials. A
+future noncommutative instance may prove the same monoid-level invariant
+without satisfying the stronger commutative-field interface; this change
+deliberately introduces no new monoid abstraction.
+
 ## Specification, execution, and laws
 
 `DEF-POW-INSTANCE` takes names for the linear specification, fast auxiliary,
