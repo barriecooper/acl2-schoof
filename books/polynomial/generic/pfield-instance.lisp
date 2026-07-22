@@ -2,37 +2,20 @@
 (include-book "add")
 (include-book "../../field/pfield-adapter")
 
-; Copies at the exact-arity PFIELD adapter boundary make functional
-; instantiation explicit and keep GPOLY independent of a modulus.
-(defun pfield-fix-coefficients (xs)
-  (if (atom xs) nil
-    (cons (gfield::pfield-fix (car xs))
-          (pfield-fix-coefficients (cdr xs)))))
+; Generate the exact-arity PFIELD adapter boundary from the same templates as
+; the generic theory and concrete instances.  The constrained modulus keeps
+; these definitions logical adapters rather than directly executable code.
+(def-normalize-eval-instance
+  pfield-fix-coefficients pfield-trim-trailing-zeros
+  pfield-normalize pfield-eval
+  gfield::pfield-fix gfield::pfield-zero
+  gfield::pfield-add gfield::pfield-mul)
 
-(defun pfield-trim-trailing-zeros (xs)
-  (if (atom xs) nil
-    (let ((tail (pfield-trim-trailing-zeros (cdr xs))))
-      (if (and (equal (gfield::pfield-fix (car xs))
-                      (gfield::pfield-zero))
-               (endp tail))
-          nil
-        (cons (car xs) tail)))))
-
-(defun pfield-normalize (xs)
-  (pfield-trim-trailing-zeros (pfield-fix-coefficients xs)))
 (defun pfield-coefficient-list-p (xs)
   (if (atom xs) (null xs)
     (and (gfield::pfield-element-p (car xs))
          (pfield-coefficient-list-p (cdr xs)))))
 (defun pfield-polynomial-p (xs) (pfield-coefficient-list-p xs))
-
-(defun pfield-eval (poly x)
-  (if (atom poly)
-      (gfield::pfield-zero)
-    (gfield::pfield-add
-     (gfield::pfield-fix (car poly))
-     (gfield::pfield-mul (gfield::pfield-fix x)
-                         (pfield-eval (cdr poly) x)))))
 
 (defthm pfield-normalize-preserves-eval-from-generic
   (equal (pfield-eval (pfield-normalize poly) x)
