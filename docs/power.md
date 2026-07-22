@@ -39,12 +39,25 @@ execution makes logarithmically many recursive exponent reductions and never
 calls the linear specification.  This is structural efficiency evidence, not
 a wall-clock claim.
 
-Fast/spec correctness needs multiplication associativity and both identity
-directions; it does not need commutativity because every reordered factor is a
-power of the same base.  Commutativity is used only for rearranging the separately disabled
-exponent-addition law.  Exponent addition and implementation-bridge theorems are disabled to avoid expansion and
-associativity/commutativity loops.  Reducing zero, one, fixer, and `NFIX` rules
-remain available.
+The certified accumulator invariant is, for fixed accumulator and base values
+and a natural `n`, `pow-fast(acc,base,n) = mul(acc,pow-spec(base,n))`.
+`FIELD-POW-FAST-ACCUMULATOR-INVARIANT` proves this with multiplication
+commutativity explicitly disabled.  Its square lemma is proved the same way,
+so the bridge depends only on associativity and the left/right identity laws.
+The corresponding polynomial invariant uses canonicality as its fixing and
+identity condition and never makes the rule-class-free polynomial
+commutativity theorem available.
+
+`FIELD-POW-FAST`, `FIELD-POW`, `POLY-POW-FAST`, and `POLY-POW` have verified
+guards.  Verification of each public `MBE` uses its fast/spec theorem; the
+compiled branch therefore calls only the logarithmic auxiliary.  Polynomial
+execution normalizes the base once at the public boundary, after which squares
+and accumulator updates use canonical `POLY-MUL` directly.
+
+Commutativity is used separately for rearranging the disabled exponent-addition
+law.  Exponent addition and implementation-bridge theorems are disabled to
+avoid expansion and associativity/commutativity loops.  Reducing zero, one,
+fixer, and `NFIX` rules remain available.
 
 Natural powers use the conventional `0^0 = 1`; zero to a positive power is
 zero.  There are no inverse, signed, or rational exponent semantics.

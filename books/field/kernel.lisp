@@ -1,6 +1,7 @@
 (in-package "GFIELD")
 
 (include-book "kestrel/arithmetic-light/floor" :dir :system)
+(include-book "kestrel/arithmetic-light/evenp" :dir :system)
 
 ; A canonical-representative field interface.  Local definitions are only
 ; consistency witnesses; clients replace the constrained symbols by functional
@@ -103,7 +104,9 @@
 ; ordinary DEFUN events: a linear logical specification, a binary accumulator,
 ; and the public MBE wrapper.  The logical branch makes proofs inspectable;
 ; compiled execution uses only the accumulator, whose exponent is shifted
-; right once at every recursive call.
+; right once at every recursive call.  Guard verification is deliberately
+; staged after each instance's accumulator theorem, because that theorem is
+; also the proof obligation equating the MBE branches.
 (defmacro def-pow-instance (spec fast pow one mul fix)
   `(progn
      (defun ,spec (x n)
@@ -277,6 +280,95 @@
   (field-element-p (field-pow-spec x n))
   :hints (("Goal" :induct (field-pow-spec x n)
            :in-theory (enable field-pow-spec))))
+
+; Squaring two adjacent copies of the same base needs associativity only.
+; Keep commutativity explicitly unavailable: this lemma is part of the
+; fast-accumulator correctness argument, not a commutative-ring power law.
+(defthm field-pow-spec-successor
+  (equal (field-pow-spec base (+ 1 (nfix n)))
+         (field-mul (field-fix base) (field-pow-spec base n)))
+  :hints (("Goal" :in-theory (enable field-pow-spec))))
+
+(defthm field-pow-spec-plus-two
+  (implies (and (field-element-p base)
+                (natp n))
+           (equal (field-pow-spec base (+ 2 n))
+                  (field-mul base
+                             (field-mul base (field-pow-spec base n)))))
+  :hints (("Goal" :use ((:instance field-pow-spec-successor
+                          (n (+ 1 n)))
+                          (:instance field-pow-spec-successor (n n))))))
+
+(defthm field-pow-spec-of-square
+  (implies (and (field-element-p base)
+                (natp n))
+           (equal (field-pow-spec (field-mul base base) n)
+                  (field-pow-spec base (* 2 n))))
+  :hints (("Goal" :induct (field-pow-spec base n)
+           :in-theory (e/d (field-pow-spec field-pow-spec-plus-two
+                                           field-mul-associative)
+                           (field-mul-commutative)))
+          ("Subgoal *1/2" :use ((:instance field-pow-spec-plus-two
+                                  (base base)
+                                  (n (+ -2 (* 2 n)))))
+           :in-theory (disable field-mul-commutative))))
+
+(defthm natural-split-at-low-bit
+  (implies (natp n)
+           (equal n
+                  (if (oddp n)
+                      (+ 1 (* 2 (floor n 2)))
+                    (* 2 (floor n 2)))))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance acl2::split-low-bit (i n)))
+           :in-theory (e/d (oddp) (floor)))))
+
+(defthm field-pow-spec-odd-form
+  (implies (and (field-element-p base)
+                (natp n))
+           (equal (field-pow-spec base (+ 1 (* 2 n)))
+                  (field-mul base (field-pow-spec base (* 2 n)))))
+  :hints (("Goal" :use ((:instance field-pow-spec-successor
+                          (base base) (n (* 2 n)))))))
+
+; Accumulator invariant for the executable binary recursion:
+;   fast(acc, base, n) = acc * spec(base, n).
+; The hypotheses say that ACC and BASE are fixed monoid elements.  The proof
+; deliberately excludes multiplication commutativity; associativity and the
+; two identity laws are the only multiplicative rearrangements available.
+(defthm field-pow-fast-accumulator-invariant
+  (implies (and (field-element-p acc)
+                (field-element-p base)
+                (natp n))
+           (equal (field-pow-fast acc base n)
+                  (field-mul acc (field-pow-spec base n))))
+  :hints (("Goal" :induct (field-pow-fast acc base n)
+           :in-theory (e/d (field-pow-fast field-pow-spec
+                                           field-pow-spec-of-square
+                                           field-pow-spec-odd-form
+                                           field-mul-associative)
+                           (field-mul-commutative)))
+          ("Subgoal *1/2" :use ((:instance natural-split-at-low-bit (n n))
+                                  (:instance field-pow-spec-odd-form
+                                   (base base) (n (floor n 2))))
+           :in-theory (disable field-mul-commutative))
+          ("Subgoal *1/3" :use ((:instance natural-split-at-low-bit (n n)))
+           :in-theory (disable field-mul-commutative))
+          ("Subgoal *1/1" :use ((:instance natural-split-at-low-bit (n n)))
+           :in-theory (disable field-mul-commutative))))
+
+(defthm field-pow-fast-correct
+  (equal (field-pow-fast (field-one) (field-fix x) (nfix n))
+         (field-pow-spec (field-fix x) (nfix n)))
+  :hints (("Goal" :use ((:instance field-pow-fast-accumulator-invariant
+                          (acc (field-one))
+                          (base (field-fix x))
+                          (n (nfix n))))
+           :in-theory (disable field-mul-commutative))))
+
+(verify-guards field-pow-fast)
+(verify-guards field-pow
+  :hints (("Goal" :use field-pow-fast-correct)))
 (defthm field-mul-power-interchange
   (equal (field-mul x (field-mul a (field-mul x b)))
          (field-mul x (field-mul x (field-mul a b))))

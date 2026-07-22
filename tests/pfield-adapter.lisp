@@ -18,6 +18,10 @@
 (assert-event (equal (f7-pow 3 5) 5))
 (assert-event (equal (f7-pow 3 6) 1))
 (assert-event (equal (f7-pow 3 1048576) 4))
+; NFIX maps a negative exponent to zero; this is not inverse or signed power.
 (assert-event (equal (f7-pow 3 -4) 1))
 (assert-event (equal (f7-pow 10 4) 4))
+(assert-event
+ (equal (f7-pow-fast (f7-one) (f7-fix 3) 13)
+        (f7-pow-spec (f7-fix 3) 13)))
 (assert-event (equal (f7-neg (f7-neg 9)) (f7-fix 9)))

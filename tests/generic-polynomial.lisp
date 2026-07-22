@@ -77,6 +77,12 @@
 (assert-event (equal (f7-poly-pow '(1 2) 2) '(1 4 4)))
 (assert-event (equal (f7-poly-pow '(1 1) 3) '(1 3 3 1)))
 (assert-event
+ (equal (f7-poly-pow-fast (f7-polynomial-one) (f7-normalize '(1 2 0)) 9)
+        (f7-poly-pow-spec (f7-normalize '(1 2 0)) 9)))
+(assert-event
+ (equal (f7-normalize (f7-poly-pow '(1 2 0) 17))
+        (f7-poly-pow '(1 2 0) 17)))
+(assert-event
  (equal (f7-eval (f7-poly-pow '(1 1) 16) 2)
         (gfield::f7-pow (f7-eval '(1 1) 2) 16)))
 (assert-event
