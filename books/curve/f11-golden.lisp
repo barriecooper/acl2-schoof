@@ -8,6 +8,8 @@
 (def-normalize-eval-instance
   f11-fix-coefficients f11-trim-trailing-zeros f11-normalize f11-eval
   gfield::f11-fix gfield::f11-zero gfield::f11-add gfield::f11-mul)
+(def-degree-instance f11-poly-degree f11-poly-leading-coefficient
+                     f11-normalize gfield::f11-zero)
 
 (defthm f11-normalize-preserves-eval
   (equal (f11-eval (f11-normalize poly) x) (f11-eval poly x))
@@ -93,6 +95,8 @@
                      *f11-golden-expected-affine-points*))
 (assert-event (equal (len (f11-golden-affine-points)) 12))
 (assert-event (equal (+ 1 (len (f11-golden-affine-points))) 13))
+(assert-event (equal (f11-poly-degree '(6 1 0 1)) 3))
+(assert-event (equal (f11-poly-leading-coefficient '(6 1 0 1)) 1))
 
 ; Concrete characteristic-11 nonsingularity check: 4*1^3 + 27*6^2 /= 0.
 (defun f11-golden-nonsingular-check ()
@@ -106,6 +110,8 @@
 (verify-guards f11-fix-coefficients)
 (verify-guards f11-trim-trailing-zeros)
 (verify-guards f11-normalize)
+(verify-guards f11-poly-degree)
+(verify-guards f11-poly-leading-coefficient)
 (verify-guards f11-eval)
 (verify-guards f11-golden-cubic)
 (verify-guards f11-golden-curve-rhs)
