@@ -11,8 +11,10 @@ ACL2 obligations are genuinely proved and certified.
 1. Prime-field polynomial arithmetic, canonical forms, evaluation, and degree
    (current certified implementation), plus the completed abstract field
    kernel and its completed certified fixed-prime PFIELD adapter.  The generic dense-polynomial foundation (representation, normalization, and
-   evaluation) and its generic additive structure (addition, negation, and
-   subtraction) are also complete.  The executable-instantiation policy is
+   evaluation), its generic additive structure (addition, negation, and
+   subtraction), and generic canonical scalar multiplication are also
+   complete.  Generic polynomial multiplication is the next intended
+   mathematical PR.  The executable-instantiation policy is
    recorded in `executable-instantiation.md`: abstract algorithms, ordinary
    executable concrete definitions, and certified correctness bridges are all
    required for future computational layers.  Generic polynomial multiplication,

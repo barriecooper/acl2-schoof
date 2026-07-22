@@ -1,5 +1,5 @@
 (in-package "GPOLY")
-(include-book "add")
+(include-book "scale")
 (include-book "../../field/pfield-adapter")
 
 ; Generate the exact-arity PFIELD adapter boundary from the same templates as
@@ -37,6 +37,28 @@
 
 (def-add-instance pfield-raw-add pfield-poly-add pfield-fix-coefficients
                   pfield-normalize gfield::pfield-add)
+(def-scale-instance pfield-raw-scale pfield-poly-scale pfield-normalize
+                    gfield::pfield-fix gfield::pfield-mul)
+
+(defthm pfield-eval-of-poly-scale-from-generic
+  (equal (pfield-eval (pfield-poly-scale a poly) x)
+         (gfield::pfield-mul a (pfield-eval poly x)))
+  :hints (("Goal" :by (:functional-instance
+                        eval-of-poly-scale
+                        (gfield::field-element-p gfield::pfield-element-p)
+                        (gfield::field-fix gfield::pfield-fix)
+                        (gfield::field-zero gfield::pfield-zero)
+                        (gfield::field-one gfield::pfield-one)
+                        (gfield::field-add gfield::pfield-add)
+                        (gfield::field-mul gfield::pfield-mul)
+                        (gfield::field-neg gfield::pfield-neg)
+                        (gfield::field-inv gfield::pfield-inv)
+                        (fix-coefficients pfield-fix-coefficients)
+                        (trim-trailing-zeros pfield-trim-trailing-zeros)
+                        (normalize pfield-normalize)
+                        (eval pfield-eval)
+                        (raw-scale pfield-raw-scale)
+                        (poly-scale pfield-poly-scale)))))
 
 (defthm pfield-eval-of-raw-add-from-generic
   (equal (pfield-eval (pfield-raw-add x y) a)
@@ -108,6 +130,8 @@
                   gfield::f7-add)
 (def-neg-sub-instance f7-raw-neg f7-poly-neg f7-poly-sub f7-poly-add
                       f7-normalize gfield::f7-neg)
+(def-scale-instance f7-raw-scale f7-poly-scale f7-normalize
+                    gfield::f7-fix gfield::f7-mul)
 
 (defthm f7-eval-of-poly-add-from-generic
   (equal (f7-eval (f7-poly-add x y) a)
@@ -131,6 +155,28 @@
                         (pfield-poly-add f7-poly-add))
            :in-theory (enable dm::primep))))
 
+(defthm f7-eval-of-poly-scale-from-generic
+  (equal (f7-eval (f7-poly-scale a poly) x)
+         (gfield::f7-mul a (f7-eval poly x)))
+  :hints (("Goal" :by (:functional-instance
+                        pfield-eval-of-poly-scale-from-generic
+                        (gfield::pfield-modulus (lambda () 7))
+                        (gfield::pfield-element-p gfield::f7-element-p)
+                        (gfield::pfield-fix gfield::f7-fix)
+                        (gfield::pfield-zero gfield::f7-zero)
+                        (gfield::pfield-one gfield::f7-one)
+                        (gfield::pfield-add gfield::f7-add)
+                        (gfield::pfield-mul gfield::f7-mul)
+                        (gfield::pfield-neg gfield::f7-neg)
+                        (gfield::pfield-inv gfield::f7-inv)
+                        (pfield-fix-coefficients f7-fix-coefficients)
+                        (pfield-trim-trailing-zeros f7-trim-trailing-zeros)
+                        (pfield-normalize f7-normalize)
+                        (pfield-eval f7-eval)
+                        (pfield-raw-scale f7-raw-scale)
+                        (pfield-poly-scale f7-poly-scale))
+           :in-theory (enable dm::primep))))
+
 (assert-event (equal (f7-normalize '(1 2 0 0)) '(1 2)))
 (assert-event (equal (f7-normalize '(0 0 0)) nil))
 (assert-event (equal (f7-eval '(1 2 3) 2) 3))
@@ -151,3 +197,18 @@
 (assert-event
  (equal (f7-poly-add (f7-poly-add '(1 2) '(2 3)) '(4 5))
         (f7-poly-add '(1 2) (f7-poly-add '(2 3) '(4 5)))))
+(assert-event (equal (f7-poly-scale 3 '(1 2 3)) '(3 6 2)))
+(assert-event (equal (f7-poly-scale 0 '(1 2 3)) nil))
+(assert-event (equal (f7-poly-scale 1 '(1 2 0 0)) '(1 2)))
+(assert-event (equal (f7-poly-scale 2 '(1 0 4)) '(2 0 1)))
+(assert-event (equal (f7-poly-scale 7 '(1 0 4)) nil))
+(assert-event (equal (f7-poly-scale 2 '(1 . 4)) '(2)))
+(assert-event (equal (f7-eval (f7-poly-scale 3 '(1 2 3)) 2)
+                     (gfield::f7-mul 3 (f7-eval '(1 2 3) 2))))
+(assert-event
+ (equal (f7-poly-scale 2 (f7-poly-scale 3 '(1 2 3)))
+        (f7-poly-scale (gfield::f7-mul 2 3) '(1 2 3))))
+(assert-event
+ (equal (f7-poly-scale 3 (f7-poly-add '(1 2) '(3 4)))
+        (f7-poly-add (f7-poly-scale 3 '(1 2))
+                     (f7-poly-scale 3 '(3 4)))))
