@@ -3,25 +3,10 @@
 
 ; Missing coefficients are field zero.  Atomic tails terminate recursion and
 ; are discarded by FIX-COEFFICIENTS, consistently with the foundation.
-(defun raw-add (x y)
-  (cond ((atom x) (fix-coefficients y))
-        ((atom y) (fix-coefficients x))
-        (t (cons (gfield::field-add (car x) (car y))
-                 (raw-add (cdr x) (cdr y))))))
-
-(defun poly-add (x y)
-  (normalize (raw-add (normalize x) (normalize y))))
-
-(defun raw-neg (x)
-  (if (atom x) nil
-    (cons (gfield::field-neg (car x))
-          (raw-neg (cdr x)))))
-
-(defun poly-neg (x)
-  (normalize (raw-neg (normalize x))))
-
-(defun poly-sub (x y)
-  (poly-add x (poly-neg y)))
+(def-add-instance raw-add poly-add fix-coefficients normalize
+                  gfield::field-add)
+(def-neg-sub-instance raw-neg poly-neg poly-sub poly-add normalize
+                      gfield::field-neg)
 
 (defthm true-listp-of-raw-add
   (true-listp (raw-add x y)))

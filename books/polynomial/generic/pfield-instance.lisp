@@ -35,14 +35,8 @@
                         (normalize pfield-normalize)
                          (eval pfield-eval)))))
 
-(defun pfield-raw-add (x y)
-  (cond ((atom x) (pfield-fix-coefficients y))
-        ((atom y) (pfield-fix-coefficients x))
-        (t (cons (gfield::pfield-add (car x) (car y))
-                 (pfield-raw-add (cdr x) (cdr y))))))
-(defun pfield-poly-add (x y)
-  (pfield-normalize
-   (pfield-raw-add (pfield-normalize x) (pfield-normalize y))))
+(def-add-instance pfield-raw-add pfield-poly-add pfield-fix-coefficients
+                  pfield-normalize gfield::pfield-add)
 
 (defthm pfield-eval-of-raw-add-from-generic
   (equal (pfield-eval (pfield-raw-add x y) a)
@@ -110,19 +104,32 @@
                         (pfield-normalize f7-normalize)
                         (pfield-eval f7-eval))
            :in-theory (enable dm::primep))))
-(defun f7-raw-add (x y)
-  (cond ((atom x) (f7-fix-coefficients y))
-        ((atom y) (f7-fix-coefficients x))
-        (t (cons (gfield::f7-add (car x) (car y))
-                 (f7-raw-add (cdr x) (cdr y))))))
-(defun f7-poly-add (x y)
-  (f7-normalize (f7-raw-add (f7-normalize x) (f7-normalize y))))
-(defun f7-raw-neg (x)
-  (if (atom x) nil
-    (cons (gfield::f7-neg (car x)) (f7-raw-neg (cdr x)))))
-(defun f7-poly-neg (x)
-  (f7-normalize (f7-raw-neg (f7-normalize x))))
-(defun f7-poly-sub (x y) (f7-poly-add x (f7-poly-neg y)))
+(def-add-instance f7-raw-add f7-poly-add f7-fix-coefficients f7-normalize
+                  gfield::f7-add)
+(def-neg-sub-instance f7-raw-neg f7-poly-neg f7-poly-sub f7-poly-add
+                      f7-normalize gfield::f7-neg)
+
+(defthm f7-eval-of-poly-add-from-generic
+  (equal (f7-eval (f7-poly-add x y) a)
+         (gfield::f7-add (f7-eval x a) (f7-eval y a)))
+  :hints (("Goal" :by (:functional-instance
+                        pfield-eval-of-add-from-generic
+                        (gfield::pfield-modulus (lambda () 7))
+                        (gfield::pfield-element-p gfield::f7-element-p)
+                        (gfield::pfield-fix gfield::f7-fix)
+                        (gfield::pfield-zero gfield::f7-zero)
+                        (gfield::pfield-one gfield::f7-one)
+                        (gfield::pfield-add gfield::f7-add)
+                        (gfield::pfield-mul gfield::f7-mul)
+                        (gfield::pfield-neg gfield::f7-neg)
+                        (gfield::pfield-inv gfield::f7-inv)
+                        (pfield-fix-coefficients f7-fix-coefficients)
+                        (pfield-trim-trailing-zeros f7-trim-trailing-zeros)
+                        (pfield-normalize f7-normalize)
+                        (pfield-eval f7-eval)
+                        (pfield-raw-add f7-raw-add)
+                        (pfield-poly-add f7-poly-add))
+           :in-theory (enable dm::primep))))
 
 (assert-event (equal (f7-normalize '(1 2 0 0)) '(1 2)))
 (assert-event (equal (f7-normalize '(0 0 0)) nil))

@@ -54,9 +54,10 @@ Future computational layers are incomplete until they have all three:
 2. ordinary executable concrete functions; and
 3. certified correctness bridges between them.
 
-The normalization/evaluation migration is complete: the generic, PFIELD, and
-F_7 layers all use the shared template.  The PFIELD/F_7 additive recurrences
-remain handwritten and unchanged.  The smallest next migration is to extend
-one template group to generic/PFIELD/F_7 addition and transport
-`eval-of-poly-add`; only afterward should the established pattern be used for
-new algorithms.
+The additive migration is also complete.  Generic addition, negation, and
+subtraction, the existing PFIELD addition adapter, and concrete F_7 addition,
+negation, and subtraction now use two small shared templates.  Keeping the
+addition template separate avoids inventing PFIELD negation/subtraction APIs
+merely for symmetry.  No mathematical milestone is implied by this definition
+refactoring; the smallest next mathematical PR is the first generic scaling
+definition and its evaluation theorem, without yet adding multiplication.
