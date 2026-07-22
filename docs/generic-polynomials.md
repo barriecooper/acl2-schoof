@@ -2,7 +2,8 @@
 
 `books/polynomial/generic/package.lisp` establishes the dedicated `GPOLY`
 namespace, `base.lisp` defines the abstract theory over `GFIELD`, and
-`add.lisp` supplies the additive structure, and `pfield-instance.lisp` is its
+`add.lisp` supplies the additive structure, `scale.lisp` supplies the scalar
+action, and `pfield-instance.lisp` is their
 PFIELD/F_7 regression.  The existing `HS` books
 are unchanged.
 
@@ -46,6 +47,27 @@ associativity, inverses, double negation, subtraction laws.
 Canonicality hypotheses are used exactly where recovering an input list from
 its normalized representative requires them.
 
+`RAW-SCALE` multiplies each fixed coefficient by one fixed field element and
+discards atomic tails exactly as `RAW-NEG` does.  `POLY-SCALE` is the sole
+normalization boundary.  It is canonical on every ACL2 input, invariant under
+the scalar fixer and polynomial fixing/normalization, and its evaluation is the
+field product of the scalar and the original evaluation.  The certified scalar
+action includes zero and one, the zero polynomial, nested scaling, and both
+distributivity laws; the expanding composition and distribution rules are
+proved but disabled by default.  These polynomial equalities are structural
+normalization results, not consequences of equality at all field points.
+
+This is a generic canonical generalization of two strands of Community Books
+prior art.  `projects/linear/field.lisp` scales fixed-length lists over an
+abstract field and proves the corresponding action laws, but preserves their
+zero-filled length and has no polynomial normalization or evaluation.
+`nonstd/polynomials/polynomial-defuns.lisp` has constant-first dense scaling,
+while `nonstd/polynomials/polynomial-lemmas.lisp` proves its evaluation law for
+specialized rational/real coefficients.  Neither supplies GFIELD-generic,
+fixer-total, canonical, directly executable GPOLY operations.  GPOLY follows
+the recurring semantic pattern: establish raw Horner semantics, then transport
+it through evaluation-preserving normalization.
+
 The adapter regression defines exact copies using the fixed-arity PFIELD
 operations and transports normalization-preserves-evaluation with
 `:functional-instance`.  Separate executable copies specialize the same
@@ -61,7 +83,7 @@ bridge may therefore use the identity conversion at a fixed PFIELD instance,
 but must prove equivalence of canonical predicates, normalization, evaluation,
 and eventually addition and multiplication.
 
-This additive layer deliberately contains no polynomial multiplication,
+This additive-and-scaling layer deliberately contains no generic polynomial multiplication,
 degree, leading coefficient, division, gcd, derivatives, root counting, field
 enumeration, or extension-field implementation.  It provides syntax and
 semantics over an assumed field, not an implementation of every finite field.
@@ -88,3 +110,10 @@ after proving that fixed HS coefficients make GPOLY's remainder fixing an
 identity and that both normalizers coincide.  This PR intentionally neither
 changes nor removes any HS theorem, and polynomial multiplication remains a
 separate future task.
+
+Scaling is intended to support later polynomial multiplication, division,
+monic normalization, and extension-field reduction.  In particular,
+`nonstd/polynomials/polynomial-defuns.lisp` recursively builds multiplication
+from scaling, addition, and a zero-coefficient shift.  That construction is
+prior art to compare with direct convolution in the next multiplication design
+review; neither multiplication nor shifting is implemented by this milestone.

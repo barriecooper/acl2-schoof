@@ -34,6 +34,14 @@ high-degree zeroes.  Closure and evaluation results assume coefficient lists
 whose entries satisfy `PFIELD::FEP` and a positive field modulus; no broader
 ring interface is introduced.
 
+The generic GPOLY layer also provides scalar-first coefficientwise scaling.
+Its raw traversal uses the GFIELD multiplication and the established total
+fixers; its public operation alone removes trailing zeroes.  Raw evaluation is
+proved first and evaluation preservation under normalization then yields the
+canonical semantic theorem.  Ordinary executable F_7 definitions share the
+transparent two-`DEFUN` template, and their semantic bridge is transported by
+functional instantiation through the certified PFIELD adapter.
+
 The intended Hasse stack is: field polynomials; rational functions; valuation
 at infinity; a generic quadratic twist; Frobenius and scalar multiplication;
 the quadratic degree sequence; point-count/separability bridges; and the

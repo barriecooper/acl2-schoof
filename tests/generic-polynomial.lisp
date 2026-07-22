@@ -29,3 +29,8 @@
 (assert-event (equal (f7-poly-add '(1 2) '(2 5)) '(3)))
 (assert-event (equal (f7-poly-neg '(1 2)) '(6 5)))
 (assert-event (equal (f7-poly-sub '(1 2) '(1 2)) nil))
+(assert-event (equal (f7-poly-scale 3 '(1 2 3)) '(3 6 2)))
+(assert-event (equal (f7-poly-scale 0 '(1 2 3)) nil))
+(assert-event (equal (f7-poly-scale 1 '(1 2 0 0)) '(1 2)))
+(assert-event (equal (f7-poly-scale 2 '(1 0 4)) '(2 0 1)))
+(assert-event (equal (f7-poly-scale 2 '(1 . bad-tail)) '(2)))

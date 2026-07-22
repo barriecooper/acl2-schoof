@@ -52,3 +52,15 @@
        (,normalize (,raw-neg (,normalize x))))
      (defun ,poly-sub (x y)
        (,poly-add x (,poly-neg y)))))
+
+; Scalar multiplication has its own deliberately small generator.  Like the
+; other generators above, its expansion contains ordinary DEFUN events only.
+(defmacro def-scale-instance
+  (raw-scale poly-scale normalize field-fix field-mul)
+  `(progn
+     (defun ,raw-scale (a x)
+       (if (atom x) nil
+         (cons (,field-mul (,field-fix a) (,field-fix (car x)))
+               (,raw-scale a (cdr x)))))
+     (defun ,poly-scale (a x)
+       (,normalize (,raw-scale (,field-fix a) (,normalize x))))))
