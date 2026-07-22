@@ -24,12 +24,10 @@ ACL2 obligations are genuinely proved and certified.
    certified for reuse by fields and later extension fields.  The executable
    F_11 golden field/polynomial fixture for `y^2 = x^3 + x + 6` is complete.
    Generic canonical polynomial degree and leading coefficient, including the
-   PFIELD adapter and executable F_7 instances, are complete.  Structural
-   leading-term multiplication, polynomial nonvanishing, and degree addition
-   for nonzero canonical generic factors are complete.  The next focused
-   milestone is to specify polynomial division and remainder contracts before
-   implementing long division; division and Euclidean theory remain open.
-   Later power uses include extension-field arithmetic,
+   PFIELD adapter and executable F_7 instances, are complete.  The next focused
+   milestones are (1) leading-term/no-zero-divisor results and degree of
+   multiplication, and (2) division
+   and Euclidean theory.  Later power uses include extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.
    The executable-instantiation policy is
