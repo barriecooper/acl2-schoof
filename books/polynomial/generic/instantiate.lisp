@@ -27,3 +27,28 @@
           (,field-fix (car poly))
           (,field-mul (,field-fix x)
                       (,eval (cdr poly) x)))))))
+
+; Addition is separate from negation/subtraction because an adapter may expose
+; only the former.  Both macros expand solely to ordinary DEFUN events.
+(defmacro def-add-instance
+  (raw-add poly-add fix-coefficients normalize field-add)
+  `(progn
+     (defun ,raw-add (x y)
+       (cond ((atom x) (,fix-coefficients y))
+             ((atom y) (,fix-coefficients x))
+             (t (cons (,field-add (car x) (car y))
+                      (,raw-add (cdr x) (cdr y))))))
+     (defun ,poly-add (x y)
+       (,normalize
+        (,raw-add (,normalize x) (,normalize y))))))
+
+(defmacro def-neg-sub-instance
+  (raw-neg poly-neg poly-sub poly-add normalize field-neg)
+  `(progn
+     (defun ,raw-neg (x)
+       (if (atom x) nil
+         (cons (,field-neg (car x)) (,raw-neg (cdr x)))))
+     (defun ,poly-neg (x)
+       (,normalize (,raw-neg (,normalize x))))
+     (defun ,poly-sub (x y)
+       (,poly-add x (,poly-neg y)))))
