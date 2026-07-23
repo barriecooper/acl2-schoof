@@ -54,3 +54,8 @@ ACL2 obligations are genuinely proved and certified.
 7. Integer quadratic conclusion yielding Hasse's bound.
 8. Division polynomials and quotient-coordinate algebra.
 9. Schoof trace residues and certified CRT reconstruction.
+
+
+## Generic recursive division (certified)
+
+`books/polynomial/generic/division.lisp` certifies `POLY-DIVMOD-CORE` and the total `(mv q r)` public `POLY-DIVMOD`.  Canonical remainder length is the measure, the one-step decrease theorem supplies termination, and an accumulator invariant supplies normalized reconstruction without evaluation extensionality.  The final remainder is zero or strictly below the normalized nonzero divisor.  Guards are verified separately.  No executable boundary or concrete PFIELD/F7 instance is added; concrete generated division, uniqueness, gcd, and extended gcd remain open.

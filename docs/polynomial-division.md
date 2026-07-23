@@ -1,24 +1,22 @@
 # Generic polynomial division contract
 
-This document fixes the contract for the **future** generic long-division
-operation.  Division itself is not implemented yet.  The intended public name
-and shape are:
+This document records the certified generic long-division operation.  Its public name and shape are:
 
 ```lisp
 (mv q r) = (poly-divmod f g)
 ```
 
-`POLY-DIVMOD` will be an ordinary, deterministic, total ACL2 function.  At its
-public boundary it will normalize each polynomial input exactly once.  This
+`POLY-DIVMOD` is an ordinary, deterministic, total ACL2 function.  At its
+public boundary it normalizes each polynomial input exactly once.  This
 retains the established policy that an atom ends a coefficient list and a
-dotted tail is discarded.  If normalized `g` is `nil`, it will return
+dotted tail is discarded.  If normalized `g` is `nil`, it returns
 `(mv nil (normalize f))`.  That result is a total fallback, **not**
 field-theoretic division by zero.  Negative or malformed inputs may not cause a
 partial function, assertion-based domain restriction, program-mode escape, or
 raw execution mechanism.
 
 For normalized `f` and nonzero canonical `g`, with `(mv q r)` the result, the
-future certified contract is all of the following:
+certified contract is all of the following:
 
 * `q` and `r` are canonical polynomials, hence coefficient-list polynomials in
   the generic field carrier and true lists;
@@ -30,10 +28,9 @@ future certified contract is all of the following:
   `(mv (normalize f) nil)`;
 * repeated calls on equal ACL2 inputs return the same concrete canonical pair.
 
-The recursion will cancel one current leading term at a time.  Its termination
-proof must exhibit strict decrease of the nonzero current remainder's degree;
-the equivalent natural measure is its canonical length.  Guard verification
-will separately establish safe execution and will not substitute for the
+The recursion cancels one current leading term at a time.  Its termination
+proof exhibits strict decrease of the nonzero current remainder's degree;
+the equivalent natural measure is its canonical length.  Guard verification separately establishes safe execution and will not substitute for the
 reconstruction or degree-bound proofs.
 
 ## Certified foundation in this change
@@ -58,13 +55,17 @@ generated copy is deferred to the division instance.
 No `MBE`, `DEFEXEC`, attachment, or other logical/executable boundary is added,
 and no update to `docs/execution-boundaries.md` is required.
 
+## Certified recursive quotient/remainder
+
+`GPOLY::POLY-DIVMOD-CORE` carries `(quotient remainder divisor)`, returns the transparent pair `(final-q . final-r)`, and measures `(len remainder)`.  It invokes `POLY-DIVISION-STEP-CORE` once per active iteration and reuses that pair.  `POLY-DIVMOD` normalizes each external operand once and returns `(mv q r)`.  The certified invariant is `final-q*g+final-r = accumulated-q*g+current-r`; the public consequence is `q*normalize(g)+r = normalize(f)`.  Canonicality, polynomial/true-list closure, the strict final remainder bound, inactive reductions, divisor-one reduction, determinism, and exact division are certified.  Both new ordinary `DEFUN`s have verified guards.
+
+No `MBE`, `DEFEXEC`, attachment, or separate executable specification is used.  The divisor is fixed and is not normalized in recursion.  Concrete PFIELD/F7 generated division remains the immediate next executable-instance task.
+
 ## Explicitly downstream
 
 This contract claims no uniqueness theorem, gcd or extended-gcd correctness,
 Bézout identity, Euclidean-domain result, irreducibility result, factorization,
-extension field, rational function, or curve operation.  One-step leading-term cancellation is now certified.  Recursive
-quotient/remainder, its accumulated reconstruction, and the final strict
-remainder-degree bound remain open before downstream topics can begin.
+extension field, rational function, or curve operation.  One-step leading-term cancellation and generic recursive quotient/remainder, reconstruction, and final strict remainder-degree bound are certified. Concrete generated instances, uniqueness, gcd, and all broader Euclidean consequences remain open.
 
 ## Certified one-step cancellation API
 
@@ -81,4 +82,4 @@ The book certifies canonical/nonempty quotient-term and product facts, exact
 formal reconstruction `normalize(remainder) = term*normalize(divisor)+next`,
 and structural strict degree decrease in every active step.  The corresponding
 strict canonical-length decrease is the intended measure for later recursion.
-No recursive quotient/remainder operation is implemented here.
+The recursive operation is implemented in `books/polynomial/generic/division.lisp`.
