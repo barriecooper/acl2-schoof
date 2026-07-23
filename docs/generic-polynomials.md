@@ -207,6 +207,17 @@ after proving that fixed HS coefficients make GPOLY's remainder fixing an
 identity and that both normalizers coincide.  This work intentionally neither
 changes nor removes any HS theorem.
 
-The immediate next milestone is polynomial division and Euclidean theory.
+The certified monomial foundation now provides total `ZERO-PREFIX`,
+`POLY-SHIFT`, and `MONOMIAL` operations.  Shifts use `NFIX`, preserve canonical
+zero, add the natural index to the degree of a canonical nonzero polynomial,
+and preserve its leading coefficient.  Monomials fix arbitrary coefficients,
+map fixed zero to `nil`, and have the expected degree and leading coefficient
+when nonzero.  These are structural dense-list results, not evaluation
+extensionality.  The exact future quotient/remainder contract and zero-divisor
+fallback are maintained in `polynomial-division.md`; division itself remains
+unimplemented.  No new logical/executable boundary is introduced.
+
+The immediate next milestone is one-step leading-term cancellation, followed
+by polynomial division and Euclidean theory.
 Division, remainder, gcd, irreducibility, monic normalization, and
 extension-field reduction remain later work.

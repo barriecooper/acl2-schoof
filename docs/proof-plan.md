@@ -29,7 +29,11 @@ ACL2 obligations are genuinely proved and certified.
    multiplication is canonical, normalization preserves the full convolution,
    leading coefficients multiply in operand order, degrees add, and products
    are nonzero.  This uses the field no-zero-divisor law and raw length theorem,
-   not evaluation extensionality.  The next focused milestone is division and
+   not evaluation extensionality.  The total, canonical monomial and natural
+   degree-shift foundation is also certified, including degree and leading-
+   coefficient laws and explicit `nfix` behavior.  The maintained division
+   contract is fixed, but recursive division is not implemented.  The next
+   focused milestone is one-step leading-term cancellation, then division and
    Euclidean theory.  Later power uses include extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.
