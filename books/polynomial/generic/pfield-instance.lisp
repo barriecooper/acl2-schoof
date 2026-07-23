@@ -1054,6 +1054,221 @@
            :in-theory (e/d (f7-raw-add f7-fix-coefficients)
                            (gfield::f7-add gfield::f7-fix)))))
 
+; Concrete subtraction cancellation is proved structurally, rather than by
+; transporting the recursive generic operations through functional
+; instantiation.  Expansionary list facts are kept out of the rewrite theory.
+(defthm f7-true-listp-of-raw-neg
+  (true-listp (f7-raw-neg x))
+  :hints (("Goal" :induct (f7-raw-neg x)
+           :in-theory (enable f7-raw-neg))))
+
+(defthm f7-coefficient-list-p-of-raw-neg
+  (f7-coefficient-list-p (f7-raw-neg x))
+  :hints (("Goal" :induct (f7-raw-neg x)
+           :in-theory (enable f7-raw-neg f7-coefficient-list-p
+                              gfield::f7-element-p gfield::f7-neg))))
+
+(defthm f7-len-of-raw-neg
+  (equal (len (f7-raw-neg x)) (len x))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-raw-neg x)
+           :in-theory (enable f7-raw-neg))))
+
+(defthm f7-consp-of-raw-neg
+  (equal (consp (f7-raw-neg x)) (consp x))
+  :hints (("Goal" :in-theory (enable f7-raw-neg))))
+
+(defthm f7-last-of-raw-neg
+  (implies (consp x)
+           (equal (car (last (f7-raw-neg x)))
+                  (gfield::f7-neg (car (last x)))))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-raw-neg x)
+           :in-theory (enable f7-raw-neg))))
+
+(defthm equal-f7-neg-zero-for-subtraction
+  (equal (equal (gfield::f7-neg x) (gfield::f7-zero))
+         (equal (gfield::f7-fix x) (gfield::f7-zero)))
+  :hints (("Goal"
+           :in-theory (e/d (gfield::f7-neg gfield::f7-fix
+                                           gfield::f7-zero)
+                           (pfield::neg)))))
+
+(defthm f7-canonical-polynomial-p-of-raw-neg-when-canonical
+  (implies (f7-canonical-polynomial-p x)
+           (f7-canonical-polynomial-p (f7-raw-neg x)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-last-of-raw-neg))
+           :in-theory (enable f7-canonical-polynomial-p
+                              equal-f7-neg-zero-for-subtraction))))
+
+(defthm f7-poly-neg-when-canonical
+  (implies (f7-canonical-polynomial-p x)
+           (equal (f7-poly-neg x) (f7-raw-neg x)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-canonical-polynomial-p-of-raw-neg-when-canonical)
+                 (:instance f7-normalize-when-canonical
+                            (xs (f7-raw-neg x))))
+           :in-theory (enable f7-poly-neg))))
+
+(defthm f7-last-of-raw-add-when-equal-len
+  (implies (and (consp x)
+                (consp y)
+                (equal (len x) (len y)))
+           (equal (car (last (f7-raw-add x y)))
+                  (gfield::f7-add (car (last x)) (car (last y)))))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-raw-add x y)
+           :in-theory (enable f7-raw-add))))
+
+(defthm f7-add-inverse-right-for-subtraction
+  (equal (gfield::f7-add x (gfield::f7-neg x))
+         (gfield::f7-zero))
+  :hints (("Goal"
+           :in-theory (e/d (gfield::f7-add gfield::f7-neg
+                                           gfield::f7-fix gfield::f7-zero)
+                           (pfield::add pfield::neg)))))
+
+(defthm f7-len-of-trim-strict-when-last-zero
+  (implies (and (f7-coefficient-list-p x)
+                (consp x)
+                (equal (car (last x)) (gfield::f7-zero)))
+           (< (len (f7-trim-trailing-zeros x)) (len x)))
+  :rule-classes :linear
+  :hints (("Goal" :induct (f7-trim-trailing-zeros x)
+           :in-theory (enable f7-trim-trailing-zeros
+                              f7-coefficient-list-p))))
+
+(defthm f7-len-of-normalize-strict-when-last-zero
+  (implies (and (f7-coefficient-list-p x)
+                (consp x)
+                (equal (car (last x)) (gfield::f7-zero)))
+           (< (len (f7-normalize x)) (len x)))
+  :rule-classes :linear
+  :hints (("Goal"
+           :use ((:instance f7-len-of-trim-strict-when-last-zero))
+           :in-theory (enable f7-normalize))))
+
+(defthm f7-poly-sub-of-canonical-operands
+  (implies (and (f7-canonical-polynomial-p x)
+                (f7-canonical-polynomial-p y))
+           (equal (f7-poly-sub x y)
+                  (f7-normalize (f7-raw-add x (f7-raw-neg y)))))
+  :hints (("Goal"
+           :use ((:instance f7-poly-neg-when-canonical (x y)))
+           :in-theory (enable f7-poly-sub f7-poly-add))))
+
+(defthm f7-canonical-polynomial-p-of-poly-sub
+  (f7-canonical-polynomial-p (f7-poly-sub x y))
+  :hints (("Goal"
+           :use ((:instance f7-canonical-polynomial-p-of-normalize
+                            (xs (f7-raw-add
+                                 (f7-normalize x)
+                                 (f7-normalize (f7-poly-neg y))))))
+           :in-theory (e/d (f7-poly-sub f7-poly-add)
+                           (f7-canonical-polynomial-p-of-normalize
+                            f7-normalize f7-poly-neg f7-raw-add)))))
+
+(defthm f7-last-of-raw-sub-zero-when-equal-len-and-last-equal
+  (implies (and (f7-coefficient-list-p x)
+                (f7-coefficient-list-p y)
+                (consp x)
+                (consp y)
+                (equal (len x) (len y))
+                (equal (car (last x)) (car (last y))))
+           (equal (car (last (f7-raw-add x (f7-raw-neg y))))
+                  (gfield::f7-zero)))
+  :hints (("Goal"
+           :use ((:instance f7-len-of-raw-neg (x y))
+                 (:instance f7-last-of-raw-neg (x y))
+                 (:instance f7-last-of-raw-add-when-equal-len
+                            (x x) (y (f7-raw-neg y))))
+           :in-theory (disable f7-raw-neg f7-raw-add
+                               gfield::f7-add gfield::f7-neg))))
+
+(defthm f7-len-of-poly-sub-strict-when-equal-len-and-last-equal
+  (implies (and (f7-canonical-polynomial-p x)
+                (f7-canonical-polynomial-p y)
+                (consp x)
+                (consp y)
+                (equal (len x) (len y))
+                (equal (car (last x)) (car (last y))))
+           (< (len (f7-poly-sub x y)) (len x)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-last-of-raw-sub-zero-when-equal-len-and-last-equal)
+                 (:instance f7-coefficient-list-p-of-raw-add
+                            (x x) (y (f7-raw-neg y)))
+                 (:instance f7-consp-of-raw-add
+                            (x x) (y (f7-raw-neg y)))
+                 (:instance f7-len-of-raw-add
+                            (x x) (y (f7-raw-neg y)))
+                 (:instance f7-len-of-raw-neg (x y))
+                 (:instance f7-len-of-normalize-strict-when-last-zero
+                            (x (f7-raw-add x (f7-raw-neg y)))))
+           :in-theory
+           (e/d (f7-poly-sub-of-canonical-operands)
+                (f7-poly-sub f7-poly-add f7-poly-neg f7-normalize
+                 f7-trim-trailing-zeros f7-raw-add f7-raw-neg)))))
+
+(defthm f7-leading-coefficient-when-canonical-nonzero
+  (implies (and (f7-canonical-polynomial-p p) (consp p))
+           (equal (f7-poly-leading-coefficient p) (car (last p))))
+  :hints (("Goal"
+           :use ((:instance f7-poly-leading-coefficient-semantics-from-pfield
+                            (poly p))
+                 (:instance f7-normalize-when-canonical (xs p)))
+           :in-theory (disable f7-poly-leading-coefficient f7-normalize))))
+
+(defthm f7-degree-when-canonical-nonzero
+  (implies (and (f7-canonical-polynomial-p p) (consp p))
+           (equal (f7-poly-degree p) (1- (len p))))
+  :hints (("Goal"
+           :use ((:instance f7-poly-degree-semantics-from-pfield (poly p))
+                 (:instance f7-normalize-when-canonical (xs p)))
+           :in-theory (disable f7-poly-degree f7-normalize))))
+
+(defthm f7-len-of-poly-sub-less-when-equal-degree-and-leading
+  (implies
+   (and (f7-canonical-polynomial-p f)
+        (f7-canonical-polynomial-p h)
+        (consp f)
+        (consp h)
+        (equal (f7-poly-degree f) (f7-poly-degree h))
+        (equal (f7-poly-leading-coefficient f)
+               (f7-poly-leading-coefficient h)))
+   (< (len (f7-poly-sub f h)) (len f)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-degree-when-canonical-nonzero (p f))
+                 (:instance f7-degree-when-canonical-nonzero (p h))
+                 (:instance f7-leading-coefficient-when-canonical-nonzero (p f))
+                 (:instance f7-leading-coefficient-when-canonical-nonzero (p h))
+                 (:instance f7-len-of-poly-sub-strict-when-equal-len-and-last-equal
+                            (x f) (y h))))))
+
+(defthm f7-poly-degree-of-poly-sub-decreases-when-leading-terms-equal
+  (implies
+   (and (f7-canonical-polynomial-p f)
+        (f7-canonical-polynomial-p h)
+        (consp f)
+        (consp h)
+        (equal (f7-poly-degree f) (f7-poly-degree h))
+        (equal (f7-poly-leading-coefficient f)
+               (f7-poly-leading-coefficient h)))
+   (or (not (consp (f7-poly-sub f h)))
+       (< (f7-poly-degree (f7-poly-sub f h))
+          (f7-poly-degree f))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-len-of-poly-sub-less-when-equal-degree-and-leading)
+                 (:instance f7-degree-when-canonical-nonzero (p f))
+                 (:instance f7-degree-when-canonical-nonzero
+                            (p (f7-poly-sub f h))))
+           :in-theory (disable f7-poly-sub f7-poly-degree))))
+
 (defthm f7-true-listp-of-raw-mul
   (true-listp (f7-raw-mul f g))
   :hints (("Goal" :induct (f7-raw-mul f g)
@@ -2132,3 +2347,24 @@
 (assert-event (not (equal (gfield::f7-div 6 3) (gfield::f7-zero))))
 (assert-event
  (equal (gfield::f7-mul (gfield::f7-div 6 3) 3) 6))
+
+; Concrete constant-first subtraction-cancellation regressions.
+(assert-event
+ (let ((difference (f7-poly-sub '(1 2 3) '(4 5 3))))
+   (and (equal difference '(4 4))
+        (f7-canonical-polynomial-p difference)
+        (< (len difference) (len '(1 2 3)))
+        (< (f7-poly-degree difference) (f7-poly-degree '(1 2 3))))))
+(assert-event (equal (f7-poly-sub '(1 2 3) '(1 2 3)) nil))
+(assert-event (equal (f7-poly-sub '(5) '(5)) nil))
+(assert-event
+ (let ((difference (f7-poly-sub '(1 2 3) '(1 1 3))))
+   (and (equal difference '(0 1))
+        (f7-canonical-polynomial-p difference)
+        (< (len difference) (len '(1 2 3)))
+        (< (f7-poly-degree difference) (f7-poly-degree '(1 2 3))))))
+(assert-event
+ (and (not (equal (f7-poly-degree '(1 2 3))
+                  (f7-poly-degree '(1 2))))
+      (not (equal (f7-poly-leading-coefficient '(1 2 3))
+                  (f7-poly-leading-coefficient '(1 2 4))))))
