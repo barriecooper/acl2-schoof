@@ -10,4 +10,5 @@
 (include-book "polynomial/generic/division-step")
 (include-book "polynomial/generic/division")
 (include-book "polynomial/generic/reduction")
+(include-book "polynomial/generic/euclidean")
 (include-book "curve/f11-golden")
