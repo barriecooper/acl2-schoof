@@ -74,9 +74,13 @@ modulus is nonempty, and idempotence. The proof uses certified remainder
 canonicality and degree bounds, inactive lower-degree division, and the zero
 fallback; it adds no recursive induction and uses no evaluation equality.
 
-Polynomial congruence remains separate and open. The next PR will cover adding
-a modulus multiple, the congruence relation itself, and addition and
-multiplication compatibility. It will not be inferred from this reduction API.
+Generic polynomial congruence is now the transparent structural equality of
+canonical remainder results.  Its equivalence laws, normalization invariance,
+zero-modulus normalized-equality semantics, bounded-representative uniqueness,
+and invariance under adding a normalized-modulus multiple are certified.  The
+`GPOLY-MOD-CONGRUENCE` obligation remains open only for the next PR's addition
+and multiplication compatibility; no quotient-ring or concrete congruence API
+is introduced.
 
 ## Explicitly downstream
 

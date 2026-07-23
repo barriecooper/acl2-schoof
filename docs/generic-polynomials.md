@@ -255,8 +255,17 @@ derived from the certified division reconstruction together with generic
 polynomial cancellation, nonzero-product, and degree algebra.  It introduces
 neither a second reduction algorithm nor a concrete reduction API.
 
-The next PR, `GPOLY-MOD-CONGRUENCE`, remains responsible for invariance under
-adding a modulus multiple, defining congruence by equality of canonical
-remainders, and proving compatibility with addition and multiplication. No quotient-ring operations,
-gcd, modular inverse, extension field, or concrete F7/PFIELD division API is
-claimed here.
+The same generic reduction book now defines `POLY-CONGRUENT-P` as structural
+equality of canonical `POLY-REMAINDER` results.  The relation is certified as
+reflexive, symmetric, and transitive and is invariant under normalizing either
+representative or the modulus.  Every polynomial is congruent to its canonical
+remainder; canonical representatives below a nonzero normalized modulus degree
+are congruent exactly when structurally equal.  Adding an arbitrary polynomial
+multiple of the normalized modulus preserves the remainder and therefore the
+congruence class.  When the normalized modulus is zero, congruence is exactly
+structural equality of the normalized inputs.
+
+`GPOLY-MOD-CONGRUENCE` remains open for the following focused PR to certify
+compatibility with polynomial addition and multiplication.  No quotient-ring
+operations, concrete reduction/congruence API, gcd, modular inverse, extension
+field, or concrete F7/PFIELD division API is claimed here.
