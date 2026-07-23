@@ -276,3 +276,12 @@ one-sided corollaries, and
 `POLY-MUL-POLY-CONGRUENT-P-WITH-REMAINDERS`. No quotient-ring operation, concrete
 reduction/congruence API, gcd, modular inverse, extension field, or concrete
 F7/PFIELD division API is introduced here.
+
+The Euclidean remainder step additionally has a certified natural-valued
+descent measure: for a nonempty normalized divisor, the length of the
+canonical remainder (and hence of its normalization) is strictly less than
+the length of the normalized divisor.  This follows only from canonicality,
+the strict degree bound, and the canonical degree/length characterization;
+it does not unfold recursive division.  A zero normalized divisor is the
+future recursion base case.  No gcd function or monic normalization is yet
+defined, and gcd correctness remains open.

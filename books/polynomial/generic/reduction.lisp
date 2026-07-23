@@ -64,6 +64,38 @@
                             (f dividend) (g modulus)))
            :in-theory (enable poly-remainder))))
 
+; This is the natural-valued measure fact needed by the next Euclidean
+; recursion.  It is a consequence of the public remainder contract; in
+; particular, it does not inspect the division recursion.
+(defthm poly-remainder-strict-length-bound
+  (implies (consp (normalize modulus))
+           (< (len (poly-remainder dividend modulus))
+              (len (normalize modulus))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance poly-remainder-canonical)
+                 (:instance canonical-polynomial-p-of-normalize
+                            (xs modulus))
+                 (:instance poly-remainder-strict-degree-bound)
+                 (:instance canonical-degree-decrease-implies-length-decrease
+                            (x (normalize modulus))
+                            (y (poly-remainder dividend modulus))))
+           :in-theory (disable poly-remainder normalize poly-degree
+                               canonical-polynomial-p))))
+
+(defthm normalize-poly-remainder-strict-length-bound
+  (implies (consp (normalize modulus))
+           (< (len (normalize (poly-remainder dividend modulus)))
+              (len (normalize modulus))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance poly-remainder-strict-length-bound)
+                 (:instance poly-remainder-canonical)
+                 (:instance normalize-when-canonical
+                            (xs (poly-remainder dividend modulus))))
+           :in-theory (disable poly-remainder normalize
+                               canonical-polynomial-p))))
+
 (defthm poly-remainder-canonical-lower-degree
   (implies (and (canonical-polynomial-p dividend)
                 (consp (normalize modulus))
@@ -1276,3 +1308,61 @@
       (poly-add (monomial (gfield::field-one) 1) (polynomial-one))
       (monomial (gfield::field-one) 1)))
     (poly-degree (monomial (gfield::field-one) 1))))
+
+; Focused measure regressions use constant-first structural polynomials.
+(defthm poly-remainder-length-regression-constant-divisor
+ (< (len (poly-remainder (polynomial-one) (polynomial-one)))
+    (len (normalize (polynomial-one)))))
+(defthm poly-remainder-length-regression-linear-divisor
+ (< (len (poly-remainder
+          (poly-add (monomial (gfield::field-one) 1) (polynomial-one))
+          (monomial (gfield::field-one) 1)))
+    (len (normalize (monomial (gfield::field-one) 1)))))
+(defthm poly-remainder-length-regression-higher-degree-divisor
+ (< (len (poly-remainder (monomial (gfield::field-one) 3)
+                         (poly-add (monomial (gfield::field-one) 2)
+                                   (polynomial-one))))
+    (len (normalize (poly-add (monomial (gfield::field-one) 2)
+                              (polynomial-one))))))
+(defthm poly-remainder-length-regression-lower-degree-dividend
+ (< (len (poly-remainder (polynomial-one)
+                         (monomial (gfield::field-one) 2)))
+    (len (normalize (monomial (gfield::field-one) 2)))))
+(defthm poly-remainder-length-regression-exact-divisibility
+ (< (len (poly-remainder (monomial (gfield::field-one) 2)
+                         (monomial (gfield::field-one) 1)))
+    (len (normalize (monomial (gfield::field-one) 1))))
+ :hints (("Goal"
+          :use ((:instance poly-remainder-strict-length-bound
+                           (dividend (monomial (gfield::field-one) 2))
+                           (modulus (monomial (gfield::field-one) 1)))))))
+(defthm poly-remainder-length-regression-trailing-zero-divisor
+ (< (len (poly-remainder (polynomial-one)
+                         (list (gfield::field-one) (gfield::field-one)
+                               (gfield::field-zero))))
+    (len (normalize (list (gfield::field-one) (gfield::field-one)
+                          (gfield::field-zero))))))
+(defthm poly-remainder-length-regression-noncanonical-coefficient
+ (< (len (poly-remainder (polynomial-one)
+                         (list 'malformed-coefficient
+                               (gfield::field-one))))
+    (len (normalize (list 'malformed-coefficient
+                          (gfield::field-one))))))
+(defthm poly-remainder-length-regression-malformed-dividend
+ (< (len (poly-remainder 'malformed-dividend
+                         (monomial (gfield::field-one) 1)))
+    (len (normalize (monomial (gfield::field-one) 1)))))
+(defthm poly-remainder-length-regression-nil-dividend
+ (< (len (poly-remainder nil (polynomial-one)))
+    (len (normalize (polynomial-one)))))
+(defthm poly-remainder-length-regression-zero-divisor-excluded
+ (not (consp (normalize 'malformed-divisor))))
+(defthm poly-remainder-length-regression-normalized-measure
+ (equal (len (normalize (poly-remainder dividend modulus)))
+        (len (poly-remainder dividend modulus)))
+ :hints (("Goal"
+          :use ((:instance poly-remainder-canonical)
+                (:instance normalize-when-canonical
+                           (xs (poly-remainder dividend modulus))))
+          :in-theory (disable poly-remainder normalize
+                              canonical-polynomial-p))))

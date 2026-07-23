@@ -35,8 +35,10 @@ ACL2 obligations are genuinely proved and certified.
    division are certified, including reconstruction and the final strict
    remainder-degree bound. Generic modular reduction and congruence are also
    certified, including compatibility with addition, negation, subtraction,
-   and multiplication. The next focused milestone is the generic monic gcd
-   layer and its Euclidean-descent termination proof. Later power uses include
+   and multiplication. The Euclidean remainder step now has a certified
+   normalized-divisor-length descent theorem. The next focused milestone is
+   defining the generic Euclidean gcd, followed by its monic normalization and
+   correctness theory. Later power uses include
    extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.
@@ -67,8 +69,8 @@ GPOLY is authoritative for new polynomial algebra. The older HS/PFIELD
 polynomial stack remains a legacy/root-count bridge unless a specific bridge
 requires it; gcd, derivative, quotient-ring, and
 extension-field work should not be independently duplicated in both stacks.
-The immediate mathematical milestone is generic monic gcd and Euclidean
-descent, now that generic modular congruence, multiple invariance, and
+The immediate mathematical milestone is defining generic Euclidean gcd using
+the now-certified normalized-divisor-length descent, now that generic modular congruence, multiple invariance, and
 addition/multiplication compatibility are certified. Recursive concrete F7 divmod is postponed. The first executable
 Schoof path may target a named prime field; arbitrary finite-field execution is
 a later architectural phase.
