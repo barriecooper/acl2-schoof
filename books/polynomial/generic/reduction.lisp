@@ -310,7 +310,205 @@
            :in-theory (disable poly-divmod poly-remainder normalize poly-add
                                poly-mul poly-degree canonical-polynomial-p))))
 
+; Adding a multiple merely changes the quotient in the certified bounded
+; reconstruction.  This algebraic reshaping lemma is deliberately not a
+; rewrite rule: its expanded reconstruction shape is useful only to the
+; remainder theorem immediately below.
+(defthm normalize-of-poly-add-modulus-multiple-reconstruction
+  (equal
+   (normalize
+    (poly-add dividend
+              (poly-mul multiplier (normalize modulus))))
+   (poly-add
+    (poly-mul
+     (poly-add (mv-nth 0 (poly-divmod dividend modulus)) multiplier)
+     (normalize modulus))
+    (poly-remainder dividend modulus)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance poly-divmod-reconstruction
+                     (f dividend) (g modulus))
+          (:instance poly-remainder-is-divmod-remainder)
+          (:instance poly-mul-right-distributive
+                     (x (mv-nth 0 (poly-divmod dividend modulus)))
+                     (y multiplier) (z (normalize modulus)))
+          (:instance poly-add-associative
+                     (x (poly-mul
+                         (mv-nth 0 (poly-divmod dividend modulus))
+                         (normalize modulus)))
+                     (y (poly-remainder dividend modulus))
+                     (z (poly-mul multiplier (normalize modulus))))
+          (:instance poly-add-associative
+                     (x (poly-mul
+                         (mv-nth 0 (poly-divmod dividend modulus))
+                         (normalize modulus)))
+                     (y (poly-mul multiplier (normalize modulus)))
+                     (z (poly-remainder dividend modulus)))
+          (:instance poly-add-commutative
+                     (x (poly-remainder dividend modulus))
+                     (y (poly-mul multiplier (normalize modulus))))
+          (:instance normalize-when-canonical
+                     (xs (poly-add
+                          dividend
+                          (poly-mul multiplier (normalize modulus))))))
+    :in-theory
+    (e/d (poly-add)
+         (poly-divmod poly-remainder normalize poly-mul
+          poly-add-associative poly-add-commutative
+          canonical-polynomial-p polynomial-p)))))
+
+(defthm poly-remainder-of-poly-add-modulus-multiple
+  (implies
+   (consp (normalize modulus))
+   (equal
+    (poly-remainder
+     (poly-add dividend
+               (poly-mul multiplier (normalize modulus)))
+     modulus)
+    (poly-remainder dividend modulus)))
+  :hints
+  (("Goal"
+    :use
+    ((:instance normalize-of-poly-add-modulus-multiple-reconstruction)
+     (:instance poly-remainder-of-bounded-reconstruction
+                (dividend
+                 (poly-add dividend
+                           (poly-mul multiplier (normalize modulus))))
+                (quotient
+                 (poly-add (mv-nth 0 (poly-divmod dividend modulus))
+                           multiplier))
+                (candidate-remainder (poly-remainder dividend modulus)))
+     (:instance poly-remainder-canonical)
+     (:instance poly-remainder-strict-degree-bound))
+    :in-theory
+    (disable poly-divmod poly-remainder normalize poly-add poly-mul
+             poly-degree canonical-polynomial-p))))
+
 (verify-guards poly-remainder)
+
+; Generic congruence is structural equality of the two canonical remainder
+; representatives.  It has no nonzero-modulus precondition.
+(defun poly-congruent-p (left right modulus)
+  (equal (poly-remainder left modulus)
+         (poly-remainder right modulus)))
+
+(defthm poly-congruent-p-iff-equal-remainders
+  (equal (poly-congruent-p left right modulus)
+         (equal (poly-remainder left modulus)
+                (poly-remainder right modulus)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable poly-congruent-p))))
+
+(defthm poly-congruent-p-reflexive
+  (poly-congruent-p x x modulus))
+
+(defthm poly-congruent-p-symmetric
+  (implies (poly-congruent-p x y modulus)
+           (poly-congruent-p y x modulus)))
+
+(defthm poly-congruent-p-transitive
+  (implies (and (poly-congruent-p x y modulus)
+                (poly-congruent-p y z modulus))
+           (poly-congruent-p x z modulus)))
+
+(defthm poly-congruent-p-of-normalize-left
+  (equal (poly-congruent-p (normalize left) right modulus)
+         (poly-congruent-p left right modulus)))
+
+(defthm poly-congruent-p-of-normalize-right
+  (equal (poly-congruent-p left (normalize right) modulus)
+         (poly-congruent-p left right modulus)))
+
+(defthm poly-congruent-p-of-normalize-modulus
+  (equal (poly-congruent-p left right (normalize modulus))
+         (poly-congruent-p left right modulus)))
+
+(defthm poly-congruent-p-zero-normalized-modulus
+  (implies (not (consp (normalize modulus)))
+           (equal (poly-congruent-p left right modulus)
+                  (equal (normalize left) (normalize right))))
+  :hints (("Goal"
+           :use ((:instance poly-remainder-zero-normalized-modulus
+                            (dividend left))
+                 (:instance poly-remainder-zero-normalized-modulus
+                            (dividend right)))
+           :in-theory (enable poly-congruent-p))))
+
+(defthm poly-congruent-p-with-remainder
+  (poly-congruent-p dividend
+                    (poly-remainder dividend modulus)
+                    modulus)
+  :hints (("Goal" :use ((:instance poly-remainder-idempotent))
+           :in-theory (e/d (poly-congruent-p)
+                           (poly-remainder poly-remainder-idempotent)))))
+
+(defthm poly-congruent-p-of-remainder-left
+  (equal (poly-congruent-p (poly-remainder left modulus) right modulus)
+         (poly-congruent-p left right modulus))
+  :hints (("Goal" :use ((:instance poly-remainder-idempotent
+                                   (dividend left)))
+           :in-theory (e/d (poly-congruent-p)
+                           (poly-remainder poly-remainder-idempotent)))))
+
+(defthm poly-congruent-p-of-remainder-right
+  (equal (poly-congruent-p left (poly-remainder right modulus) modulus)
+         (poly-congruent-p left right modulus))
+  :hints (("Goal" :use ((:instance poly-remainder-idempotent
+                                   (dividend right)))
+           :in-theory (e/d (poly-congruent-p)
+                           (poly-remainder poly-remainder-idempotent)))))
+
+(defthm bounded-representatives-poly-congruent-p-iff-equal
+  (implies
+   (and (consp (normalize modulus))
+        (canonical-polynomial-p left)
+        (canonical-polynomial-p right)
+        (or (not (consp left))
+            (< (poly-degree left) (poly-degree (normalize modulus))))
+        (or (not (consp right))
+            (< (poly-degree right) (poly-degree (normalize modulus)))))
+   (equal (poly-congruent-p left right modulus)
+          (equal left right)))
+  :hints
+  (("Goal"
+    :use ((:instance poly-remainder-canonical-lower-degree
+                     (dividend left))
+          (:instance poly-remainder-canonical-lower-degree
+                     (dividend right)))
+    :in-theory (enable poly-congruent-p))))
+
+(defthm poly-add-modulus-multiple-poly-congruent-p
+  (implies
+   (consp (normalize modulus))
+   (poly-congruent-p
+    (poly-add dividend
+              (poly-mul multiplier (normalize modulus)))
+    dividend modulus))
+  :hints (("Goal"
+           :use ((:instance poly-remainder-of-poly-add-modulus-multiple))
+           :in-theory (enable poly-congruent-p))))
+
+(defthm bounded-reconstruction-poly-congruent-p
+  (implies
+   (and (consp (normalize modulus))
+        (canonical-polynomial-p candidate-remainder)
+        (or (not (consp candidate-remainder))
+            (< (poly-degree candidate-remainder)
+               (poly-degree (normalize modulus))))
+        (equal (normalize dividend)
+               (poly-add
+                (poly-mul quotient (normalize modulus))
+                candidate-remainder)))
+   (poly-congruent-p dividend candidate-remainder modulus))
+  :hints
+  (("Goal"
+    :use ((:instance poly-remainder-of-bounded-reconstruction)
+          (:instance poly-remainder-canonical-lower-degree
+                     (dividend candidate-remainder)))
+    :in-theory (enable poly-congruent-p))))
+
+(verify-guards poly-congruent-p)
 
 ; Focused generic structural regressions use the constrained field itself. All
 ; expected values are structural constant-first polynomials; no evaluation
@@ -336,6 +534,62 @@
  (equal (poly-remainder (polynomial-one)
                         (monomial (gfield::field-one) 1))
         (polynomial-one)))
+(defthm poly-congruent-regression-reflexive
+ (poly-congruent-p (polynomial-one) (polynomial-one)
+                   (monomial (gfield::field-one) 1)))
+(defthm poly-congruent-regression-symmetric
+ (equal (poly-congruent-p (polynomial-one) nil
+                          (monomial (gfield::field-one) 1))
+        (poly-congruent-p nil (polynomial-one)
+                          (monomial (gfield::field-one) 1))))
+(defthm poly-congruent-regression-transitive
+ (implies (and (poly-congruent-p x y modulus)
+               (poly-congruent-p y z modulus))
+          (poly-congruent-p x z modulus)))
+(defthm poly-congruent-regression-equal-noncanonical
+ (poly-congruent-p
+  (list (gfield::field-one) (gfield::field-zero))
+  (polynomial-one) (monomial (gfield::field-one) 1)))
+(defthm poly-congruent-regression-normalize-left
+ (equal (poly-congruent-p (normalize x) y modulus)
+        (poly-congruent-p x y modulus)))
+(defthm poly-congruent-regression-normalize-right
+ (equal (poly-congruent-p x (normalize y) modulus)
+        (poly-congruent-p x y modulus)))
+(defthm poly-congruent-regression-normalize-modulus
+ (equal (poly-congruent-p x y (normalize modulus))
+        (poly-congruent-p x y modulus)))
+(defthm poly-congruent-regression-one-modulus-multiple
+ (poly-congruent-p
+  (poly-add (polynomial-one) (monomial (gfield::field-one) 1))
+  (polynomial-one) (monomial (gfield::field-one) 1)))
+(defthm poly-congruent-regression-polynomial-multiplier
+ (poly-congruent-p
+  (poly-add
+   (polynomial-one)
+   (poly-mul (poly-add (monomial (gfield::field-one) 1)
+                       (polynomial-one))
+             (monomial (gfield::field-one) 2)))
+  (polynomial-one) (monomial (gfield::field-one) 2)))
+(defthm poly-congruent-regression-malformed-atom
+ (poly-congruent-p 'malformed-operand nil (polynomial-one)))
+(defthm poly-congruent-regression-trailing-zeros
+ (poly-congruent-p
+  (list (gfield::field-one) (gfield::field-zero)
+        (gfield::field-zero))
+  (polynomial-one) (monomial (gfield::field-one) 1)))
+(defthm poly-congruent-regression-to-remainder
+ (poly-congruent-p
+  (poly-add (monomial (gfield::field-one) 1) (polynomial-one))
+  (polynomial-one) (monomial (gfield::field-one) 1)))
+(defthm poly-congruent-regression-unequal-bounded-representatives
+ (not (poly-congruent-p nil (polynomial-one)
+                        (monomial (gfield::field-one) 1))))
+(defthm poly-congruent-regression-zero-modulus-normalized-equality
+ (and (poly-congruent-p
+       (list (gfield::field-one) (gfield::field-zero))
+       (polynomial-one) nil)
+      (not (poly-congruent-p nil (polynomial-one) nil))))
 (defthm poly-remainder-regression-exact-divisibility
  (equal (poly-remainder (monomial (gfield::field-one) 2)
                         (polynomial-one))
