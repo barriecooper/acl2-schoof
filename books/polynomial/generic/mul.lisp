@@ -236,6 +236,104 @@
                       0
                     (+ -1 (len x) (len y))))))
 
+; The following three list facts isolate the structural content needed at the
+; top of a convolution.  They are kept out of the default rewrite theory: in
+; particular, LAST of RAW-ADD should only be selected when the length
+; comparison that makes one operand decisive is already known.
+(defthm last-of-raw-scale
+  (implies (consp x)
+           (equal (car (last (raw-scale a x)))
+                  (gfield::field-mul a (car (last x)))))
+  :rule-classes nil
+  :hints (("Goal" :induct (raw-scale a x))))
+
+(defthm last-of-raw-add-when-right-longer
+  (implies (and (coefficient-list-p x)
+                (coefficient-list-p y)
+                (< (len x) (len y)))
+           (equal (car (last (raw-add x y)))
+                  (car (last y))))
+  :rule-classes nil
+  :hints (("Goal" :induct (raw-add x y))))
+
+(defthm last-of-zero-prefix
+  (implies (consp x)
+           (equal (car (last (cons (gfield::field-zero) x)))
+                  (car (last x))))
+  :rule-classes nil)
+
+(defthm raw-add-zero-singleton-right
+  (implies (and (coefficient-list-p x)
+                (consp x))
+           (equal (raw-add x (list (gfield::field-zero))) x))
+  :rule-classes nil
+  :hints (("Goal" :induct (coefficient-list-p x)
+           :in-theory (enable raw-add))))
+
+(defthm raw-mul-singleton-left
+  (implies (and (gfield::field-element-p a)
+                (coefficient-list-p g)
+                (consp g))
+           (equal (raw-mul (list a) g)
+                  (raw-scale a g)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance raw-add-zero-singleton-right
+                            (x (raw-scale a g))))
+           :in-theory (e/d (raw-mul)
+                           (raw-add-commutative)))))
+
+(defthm len-raw-scale-less-than-zero-prefix-raw-mul
+  (implies (and (true-listp f)
+                (true-listp g)
+                (consp f)
+                (consp g))
+           (< (len (raw-scale a g))
+              (len (cons (gfield::field-zero) (raw-mul f g)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance len-of-raw-scale (x g))
+                 (:instance len-of-raw-mul (x f) (y g)))
+           :in-theory (disable raw-scale raw-mul))))
+
+(defthm raw-leading-coefficient-of-raw-mul
+  (implies (and (coefficient-list-p f)
+                (coefficient-list-p g)
+                (consp f)
+                (consp g))
+           (equal (car (last (raw-mul f g)))
+                  (gfield::field-mul (car (last f))
+                                     (car (last g)))))
+  :rule-classes nil
+  :hints (("Goal" :induct (raw-mul f g)
+           :in-theory (disable gfield::field-mul-commutative
+                               raw-add-commutative))
+          ("Subgoal *1/2"
+           :use ((:instance raw-mul-singleton-left
+                            (a (car f)) (g g))
+                 (:instance last-of-raw-scale
+                            (a (car f)) (x g)))
+           :in-theory (disable gfield::field-mul-commutative
+                               raw-add-commutative
+                               raw-mul))
+          ("Subgoal *1/3"
+           :use ((:instance last-of-raw-add-when-right-longer
+                            (x (raw-scale (car f) g))
+                            (y (cons (gfield::field-zero)
+                                     (raw-mul (cdr f) g))))
+                 (:instance last-of-zero-prefix
+                            (x (raw-mul (cdr f) g)))
+                 (:instance len-of-raw-scale
+                            (a (car f)) (x g))
+                 (:instance len-of-raw-mul (x (cdr f)) (y g))
+                 (:instance coefficient-list-p-of-raw-mul
+                            (x (cdr f)) (y g))
+                 (:instance len-raw-scale-less-than-zero-prefix-raw-mul
+                            (a (car f)) (f (cdr f)) (g g)))
+           :in-theory (disable gfield::field-mul-commutative
+                               raw-add-commutative
+                               raw-add raw-scale raw-mul))))
+
 (defthm len-raw-add-lower-bound-left
   (<= (len x) (len (raw-add x y)))
   :rule-classes :linear)
