@@ -49,11 +49,13 @@ shift and leading-coefficient preservation, and the corresponding monomial
 nonzero, degree, and leading-coefficient laws.  Its focused symbolic
 regressions cover zero, one, and four-place shifts; zero and constant
 monomials; a degree-two monomial; and negative-index behavior.  The abstract
-field operations deliberately have no evaluator, so an ordinary concrete
-generated copy is deferred to the division instance.
+theory now also has a certified named F7 instance (`f7-zero-prefix`,
+`f7-poly-shift`, and `f7-monomial`) with a direct zero-prefix normalization
+bridge.  F7 one-step division and recursive quotient/remainder remain open.
 
 No `MBE`, `DEFEXEC`, attachment, or other logical/executable boundary is added,
-and no update to `docs/execution-boundaries.md` is required.
+and the ordinary concrete runtime classification is recorded in
+`docs/execution-boundaries.md`.
 
 ## Certified recursive quotient/remainder
 

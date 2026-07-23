@@ -884,6 +884,175 @@
            (equal (f7-normalize xs) xs))
   :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p))))
 
+; Concrete F7 monomials use the same three ordinary DEFUN templates as the
+; generic development.  There is no separate executable specification.
+(def-monomial-instance f7-zero-prefix f7-poly-shift f7-monomial f7-normalize
+  gfield::f7-fix gfield::f7-zero)
+
+(defun f7-coefficient-list-p (xs)
+  (if (atom xs) (null xs)
+    (and (gfield::f7-element-p (car xs))
+         (f7-coefficient-list-p (cdr xs)))))
+(defun f7-polynomial-p (xs) (f7-coefficient-list-p xs))
+
+(defthm f7-coefficient-list-p-of-zero-prefix
+  (implies (f7-coefficient-list-p xs)
+           (f7-coefficient-list-p (f7-zero-prefix n xs)))
+  :hints (("Goal" :in-theory (enable f7-zero-prefix
+                                      f7-coefficient-list-p))))
+
+(defthm f7-true-listp-of-zero-prefix
+  (equal (true-listp (f7-zero-prefix n xs)) (true-listp xs))
+  :hints (("Goal" :in-theory (enable f7-zero-prefix))))
+
+(defthm f7-zero-prefix-when-zp
+  (implies (zp (nfix n)) (equal (f7-zero-prefix n xs) xs))
+  :hints (("Goal" :in-theory (enable f7-zero-prefix))))
+
+(defthm f7-zero-prefix-of-nfix
+  (equal (f7-zero-prefix (nfix n) xs) (f7-zero-prefix n xs))
+  :hints (("Goal" :in-theory (enable f7-zero-prefix))))
+
+(defthm f7-len-of-zero-prefix
+  (equal (len (f7-zero-prefix n xs)) (+ (nfix n) (len xs)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable f7-zero-prefix))))
+
+(defthm f7-last-of-zero-prefix-when-consp
+  (implies (consp xs) (equal (last (f7-zero-prefix n xs)) (last xs)))
+  :hints (("Goal" :in-theory (enable f7-zero-prefix))))
+
+(defthm f7-fix-coefficients-of-zero-prefix
+  (equal (f7-fix-coefficients (f7-zero-prefix n xs))
+         (f7-zero-prefix n (f7-fix-coefficients xs)))
+  :hints (("Goal" :in-theory (enable f7-zero-prefix
+                                      f7-fix-coefficients))))
+
+(defthm f7-trim-trailing-zeros-of-zero-prefix-when-trim-nonempty
+  (implies (consp (f7-trim-trailing-zeros xs))
+           (equal (f7-trim-trailing-zeros (f7-zero-prefix n xs))
+                  (f7-zero-prefix n (f7-trim-trailing-zeros xs))))
+  :hints (("Goal" :induct (f7-zero-prefix n xs)
+           :in-theory (enable f7-zero-prefix f7-trim-trailing-zeros))))
+
+(defthm f7-normalize-of-zero-prefix-when-normalize-nonempty
+  (implies (consp (f7-normalize p))
+           (equal (f7-normalize (f7-zero-prefix n p))
+                  (f7-zero-prefix n (f7-normalize p))))
+  :hints (("Goal"
+           :use ((:instance
+                  f7-trim-trailing-zeros-of-zero-prefix-when-trim-nonempty
+                  (xs (f7-fix-coefficients p))))
+           :in-theory (e/d (f7-normalize f7-fix-coefficients-of-zero-prefix)
+                           (f7-zero-prefix)))))
+
+(defthm f7-normalize-of-zero-prefix-when-canonical-nonempty
+  (implies (and (f7-canonical-polynomial-p p) (consp p))
+           (equal (f7-normalize (f7-zero-prefix n p))
+                  (f7-zero-prefix n p)))
+  :hints (("Goal"
+           :use ((:instance f7-normalize-of-zero-prefix-when-normalize-nonempty))
+           :in-theory (enable f7-canonical-polynomial-p))))
+
+(defthm f7-canonical-polynomial-p-of-zero-prefix
+  (implies (and (f7-canonical-polynomial-p p) (consp p))
+           (f7-canonical-polynomial-p (f7-zero-prefix n p)))
+  :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p)
+           :use ((:instance
+                  f7-normalize-of-zero-prefix-when-canonical-nonempty)))))
+
+(defthm f7-canonical-polynomial-p-of-poly-shift
+  (f7-canonical-polynomial-p (f7-poly-shift p n))
+  :hints (("Goal" :in-theory (e/d (f7-poly-shift) (f7-normalize
+                                                    f7-canonical-polynomial-p))
+           :use ((:instance f7-canonical-polynomial-p-of-normalize (xs p))
+                 (:instance f7-canonical-polynomial-p-of-zero-prefix
+                            (p (f7-normalize p)))))))
+
+(defthm f7-consp-of-poly-shift
+  (equal (consp (f7-poly-shift p n)) (consp (f7-normalize p)))
+  :hints (("Goal" :in-theory (enable f7-poly-shift))))
+
+(defthm f7-len-of-poly-shift-when-normalize-nonzero
+  (implies (consp (f7-normalize p))
+           (equal (len (f7-poly-shift p n))
+                  (+ (nfix n) (len (f7-normalize p)))))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable f7-poly-shift)
+           :use ((:instance f7-len-of-zero-prefix
+                            (xs (f7-normalize p)))))))
+
+(defthm f7-poly-degree-of-poly-shift
+  (implies (and (f7-canonical-polynomial-p p) (consp p))
+           (equal (f7-poly-degree (f7-poly-shift p n))
+                  (+ (f7-poly-degree p) (nfix n))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-len-of-poly-shift-when-normalize-nonzero)
+                 (:instance f7-normalize-of-zero-prefix-when-canonical-nonempty)
+                 (:instance f7-canonical-polynomial-p-of-poly-shift))
+           :in-theory (e/d (f7-poly-degree f7-poly-shift
+                                           f7-canonical-polynomial-p)
+                           (f7-normalize f7-zero-prefix)))))
+
+(defthm f7-poly-leading-coefficient-of-poly-shift
+  (implies (and (f7-canonical-polynomial-p p) (consp p))
+           (equal (f7-poly-leading-coefficient (f7-poly-shift p n))
+                  (f7-poly-leading-coefficient p)))
+  :hints (("Goal"
+           :use ((:instance f7-last-of-zero-prefix-when-consp (xs p))
+                 (:instance f7-normalize-of-zero-prefix-when-canonical-nonempty)
+                 (:instance f7-canonical-polynomial-p-of-poly-shift))
+           :in-theory (e/d (f7-poly-leading-coefficient f7-poly-shift
+                                                        f7-canonical-polynomial-p)
+                           (f7-normalize f7-zero-prefix)))))
+
+(defthm f7-canonical-polynomial-p-of-monomial
+  (f7-canonical-polynomial-p (f7-monomial a n))
+  :hints (("Goal" :in-theory (enable f7-monomial
+                                      f7-canonical-polynomial-p)
+           :use ((:instance f7-canonical-polynomial-p-of-zero-prefix
+                            (p (list (gfield::f7-fix a))))))))
+
+(defthm f7-monomial-of-nfix
+  (equal (f7-monomial a (nfix n)) (f7-monomial a n))
+  :hints (("Goal" :in-theory (enable f7-monomial f7-zero-prefix))))
+
+(defthm f7-monomial-nonzero-iff
+  (equal (consp (f7-monomial a n))
+         (not (equal (gfield::f7-fix a) (gfield::f7-zero))))
+  :hints (("Goal" :in-theory (enable f7-monomial))))
+
+(defthm f7-poly-shift-of-nil
+  (equal (f7-poly-shift nil n) nil)
+  :hints (("Goal" :in-theory (enable f7-poly-shift))))
+
+(defthm f7-monomial-when-fixed-zero
+  (implies (equal (gfield::f7-fix a) (gfield::f7-zero))
+           (equal (f7-monomial a n) nil))
+  :hints (("Goal" :in-theory (enable f7-monomial))))
+
+(defthm f7-poly-degree-of-monomial
+  (implies (not (equal (gfield::f7-fix a) (gfield::f7-zero)))
+           (equal (f7-poly-degree (f7-monomial a n)) (nfix n)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable f7-monomial f7-poly-degree)
+           :use ((:instance f7-len-of-zero-prefix
+                            (xs (list (gfield::f7-fix a))))
+                 (:instance f7-normalize-of-zero-prefix-when-canonical-nonempty
+                            (p (list (gfield::f7-fix a))))))))
+
+(defthm f7-poly-leading-coefficient-of-monomial
+  (implies (not (equal (gfield::f7-fix a) (gfield::f7-zero)))
+           (equal (f7-poly-leading-coefficient (f7-monomial a n))
+                  (gfield::f7-fix a)))
+  :hints (("Goal" :in-theory (enable f7-monomial
+                                      f7-poly-leading-coefficient)
+           :use ((:instance f7-last-of-zero-prefix-when-consp
+                            (xs (list (gfield::f7-fix a))))
+                 (:instance f7-normalize-of-zero-prefix-when-canonical-nonempty
+                            (p (list (gfield::f7-fix a))))))))
+
 (defthm f7-canonical-polynomial-p-of-polynomial-one
   (f7-canonical-polynomial-p (f7-polynomial-one))
   :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p
@@ -1077,6 +1246,9 @@
 (verify-guards f7-normalize)
 (verify-guards f7-poly-degree)
 (verify-guards f7-poly-leading-coefficient)
+(verify-guards f7-zero-prefix)
+(verify-guards f7-poly-shift)
+(verify-guards f7-monomial)
 (verify-guards f7-raw-add)
 (verify-guards f7-poly-add)
 (verify-guards f7-raw-scale)
@@ -1166,3 +1338,16 @@
 (assert-event
  (equal (f7-poly-mul '(1 2 3) (f7-const 4))
         (f7-poly-scale 4 '(1 2 3))))
+
+; Focused concrete execution checks for the generated F7 monomial family.
+(assert-event (equal (f7-zero-prefix 3 '(2 1)) '(0 0 0 2 1)))
+(assert-event (equal (f7-zero-prefix -3 '(2 1)) '(2 1)))
+(assert-event (equal (f7-poly-shift nil 4) nil))
+(assert-event (equal (f7-poly-shift '(2 1) 2) '(0 0 2 1)))
+(assert-event (equal (f7-monomial 0 3) nil))
+(assert-event (equal (f7-monomial 9 0) '(2)))
+(assert-event (equal (f7-monomial 9 3) '(0 0 0 2)))
+(assert-event (f7-canonical-polynomial-p (f7-monomial 9 3)))
+(assert-event (equal (f7-poly-degree (f7-monomial 9 3)) 3))
+(assert-event
+ (equal (f7-poly-leading-coefficient (f7-monomial 9 3)) 2))
