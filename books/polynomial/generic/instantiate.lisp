@@ -119,7 +119,8 @@
            (,zero-prefix (nfix n) (list a)))))))
 
 ; One leading-term cancellation, including its public normalization boundary
-; and transparent result accessors.  The expansion is five ordinary DEFUNs.
+; and transparent result accessors.  The expansion is four ordinary DEFUNs:
+; the core, public wrapper, term accessor, and next accessor.
 (defmacro def-division-step-instance
   (core step term next degree leading monomial poly-sub poly-mul normalize
         field-div)
