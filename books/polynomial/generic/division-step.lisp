@@ -11,28 +11,12 @@
 (verify-guards raw-mul)
 (verify-guards poly-mul)
 
-; A result is the transparent pair (quotient-term . next-remainder).
-(defun poly-division-step-core (remainder divisor)
-  (if (and (consp remainder)
-           (consp divisor)
-           (<= (poly-degree divisor) (poly-degree remainder)))
-      (let* ((k (- (poly-degree remainder) (poly-degree divisor)))
-             (c (gfield::field-div (poly-leading-coefficient remainder)
-                                   (poly-leading-coefficient divisor)))
-             (term (monomial c k)))
-        (cons term (poly-sub remainder (poly-mul term divisor))))
-    (cons nil remainder)))
-
-(defun poly-division-step (remainder divisor)
-  (let ((remainder (normalize remainder))
-        (divisor (normalize divisor)))
-    (poly-division-step-core remainder divisor)))
-
-(defun poly-division-step-term (remainder divisor)
-  (car (poly-division-step remainder divisor)))
-
-(defun poly-division-step-next (remainder divisor)
-  (cdr (poly-division-step remainder divisor)))
+; Shared transparent generator; the result is (term . next-remainder).
+(def-division-step-instance
+  poly-division-step-core poly-division-step
+  poly-division-step-term poly-division-step-next
+  poly-degree poly-leading-coefficient monomial poly-sub poly-mul normalize
+  gfield::field-div)
 
 (defthm field-div-nonzero
   (implies (and (not (equal (gfield::field-fix x) (gfield::field-zero)))
