@@ -40,9 +40,13 @@ ACL2 obligations are genuinely proved and certified.
    recursion is now admitted on `(len (normalize second))`: it stops at an
    empty normalized second argument, otherwise transitions from `(a,b)` to
    `(b,poly-remainder(a,b))`, and has certified canonical output. It is not
-   monic, and no divisibility or algebraic gcd correctness is claimed. The next
-   focused milestone is the missing generic divisibility interface followed by
-   common-divisor invariance across one Euclidean step; monic normalization,
+   monic, and no recursive algebraic gcd correctness is claimed. Generic
+   divisor-first divisibility is now decidable by canonical zero remainder,
+   and common divisors are certified invariant across one Euclidean step using
+   reconstruction and congruence algebra. The next focused milestone is to
+   prove that the recursive result divides both inputs; afterward prove that
+   every common divisor divides the result and package raw gcd correctness
+   before treating monic normalization separately. Monic normalization,
    greatestness, associates/unit invariance, extended gcd, and Bézout remain
    open. Later power uses include
    extension-field arithmetic,
@@ -77,8 +81,10 @@ requires it; gcd, derivative, quotient-ring, and
 extension-field work should not be independently duplicated in both stacks.
 The raw generic Euclidean computation now uses the certified normalized-divisor-
 length descent and returns a canonical, potentially non-monic result. The
-immediate mathematical milestone is a generic divisibility interface and the
-two directions of common-divisor invariance across a remainder step. Algebraic
+generic divisibility interface and both directions of common-divisor invariance
+across a remainder step are now certified, unconditionally including
+zero-normalized inputs. The immediate mathematical milestone is proving that
+the recursive result divides both inputs. Algebraic
 gcd correctness, monic normalization, extended gcd, and Bézout correctness are
 still open. No concrete PFIELD/F7 gcd API was introduced, and recursive
 concrete F7 divmod remains postponed. The first executable
