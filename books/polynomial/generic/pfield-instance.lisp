@@ -1213,6 +1213,35 @@
                  (:instance f7-normalize-of-zero-prefix-when-canonical-nonempty
                             (p (list (gfield::f7-fix a))))))))
 
+; Reusable opaque interface for a monomial whose coefficient is already known
+; to be a nonzero F7 element.
+(defthm f7-nonzero-monomial-package
+  (implies
+   (and (gfield::f7-element-p a)
+        (not (equal a (gfield::f7-zero)))
+        (natp n))
+   (and
+    (f7-canonical-polynomial-p (f7-monomial a n))
+    (consp (f7-monomial a n))
+    (equal (f7-poly-degree (f7-monomial a n)) n)
+    (equal (f7-poly-leading-coefficient (f7-monomial a n)) a)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance f7-canonical-polynomial-p-of-monomial)
+          (:instance f7-monomial-nonzero-iff)
+          (:instance f7-poly-degree-of-monomial)
+          (:instance f7-poly-leading-coefficient-of-monomial)
+          (:instance gfield::f7-fix-when-f7-element-p (x a)))
+    :in-theory
+    (e/d (nfix)
+         (f7-monomial f7-zero-prefix f7-poly-shift f7-normalize
+          f7-fix-coefficients f7-trim-trailing-zeros
+          f7-canonical-polynomial-p f7-poly-add f7-poly-mul f7-poly-neg
+          f7-poly-sub gfield::f7-element-p gfield::f7-fix gfield::f7-div
+          gfield::f7-inv gfield::f7-mul pfield::fep-fix
+          pfield::mul-commutative gfield::f7-mul-commutative)))))
+
 (defthm f7-canonical-polynomial-p-of-polynomial-one
   (f7-canonical-polynomial-p (f7-polynomial-one))
   :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p
@@ -1511,6 +1540,16 @@
 (assert-event (equal (f7-poly-degree (f7-monomial 9 3)) 3))
 (assert-event
  (equal (f7-poly-leading-coefficient (f7-monomial 9 3)) 2))
+(assert-event
+ (and (f7-canonical-polynomial-p (f7-monomial 2 3))
+      (consp (f7-monomial 2 3))
+      (equal (f7-poly-degree (f7-monomial 2 3)) 3)
+      (equal (f7-poly-leading-coefficient (f7-monomial 2 3)) 2)))
+(assert-event
+ (and (f7-canonical-polynomial-p (f7-monomial 3 0))
+      (consp (f7-monomial 3 0))
+      (equal (f7-poly-degree (f7-monomial 3 0)) 0)
+      (equal (f7-poly-leading-coefficient (f7-monomial 3 0)) 3)))
 
 ; Focused concrete canonical-final-coefficient regressions.
 (assert-event (f7-canonical-polynomial-p nil))
