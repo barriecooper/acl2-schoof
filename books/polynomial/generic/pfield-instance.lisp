@@ -1239,6 +1239,142 @@
   :hints (("Goal" :induct (f7-coefficient-list-p p)
            :in-theory (enable f7-coefficient-list-p))))
 
+; Ordered concrete consequence of the prime-field cancellation rule.  This is
+; intentionally stated without commuting either input.
+(defthm f7-mul-nonzero-when-both-nonzero
+  (implies (and (gfield::f7-element-p x)
+                (gfield::f7-element-p y)
+                (not (equal x (gfield::f7-zero)))
+                (not (equal y (gfield::f7-zero))))
+           (not (equal (gfield::f7-mul x y)
+                       (gfield::f7-zero))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance pfield::equal-of-mul-and-mul-same
+                            (x x) (y y) (z 0) (p 7)))
+           :in-theory
+           (e/d (gfield::f7-element-p gfield::f7-mul
+                                      gfield::f7-zero dm::primep)
+                (pfield::mul pfield::mul-commutative
+                 gfield::f7-mul-commutative)))))
+
+(defthm f7-trim-trailing-zeros-when-coefficient-list-p-and-last-nonzero
+  (implies (and (f7-coefficient-list-p p)
+                (consp p)
+                (not (equal (car (last p)) (gfield::f7-zero))))
+           (equal (f7-trim-trailing-zeros p) p))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-trim-trailing-zeros p)
+           :in-theory (enable f7-trim-trailing-zeros
+                              f7-coefficient-list-p))))
+
+(defthm f7-canonical-polynomial-p-of-raw-mul-when-nonzero
+  (implies (and (f7-canonical-polynomial-p f)
+                (f7-canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (f7-canonical-polynomial-p (f7-raw-mul f g)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance f7-coefficient-list-p-of-raw-mul (f f) (g g))
+          (:instance f7-consp-of-raw-mul (f f) (g g))
+          (:instance f7-raw-leading-coefficient-of-raw-mul (f f) (g g))
+          (:instance f7-element-p-of-last-when-coefficient-list-p (p f))
+          (:instance f7-element-p-of-last-when-coefficient-list-p (p g))
+          (:instance f7-canonical-polynomial-p-implies-last-nonzero (p f))
+          (:instance f7-canonical-polynomial-p-implies-last-nonzero (p g))
+          (:instance f7-mul-nonzero-when-both-nonzero
+                     (x (car (last f))) (y (car (last g))))
+          (:instance
+           f7-trim-trailing-zeros-when-coefficient-list-p-and-last-nonzero
+           (p (f7-raw-mul f g))))
+    :in-theory
+    (e/d (f7-canonical-polynomial-p f7-normalize)
+         (f7-raw-mul f7-raw-add f7-raw-scale
+          gfield::f7-mul pfield::mul
+          pfield::mul-commutative gfield::f7-mul-commutative)))))
+
+(defthm f7-normalize-of-raw-mul-when-canonical-nonzero
+  (implies (and (f7-canonical-polynomial-p f)
+                (f7-canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (equal (f7-normalize (f7-raw-mul f g))
+                  (f7-raw-mul f g)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance
+                  f7-canonical-polynomial-p-of-raw-mul-when-nonzero)
+                 (:instance f7-normalize-when-canonical
+                            (xs (f7-raw-mul f g))))
+           :in-theory
+           (disable f7-raw-mul f7-normalize
+                    pfield::mul-commutative gfield::f7-mul-commutative))))
+
+(defthm f7-poly-leading-coefficient-of-poly-mul
+  (implies (and (f7-canonical-polynomial-p f)
+                (f7-canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (equal (f7-poly-leading-coefficient (f7-poly-mul f g))
+                  (gfield::f7-mul
+                   (f7-poly-leading-coefficient f)
+                   (f7-poly-leading-coefficient g))))
+  :hints
+  (("Goal"
+    :use ((:instance f7-raw-leading-coefficient-of-raw-mul (f f) (g g))
+          (:instance f7-normalize-of-raw-mul-when-canonical-nonzero)
+          (:instance f7-poly-leading-coefficient-semantics-from-pfield
+                     (poly f))
+          (:instance f7-poly-leading-coefficient-semantics-from-pfield
+                     (poly g)))
+    :in-theory
+    (e/d (f7-poly-mul)
+         (f7-raw-mul f7-normalize gfield::f7-mul pfield::mul
+          pfield::mul-commutative gfield::f7-mul-commutative)))))
+
+(defthm f7-poly-degree-of-poly-mul
+  (implies (and (f7-canonical-polynomial-p f)
+                (f7-canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (equal (f7-poly-degree (f7-poly-mul f g))
+                  (+ (f7-poly-degree f) (f7-poly-degree g))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance f7-len-of-raw-mul (f f) (g g))
+          (:instance f7-normalize-of-raw-mul-when-canonical-nonzero)
+          (:instance f7-poly-degree-semantics-from-pfield (poly f))
+          (:instance f7-poly-degree-semantics-from-pfield (poly g))
+          (:instance f7-coefficient-list-p-of-normalize (xs f))
+          (:instance f7-coefficient-list-p-of-normalize (xs g))
+          (:instance f7-true-listp-when-coefficient-list-p-for-raw-mul
+                     (x f))
+          (:instance f7-true-listp-when-coefficient-list-p-for-raw-mul
+                     (x g)))
+    :in-theory
+    (e/d (f7-poly-mul)
+         (f7-raw-mul f7-normalize
+          pfield::mul-commutative gfield::f7-mul-commutative)))))
+
+(defthm f7-consp-of-poly-mul-when-canonical-nonzero
+  (implies (and (f7-canonical-polynomial-p f)
+                (f7-canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (consp (f7-poly-mul f g)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance f7-consp-of-raw-mul (f f) (g g))
+          (:instance f7-normalize-of-raw-mul-when-canonical-nonzero))
+    :in-theory
+    (e/d (f7-poly-mul)
+         (f7-raw-mul f7-normalize
+          pfield::mul-commutative gfield::f7-mul-commutative)))))
+
 (defthm f7-element-p-of-poly-leading-coefficient
   (gfield::f7-element-p (f7-poly-leading-coefficient p))
   :hints (("Goal"
