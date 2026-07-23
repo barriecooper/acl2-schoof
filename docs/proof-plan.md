@@ -31,19 +31,18 @@ ACL2 obligations are genuinely proved and certified.
    are nonzero.  This uses the field no-zero-divisor law and raw length theorem,
    not evaluation extensionality.  The total, canonical monomial and natural
    degree-shift foundation is also certified, including degree and leading-
-   coefficient laws and explicit `nfix` behavior.  The maintained division
-   contract is fixed, but recursive division is not implemented.  One-step
-   leading-term cancellation is now certified, including exact reconstruction
-   and strict structural degree decrease.  The next focused milestone is
-   recursive division, then Euclidean theory.  Later power uses include
+   coefficient laws and explicit `nfix` behavior.  The maintained division contract, one-step cancellation, and recursive generic
+   division are certified, including reconstruction and the final strict
+   remainder-degree bound.  The next focused milestone is generic modular
+   reduction and congruence, followed by the remaining Euclidean theory.  Later power uses include
    extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.
    The executable-instantiation policy is
    recorded in `executable-instantiation.md`: abstract algorithms, ordinary
    executable concrete definitions, and certified correctness bridges are all
-   required for future computational layers.  Generic polynomial division,
-   extension fields, and arbitrary finite fields are not complete.
+   required for future computational layers.  Concrete generated division, extension fields, and arbitrary finite-field
+   execution are not complete.
 2. Certified extension fields and generic polynomial instances, then rational
    functions over `F_q(t)` and well-defined operations.
 3. Valuation at infinity, including product and cancellation laws.
@@ -59,3 +58,20 @@ ACL2 obligations are genuinely proved and certified.
 ## Generic recursive division (certified)
 
 `books/polynomial/generic/division.lisp` certifies `POLY-DIVMOD-CORE` and the total `(mv q r)` public `POLY-DIVMOD`.  Canonical remainder length is the measure, the one-step decrease theorem supplies termination, and an accumulator invariant supplies normalized reconstruction without evaluation extensionality.  The final remainder is zero or strictly below the normalized nonzero divisor.  Guards are verified separately.  No executable boundary or concrete PFIELD/F7 instance is added; concrete generated division, uniqueness, gcd, and extended gcd remain open.
+
+## Architecture and top-down interfaces
+
+GPOLY is authoritative for new polynomial algebra. The older HS/PFIELD
+polynomial stack remains a legacy/root-count bridge unless a specific bridge
+requires it; gcd, derivative, modular-reduction, quotient-ring, and
+extension-field work should not be independently duplicated in both stacks.
+The immediate mathematical milestone is generic modular reduction and
+congruence. Recursive concrete F7 divmod is postponed. The first executable
+Schoof path may target a named prime field; arbitrary finite-field execution is
+a later architectural phase.
+
+Top-down planning requires interfaces for base-to-extension-field embedding,
+q-power Frobenius, Frobenius preservation of the curve, Frobenius fixed points
+corresponding to rational points, finite splitting certificates, fibre-to-kernel
+completeness, and endomorphism degree and separability. These are requirements,
+not imported code or claims of proof.

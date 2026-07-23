@@ -20,8 +20,11 @@ operations.  PFIELD is a constrained-modulus adapter, not ordinary arithmetic
 for one named runtime modulus.  F2, F7, and F11 are named executable concrete
 instances where the corresponding generated operations have been supplied.
 At present the recursive division algorithm itself is certified generically;
-a generated concrete F7 division boundary remains future work.
+a concrete F7 one-step boundary was not retained after its semantic theorem
+group certified experimentally because the existing F7 inverse/division guard
+contract blocked explicit guard verification. Recursive F7 divmod is postponed.
 
+The next mathematical milestone is generic modular reduction and congruence.
 Still open are polynomial gcd and extended gcd, quotient/remainder uniqueness,
 irreducibility, arbitrary extension fields, rational functions, generic curve
 operations, Hasse, division polynomials, CRT trace reconstruction, and Schoof
@@ -64,3 +67,13 @@ canonical inputs have no trailing zero.  The trust policy forbids proof
 bypasses, axioms, trust tags, and raw Lisp. `make check-trust` conservatively
 scans comments and strings as well as executable forms. Generated certificates,
 logs, and `.deps/` contents are build artifacts and are not tracked.
+
+
+## Polynomial architecture
+
+GPOLY is authoritative for new polynomial algebra. HS/PFIELD polynomials remain
+a legacy/root-count bridge unless an explicit bridge requires them; new gcd,
+derivative, modular-reduction, quotient-ring, and extension-field developments
+should not be duplicated across both stacks. The first executable Schoof path
+may use a named prime field, while arbitrary finite-field execution is a later
+architectural phase.

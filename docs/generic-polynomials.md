@@ -103,10 +103,9 @@ disabled rules because their orientations either expand terms or invite
 loops.  The constant-left multiplication rule remains enabled because it
 strictly reduces multiplication to the existing scalar action.
 
-Zero-prefix addition and scaling are stable, narrowly reusable raw facts.  No
-public shift operation is introduced: shifted-product rearrangements and the
-length/zero-scale lemmas remain local proof infrastructure until a later degree
-or division development demonstrates a stable API need.  The completed public
+Zero-prefix addition and scaling are stable, narrowly reusable raw facts. The
+public `ZERO-PREFIX`, `POLY-SHIFT`, and `MONOMIAL` operations now provide the
+certified shift API used by degree and division.  The completed public
 laws are transported by certified functional instantiation to the fixed PFIELD
 adapter and then to the executable F_7 instance; the existing computations
 remain regressions rather than generic proofs.
@@ -179,9 +178,9 @@ nonempty canonical polynomials is nonempty: this is the polynomial
 no-zero-divisor consequence.  No commutativity or evaluation extensionality is
 used in this leading-term argument.
 
-This arithmetic layer still contains no division, remainder, gcd,
-irreducibility, extension-field reduction, Euclidean theory, derivatives, root
-counting, field enumeration, or extension-field implementation.  It provides
+This arithmetic layer includes certified generic division and remainder, but
+still contains no gcd, irreducibility, extension-field reduction, derivatives,
+field enumeration, or extension-field implementation.  It provides
 syntax and semantics over an assumed field, not an implementation of every
 finite field.
 
@@ -213,14 +212,11 @@ zero, add the natural index to the degree of a canonical nonzero polynomial,
 and preserve its leading coefficient.  Monomials fix arbitrary coefficients,
 map fixed zero to `nil`, and have the expected degree and leading coefficient
 when nonzero.  These are structural dense-list results, not evaluation
-extensionality.  The exact future quotient/remainder contract and zero-divisor
-fallback are maintained in `polynomial-division.md`; division itself remains
-unimplemented.  No new logical/executable boundary is introduced.
-
-One-step leading-term cancellation is certified.  The immediate next milestone
-is recursive polynomial division, followed by Euclidean theory.
-Division, remainder, gcd, irreducibility, monic normalization, and
-extension-field reduction remain later work.
+extensionality.  The certified quotient/remainder contract and zero-divisor fallback are
+maintained in `polynomial-division.md`. Generic recursive division,
+reconstruction, and the final remainder bound are certified. The immediate
+next milestone is generic modular reduction and congruence; gcd, irreducibility,
+monic normalization, and extension-field reduction remain later work.
 
 ## One long-division step
 
@@ -228,9 +224,9 @@ extension-field reduction remain later work.
 cancellation.  The public wrapper normalizes its two inputs once; the canonical
 core returns `(term . next)`.  Certified structural theorems establish the
 ordered field quotient coefficient, degree difference, matching product leader,
-strict degree decrease, and exact `EQUAL` reconstruction.  This is not complete
-polynomial division or Euclidean theory, and introduces no logical/executable
-boundary.
+strict degree decrease, and exact `EQUAL` reconstruction.  This step is the certified foundation used by complete generic recursive
+division; it is not Euclidean gcd theory and introduces no split
+logical/executable boundary.
 
 
 ## Generic recursive division (certified)

@@ -61,7 +61,7 @@ and the ordinary concrete runtime classification is recorded in
 
 `GPOLY::POLY-DIVMOD-CORE` carries `(quotient remainder divisor)`, returns the transparent pair `(final-q . final-r)`, and measures `(len remainder)`.  It invokes `POLY-DIVISION-STEP-CORE` once per active iteration and reuses that pair.  `POLY-DIVMOD` normalizes each external operand once and returns `(mv q r)`.  The certified invariant is `final-q*g+final-r = accumulated-q*g+current-r`; the public consequence is `q*normalize(g)+r = normalize(f)`.  Canonicality, polynomial/true-list closure, the strict final remainder bound, inactive reductions, divisor-one reduction, determinism, and exact division are certified.  Both new ordinary `DEFUN`s have verified guards.
 
-No `MBE`, `DEFEXEC`, attachment, or separate executable specification is used.  The divisor is fixed and is not normalized in recursion.  Concrete PFIELD/F7 generated division remains the immediate next executable-instance task.
+No `MBE`, `DEFEXEC`, attachment, or separate executable specification is used.  The divisor is fixed and is not normalized in recursion.  Concrete PFIELD division and recursive F7 divmod are postponed; the immediate mathematical milestone is generic modular reduction and congruence.
 
 ## Explicitly downstream
 

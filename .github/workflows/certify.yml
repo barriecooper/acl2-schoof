@@ -11,10 +11,13 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: .deps
-          key: acl2-${{ runner.os }}-${{ hashFiles('ACL2_VERSION', 'scripts/install-acl2.sh') }}
+          key: acl2-${{ runner.os }}-${{ hashFiles('ACL2_VERSION', 'scripts/install-acl2.sh', 'scripts/certify-system-deps.sh') }}
       - run: sudo apt-get update && sudo apt-get install -y sbcl
       - run: make setup
       - run: make check-trust
+      - run: make test-check-trust
+      - run: make check-docs
+      - run: make test-check-docs
       - run: make certify
       - run: make test
       - if: failure()

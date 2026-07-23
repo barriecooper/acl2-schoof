@@ -26,6 +26,10 @@ shape, not benchmark measurements.
 | PFIELD polynomial degree / leading coefficient | Same transparent two-DEFUN template | `pfield-poly-degree`; `pfield-poly-leading-coefficient` | Named normalized structural semantics theorems | Explicitly verified | Certified adapter book | 2 — constrained-modulus adapter, not claimed as concrete runtime |
 | F7 polynomial degree / leading coefficient | Same transparent two-DEFUN template | `f7-poly-degree`; `f7-poly-leading-coefficient` | Named semantics bridges specialized from the PFIELD shape | Explicitly verified | `tests/generic-polynomial.lisp` and adapter-book assertions | 2 — ordinary concrete runtime; no MBE split |
 | F7 polynomial zero-prefix / shift / monomial | Same transparent three-DEFUN template as GPOLY | `f7-zero-prefix`; `f7-poly-shift`; `f7-monomial` | Direct F7 structural, normalization, canonicality, degree, and leading-coefficient theorems | All three explicitly verified | Focused assertions in `generic/pfield-instance.lisp` | 2 — ordinary concrete runtime; no MBE split |
+| Generic polynomial zero-prefix / shift / monomial | Transparent `def-monomial-instance` over GFIELD | Generic ordinary DEFUNs; PFIELD/F7 instances share the template | Certified normalization, canonicality, degree, and leading-coefficient laws | `zero-prefix`, `poly-shift`, and `monomial` explicitly verified | Generic certification and focused F7 assertions | 1/2 — transparent generators; no MBE split |
+| Generic one-step division | Transparent `def-division-step-instance` over GFIELD | Four ordinary DEFUNs: core, wrapper, term accessor, next accessor | Certified term, product, reconstruction, and active strict-decrease group | Dependencies and all four generic functions explicitly verified | Generic certification | 1 — abstract transparent generator; no MBE split |
+| Generic recursive divmod | `poly-divmod-core` and public `poly-divmod` | Same ordinary recursive DEFUNs | Accumulator reconstruction invariant and final remainder-degree bound | Both functions explicitly verified after division dependencies | Generic certification | 1 — abstract ordinary definitions; no MBE split |
+| Concrete F7 one-step division | Generated semantic experiment only | Not retained | Complete semantic theorem group certified experimentally, then reverted | Blocked: `F7-INV` guard obligations require arbitrary integer input nonzero modulo 7 | None retained | Open — no executable boundary exists |
 | F11 polynomial degree / leading coefficient | Same transparent two-DEFUN template | `f11-poly-degree`; `f11-poly-leading-coefficient` | Identical normalized structural equations | Explicitly verified | `books/curve/f11-golden.lisp` cubic assertions | 2 — golden concrete runtime; no MBE split |
 | Named F11 golden field | PFIELD adapter specialized at modulus 11 | `f11-element-p`, `f11-fix`, `f11-zero`, `f11-one`, `f11-add`, `f11-mul`, `f11-neg` | PFIELD adapter laws and functional instantiation; primality of 11 is concrete | Every named DEFUN explicitly verified | `books/curve/f11-golden.lisp` | 2 — ordinary concrete named runtime code; no split |
 | F11 golden polynomial and curve fixture | `def-normalize-eval-instance` ordinary DEFUN template | Four generated polynomial functions, fixed cubic helpers, and bounded enumerators | Generic normalization/evaluation semantics transported through PFIELD; curve data and nonsingularity are concrete computations | Every runtime DEFUN explicitly verified | `books/curve/f11-golden.lisp` | 2 — transparent ordinary DEFUNs; no MBE split |
@@ -69,8 +73,10 @@ searched. The only logical/executable split is the `MBE` emitted by
 polynomial power. The two `:verify-guards nil` occurrences are inside that
 macro and are classification 3 (intentional staging). Explicit `VERIFY-GUARDS`
 occurs for `field-pow-fast`, `field-pow`, the PFIELD, F2, and F7 field-power
-boundaries and their direct callees, and the twelve GPOLY functions in `generic/power.lisp`;
-those occurrences are classifications 3/4.
+boundaries and their direct callees, the twelve GPOLY functions in `generic/power.lisp`, the generic and F7
+monomial/shift functions, all four generic one-step division functions and
+their arithmetic dependencies, and both generic recursive divmod functions;
+those occurrences are classifications 1/2/3/4 as inventoried above.
 
 The two `ENCAPSULATE` events (GFIELD operations and the PFIELD modulus) are
 classification 1. There are no project occurrences of `DEFEXEC`, `DEFATTACH`
@@ -105,3 +111,15 @@ ACL2 8.6 source confirms these prohibited facility spellings:
 Ordinary sound facilities (`MBE`, `DEFEXEC`, `VERIFY-GUARDS`, `ENCAPSULATE`,
 and functional instantiation) are not prohibited. They trigger the review and
 evidence requirements instead.
+
+
+## F7 division guard blocker
+
+The concrete F7 one-step boundary is open and was not retained. In the reverted
+experiment, `F7-INV` called `PFIELD::INV` on `F7-FIX x`, and `F7-DIV` depended
+on `F7-INV`. `VERIFY-GUARDS F7-INV` generated obligations requiring an
+arbitrary integer input to be nonzero modulo 7. Although the complete generated
+one-step semantic theorem group certified experimentally, guard verification
+did not complete, so no executable boundary is inventoried as present. This is
+an open field-interface/guard-contract decision. Guard verification would not
+by itself prove semantic correctness.

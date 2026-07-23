@@ -70,6 +70,20 @@ The additive migration is also complete.  Generic addition, negation, and
 subtraction, the existing PFIELD addition adapter, and concrete F_7 addition,
 negation, and subtraction now use two small shared templates.  Keeping the
 addition template separate avoids inventing PFIELD negation/subtraction APIs
-merely for symmetry.  No mathematical milestone is implied by this definition
-refactoring; the smallest next mathematical PR is the first generic scaling
-definition and its evaluation theorem, without yet adding multiplication.
+merely for symmetry.  That migration now includes scaling, multiplication, monomial/shift, and
+generic division templates. The next mathematical PR should begin generic
+modular reduction and congruence, not duplicate algorithms in HS/PFIELD.
+
+
+## Current concrete-division guard decision
+
+A generated F7 one-step experiment certified its complete semantic theorem
+group, using the retained F7 monomial, ordered-product, subtraction-decrease,
+normalized-addition, and reconstruction support. It was not retained because
+explicit guard verification did not complete: `F7-INV` calls `PFIELD::INV` on
+`F7-FIX x`, `F7-DIV` depends on `F7-INV`, and `VERIFY-GUARDS F7-INV` generated
+obligations requiring an arbitrary integer input to be nonzero modulo 7. This
+is an open field-interface/guard-contract decision. Verified guards would show
+execution admissibility, not semantic correctness; conversely, the experimental
+semantic certifications do not create an executable boundary. Neither guard nor
+executable definition is changed here.
