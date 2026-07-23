@@ -217,7 +217,17 @@ extensionality.  The exact future quotient/remainder contract and zero-divisor
 fallback are maintained in `polynomial-division.md`; division itself remains
 unimplemented.  No new logical/executable boundary is introduced.
 
-The immediate next milestone is one-step leading-term cancellation, followed
-by polynomial division and Euclidean theory.
+One-step leading-term cancellation is certified.  The immediate next milestone
+is recursive polynomial division, followed by Euclidean theory.
 Division, remainder, gcd, irreducibility, monic normalization, and
 extension-field reduction remain later work.
+
+## One long-division step
+
+`division-step.lisp` adds ordinary total `DEFUN` operations for one leading-term
+cancellation.  The public wrapper normalizes its two inputs once; the canonical
+core returns `(term . next)`.  Certified structural theorems establish the
+ordered field quotient coefficient, degree difference, matching product leader,
+strict degree decrease, and exact `EQUAL` reconstruction.  This is not complete
+polynomial division or Euclidean theory, and introduces no logical/executable
+boundary.

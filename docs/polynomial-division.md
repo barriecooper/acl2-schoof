@@ -62,7 +62,23 @@ and no update to `docs/execution-boundaries.md` is required.
 
 This contract claims no uniqueness theorem, gcd or extended-gcd correctness,
 Bézout identity, Euclidean-domain result, irreducibility result, factorization,
-extension field, rational function, or curve operation.  The next task still
-owes one-step leading-term cancellation, recursive quotient/remainder,
-reconstruction, and the strict remainder-degree bound before any of those
-downstream topics can begin.
+extension field, rational function, or curve operation.  One-step leading-term cancellation is now certified.  Recursive
+quotient/remainder, its accumulated reconstruction, and the final strict
+remainder-degree bound remain open before downstream topics can begin.
+
+## Certified one-step cancellation API
+
+`GPOLY::POLY-DIVISION-STEP-CORE` accepts canonical operands and returns the
+transparent pair `(term . next)`.  It is active exactly when both operands are
+nonempty and the divisor degree is at most the remainder degree.  In that case
+`term` is `MONOMIAL(FIELD-DIV(lc(remainder),lc(divisor)), degree(remainder)-degree(divisor))`
+and `next` subtracts `term*divisor`.  Otherwise it returns `(nil . remainder)`.
+`GPOLY::POLY-DIVISION-STEP` is the total public wrapper and normalizes each
+input once before calling the core; zero divisor therefore returns a zero term
+and the normalized remainder unchanged.
+
+The book certifies canonical/nonempty quotient-term and product facts, exact
+formal reconstruction `normalize(remainder) = term*normalize(divisor)+next`,
+and structural strict degree decrease in every active step.  The corresponding
+strict canonical-length decrease is the intended measure for later recursion.
+No recursive quotient/remainder operation is implemented here.

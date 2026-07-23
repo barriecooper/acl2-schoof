@@ -32,9 +32,11 @@ ACL2 obligations are genuinely proved and certified.
    not evaluation extensionality.  The total, canonical monomial and natural
    degree-shift foundation is also certified, including degree and leading-
    coefficient laws and explicit `nfix` behavior.  The maintained division
-   contract is fixed, but recursive division is not implemented.  The next
-   focused milestone is one-step leading-term cancellation, then division and
-   Euclidean theory.  Later power uses include extension-field arithmetic,
+   contract is fixed, but recursive division is not implemented.  One-step
+   leading-term cancellation is now certified, including exact reconstruction
+   and strict structural degree decrease.  The next focused milestone is
+   recursive division, then Euclidean theory.  Later power uses include
+   extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.
    The executable-instantiation policy is
