@@ -9,4 +9,5 @@
 (include-book "polynomial/generic/monomial")
 (include-book "polynomial/generic/division-step")
 (include-book "polynomial/generic/division")
+(include-book "polynomial/generic/reduction")
 (include-book "curve/f11-golden")
