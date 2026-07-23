@@ -71,6 +71,24 @@
        (equal (normalize dividend) nil))
   :hints (("Goal" :in-theory (enable poly-divides-p))))
 
+(defthm normalize-divides-p-self
+  (poly-divides-p (normalize dividend) dividend)
+  :hints
+  (("Goal"
+    :use ((:instance poly-divides-p-self)
+          (:instance poly-divides-p-of-normalize-divisor
+                     (divisor dividend)))
+    :in-theory (disable poly-divides-p normalize))))
+
+(defthm poly-divides-p-when-normalize-dividend-nil
+  (implies (equal (normalize dividend) nil)
+           (poly-divides-p divisor dividend))
+  :hints
+  (("Goal"
+    :use ((:instance poly-divides-p-zero)
+          (:instance poly-divides-p-of-normalize-dividend))
+    :in-theory (disable poly-divides-p normalize))))
+
 (defthm poly-divides-p-of-poly-add
   (implies (and (poly-divides-p divisor left)
                 (poly-divides-p divisor right))
@@ -348,6 +366,118 @@
           (:instance poly-euclidean-gcd-canonical))
     :in-theory (disable poly-euclidean-gcd normalize
                         canonical-polynomial-p))))
+
+; The conjunction is the natural invariant of the Euclidean recursion: the
+; recursive result divides the new pair, and the public Euclidean-step theorem
+; transports that fact back to the old pair.
+(defthm poly-euclidean-gcd-divides-both-base
+  (implies (not (consp (normalize second)))
+           (and (poly-divides-p (poly-euclidean-gcd first second) first)
+                (poly-divides-p (poly-euclidean-gcd first second) second)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :in-theory
+    (e/d (poly-euclidean-gcd normalize-divides-p-self
+          poly-divides-p-when-normalize-dividend-nil)
+         (poly-remainder poly-divides-p normalize
+          poly-divides-p-iff-congruent-zero
+          poly-divides-p-of-normalize-divisor
+          poly-divides-p-of-normalize-dividend
+          poly-divides-p-self poly-divides-p-zero)))))
+
+(defthm poly-euclidean-gcd-divides-both-step
+  (implies
+   (and (consp (normalize second))
+        (poly-divides-p
+         (poly-euclidean-gcd second (poly-remainder first second)) second)
+        (poly-divides-p
+         (poly-euclidean-gcd second (poly-remainder first second))
+         (poly-remainder first second)))
+   (and (poly-divides-p (poly-euclidean-gcd first second) first)
+        (poly-divides-p (poly-euclidean-gcd first second) second)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance poly-euclidean-gcd-nonzero-second)
+          (:instance poly-divides-p-euclidean-step-iff
+                     (divisor
+                      (poly-euclidean-gcd
+                       second (poly-remainder first second)))))
+    :in-theory
+    (disable poly-euclidean-gcd poly-remainder poly-divides-p normalize
+             poly-divides-p-euclidean-step-iff))))
+
+(defthm poly-euclidean-gcd-divides-both
+  (and
+   (poly-divides-p (poly-euclidean-gcd first second) first)
+   (poly-divides-p (poly-euclidean-gcd first second) second))
+  :hints
+  (("Goal"
+    :induct (poly-euclidean-gcd first second)
+    :in-theory (e/d (poly-euclidean-gcd)
+                       (poly-remainder poly-divides-p normalize)))
+   ("Subgoal *1/2"
+    :use ((:instance poly-euclidean-gcd-divides-both-base))
+    :in-theory (disable poly-euclidean-gcd poly-remainder poly-divides-p normalize))
+   ("Subgoal *1/1"
+    :use ((:instance poly-euclidean-gcd-divides-both-step))
+    :in-theory (disable poly-euclidean-gcd poly-remainder poly-divides-p normalize))))
+
+(defthm poly-euclidean-gcd-divides-first
+  (poly-divides-p (poly-euclidean-gcd first second) first)
+  :hints
+  (("Goal"
+    :use ((:instance poly-euclidean-gcd-divides-both))
+    :in-theory (disable poly-euclidean-gcd-divides-both))))
+
+(defthm poly-euclidean-gcd-divides-second
+  (poly-divides-p (poly-euclidean-gcd first second) second)
+  :hints
+  (("Goal"
+    :use ((:instance poly-euclidean-gcd-divides-both))
+    :in-theory (disable poly-euclidean-gcd-divides-both))))
+
+; Correctness regressions exercise total inputs as well as a visibly non-monic
+; raw answer.  The computation regressions below record further exact chains.
+(defthm poly-euclidean-gcd-divides-regression-boundaries
+  (and (poly-divides-p (poly-euclidean-gcd nil nil) nil)
+       (poly-divides-p (poly-euclidean-gcd (polynomial-one) nil)
+                       (polynomial-one))
+       (poly-divides-p (poly-euclidean-gcd nil (polynomial-one)) nil)
+       (poly-divides-p
+        (poly-euclidean-gcd (polynomial-one) 'malformed-second)
+        'malformed-second)
+       (poly-divides-p
+        (poly-euclidean-gcd 'malformed-first (polynomial-one))
+        'malformed-first)))
+
+(defthm poly-euclidean-gcd-divides-regression-negative-unit
+  (let ((negative-one (list (gfield::field-neg (gfield::field-one)))))
+    (and (equal (poly-euclidean-gcd nil negative-one) negative-one)
+         (poly-divides-p (poly-euclidean-gcd nil negative-one) nil)
+         (poly-divides-p (poly-euclidean-gcd nil negative-one)
+                         negative-one))))
+
+(defthm poly-euclidean-gcd-divides-regression-noncanonical
+  (let ((first (list (gfield::field-one) (gfield::field-zero)))
+        (second (list (gfield::field-one) (gfield::field-one)
+                      (gfield::field-zero))))
+    (and (poly-divides-p (poly-euclidean-gcd first second) first)
+         (poly-divides-p (poly-euclidean-gcd first second) second))))
+
+(defthm poly-euclidean-gcd-divides-regression-corollaries
+  (and
+   (poly-divides-p
+    (poly-euclidean-gcd
+     (poly-add (monomial (gfield::field-one) 1) (polynomial-one))
+     (monomial (gfield::field-one) 1))
+    (poly-add (monomial (gfield::field-one) 1) (polynomial-one)))
+   (poly-divides-p
+    (poly-euclidean-gcd
+     (poly-add (monomial (gfield::field-one) 1) (polynomial-one))
+     (monomial (gfield::field-one) 1))
+    (monomial (gfield::field-one) 1))))
 
 ; Focused executable structural regressions.  These use constant-first dense
 ; polynomials and retain the raw output selected by the Euclidean chain.
