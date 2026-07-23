@@ -263,9 +263,14 @@ remainder; canonical representatives below a nonzero normalized modulus degree
 are congruent exactly when structurally equal.  Adding an arbitrary polynomial
 multiple of the normalized modulus preserves the remainder and therefore the
 congruence class.  When the normalized modulus is zero, congruence is exactly
-structural equality of the normalized inputs.
+structural equality of the normalized inputs.  Congruence is now compatible
+with addition, additive negation, and subtraction, and operands may be replaced
+by their canonical remainders before each operation followed by reduction.
+These unconditional laws include the normalized-equality semantics of a zero
+modulus.
 
-`GPOLY-MOD-CONGRUENCE` remains open for the following focused PR to certify
-compatibility with polynomial addition and multiplication.  No quotient-ring
-operations, concrete reduction/congruence API, gcd, modular inverse, extension
-field, or concrete F7/PFIELD division API is claimed here.
+`GPOLY-MOD-CONGRUENCE` remains open for the next focused PR, generic
+multiplication compatibility; once that theorem package certifies, the
+obligation may be marked proved.  No quotient-ring operation, concrete
+reduction/congruence API, gcd, modular inverse, extension field, or concrete
+F7/PFIELD division API is introduced here.
