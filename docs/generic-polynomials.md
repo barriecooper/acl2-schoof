@@ -270,11 +270,38 @@ by reduction. For multiplication, either or both factors may be replaced.
 These unconditional laws include the normalized-equality semantics of a zero
 modulus.
 
+## Generic divisibility and one Euclidean step (certified)
+
+`books/polynomial/generic/euclidean.lisp` defines the transparent Boolean
+predicate `POLY-DIVIDES-P` with divisor first and dividend second.  It decides
+divisibility by testing whether `POLY-REMAINDER(dividend,divisor)` is the unique
+canonical zero, `nil`; no existential quotient witness or concrete
+divisibility API is introduced.  Equivalently, the dividend is
+`POLY-CONGRUENT-P` to zero modulo the divisor.  Divisibility is invariant under
+normalizing either argument.  Every polynomial divides zero and itself, the
+constant-first polynomial one divides every polynomial, and zero divides
+exactly the polynomials whose normalization is `nil`.  The certified closure
+laws cover addition, negation, subtraction, and multiplication by an arbitrary
+polynomial.
+
+`POLY-DIVIDES-P-EUCLIDEAN-STEP-IFF` proves unconditionally that a candidate
+divides both `first` and `second` exactly when it divides both `second` and
+`POLY-REMAINDER(first,second)`.  The proof remains above recursive division:
+public divmod reconstruction and the addition/multiplication congruence laws
+show that `first` is congruent to its Euclidean remainder modulo every divisor
+of `second`, and transitivity transfers congruence with zero in both
+directions.  Reconstruction is unconditional, so the same proof includes a
+zero-normalized second argument; in that boundary case the remainder is
+`NORMALIZE(first)`.  It also includes zero candidate divisors and malformed or
+noncanonical inputs through total normalization semantics.  This theorem does
+not establish correctness, greatestness, or monic normalization of the
+recursive Euclidean result.
+
 `GPOLY-MOD-CONGRUENCE` is proved by the one-sided and simultaneous
 `POLY-REMAINDER-OF-POLY-MUL-*` laws, `POLY-CONGRUENT-P-OF-POLY-MUL` and its
 one-sided corollaries, and
 `POLY-MUL-POLY-CONGRUENT-P-WITH-REMAINDERS`. No quotient-ring operation, concrete
-reduction/congruence API, gcd, modular inverse, extension field, or concrete
+reduction/congruence API, gcd correctness, modular inverse, extension field, or concrete
 F7/PFIELD division API is introduced here.
 
 The Euclidean remainder step additionally has a certified natural-valued
