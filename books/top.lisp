@@ -8,4 +8,5 @@
 (include-book "polynomial/generic/pfield-instance")
 (include-book "polynomial/generic/monomial")
 (include-book "polynomial/generic/division-step")
+(include-book "polynomial/generic/division")
 (include-book "curve/f11-golden")

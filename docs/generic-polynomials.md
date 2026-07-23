@@ -231,3 +231,8 @@ ordered field quotient coefficient, degree difference, matching product leader,
 strict degree decrease, and exact `EQUAL` reconstruction.  This is not complete
 polynomial division or Euclidean theory, and introduces no logical/executable
 boundary.
+
+
+## Generic recursive division (certified)
+
+`books/polynomial/generic/division.lisp` certifies `POLY-DIVMOD-CORE` and the total `(mv q r)` public `POLY-DIVMOD`.  Canonical remainder length is the measure, the one-step decrease theorem supplies termination, and an accumulator invariant supplies normalized reconstruction without evaluation extensionality.  The final remainder is zero or strictly below the normalized nonzero divisor.  Guards are verified separately.  No executable boundary or concrete PFIELD/F7 instance is added; concrete generated division, uniqueness, gcd, and extended gcd remain open.
