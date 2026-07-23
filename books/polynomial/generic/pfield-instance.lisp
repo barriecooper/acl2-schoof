@@ -884,6 +884,36 @@
            (equal (f7-normalize xs) xs))
   :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p))))
 
+; This is the concrete structural bridge corresponding to GPOLY's trimming
+; theorem.  Keep it independent of field multiplication and division facts.
+(defthm f7-consp-of-trim-implies-last-nonzero
+  (implies (consp (f7-trim-trailing-zeros xs))
+           (not (equal (car (last (f7-trim-trailing-zeros xs)))
+                       (gfield::f7-zero))))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-trim-trailing-zeros xs)
+           :in-theory (enable f7-trim-trailing-zeros))))
+
+(defthm f7-canonical-polynomial-p-implies-last-nonzero
+  (implies (and (f7-canonical-polynomial-p p) (consp p))
+           (not (equal (car (last p)) (gfield::f7-zero))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-consp-of-trim-implies-last-nonzero
+                            (xs (f7-fix-coefficients p))))
+           :in-theory (e/d (f7-canonical-polynomial-p f7-normalize)
+                           (f7-trim-trailing-zeros)))))
+
+(defthm f7-poly-leading-coefficient-nonzero-when-canonical
+  (implies (and (f7-canonical-polynomial-p p) (consp p))
+           (not (equal (f7-poly-leading-coefficient p)
+                       (gfield::f7-zero))))
+  :hints (("Goal"
+           :use ((:instance f7-canonical-polynomial-p-implies-last-nonzero))
+           :in-theory (e/d (f7-poly-leading-coefficient
+                             f7-canonical-polynomial-p)
+                           (f7-normalize)))))
+
 ; Concrete F7 monomials use the same three ordinary DEFUN templates as the
 ; generic development.  There is no separate executable specification.
 (def-monomial-instance f7-zero-prefix f7-poly-shift f7-monomial f7-normalize
@@ -1351,3 +1381,15 @@
 (assert-event (equal (f7-poly-degree (f7-monomial 9 3)) 3))
 (assert-event
  (equal (f7-poly-leading-coefficient (f7-monomial 9 3)) 2))
+
+; Focused concrete canonical-final-coefficient regressions.
+(assert-event (f7-canonical-polynomial-p nil))
+(assert-event (not (consp nil)))
+(assert-event (not (equal (car (last '(1))) (gfield::f7-zero))))
+(assert-event (f7-canonical-polynomial-p '(0 0 2)))
+(assert-event (not (equal (car (last '(0 0 2))) (gfield::f7-zero))))
+(assert-event (not (f7-canonical-polynomial-p '(1 2 0))))
+(assert-event (not (f7-canonical-polynomial-p '(1 9))))
+(assert-event
+ (not (equal (f7-poly-leading-coefficient '(0 0 2))
+             (gfield::f7-zero))))
