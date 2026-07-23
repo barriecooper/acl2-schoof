@@ -198,12 +198,12 @@
            :in-theory (disable normalize-raw-add-normalize-left))))
 
 (defthm poly-add-normalize-left
-  (implies (and (polynomial-p x) (polynomial-p y))
-           (equal (poly-add (normalize x) y) (poly-add x y))))
+  (equal (poly-add (normalize x) y) (poly-add x y))
+  :hints (("Goal" :in-theory (enable poly-add))))
 
 (defthm poly-add-normalize-right
-  (implies (and (polynomial-p x) (polynomial-p y))
-           (equal (poly-add x (normalize y)) (poly-add x y))))
+  (equal (poly-add x (normalize y)) (poly-add x y))
+  :hints (("Goal" :in-theory (enable poly-add))))
 
 (defthm poly-add-associative
   (implies (and (polynomial-p x) (polynomial-p y) (polynomial-p z))
@@ -228,8 +228,8 @@
   (equal (poly-neg nil) nil))
 
 (defthm poly-neg-of-normalize
-  (implies (polynomial-p x)
-           (equal (poly-neg (normalize x)) (poly-neg x))))
+  (equal (poly-neg (normalize x)) (poly-neg x))
+  :hints (("Goal" :in-theory (enable poly-neg))))
 
 (defthm poly-neg-of-poly-neg
   (implies (polynomial-p x)

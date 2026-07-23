@@ -77,10 +77,13 @@ fallback; it adds no recursive induction and uses no evaluation equality.
 Generic polynomial congruence is now the transparent structural equality of
 canonical remainder results.  Its equivalence laws, normalization invariance,
 zero-modulus normalized-equality semantics, bounded-representative uniqueness,
-and invariance under adding a normalized-modulus multiple are certified.  The
-`GPOLY-MOD-CONGRUENCE` obligation remains open only for the next PR's addition
-and multiplication compatibility; no quotient-ring or concrete congruence API
-is introduced.
+and invariance under adding a normalized-modulus multiple are certified.
+Congruence is also compatible with addition, additive negation, and subtraction;
+reducing operands before those operations and then reducing the result preserves
+the remainder.  These laws are unconditional and cover zero-modulus normalized
+equality.  `GPOLY-MOD-CONGRUENCE` remains open only for the next focused PR's
+generic multiplication compatibility; no quotient-ring operation or concrete
+congruence API is introduced.
 
 ## Explicitly downstream
 
