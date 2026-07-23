@@ -259,7 +259,6 @@
 
 (defthm pfield-poly-mul-commutative-from-generic
   (equal (pfield-poly-mul x y) (pfield-poly-mul y x))
-  :rule-classes nil
   :hints (("Goal" :by (:functional-instance
                         poly-mul-commutative
                         (gfield::field-element-p gfield::pfield-element-p)
@@ -1170,6 +1169,49 @@
            :in-theory (e/d (f7-poly-sub f7-poly-add)
                            (f7-canonical-polynomial-p-of-normalize
                             f7-normalize f7-poly-neg f7-raw-add)))))
+
+; Reusable structural additive laws.  These deliberately stop below the
+; normalized public operation and do not use multiplication or evaluation.
+(defthm f7-add-commutative-for-polynomial-structure
+  (equal (gfield::f7-add x y) (gfield::f7-add y x))
+  :hints (("Goal" :in-theory
+           (enable gfield::f7-add pfield::add-commutative))))
+
+(defthm f7-add-associative-for-polynomial-structure
+  (equal (gfield::f7-add (gfield::f7-add x y) z)
+         (gfield::f7-add x (gfield::f7-add y z)))
+  :hints (("Goal" :in-theory
+           (enable gfield::f7-add gfield::f7-fix
+                   pfield::add-associative))))
+
+(defthm f7-raw-add-commutative-for-poly-add
+  (equal (f7-raw-add x y) (f7-raw-add y x))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-raw-add x y)
+           :in-theory (enable f7-raw-add f7-fix-coefficients
+                              f7-add-commutative-for-polynomial-structure))))
+
+(defun f7-raw-add-induct3 (x y z)
+  (declare (xargs :measure (+ (len x) (len y) (len z))))
+  (if (or (consp x) (consp y) (consp z))
+      (f7-raw-add-induct3 (if (consp x) (cdr x) nil)
+                          (if (consp y) (cdr y) nil)
+                          (if (consp z) (cdr z) nil))
+    nil))
+
+(defthm f7-raw-add-associative-for-poly-add
+  (implies (and (f7-coefficient-list-p x)
+                (f7-coefficient-list-p y)
+                (f7-coefficient-list-p z))
+           (equal (f7-raw-add (f7-raw-add x y) z)
+                  (f7-raw-add x (f7-raw-add y z))))
+  :hints (("Goal" :induct (f7-raw-add-induct3 x y z)
+           :in-theory (e/d (f7-raw-add f7-fix-coefficients
+                                        f7-coefficient-list-p
+                                        f7-add-associative-for-polynomial-structure)))))
+
+(in-theory (disable f7-add-commutative-for-polynomial-structure
+                    f7-add-associative-for-polynomial-structure))
 
 (defthm f7-last-of-raw-sub-zero-when-equal-len-and-last-equal
   (implies (and (f7-coefficient-list-p x)
