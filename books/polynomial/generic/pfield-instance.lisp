@@ -2,6 +2,7 @@
 (include-book "power")
 (include-book "degree")
 (include-book "../../field/pfield-adapter")
+(include-book "std/lists/len" :dir :system)
 
 ; Generate the exact-arity PFIELD adapter boundary from the same templates as
 ; the generic theory and concrete instances.  The constrained modulus keeps
@@ -884,6 +885,52 @@
            (equal (f7-normalize xs) xs))
   :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p))))
 
+(defthm f7-natp-of-poly-degree-when-canonical-nonzero
+  (implies
+   (and (f7-canonical-polynomial-p p)
+        (consp p))
+   (natp (f7-poly-degree p)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance f7-poly-degree-semantics-from-pfield (poly p))
+          (:instance f7-normalize-when-canonical (xs p))
+          (:instance acl2::|(< 0 (len x))| (x p)))
+    :in-theory (disable f7-poly-degree f7-normalize
+                        f7-fix-coefficients f7-trim-trailing-zeros
+                        f7-canonical-polynomial-p))))
+
+(defthm natp-of-difference-when-ordered
+  (implies (and (natp m)
+                (natp n)
+                (<= n m))
+           (natp (- m n)))
+  :rule-classes nil)
+
+(defthm f7-natp-of-poly-degree-difference-when-ordered
+  (implies
+   (and (f7-canonical-polynomial-p remainder)
+        (consp remainder)
+        (f7-canonical-polynomial-p divisor)
+        (consp divisor)
+        (<= (f7-poly-degree divisor)
+            (f7-poly-degree remainder)))
+   (natp
+    (- (f7-poly-degree remainder)
+       (f7-poly-degree divisor))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance f7-natp-of-poly-degree-when-canonical-nonzero
+                     (p remainder))
+          (:instance f7-natp-of-poly-degree-when-canonical-nonzero
+                     (p divisor))
+          (:instance natp-of-difference-when-ordered
+                     (m (f7-poly-degree remainder))
+                     (n (f7-poly-degree divisor))))
+    :in-theory (disable f7-poly-degree f7-normalize
+                        f7-canonical-polynomial-p))))
+
 ; This is the concrete structural bridge corresponding to GPOLY's trimming
 ; theorem.  Keep it independent of field multiplication and division facts.
 (defthm f7-consp-of-trim-implies-last-nonzero
@@ -1242,6 +1289,88 @@
           gfield::f7-inv gfield::f7-mul pfield::fep-fix
           pfield::mul-commutative gfield::f7-mul-commutative)))))
 
+(defthm f7-leading-quotient-monomial-package
+  (implies
+   (and (f7-canonical-polynomial-p remainder)
+        (f7-canonical-polynomial-p divisor)
+        (consp remainder)
+        (consp divisor)
+        (<= (f7-poly-degree divisor)
+            (f7-poly-degree remainder)))
+   (and
+    (gfield::f7-element-p
+     (gfield::f7-div
+      (f7-poly-leading-coefficient remainder)
+      (f7-poly-leading-coefficient divisor)))
+    (not
+     (equal
+      (gfield::f7-div
+       (f7-poly-leading-coefficient remainder)
+       (f7-poly-leading-coefficient divisor))
+      (gfield::f7-zero)))
+    (natp
+     (- (f7-poly-degree remainder)
+        (f7-poly-degree divisor)))
+    (f7-canonical-polynomial-p
+     (f7-monomial
+      (gfield::f7-div
+       (f7-poly-leading-coefficient remainder)
+       (f7-poly-leading-coefficient divisor))
+      (- (f7-poly-degree remainder)
+         (f7-poly-degree divisor))))
+    (consp
+     (f7-monomial
+      (gfield::f7-div
+       (f7-poly-leading-coefficient remainder)
+       (f7-poly-leading-coefficient divisor))
+      (- (f7-poly-degree remainder)
+         (f7-poly-degree divisor))))
+    (equal
+     (f7-poly-degree
+      (f7-monomial
+       (gfield::f7-div
+        (f7-poly-leading-coefficient remainder)
+        (f7-poly-leading-coefficient divisor))
+       (- (f7-poly-degree remainder)
+          (f7-poly-degree divisor))))
+     (- (f7-poly-degree remainder)
+        (f7-poly-degree divisor)))
+    (equal
+     (f7-poly-leading-coefficient
+      (f7-monomial
+       (gfield::f7-div
+        (f7-poly-leading-coefficient remainder)
+        (f7-poly-leading-coefficient divisor))
+       (- (f7-poly-degree remainder)
+          (f7-poly-degree divisor))))
+     (gfield::f7-div
+      (f7-poly-leading-coefficient remainder)
+      (f7-poly-leading-coefficient divisor)))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    ((:instance f7-leading-coefficient-ordered-quotient-package)
+     (:instance f7-element-p-of-f7-div
+                (x (f7-poly-leading-coefficient remainder))
+                (y (f7-poly-leading-coefficient divisor)))
+     (:instance f7-natp-of-poly-degree-difference-when-ordered)
+     (:instance
+      f7-nonzero-monomial-package
+      (a (gfield::f7-div
+          (f7-poly-leading-coefficient remainder)
+          (f7-poly-leading-coefficient divisor)))
+      (n (- (f7-poly-degree remainder)
+            (f7-poly-degree divisor)))))
+    :in-theory
+    (disable
+     f7-monomial f7-zero-prefix f7-poly-shift f7-normalize
+     f7-fix-coefficients f7-trim-trailing-zeros
+     f7-canonical-polynomial-p f7-poly-add f7-poly-mul f7-poly-neg
+     f7-poly-sub gfield::f7-element-p gfield::f7-fix gfield::f7-div
+     gfield::f7-inv gfield::f7-mul pfield::fep-fix
+     pfield::mul-commutative gfield::f7-mul-commutative))))
+
 (defthm f7-canonical-polynomial-p-of-polynomial-one
   (f7-canonical-polynomial-p (f7-polynomial-one))
   :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p
@@ -1550,6 +1679,38 @@
       (consp (f7-monomial 3 0))
       (equal (f7-poly-degree (f7-monomial 3 0)) 0)
       (equal (f7-poly-leading-coefficient (f7-monomial 3 0)) 3)))
+
+; Focused degree-arithmetic and quotient-monomial theorem regressions.
+(assert-event
+ (and (f7-canonical-polynomial-p '(3))
+      (natp (f7-poly-degree '(3)))
+      (equal (f7-poly-degree '(3)) 0)))
+(assert-event
+ (and (f7-canonical-polynomial-p '(1 0 0 3))
+      (natp (f7-poly-degree '(1 0 0 3)))
+      (equal (f7-poly-degree '(1 0 0 3)) 3)))
+(assert-event
+ (and (natp (- (f7-poly-degree '(1 0 0 3))
+               (f7-poly-degree '(2 2))))
+      (equal (- (f7-poly-degree '(1 0 0 3))
+                (f7-poly-degree '(2 2)))
+             2)))
+(assert-event
+ (let* ((remainder '(1 0 0 3))
+        (divisor '(2 2))
+        (coefficient
+         (gfield::f7-div
+          (f7-poly-leading-coefficient remainder)
+          (f7-poly-leading-coefficient divisor)))
+        (index (- (f7-poly-degree remainder)
+                  (f7-poly-degree divisor)))
+        (monomial (f7-monomial coefficient index)))
+   (and (equal coefficient 5)
+        (equal index 2)
+        (f7-canonical-polynomial-p monomial)
+        (consp monomial)
+        (equal (f7-poly-degree monomial) index)
+        (equal (f7-poly-leading-coefficient monomial) coefficient))))
 
 ; Focused concrete canonical-final-coefficient regressions.
 (assert-event (f7-canonical-polynomial-p nil))
