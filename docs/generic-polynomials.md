@@ -247,8 +247,16 @@ a public-division consequence, not a new induction. `POLY-REMAINDER` is an
 ordinary transparent `DEFUN` with explicitly verified guards; the constrained
 generic field is not claimed as a concrete runtime field.
 
+Bounded Euclidean remainders are also uniquely characterized: when a
+normalized dividend is reconstructed as a polynomial quotient times a
+nonzero normalized modulus plus a canonical remainder of strictly lower
+degree (or `nil`), `POLY-REMAINDER` returns that remainder.  This theorem is
+derived from the certified division reconstruction together with generic
+polynomial cancellation, nonzero-product, and degree algebra.  It introduces
+neither a second reduction algorithm nor a concrete reduction API.
+
 The next PR, `GPOLY-MOD-CONGRUENCE`, remains responsible for invariance under
-adding a modulus multiple, an appropriate polynomial congruence relation, and
-compatibility with addition and multiplication. No quotient-ring operations,
+adding a modulus multiple, defining congruence by equality of canonical
+remainders, and proving compatibility with addition and multiplication. No quotient-ring operations,
 gcd, modular inverse, extension field, or concrete F7/PFIELD division API is
 claimed here.
