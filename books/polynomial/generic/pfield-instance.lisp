@@ -1085,6 +1085,153 @@
   :hints (("Goal" :induct (f7-raw-mul f g)
            :in-theory (enable f7-raw-mul))))
 
+; Concrete counterparts of the generic raw-convolution final-coefficient
+; support.  Keep these structural facts out of the default rewrite theory.
+(defthm f7-mul-of-fixes-for-raw-scale
+  (equal (gfield::f7-mul (gfield::f7-fix x) (gfield::f7-fix y))
+         (gfield::f7-mul x y))
+  :hints (("Goal"
+           :in-theory (e/d (gfield::f7-mul)
+                           (pfield::mul)))))
+
+(defthm f7-last-of-raw-scale
+  (implies (consp x)
+           (equal (car (last (f7-raw-scale a x)))
+                  (gfield::f7-mul a (car (last x)))))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-raw-scale a x)
+           :in-theory (e/d (f7-raw-scale)
+                           (pfield::mul-commutative
+                            gfield::f7-mul-commutative
+                            gfield::f7-mul gfield::f7-fix)))))
+
+(defthm f7-last-of-raw-add-when-right-longer
+  (implies (and (f7-coefficient-list-p x)
+                (f7-coefficient-list-p y)
+                (< (len x) (len y)))
+           (equal (car (last (f7-raw-add x y)))
+                  (car (last y))))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-raw-add x y)
+           :in-theory (e/d (f7-raw-add f7-coefficient-list-p
+                                      f7-fix-coefficients)
+                           (gfield::f7-add)))))
+
+(defthm f7-last-of-zero-prefix
+  (implies (consp x)
+           (equal (car (last (cons (gfield::f7-zero) x)))
+                  (car (last x))))
+  :rule-classes nil)
+
+(defthm f7-add-zero-right-for-raw-mul
+  (equal (gfield::f7-add x (gfield::f7-zero))
+         (gfield::f7-fix x))
+  :hints (("Goal"
+           :in-theory (enable gfield::f7-add gfield::f7-zero
+                              gfield::f7-fix pfield::add))))
+
+(defthm f7-fix-coefficients-when-coefficient-list-p-for-raw-mul
+  (implies (f7-coefficient-list-p x)
+           (equal (f7-fix-coefficients x) x))
+  :hints (("Goal" :induct (f7-coefficient-list-p x)
+           :in-theory (enable f7-coefficient-list-p
+                              f7-fix-coefficients))))
+
+(defthm f7-true-listp-when-coefficient-list-p-for-raw-mul
+  (implies (f7-coefficient-list-p x)
+           (true-listp x))
+  :hints (("Goal" :induct (f7-coefficient-list-p x)
+           :in-theory (enable f7-coefficient-list-p))))
+
+(defthm f7-raw-add-zero-singleton-right
+  (implies (and (f7-coefficient-list-p x)
+                (consp x))
+           (equal (f7-raw-add x (list (gfield::f7-zero))) x))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-coefficient-list-p x)
+           :in-theory (e/d (f7-raw-add f7-coefficient-list-p
+                                      f7-fix-coefficients
+                                      f7-add-zero-right-for-raw-mul
+                                      f7-fix-coefficients-when-coefficient-list-p-for-raw-mul)
+                           (gfield::f7-add)))
+          ("Subgoal *1/1.3"
+           :use ((:instance f7-add-zero-right-for-raw-mul
+                            (x (car x)))))
+          ("Subgoal *1/1.1"
+           :use ((:instance f7-add-zero-right-for-raw-mul
+                            (x (car x)))))))
+
+(defthm f7-raw-mul-singleton-left
+  (implies (and (gfield::f7-element-p a)
+                (f7-coefficient-list-p g)
+                (consp g))
+           (equal (f7-raw-mul (list a) g)
+                  (f7-raw-scale a g)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-raw-add-zero-singleton-right
+                            (x (f7-raw-scale a g))))
+           :in-theory (e/d (f7-raw-mul)
+                           (gfield::f7-mul pfield::mul-commutative
+                            gfield::f7-mul-commutative)))))
+
+(defthm f7-len-raw-scale-less-than-zero-prefix-raw-mul
+  (implies (and (true-listp f)
+                (true-listp g)
+                (consp f)
+                (consp g))
+           (< (len (f7-raw-scale a g))
+              (len (cons (gfield::f7-zero) (f7-raw-mul f g)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-len-of-raw-scale (x g))
+                 (:instance f7-len-of-raw-mul (f f) (g g)))
+           :in-theory (disable f7-raw-scale f7-raw-mul))))
+
+(defthm f7-raw-leading-coefficient-of-raw-mul
+  (implies (and (f7-coefficient-list-p f)
+                (f7-coefficient-list-p g)
+                (consp f)
+                (consp g))
+           (equal (car (last (f7-raw-mul f g)))
+                  (gfield::f7-mul (car (last f))
+                                  (car (last g)))))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-raw-mul f g)
+           :in-theory (disable pfield::mul-commutative
+                               gfield::f7-mul-commutative
+                               gfield::f7-mul))
+          ("Subgoal *1/1"
+           :use ((:instance f7-raw-mul-singleton-left
+                            (a (car f)) (g g))
+                 (:instance f7-last-of-raw-scale
+                            (a (car f)) (x g))
+                 (:instance f7-raw-add-zero-singleton-right
+                            (x (f7-raw-scale (car f) g))))
+           :in-theory (disable pfield::mul-commutative
+                               gfield::f7-mul-commutative
+                               gfield::f7-mul))
+          ("Subgoal *1/3"
+           :use ((:instance f7-last-of-raw-add-when-right-longer
+                            (x (f7-raw-scale (car f) g))
+                            (y (cons (gfield::f7-zero)
+                                     (f7-raw-mul (cdr f) g))))
+                 (:instance f7-last-of-zero-prefix
+                            (x (f7-raw-mul (cdr f) g)))
+                 (:instance f7-len-of-raw-scale
+                            (a (car f)) (x g))
+                 (:instance f7-len-of-raw-mul (f (cdr f)) (g g))
+                 (:instance f7-coefficient-list-p-of-raw-mul
+                            (f (cdr f)) (g g))
+                 (:instance
+                  f7-len-raw-scale-less-than-zero-prefix-raw-mul
+                  (a (car f)) (f (cdr f)) (g g)))
+           :in-theory (e/d (f7-coefficient-list-p)
+                           (pfield::mul-commutative
+                            gfield::f7-mul-commutative
+                            gfield::f7-mul f7-raw-add
+                            f7-raw-scale f7-raw-mul)))))
+
 (defthm f7-element-p-of-last-when-coefficient-list-p
   (implies (and (f7-coefficient-list-p p) (consp p))
            (gfield::f7-element-p (car (last p))))
@@ -1737,6 +1884,23 @@
 (assert-event (equal (f7-raw-mul nil '(1 2)) nil))
 (assert-event (equal (f7-raw-mul '(1 2) nil) nil))
 (assert-event (f7-coefficient-list-p (f7-raw-mul '(1 2) '(3 4))))
+(assert-event
+ (equal (car (last (f7-raw-scale 2 '(1 2 3))))
+        (gfield::f7-mul 2 3)))
+(assert-event
+ (equal (car (last (f7-raw-add '(1 2) '(3 4 5)))) 5))
+(assert-event
+ (equal (car (last (cons (gfield::f7-zero) '(1 2 3)))) 3))
+(assert-event
+ (equal (f7-raw-mul '(2) '(1 2 3))
+        (f7-raw-scale 2 '(1 2 3))))
+(assert-event
+ (equal (car (last (f7-raw-mul '(1 2) '(3 4))))
+        (gfield::f7-mul 2 4)))
+; The deliberately unequal final operands make their syntactic order visible.
+(assert-event
+ (equal (car (last (f7-raw-mul '(5 2) '(1 6))))
+        (gfield::f7-mul 2 6)))
 
 (assert-event
  (equal (f7-eval (f7-poly-mul '(1 2) '(3 4)) 2)
