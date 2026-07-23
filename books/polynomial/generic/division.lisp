@@ -30,33 +30,11 @@
            :in-theory (disable poly-division-step-core
                                canonical-polynomial-p poly-degree))))
 
-; Canonical-state long division.  The transparent internal result is (q . r).
-; The canonical hypotheses are part of the recursive test so that this ordinary
-; total function also terminates on arbitrary ACL2 objects.
-(defun poly-divmod-core (quotient remainder divisor)
-  (declare
-   (xargs :measure (len remainder)
-          :hints
-          (("Goal"
-            :use ((:instance poly-division-step-core-length-decreases))
-            :in-theory (disable poly-division-step-core)))))
-  (if (and (canonical-polynomial-p quotient)
-           (canonical-polynomial-p remainder)
-           (canonical-polynomial-p divisor)
-           (consp remainder)
-           (consp divisor)
-           (<= (poly-degree divisor) (poly-degree remainder)))
-      (let* ((step (poly-division-step-core remainder divisor))
-             (term (car step))
-             (next (cdr step)))
-        (poly-divmod-core (poly-add quotient term) next divisor))
-    (cons quotient remainder)))
-
-(defun poly-divmod (f g)
-  (let ((f (normalize f))
-        (g (normalize g)))
-    (let ((result (poly-divmod-core nil f g)))
-      (mv (car result) (cdr result)))))
+; Shared transparent generator.  The recursive divisor is unchanged and the
+; canonical remainder length is the termination measure.
+(def-divmod-instance poly-divmod-core poly-divmod canonical-polynomial-p
+  poly-degree poly-division-step-core poly-add normalize
+  poly-division-step-core-length-decreases)
 
 (defthm poly-divmod-core-accumulator-step-canonical
   (implies (and (canonical-polynomial-p quotient)

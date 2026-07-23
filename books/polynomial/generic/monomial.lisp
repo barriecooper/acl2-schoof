@@ -1,28 +1,10 @@
 (in-package "GPOLY")
 (include-book "degree")
 
-; Structural zero prefix shared by shifts and monomials.  Its index is total:
-; NFIX makes every non-natural input, including a negative integer, mean zero.
-(defun zero-prefix (n xs)
-  (if (zp (nfix n))
-      xs
-    (cons (gfield::field-zero)
-          (zero-prefix (1- (nfix n)) xs))))
-
-; Multiplication of a canonical dense polynomial by X^N.  Normalize once at
-; this public boundary; canonical zero stays NIL instead of becoming zeros.
-(defun poly-shift (p n)
-  (let ((p (normalize p)))
-    (if (consp p)
-        (zero-prefix (nfix n) p)
-      nil)))
-
-; The canonical dense polynomial A*X^N.
-(defun monomial (a n)
-  (let ((a (gfield::field-fix a)))
-    (if (equal a (gfield::field-zero))
-        nil
-      (zero-prefix (nfix n) (list a)))))
+; Shared transparent generator; :TRANS1 expands this event to the original
+; ZERO-PREFIX, POLY-SHIFT, and MONOMIAL ordinary DEFUN definitions.
+(def-monomial-instance zero-prefix poly-shift monomial normalize
+                       gfield::field-fix gfield::field-zero)
 
 (defthm coefficient-list-p-of-zero-prefix
   (implies (coefficient-list-p xs)

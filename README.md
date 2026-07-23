@@ -1,11 +1,32 @@
 # ACL2 Hasse--Schoof
 
-This repository is a certifying foundation for a formal Manin-style proof of
-Hasse's theorem, followed by Schoof point counting, for short Weierstrass curves
-over arbitrary finite fields.  The current certified implementation is only
-the prime-field `F_p` polynomial instance; extension to `F_q`, `q = p^n`, is
-designed in `docs/finite-field-architecture.md`.  The present milestone is
-intentionally only a small polynomial pilot; Hasse's theorem is **not** claimed.
+This repository is a certified foundation for a future Manin-style proof of
+Hasse's theorem and for Schoof point counting on short Weierstrass curves.
+Neither Hasse's theorem nor Schoof's algorithm is complete here, and the
+repository does not yet implement arbitrary extension fields.
+
+The development has grown beyond a small polynomial pilot.  Its certified
+foundation includes an abstract field kernel, a constrained-modulus PFIELD
+adapter, named concrete F2 and F7 fields, canonical generic polynomial
+normalization and evaluation, addition, subtraction, scaling, multiplication,
+constant embedding and powers, degree and leading coefficients, product
+leading-term and no-zero-divisor consequences, monomials and shifts, one-step
+leading-term cancellation, and recursive quotient/remainder division with
+reconstruction and a final remainder-degree bound.  The repository also
+contains the concrete F11 golden-curve fixture.
+
+GPOLY algorithms are generic certified definitions over constrained field
+operations.  PFIELD is a constrained-modulus adapter, not ordinary arithmetic
+for one named runtime modulus.  F2, F7, and F11 are named executable concrete
+instances where the corresponding generated operations have been supplied.
+At present the recursive division algorithm itself is certified generically;
+a generated concrete F7 division boundary remains future work.
+
+Still open are polynomial gcd and extended gcd, quotient/remainder uniqueness,
+irreducibility, arbitrary extension fields, rational functions, generic curve
+operations, Hasse, division polynomials, CRT trace reconstruction, and Schoof
+trace computation.  These are tracked in `docs/obligations.md`; the full
+Euclidean-polynomial milestone is not complete.
 
 ## Reproduce
 
@@ -14,15 +35,16 @@ On Debian/Ubuntu install `git make perl sbcl`, then run:
 ```sh
 make setup
 make check-trust
+make certify-one BOOK=books/polynomial/generic/division.lisp
+make certify-one BOOK=books/polynomial/generic/pfield-instance.lisp
 make certify
 make test
-make certify-one BOOK=books/polynomial/eval.lisp
 ```
 
-Setup clones the official ACL2 `8.6` tag into ignored `.deps/`, builds it with
-SBCL, and uses that checkout's Community Books and `books/build/cert.pl`.
-Certification logs live in `.deps/logs/`. The first setup requires network
-access and substantial disk space.
+Setup installs ACL2 8.6 under ignored `.deps/`, builds it with SBCL, and uses
+that checkout's Community Books and `books/build/cert.pl`. Certification logs
+live in `.deps/logs/`; initial setup requires network access and substantial
+disk space.
 
 With Docker:
 
@@ -31,30 +53,14 @@ docker build -t acl2-schoof .
 docker run --rm acl2-schoof
 ```
 
-`books/` contains the project books, `tests/` executable certification tests,
+`books/` contains project books, `tests/` executable certification tests,
 `scripts/` the reproducible driver, and `docs/` the design and proof ledger.
-To add a book, include only its direct prerequisites, add it to `books/top.lisp`,
-first run `make certify-one BOOK=books/path/name.lisp`, then run the full suite.
+To add a book, include only direct prerequisites, add it to `books/top.lisp`,
+certify it with `make certify-one BOOK=books/path/name.lisp`, and then run the
+full suite.
 
-The zero polynomial is `nil`; coefficients are ascending and canonical inputs
-have no trailing zero. The trust policy categorically forbids proof bypasses,
-axioms, trust tags, and raw Lisp. `make check-trust` conservatively scans even
-comments and strings. Current deeper proof obligations are tracked rather than
-admitted; see `docs/obligations.md`.
-
-## Last bootstrap verification
-
-On 2026-07-21, after building ACL2 8.6 with SBCL, all acceptance commands
-completed successfully with the shown process statuses:
-
-```text
-make setup        # exit 0
-make check-trust  # exit 0
-make certify      # exit 0
-make test         # exit 0
-```
-
-The successful `make certify` run certified `books/top.lisp` and its project
-dependencies; the successful `make test` run certified `tests/smoke.lisp`.
-The complete driver logs contained no ACL2 failure markers. Generated
-certificates are build artifacts and are not tracked.
+The zero polynomial is `nil`; coefficients are stored in ascending degree and
+canonical inputs have no trailing zero.  The trust policy forbids proof
+bypasses, axioms, trust tags, and raw Lisp. `make check-trust` conservatively
+scans comments and strings as well as executable forms. Generated certificates,
+logs, and `.deps/` contents are build artifacts and are not tracked.

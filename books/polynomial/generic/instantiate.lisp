@@ -100,3 +100,64 @@
      (defun ,leading-coefficient (poly)
        (let ((p (,normalize poly)))
          (if (consp p) (car (last p)) (,field-zero))))))
+
+
+; Monomial/shift construction is shared by the generic theory and instances.
+; The expansion contains exactly three ordinary DEFUN events.
+(defmacro def-monomial-instance
+  (zero-prefix poly-shift monomial normalize field-fix field-zero)
+  `(progn
+     (defun ,zero-prefix (n xs)
+       (if (zp (nfix n)) xs
+         (cons (,field-zero) (,zero-prefix (1- (nfix n)) xs))))
+     (defun ,poly-shift (p n)
+       (let ((p (,normalize p)))
+         (if (consp p) (,zero-prefix (nfix n) p) nil)))
+     (defun ,monomial (a n)
+       (let ((a (,field-fix a)))
+         (if (equal a (,field-zero)) nil
+           (,zero-prefix (nfix n) (list a)))))))
+
+; One leading-term cancellation, including its public normalization boundary
+; and transparent result accessors.  The expansion is five ordinary DEFUNs.
+(defmacro def-division-step-instance
+  (core step term next degree leading monomial poly-sub poly-mul normalize
+        field-div)
+  `(progn
+     (defun ,core (remainder divisor)
+       (if (and (consp remainder) (consp divisor)
+                (<= (,degree divisor) (,degree remainder)))
+           (let* ((k (- (,degree remainder) (,degree divisor)))
+                  (c (,field-div (,leading remainder) (,leading divisor)))
+                  (term (,monomial c k)))
+             (cons term (,poly-sub remainder (,poly-mul term divisor))))
+         (cons nil remainder)))
+     (defun ,step (remainder divisor)
+       (let ((remainder (,normalize remainder))
+             (divisor (,normalize divisor)))
+         (,core remainder divisor)))
+     (defun ,term (remainder divisor) (car (,step remainder divisor)))
+     (defun ,next (remainder divisor) (cdr (,step remainder divisor)))))
+
+; Canonical-state recursive division.  The length of the canonical remainder
+; is the measure; each active iteration computes and reuses exactly one step.
+(defmacro def-divmod-instance
+  (core divmod canonical degree step-core poly-add normalize termination-theorem)
+  `(progn
+     (defun ,core (quotient remainder divisor)
+       (declare
+        (xargs :measure (len remainder)
+               :hints (("Goal" :use ((:instance ,termination-theorem))
+                        :in-theory (disable ,step-core)))))
+       (if (and (,canonical quotient) (,canonical remainder)
+                (,canonical divisor) (consp remainder) (consp divisor)
+                (<= (,degree divisor) (,degree remainder)))
+           (let* ((step (,step-core remainder divisor))
+                  (term (car step))
+                  (next (cdr step)))
+             (,core (,poly-add quotient term) next divisor))
+         (cons quotient remainder)))
+     (defun ,divmod (f g)
+       (let ((f (,normalize f)) (g (,normalize g)))
+         (let ((result (,core nil f g)))
+           (mv (car result) (cdr result)))))))
