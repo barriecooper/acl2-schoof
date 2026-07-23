@@ -1141,6 +1141,9 @@
 (assert-event (equal (f7-poly-mul '(3) '(1 2)) '(3 6)))
 ; (1+2X)(3+4X) = 3+3X+X^2 over F_7.
 (assert-event (equal (f7-poly-mul '(1 2) '(3 4)) '(3 3 1)))
+(assert-event (equal (f7-poly-degree (f7-poly-mul '(1 2) '(3 4))) 2))
+(assert-event
+ (equal (f7-poly-leading-coefficient (f7-poly-mul '(1 2) '(3 4))) 1))
 (assert-event (equal (f7-poly-mul '(1 0 4) '(2 0 2)) '(2 0 3 0 1)))
 (assert-event (equal (f7-poly-mul '(7 14) '(1 2)) nil))
 (assert-event (equal (f7-poly-mul '(1 2 0 0) '(3 4 0)) '(3 3 1)))
