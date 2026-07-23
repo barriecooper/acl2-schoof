@@ -33,8 +33,9 @@ ACL2 obligations are genuinely proved and certified.
    degree-shift foundation is also certified, including degree and leading-
    coefficient laws and explicit `nfix` behavior.  The maintained division contract, one-step cancellation, and recursive generic
    division are certified, including reconstruction and the final strict
-   remainder-degree bound.  The next focused milestone is generic modular
-   reduction and congruence, followed by the remaining Euclidean theory.  Later power uses include
+   remainder-degree bound. Generic modular reduction is also certified. The
+   next focused milestone is generic polynomial congruence, followed by the
+   remaining Euclidean theory. Later power uses include
    extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.
@@ -63,10 +64,10 @@ ACL2 obligations are genuinely proved and certified.
 
 GPOLY is authoritative for new polynomial algebra. The older HS/PFIELD
 polynomial stack remains a legacy/root-count bridge unless a specific bridge
-requires it; gcd, derivative, modular-reduction, quotient-ring, and
+requires it; gcd, derivative, quotient-ring, and
 extension-field work should not be independently duplicated in both stacks.
-The immediate mathematical milestone is generic modular reduction and
-congruence. Recursive concrete F7 divmod is postponed. The first executable
+The immediate mathematical milestone is generic modular congruence, including
+multiple invariance and addition/multiplication compatibility. Recursive concrete F7 divmod is postponed. The first executable
 Schoof path may target a named prime field; arbitrary finite-field execution is
 a later architectural phase.
 

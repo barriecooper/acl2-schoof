@@ -214,9 +214,10 @@ map fixed zero to `nil`, and have the expected degree and leading coefficient
 when nonzero.  These are structural dense-list results, not evaluation
 extensionality.  The certified quotient/remainder contract and zero-divisor fallback are
 maintained in `polynomial-division.md`. Generic recursive division,
-reconstruction, and the final remainder bound are certified. The immediate
-next milestone is generic modular reduction and congruence; gcd, irreducibility,
-monic normalization, and extension-field reduction remain later work.
+reconstruction, and the final remainder bound are certified. Generic modular
+reduction is now certified; polynomial congruence is the immediate next
+milestone. Gcd, irreducibility, monic normalization, and extension-field
+reduction remain later work.
 
 ## One long-division step
 
@@ -232,3 +233,22 @@ logical/executable boundary.
 ## Generic recursive division (certified)
 
 `books/polynomial/generic/division.lisp` certifies `POLY-DIVMOD-CORE` and the total `(mv q r)` public `POLY-DIVMOD`.  Canonical remainder length is the measure, the one-step decrease theorem supplies termination, and an accumulator invariant supplies normalized reconstruction without evaluation extensionality.  The final remainder is zero or strictly below the normalized nonzero divisor.  Guards are verified separately.  No executable boundary or concrete PFIELD/F7 instance is added; concrete generated division, uniqueness, gcd, and extended gcd remain open.
+
+## Generic modular reduction (certified)
+
+`books/polynomial/generic/reduction.lisp` defines `POLY-REMAINDER` as the
+remainder projection of one call to public `POLY-DIVMOD`; it neither copies nor
+reimplements division recursion and inherits that API's input normalization.
+The certified package proves the direct divmod connection, unconditional
+canonicality, invariance under normalizing either operand, normalized-zero and
+literal-`nil` modulus fallback to `NORMALIZE(dividend)`, the strict degree bound
+for a nonempty normalized modulus, and idempotence.  The lower-degree helper is
+a public-division consequence, not a new induction. `POLY-REMAINDER` is an
+ordinary transparent `DEFUN` with explicitly verified guards; the constrained
+generic field is not claimed as a concrete runtime field.
+
+The next PR, `GPOLY-MOD-CONGRUENCE`, remains responsible for invariance under
+adding a modulus multiple, an appropriate polynomial congruence relation, and
+compatibility with addition and multiplication. No quotient-ring operations,
+gcd, modular inverse, extension field, or concrete F7/PFIELD division API is
+claimed here.

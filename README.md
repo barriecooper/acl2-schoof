@@ -24,7 +24,8 @@ a concrete F7 one-step boundary was not retained after its semantic theorem
 group certified experimentally because the existing F7 inverse/division guard
 contract blocked explicit guard verification. Recursive F7 divmod is postponed.
 
-The next mathematical milestone is generic modular reduction and congruence.
+Generic modular reduction is certified. The next mathematical milestone is
+generic polynomial congruence and its addition/multiplication compatibility.
 Still open are polynomial gcd and extended gcd, quotient/remainder uniqueness,
 irreducibility, arbitrary extension fields, rational functions, generic curve
 operations, Hasse, division polynomials, CRT trace reconstruction, and Schoof
