@@ -39,6 +39,30 @@
 (assert-event (equal (f7-poly-add '(1 2) '(2 5)) '(3)))
 (assert-event (equal (f7-poly-neg '(1 2)) '(6 5)))
 (assert-event (equal (f7-poly-sub '(1 2) '(1 2)) nil))
+(assert-event
+ (equal (f7-poly-add (f7-normalize '(1 2 0)) '(3 4))
+        (f7-poly-add '(1 2 0) '(3 4))))
+(assert-event
+ (equal (f7-poly-add '(1 2) (f7-normalize '(3 4 0)))
+        (f7-poly-add '(1 2) '(3 4 0))))
+(assert-event
+ (equal (f7-poly-add '(1 2) '(3 4))
+        (f7-poly-add '(3 4) '(1 2))))
+(assert-event
+ (equal (f7-poly-add (f7-poly-add '(1 2) '(3 4)) '(5 6))
+        (f7-poly-add '(1 2) (f7-poly-add '(3 4) '(5 6)))))
+(assert-event
+ (equal (f7-poly-add '(1 2) (f7-poly-neg '(1 2))) nil))
+(assert-event
+ (equal (f7-poly-add '(1 2) (f7-poly-sub '(3 4) '(1 2))) '(3 4)))
+(assert-event
+ (equal (f7-poly-add '(1 2) (f7-poly-sub '(1 2) '(1 2))) '(1 2)))
+(assert-event
+ (equal (f7-poly-add nil (f7-poly-sub '(3 4) nil)) '(3 4)))
+(assert-event
+ (equal (f7-poly-add '(1 2) (f7-poly-sub nil '(1 2))) nil))
+(assert-event
+ (equal (f7-poly-add '(2) (f7-poly-sub '(5) '(2))) '(5)))
 (assert-event (equal (f7-poly-scale 3 '(1 2 3)) '(3 6 2)))
 (assert-event (equal (f7-poly-scale 0 '(1 2 3)) nil))
 (assert-event (equal (f7-poly-scale 1 '(1 2 0 0)) '(1 2)))

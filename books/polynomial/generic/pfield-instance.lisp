@@ -1210,6 +1210,185 @@
                                         f7-coefficient-list-p
                                         f7-add-associative-for-polynomial-structure)))))
 
+; Normalization compatibility is established directly on the concrete list
+; operations.  In particular, these proofs do not appeal to evaluation, which
+; is not extensional for formal polynomials over a finite field.
+(defthm f7-normalize-idempotent-for-addition
+  (equal (f7-normalize (f7-normalize x)) (f7-normalize x))
+  :hints (("Goal"
+           :use ((:instance f7-normalize-when-canonical
+                            (xs (f7-normalize x))))
+           :in-theory (disable f7-normalize))))
+
+(defthm f7-fix-coefficients-when-coefficient-list-p-for-addition
+  (implies (f7-coefficient-list-p x)
+           (equal (f7-fix-coefficients x) x))
+  :hints (("Goal" :induct (f7-coefficient-list-p x)
+           :in-theory (enable f7-coefficient-list-p
+                              f7-fix-coefficients))))
+
+(defthm f7-fix-coefficients-idempotent-for-addition
+  (equal (f7-fix-coefficients (f7-fix-coefficients x))
+         (f7-fix-coefficients x))
+  :hints (("Goal"
+           :use ((:instance
+                  f7-fix-coefficients-when-coefficient-list-p-for-addition
+                  (x (f7-fix-coefficients x))))
+           :in-theory (disable f7-fix-coefficients))))
+
+(defthm f7-trim-trailing-zeros-idempotent-for-addition
+  (implies (f7-coefficient-list-p x)
+           (equal (f7-trim-trailing-zeros
+                   (f7-trim-trailing-zeros x))
+                  (f7-trim-trailing-zeros x)))
+  :hints (("Goal" :induct (f7-trim-trailing-zeros x)
+           :in-theory (enable f7-trim-trailing-zeros
+                              f7-coefficient-list-p))))
+
+(defthm f7-normalize-raw-add-normalize-left
+  (implies (and (f7-polynomial-p x) (f7-polynomial-p y))
+           (equal (f7-normalize
+                   (f7-raw-add (f7-normalize x) y))
+                  (f7-normalize (f7-raw-add x y))))
+  :hints (("Goal" :induct (f7-raw-add x y))))
+
+(defthm f7-normalize-raw-add-normalize-right
+  (implies (and (f7-polynomial-p x) (f7-polynomial-p y))
+           (equal (f7-normalize
+                   (f7-raw-add x (f7-normalize y)))
+                  (f7-normalize (f7-raw-add x y))))
+  :hints (("Goal"
+           :use ((:instance f7-normalize-raw-add-normalize-left
+                            (x y) (y x))
+                 (:instance f7-raw-add-commutative-for-poly-add
+                            (x (f7-normalize y)) (y x))
+                 (:instance f7-raw-add-commutative-for-poly-add))
+           :in-theory (disable f7-normalize-raw-add-normalize-left))))
+
+(defthm f7-poly-add-normalize-left
+  (implies (and (f7-polynomial-p x) (f7-polynomial-p y))
+           (equal (f7-poly-add (f7-normalize x) y)
+                  (f7-poly-add x y)))
+  :hints (("Goal" :in-theory (enable f7-poly-add))))
+
+(defthm f7-poly-add-normalize-right
+  (implies (and (f7-polynomial-p x) (f7-polynomial-p y))
+           (equal (f7-poly-add x (f7-normalize y))
+                  (f7-poly-add x y)))
+  :hints (("Goal" :in-theory (enable f7-poly-add))))
+
+(defthm f7-poly-add-commutative
+  (equal (f7-poly-add x y) (f7-poly-add y x))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-raw-add-commutative-for-poly-add
+                            (x (f7-normalize x))
+                            (y (f7-normalize y))))
+           :in-theory (enable f7-poly-add))))
+
+(defthm f7-poly-add-associative
+  (implies (and (f7-polynomial-p x)
+                (f7-polynomial-p y)
+                (f7-polynomial-p z))
+           (equal (f7-poly-add (f7-poly-add x y) z)
+                  (f7-poly-add x (f7-poly-add y z))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-normalize-raw-add-normalize-left
+                            (x (f7-raw-add (f7-normalize x)
+                                           (f7-normalize y)))
+                            (y (f7-normalize z)))
+                 (:instance f7-normalize-raw-add-normalize-right
+                            (x (f7-normalize x))
+                            (y (f7-raw-add (f7-normalize y)
+                                           (f7-normalize z))))
+                 (:instance f7-raw-add-associative-for-poly-add
+                            (x (f7-normalize x))
+                            (y (f7-normalize y))
+                            (z (f7-normalize z))))
+           :in-theory (enable f7-poly-add))))
+
+(defthm f7-poly-add-of-nil-left
+  (equal (f7-poly-add nil x) (f7-normalize x))
+  :hints (("Goal" :in-theory
+           (enable f7-poly-add f7-raw-add f7-normalize))))
+
+(defthm f7-poly-add-of-nil-right
+  (equal (f7-poly-add x nil) (f7-normalize x))
+  :hints (("Goal" :in-theory
+           (enable f7-poly-add f7-raw-add f7-normalize))))
+
+(defthm f7-poly-add-zero-left
+  (implies (f7-canonical-polynomial-p x)
+           (equal (f7-poly-add nil x) x)))
+
+(defthm f7-poly-add-zero-right
+  (implies (f7-canonical-polynomial-p x)
+           (equal (f7-poly-add x nil) x)))
+
+(defthm f7-normalize-raw-add-inverse-right
+  (implies (f7-polynomial-p x)
+           (equal (f7-normalize
+                   (f7-raw-add x (f7-raw-neg x)))
+                  nil))
+  :hints (("Goal" :induct (f7-raw-neg x)
+           :in-theory (enable f7-polynomial-p f7-coefficient-list-p
+                              f7-raw-add f7-raw-neg f7-normalize
+                              f7-fix-coefficients
+                              f7-trim-trailing-zeros
+                              f7-add-inverse-right-for-subtraction))))
+
+(defthm f7-poly-add-inverse-right
+  (implies (f7-polynomial-p x)
+           (equal (f7-poly-add x (f7-poly-neg x)) nil))
+  :hints (("Goal"
+           :use ((:instance f7-normalize-raw-add-inverse-right
+                            (x (f7-normalize x))))
+           :in-theory (e/d (f7-poly-add f7-poly-neg)
+                           (f7-normalize f7-raw-add f7-raw-neg)))))
+
+(defthm f7-poly-add-inverse-left
+  (implies (f7-polynomial-p x)
+           (equal (f7-poly-add (f7-poly-neg x) x) nil))
+  :hints (("Goal"
+           :use ((:instance f7-poly-add-commutative
+                            (x (f7-poly-neg x)) (y x))
+                 (:instance f7-poly-add-inverse-right)))))
+
+(defthm f7-canonical-polynomial-p-of-poly-add
+  (f7-canonical-polynomial-p (f7-poly-add x y))
+  :hints (("Goal"
+           :use ((:instance f7-canonical-polynomial-p-of-normalize
+                            (xs (f7-raw-add (f7-normalize x)
+                                            (f7-normalize y)))))
+           :in-theory (enable f7-poly-add))))
+
+(defthm f7-canonical-polynomial-p-of-poly-neg
+  (f7-canonical-polynomial-p (f7-poly-neg x))
+  :hints (("Goal"
+           :use ((:instance f7-canonical-polynomial-p-of-normalize
+                            (xs (f7-raw-neg x))))
+           :in-theory (enable f7-poly-neg))))
+
+(defthm f7-poly-sub-definition
+  (equal (f7-poly-sub x y)
+         (f7-poly-add x (f7-poly-neg y)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable f7-poly-sub))))
+
+(defthm f7-poly-add-left-to-poly-sub
+  (implies (and (f7-canonical-polynomial-p x)
+                (f7-canonical-polynomial-p y))
+           (equal (f7-poly-add x (f7-poly-sub y x)) y))
+  :hints (("Goal"
+           :use ((:instance f7-poly-add-associative
+                            (x x) (y y) (z (f7-poly-neg x)))
+                 (:instance f7-poly-add-associative
+                            (x y) (y x) (z (f7-poly-neg x)))
+                 (:instance f7-poly-add-commutative (x x) (y y))
+                 (:instance f7-poly-add-inverse-right (x x))
+                 (:instance f7-poly-sub-definition (x y) (y x))))))
+
 (in-theory (disable f7-add-commutative-for-polynomial-structure
                     f7-add-associative-for-polynomial-structure))
 
@@ -2240,6 +2419,29 @@
 (assert-event
  (equal (f7-poly-add (f7-poly-add '(1 2) '(2 3)) '(4 5))
         (f7-poly-add '(1 2) (f7-poly-add '(2 3) '(4 5)))))
+(assert-event
+ (equal (f7-poly-add (f7-normalize '(1 2 0)) '(3 4))
+        (f7-poly-add '(1 2 0) '(3 4))))
+(assert-event
+ (equal (f7-poly-add '(1 2) (f7-normalize '(3 4 0)))
+        (f7-poly-add '(1 2) '(3 4 0))))
+(assert-event
+ (equal (f7-poly-add '(1 2) '(3 4))
+        (f7-poly-add '(3 4) '(1 2))))
+(assert-event
+ (equal (f7-poly-add '(1 2) (f7-poly-neg '(1 2))) nil))
+(assert-event
+ (equal (f7-poly-add '(1 2) (f7-poly-sub '(3 4) '(1 2)))
+        '(3 4)))
+(assert-event
+ (equal (f7-poly-add '(1 2) (f7-poly-sub '(1 2) '(1 2)))
+        '(1 2)))
+(assert-event
+ (equal (f7-poly-add nil (f7-poly-sub '(3 4) nil)) '(3 4)))
+(assert-event
+ (equal (f7-poly-add '(1 2) (f7-poly-sub nil '(1 2))) nil))
+(assert-event
+ (equal (f7-poly-add '(2) (f7-poly-sub '(5) '(2))) '(5)))
 (assert-event (equal (f7-poly-scale 3 '(1 2 3)) '(3 6 2)))
 (assert-event (equal (f7-poly-scale 0 '(1 2 3)) nil))
 (assert-event (equal (f7-poly-scale 1 '(1 2 0 0)) '(1 2)))
