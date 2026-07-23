@@ -73,6 +73,12 @@ normalized modulus is `nil`, a strict final degree bound when the normalized
 modulus is nonempty, and idempotence. The proof uses certified remainder
 canonicality and degree bounds, inactive lower-degree division, and the zero
 fallback; it adds no recursive induction and uses no evaluation equality.
+The same public facts now yield `POLY-REMAINDER-STRICT-LENGTH-BOUND` and its
+normalized-remainder corollary.  Thus `(len (normalize divisor))` is a
+certified natural-valued measure for the future call from `(a,b)` to
+`(b,poly-remainder(a,b))`.  A `nil` remainder has length zero; a divisor whose
+normalization is `nil` is deliberately outside the strict theorem and will be
+the future gcd recursion's base case.
 
 Generic polynomial congruence is now the transparent structural equality of
 canonical remainder results.  Its equivalence laws, normalization invariance,
@@ -87,7 +93,7 @@ concrete congruence API is introduced.
 
 ## Explicitly downstream
 
-This contract claims no uniqueness theorem, gcd or extended-gcd correctness,
+This contract claims no gcd function, gcd or extended-gcd correctness,
 Bézout identity, Euclidean-domain result, irreducibility result, factorization,
 extension field, rational function, or curve operation.  One-step leading-term cancellation and generic recursive quotient/remainder, reconstruction, and final strict remainder-degree bound are certified. Concrete generated instances, uniqueness, gcd, and all broader Euclidean consequences remain open.
 
