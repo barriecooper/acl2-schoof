@@ -36,9 +36,15 @@ ACL2 obligations are genuinely proved and certified.
    remainder-degree bound. Generic modular reduction and congruence are also
    certified, including compatibility with addition, negation, subtraction,
    and multiplication. The Euclidean remainder step now has a certified
-   normalized-divisor-length descent theorem. The next focused milestone is
-   defining the generic Euclidean gcd, followed by its monic normalization and
-   correctness theory. Later power uses include
+   normalized-divisor-length descent theorem. The raw `POLY-EUCLIDEAN-GCD`
+   recursion is now admitted on `(len (normalize second))`: it stops at an
+   empty normalized second argument, otherwise transitions from `(a,b)` to
+   `(b,poly-remainder(a,b))`, and has certified canonical output. It is not
+   monic, and no divisibility or algebraic gcd correctness is claimed. The next
+   focused milestone is the missing generic divisibility interface followed by
+   common-divisor invariance across one Euclidean step; monic normalization,
+   greatestness, associates/unit invariance, extended gcd, and Bézout remain
+   open. Later power uses include
    extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.
@@ -69,9 +75,13 @@ GPOLY is authoritative for new polynomial algebra. The older HS/PFIELD
 polynomial stack remains a legacy/root-count bridge unless a specific bridge
 requires it; gcd, derivative, quotient-ring, and
 extension-field work should not be independently duplicated in both stacks.
-The immediate mathematical milestone is defining generic Euclidean gcd using
-the now-certified normalized-divisor-length descent, now that generic modular congruence, multiple invariance, and
-addition/multiplication compatibility are certified. Recursive concrete F7 divmod is postponed. The first executable
+The raw generic Euclidean computation now uses the certified normalized-divisor-
+length descent and returns a canonical, potentially non-monic result. The
+immediate mathematical milestone is a generic divisibility interface and the
+two directions of common-divisor invariance across a remainder step. Algebraic
+gcd correctness, monic normalization, extended gcd, and Bézout correctness are
+still open. No concrete PFIELD/F7 gcd API was introduced, and recursive
+concrete F7 divmod remains postponed. The first executable
 Schoof path may target a named prime field; arbitrary finite-field execution is
 a later architectural phase.
 
