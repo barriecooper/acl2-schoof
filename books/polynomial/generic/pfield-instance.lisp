@@ -925,6 +925,136 @@
          (f7-coefficient-list-p (cdr xs)))))
 (defun f7-polynomial-p (xs) (f7-coefficient-list-p xs))
 
+; Field-valued public leading coefficients and the small ordered F7 field
+; package below are reusable prerequisites for future concrete division.
+(defthm f7-coefficient-list-p-of-fix-coefficients
+  (f7-coefficient-list-p (f7-fix-coefficients xs))
+  :hints (("Goal" :induct (f7-fix-coefficients xs)
+           :in-theory (enable f7-fix-coefficients f7-coefficient-list-p))))
+
+(defthm f7-coefficient-list-p-of-trim-trailing-zeros
+  (implies (f7-coefficient-list-p xs)
+           (f7-coefficient-list-p (f7-trim-trailing-zeros xs)))
+  :hints (("Goal" :induct (f7-trim-trailing-zeros xs)
+           :in-theory (enable f7-trim-trailing-zeros
+                              f7-coefficient-list-p))))
+
+(defthm f7-coefficient-list-p-of-normalize
+  (f7-coefficient-list-p (f7-normalize xs))
+  :hints (("Goal"
+           :use ((:instance f7-coefficient-list-p-of-fix-coefficients)
+                 (:instance f7-coefficient-list-p-of-trim-trailing-zeros
+                            (xs (f7-fix-coefficients xs))))
+           :in-theory (enable f7-normalize))))
+
+(defthm f7-element-p-of-last-when-coefficient-list-p
+  (implies (and (f7-coefficient-list-p p) (consp p))
+           (gfield::f7-element-p (car (last p))))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-coefficient-list-p p)
+           :in-theory (enable f7-coefficient-list-p))))
+
+(defthm f7-element-p-of-poly-leading-coefficient
+  (gfield::f7-element-p (f7-poly-leading-coefficient p))
+  :hints (("Goal"
+           :use ((:instance f7-coefficient-list-p-of-normalize (xs p))
+                 (:instance f7-element-p-of-last-when-coefficient-list-p
+                            (p (f7-normalize p))))
+           :in-theory (e/d (f7-poly-leading-coefficient
+                             gfield::f7-element-p gfield::f7-zero)
+                           (f7-normalize)))))
+
+(defthm f7-element-and-nonzero-of-poly-leading-coefficient-when-canonical
+  (implies (and (f7-canonical-polynomial-p p) (consp p))
+           (and (gfield::f7-element-p (f7-poly-leading-coefficient p))
+                (not (equal (f7-poly-leading-coefficient p)
+                            (gfield::f7-zero)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-element-p-of-poly-leading-coefficient)
+                 (:instance
+                  f7-poly-leading-coefficient-nonzero-when-canonical))
+           :in-theory (disable f7-poly-leading-coefficient f7-normalize))))
+
+(defthm f7-inv-nonzero
+  (implies (and (gfield::f7-element-p x)
+                (not (equal x (gfield::f7-zero))))
+           (not (equal (gfield::f7-inv x) (gfield::f7-zero))))
+  :hints (("Goal"
+           :in-theory
+           (e/d (gfield::f7-element-p gfield::f7-inv gfield::f7-zero
+                                     dm::primep)
+                (pfield::mul-commutative gfield::f7-mul-commutative)))))
+
+(defthm f7-element-p-of-f7-div
+  (gfield::f7-element-p (gfield::f7-div x y))
+  :hints (("Goal" :in-theory (enable gfield::f7-div))))
+
+(defthm f7-div-nonzero
+  (implies (and (gfield::f7-element-p x)
+                (gfield::f7-element-p y)
+                (not (equal x (gfield::f7-zero)))
+                (not (equal y (gfield::f7-zero))))
+           (not (equal (gfield::f7-div x y) (gfield::f7-zero))))
+  :hints (("Goal"
+           :in-theory
+           (e/d (gfield::f7-element-p gfield::f7-div gfield::f7-mul
+                                     gfield::f7-inv gfield::f7-fix
+                                     gfield::f7-zero dm::primep)
+                (pfield::mul-commutative gfield::f7-mul-commutative)))))
+
+(defthm f7-div-mul-denominator
+  (implies (and (gfield::f7-element-p x)
+                (gfield::f7-element-p y)
+                (not (equal y (gfield::f7-zero))))
+           (equal (gfield::f7-mul (gfield::f7-div x y) y) x))
+  :hints (("Goal"
+           :in-theory
+           (e/d (gfield::f7-element-p gfield::f7-div gfield::f7-mul
+                                     gfield::f7-inv gfield::f7-fix
+                                     gfield::f7-zero dm::primep)
+                (pfield::mul-commutative gfield::f7-mul-commutative)))))
+
+(defthm f7-leading-coefficient-ordered-quotient-package
+  (implies
+   (and (f7-canonical-polynomial-p remainder) (consp remainder)
+        (f7-canonical-polynomial-p divisor) (consp divisor))
+   (and
+    (gfield::f7-element-p
+     (gfield::f7-div (f7-poly-leading-coefficient remainder)
+                     (f7-poly-leading-coefficient divisor)))
+    (not (equal
+          (gfield::f7-div (f7-poly-leading-coefficient remainder)
+                          (f7-poly-leading-coefficient divisor))
+          (gfield::f7-zero)))
+    (equal
+     (gfield::f7-mul
+      (gfield::f7-div (f7-poly-leading-coefficient remainder)
+                      (f7-poly-leading-coefficient divisor))
+      (f7-poly-leading-coefficient divisor))
+     (f7-poly-leading-coefficient remainder))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance
+                  f7-element-and-nonzero-of-poly-leading-coefficient-when-canonical
+                  (p remainder))
+                 (:instance
+                  f7-element-and-nonzero-of-poly-leading-coefficient-when-canonical
+                  (p divisor))
+                 (:instance f7-element-p-of-f7-div
+                            (x (f7-poly-leading-coefficient remainder))
+                            (y (f7-poly-leading-coefficient divisor)))
+                 (:instance f7-div-nonzero
+                            (x (f7-poly-leading-coefficient remainder))
+                            (y (f7-poly-leading-coefficient divisor)))
+                 (:instance f7-div-mul-denominator
+                            (x (f7-poly-leading-coefficient remainder))
+                            (y (f7-poly-leading-coefficient divisor))))
+           :in-theory (disable f7-poly-leading-coefficient f7-normalize
+                               gfield::f7-div gfield::f7-mul
+                               pfield::mul-commutative
+                               gfield::f7-mul-commutative))))
+
 (defthm f7-coefficient-list-p-of-zero-prefix
   (implies (f7-coefficient-list-p xs)
            (f7-coefficient-list-p (f7-zero-prefix n xs)))
@@ -1393,3 +1523,12 @@
 (assert-event
  (not (equal (f7-poly-leading-coefficient '(0 0 2))
              (gfield::f7-zero))))
+
+; Focused carrier and ordered-field regressions for future concrete division.
+(assert-event (gfield::f7-element-p (f7-poly-leading-coefficient nil)))
+(assert-event (gfield::f7-element-p (f7-poly-leading-coefficient '(3))))
+(assert-event
+ (gfield::f7-element-p (f7-poly-leading-coefficient '(1 9 0))))
+(assert-event (not (equal (gfield::f7-div 6 3) (gfield::f7-zero))))
+(assert-event
+ (equal (gfield::f7-mul (gfield::f7-div 6 3) 3) 6))
