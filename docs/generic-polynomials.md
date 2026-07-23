@@ -293,9 +293,14 @@ of `second`, and transitivity transfers congruence with zero in both
 directions.  Reconstruction is unconditional, so the same proof includes a
 zero-normalized second argument; in that boundary case the remainder is
 `NORMALIZE(first)`.  It also includes zero candidate divisors and malformed or
-noncanonical inputs through total normalization semantics.  This theorem does
-not establish correctness, greatestness, or monic normalization of the
-recursive Euclidean result.
+noncanonical inputs through total normalization semantics.  Structural induction following `POLY-EUCLIDEAN-GCD` now proves the first
+algebraic property of that raw computation: `POLY-EUCLIDEAN-GCD-DIVIDES-BOTH`
+is unconditional, with one-sided `*-DIVIDES-FIRST` and `*-DIVIDES-SECOND`
+corollaries.  The base case uses normalization, self-divisibility, and
+zero-divisibility, including nonliteral normalized zero and malformed inputs.
+The recursive case uses `POLY-DIVIDES-P-EUCLIDEAN-STEP-IFF` as its complete
+algebraic bridge; it does not unfold recursive division or repeat
+reconstruction or congruence reasoning.  The raw result may still be non-monic.
 
 `GPOLY-MOD-CONGRUENCE` is proved by the one-sided and simultaneous
 `POLY-REMAINDER-OF-POLY-MUL-*` laws, `POLY-CONGRUENT-P-OF-POLY-MUL` and its
@@ -310,5 +315,9 @@ canonical remainder (and hence of its normalization) is strictly less than
 the length of the normalized divisor.  This follows only from canonicality,
 the strict degree bound, and the canonical degree/length characterization;
 it does not unfold recursive division.  A zero normalized divisor is the
-future recursion base case.  No gcd function or monic normalization is yet
-defined, and gcd correctness remains open.
+recursion base case.  Greatestness and full algebraic gcd correctness remain
+open, and monic normalization is not defined.  No quotient witnesses, extended
+gcd, Bézout coefficients, modular inverses, or concrete PFIELD/F7 APIs are
+introduced.  The next focused proof propagates an arbitrary common divisor
+through the same Euclidean induction to show that it divides the computed
+result.
