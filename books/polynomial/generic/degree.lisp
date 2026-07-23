@@ -30,10 +30,90 @@
   (implies (and (canonical-polynomial-p p) (consp p))
            (equal (poly-leading-coefficient p) (car (last p)))))
 
+(defthm field-element-p-of-poly-leading-coefficient
+  (gfield::field-element-p (poly-leading-coefficient p)))
+
 (defthm poly-leading-coefficient-nonzero-when-canonical-nonzero
   (implies (and (canonical-polynomial-p p) (consp p))
            (not (equal (poly-leading-coefficient p)
                        (gfield::field-zero)))))
+
+; The top convolution coefficient is the ordered product of the two input
+; leading coefficients.  The field no-zero-divisor law therefore makes the
+; complete raw convolution canonical, so normalization removes nothing.
+(defthm field-element-p-of-last-when-coefficient-list-p
+  (implies (and (coefficient-list-p p)
+                (consp p))
+           (gfield::field-element-p (car (last p))))
+  :rule-classes nil
+  :hints (("Goal" :induct (coefficient-list-p p))))
+
+(defthm canonical-polynomial-p-of-raw-mul-when-nonzero
+  (implies (and (canonical-polynomial-p f)
+                (canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (canonical-polynomial-p (raw-mul f g)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance raw-leading-coefficient-of-raw-mul)
+                 (:instance field-element-p-of-last-when-coefficient-list-p
+                            (p f))
+                 (:instance field-element-p-of-last-when-coefficient-list-p
+                            (p g)))
+           :in-theory (e/d (canonical-polynomial-p)
+                           (raw-mul raw-add raw-scale)))))
+
+(defthm normalize-of-raw-mul-when-canonical-nonzero
+  (implies (and (canonical-polynomial-p f)
+                (canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (equal (normalize (raw-mul f g))
+                  (raw-mul f g)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance canonical-polynomial-p-of-raw-mul-when-nonzero)
+                 (:instance normalize-when-canonical
+                            (xs (raw-mul f g)))))))
+
+(defthm poly-leading-coefficient-of-poly-mul
+  (implies (and (canonical-polynomial-p f)
+                (canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (equal (poly-leading-coefficient (poly-mul f g))
+                  (gfield::field-mul (poly-leading-coefficient f)
+                                     (poly-leading-coefficient g))))
+  :hints (("Goal"
+           :use ((:instance raw-leading-coefficient-of-raw-mul)
+                 (:instance normalize-of-raw-mul-when-canonical-nonzero))
+           :in-theory (enable poly-mul))))
+
+(defthm poly-degree-of-poly-mul
+  (implies (and (canonical-polynomial-p f)
+                (canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (equal (poly-degree (poly-mul f g))
+                  (+ (poly-degree f) (poly-degree g))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance len-of-raw-mul (x f) (y g))
+                 (:instance normalize-of-raw-mul-when-canonical-nonzero))
+           :in-theory (e/d (poly-mul)
+                           (len-of-raw-mul)))))
+
+(defthm consp-of-poly-mul-when-canonical-nonzero
+  (implies (and (canonical-polynomial-p f)
+                (canonical-polynomial-p g)
+                (consp f)
+                (consp g))
+           (consp (poly-mul f g)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance normalize-of-raw-mul-when-canonical-nonzero))
+           :in-theory (enable poly-mul))))
 
 (defthm integerp-of-poly-degree
   (integerp (poly-degree p))
@@ -51,9 +131,6 @@
   (implies (consp (normalize p))
            (natp (poly-degree p)))
   :rule-classes :type-prescription)
-
-(defthm field-element-p-of-poly-leading-coefficient
-  (gfield::field-element-p (poly-leading-coefficient p)))
 
 (defthm poly-leading-coefficient-equal-zero
   (equal (equal (poly-leading-coefficient p) (gfield::field-zero))

@@ -166,10 +166,24 @@ facts inferred from evaluation (which is not extensional over finite fields).
 The same transparent two-`DEFUN` template supplies constrained PFIELD and
 ordinary executable F7/F11 operations.
 
-This arithmetic layer deliberately contains no degree-of-multiplication,
-leading-coefficient-of-multiplication, division, gcd, derivatives, root counting, field
-enumeration, or extension-field implementation.  It provides syntax and
-semantics over an assumed field, not an implementation of every finite field.
+The certified multiplication consequences are structural.  For nonempty
+canonical factors, `RAW-LEADING-COEFFICIENT-OF-RAW-MUL` identifies the final
+raw coefficient, in input order, as the field product of the two final input
+coefficients.  Coefficient closure and raw-product nonemptiness give the list
+shape, while `EQUAL-FIELD-MUL-ZERO` and the nonzero canonical leaders show that
+the raw product also has a nonzero final coefficient.  Thus the complete raw
+convolution is canonical, normalization is its identity, the public leading
+coefficient is the ordered product of the input leading coefficients, and the
+raw length formula yields degree addition.  In particular, a product of two
+nonempty canonical polynomials is nonempty: this is the polynomial
+no-zero-divisor consequence.  No commutativity or evaluation extensionality is
+used in this leading-term argument.
+
+This arithmetic layer still contains no division, remainder, gcd,
+irreducibility, extension-field reduction, Euclidean theory, derivatives, root
+counting, field enumeration, or extension-field implementation.  It provides
+syntax and semantics over an assumed field, not an implementation of every
+finite field.
 
 ## HS addition proof review and future bridge
 
@@ -193,7 +207,6 @@ after proving that fixed HS coefficients make GPOLY's remainder fixing an
 identity and that both normalizers coincide.  This work intentionally neither
 changes nor removes any HS theorem.
 
-The immediate next milestone is leading-term/no-zero-divisor reasoning and the
-degree-of-multiplication theorem under nonzero hypotheses.  Polynomial
-division, monic normalization, and extension-field reduction remain later
-work.
+The immediate next milestone is polynomial division and Euclidean theory.
+Division, remainder, gcd, irreducibility, monic normalization, and
+extension-field reduction remain later work.
