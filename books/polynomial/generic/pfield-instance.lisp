@@ -994,6 +994,97 @@
                             (xs (f7-fix-coefficients xs))))
            :in-theory (enable f7-normalize))))
 
+; Concrete list-shape facts for the raw F7 convolution.  These proofs follow
+; the generic structural inductions and deliberately do not use field algebra.
+(defthm f7-element-p-of-f7-add-for-raw-shape
+  (gfield::f7-element-p (gfield::f7-add x y))
+  :hints (("Goal"
+           :use ((:instance pfield::fep-of-add
+                            (x (gfield::f7-fix x))
+                            (y (gfield::f7-fix y))
+                            (p 7)))
+           :in-theory (e/d (gfield::f7-element-p gfield::f7-add)
+                           (gfield::f7-fix pfield::add)))))
+
+(defthm f7-true-listp-of-raw-scale
+  (true-listp (f7-raw-scale a x))
+  :hints (("Goal" :induct (f7-raw-scale a x)
+           :in-theory (enable f7-raw-scale))))
+
+(defthm f7-coefficient-list-p-of-raw-scale
+  (f7-coefficient-list-p (f7-raw-scale a x))
+  :hints (("Goal" :induct (f7-raw-scale a x)
+           :in-theory (e/d (f7-raw-scale f7-coefficient-list-p
+                                         gfield::f7-element-p-of-f7-mul)
+                           (gfield::f7-mul pfield::mul-commutative
+                            gfield::f7-mul-commutative)))))
+
+(defthm f7-consp-of-raw-scale
+  (equal (consp (f7-raw-scale a x)) (consp x))
+  :hints (("Goal" :in-theory (enable f7-raw-scale))))
+
+(defthm f7-len-of-raw-scale
+  (equal (len (f7-raw-scale a x)) (len x))
+  :hints (("Goal" :induct (f7-raw-scale a x)
+           :in-theory (enable f7-raw-scale))))
+
+(defthm f7-true-listp-of-raw-add
+  (true-listp (f7-raw-add x y))
+  :hints (("Goal" :induct (f7-raw-add x y)
+           :in-theory (enable f7-raw-add f7-fix-coefficients))))
+
+(defthm f7-coefficient-list-p-of-raw-add
+  (f7-coefficient-list-p (f7-raw-add x y))
+  :hints (("Goal" :induct (f7-raw-add x y)
+           :in-theory (e/d (f7-raw-add f7-coefficient-list-p
+                                      f7-element-p-of-f7-add-for-raw-shape)
+                           (gfield::f7-add pfield::mul-commutative
+                            gfield::f7-mul-commutative)))))
+
+(defthm f7-len-of-raw-add
+  (equal (len (f7-raw-add x y))
+         (max (len x) (len y)))
+  :hints (("Goal" :induct (f7-raw-add x y)
+           :in-theory (enable f7-raw-add f7-fix-coefficients))))
+
+(defthm f7-consp-of-raw-add
+  (equal (consp (f7-raw-add x y))
+         (or (consp x) (consp y)))
+  :hints (("Goal" :induct (f7-raw-add x y)
+           :in-theory (e/d (f7-raw-add f7-fix-coefficients)
+                           (gfield::f7-add gfield::f7-fix)))))
+
+(defthm f7-true-listp-of-raw-mul
+  (true-listp (f7-raw-mul f g))
+  :hints (("Goal" :induct (f7-raw-mul f g)
+           :in-theory (enable f7-raw-mul))))
+
+(defthm f7-coefficient-list-p-of-raw-mul
+  (f7-coefficient-list-p (f7-raw-mul f g))
+  :hints (("Goal" :induct (f7-raw-mul f g)
+           :in-theory (enable f7-raw-mul))))
+
+(defthm f7-consp-of-raw-mul
+  (equal (consp (f7-raw-mul f g))
+         (and (consp f) (consp g)))
+  :hints (("Goal"
+           :in-theory (e/d (f7-raw-mul)
+                           (f7-raw-add f7-raw-scale
+                            gfield::f7-add gfield::f7-fix gfield::f7-mul
+                            pfield::mul-commutative
+                            gfield::f7-mul-commutative)))))
+
+(defthm f7-len-of-raw-mul
+  (implies (and (consp f)
+                (consp g)
+                (true-listp f)
+                (true-listp g))
+           (equal (len (f7-raw-mul f g))
+                  (+ -1 (len f) (len g))))
+  :rule-classes nil
+  :hints (("Goal" :induct (f7-raw-mul f g)
+           :in-theory (enable f7-raw-mul))))
+
 (defthm f7-element-p-of-last-when-coefficient-list-p
   (implies (and (f7-coefficient-list-p p) (consp p))
            (gfield::f7-element-p (car (last p))))
@@ -1638,6 +1729,15 @@
 (assert-event (equal (f7-poly-mul '(7 14) '(1 2)) nil))
 (assert-event (equal (f7-poly-mul '(1 2 0 0) '(3 4 0)) '(3 3 1)))
 (assert-event (equal (f7-poly-mul '(1 . bad-tail) '(3 4)) '(3 4)))
+
+; Focused raw-convolution shape regressions.
+(assert-event (equal (len (f7-raw-scale 3 '(1 2 3))) 3))
+(assert-event (equal (len (f7-raw-mul '(1 2) '(3 4))) 3))
+(assert-event (equal (len (f7-raw-mul '(2) '(1 2 3))) 3))
+(assert-event (equal (f7-raw-mul nil '(1 2)) nil))
+(assert-event (equal (f7-raw-mul '(1 2) nil) nil))
+(assert-event (f7-coefficient-list-p (f7-raw-mul '(1 2) '(3 4))))
+
 (assert-event
  (equal (f7-eval (f7-poly-mul '(1 2) '(3 4)) 2)
         (gfield::f7-mul (f7-eval '(1 2) 2) (f7-eval '(3 4) 2))))
