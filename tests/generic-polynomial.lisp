@@ -44,7 +44,25 @@
 (assert-event (equal (f7-poly-scale 1 '(1 2 0 0)) '(1 2)))
 (assert-event (equal (f7-poly-scale 2 '(1 0 4)) '(2 0 1)))
 (assert-event (equal (f7-poly-scale 2 '(1 . bad-tail)) '(2)))
+(assert-event (f7-canonical-polynomial-p
+               (f7-raw-mul '(1 2) '(3 4))))
+(assert-event (equal (f7-normalize (f7-raw-mul '(1 2) '(3 4)))
+                     (f7-raw-mul '(1 2) '(3 4))))
 (assert-event (equal (f7-poly-mul '(1 2) '(3 4)) '(3 3 1)))
+(assert-event (consp (f7-poly-mul '(1 2) '(3 4))))
+(assert-event (equal (f7-poly-degree (f7-poly-mul '(1 2) '(3 4))) 2))
+(assert-event
+ (equal (f7-poly-leading-coefficient (f7-poly-mul '(1 2) '(3 4))) 1))
+(assert-event
+ (equal (f7-poly-leading-coefficient (f7-poly-mul '(1 2) '(3 4)))
+        (gfield::f7-mul 2 4)))
+(assert-event (f7-canonical-polynomial-p (f7-raw-mul '(2) '(4))))
+(assert-event (equal (f7-normalize (f7-raw-mul '(2) '(4))) '(1)))
+(assert-event (equal (f7-poly-mul '(2) '(4)) '(1)))
+(assert-event (equal (f7-poly-degree (f7-poly-mul '(2) '(4))) 0))
+(assert-event
+ (equal (f7-poly-leading-coefficient (f7-poly-mul '(2) '(4)))
+        (gfield::f7-mul 2 4)))
 (assert-event (equal (f7-poly-mul nil '(1 2)) nil))
 (assert-event (equal (f7-poly-mul '(1 2) nil) nil))
 (assert-event (equal (f7-poly-mul '(1) '(1 2)) '(1 2)))
