@@ -637,7 +637,158 @@
                              (poly-add left right-b)
                              modulus))
   :hints (("Goal" :use ((:instance poly-congruent-p-of-poly-add
+                     (left-a left) (left-b left))))))
+
+; Multiplying the certified reconstruction of LEFT by RIGHT leaves the
+; remainder product in the same coset.  This expansionary algebraic shape is
+; kept out of rewriting and used only by the multiplication reduction laws.
+(defthm normalize-of-poly-mul-reconstruction-left
+  (equal
+   (normalize (poly-mul left right))
+   (poly-add
+    (poly-mul (poly-remainder left modulus) right)
+    (poly-mul
+     (poly-mul (mv-nth 0 (poly-divmod left modulus)) right)
+     (normalize modulus))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance poly-divmod-reconstruction (f left) (g modulus))
+          (:instance poly-remainder-is-divmod-remainder
+                     (dividend left) (modulus modulus))
+          (:instance poly-mul-right-distributive
+                     (x (poly-mul (mv-nth 0 (poly-divmod left modulus))
+                                  (normalize modulus)))
+                     (y (poly-remainder left modulus))
+                     (z right))
+          (:instance poly-mul-associative
+                     (x (mv-nth 0 (poly-divmod left modulus)))
+                     (y (normalize modulus)) (z right))
+          (:instance poly-mul-associative
+                     (x (mv-nth 0 (poly-divmod left modulus)))
+                     (y right) (z (normalize modulus)))
+          (:instance poly-mul-commutative
+                     (x (normalize modulus)) (y right))
+          (:instance poly-add-commutative
+                     (x (poly-mul
+                         (mv-nth 0 (poly-divmod left modulus))
+                         (poly-mul (normalize modulus) right)))
+                     (y (poly-mul (poly-remainder left modulus) right)))
+          (:instance poly-mul-normalize-left (x left) (y right))
+          (:instance normalize-when-canonical
+                     (xs (poly-mul left right))))
+    :in-theory
+    (disable poly-divmod poly-remainder normalize poly-add poly-mul
+             canonical-polynomial-p))))
+
+(defthm poly-remainder-of-poly-mul-remainder-left
+  (equal
+   (poly-remainder (poly-mul left right) modulus)
+   (poly-remainder
+    (poly-mul (poly-remainder left modulus) right) modulus))
+  :rule-classes nil
+  :hints
+  (("Goal" :cases ((consp (normalize modulus))))
+   ("Subgoal 1"
+    :use ((:instance normalize-of-poly-mul-reconstruction-left)
+          (:instance poly-remainder-of-normalize-dividend
+                     (dividend (poly-mul left right)))
+          (:instance poly-remainder-of-normalize-dividend
+                     (dividend
+                      (poly-add
+                       (poly-mul (poly-remainder left modulus) right)
+                       (poly-mul
+                        (poly-mul
+                         (mv-nth 0 (poly-divmod left modulus)) right)
+                        (normalize modulus)))))
+          (:instance poly-remainder-of-poly-add-modulus-multiple
+                     (dividend
+                      (poly-mul (poly-remainder left modulus) right))
+                     (multiplier
+                      (poly-mul (mv-nth 0 (poly-divmod left modulus))
+                                right))))
+    :in-theory (disable poly-divmod poly-remainder normalize poly-add poly-mul))
+   ("Subgoal 2"
+    :use ((:instance poly-remainder-zero-normalized-modulus
+                     (dividend (poly-mul left right)))
+          (:instance poly-remainder-zero-normalized-modulus
+                     (dividend
+                      (poly-mul (poly-remainder left modulus) right)))
+          (:instance poly-remainder-zero-normalized-modulus
+                     (dividend left))
+          (:instance poly-mul-normalize-left (x left) (y right)))
+    :in-theory (disable poly-remainder normalize poly-mul))))
+
+(defthm poly-remainder-of-poly-mul-remainder-right
+  (equal
+   (poly-remainder (poly-mul left right) modulus)
+   (poly-remainder
+    (poly-mul left (poly-remainder right modulus)) modulus))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance poly-remainder-of-poly-mul-remainder-left
+                            (left right) (right left))
+                 (:instance poly-mul-commutative (x left) (y right))
+                 (:instance poly-mul-commutative
+                            (x (poly-remainder right modulus)) (y left)))
+           :in-theory (disable poly-remainder poly-mul))))
+
+(defthm poly-remainder-of-poly-mul-remainders
+  (equal
+   (poly-remainder (poly-mul left right) modulus)
+   (poly-remainder
+    (poly-mul (poly-remainder left modulus)
+              (poly-remainder right modulus))
+    modulus))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance poly-remainder-of-poly-mul-remainder-left)
+                 (:instance poly-remainder-of-poly-mul-remainder-right
+                            (left (poly-remainder left modulus))))
+           :in-theory (disable poly-remainder poly-mul))))
+
+(defthm poly-congruent-p-of-poly-mul
+  (implies
+   (and (poly-congruent-p left-a left-b modulus)
+        (poly-congruent-p right-a right-b modulus))
+   (poly-congruent-p (poly-mul left-a right-a)
+                     (poly-mul left-b right-b)
+                     modulus))
+  :hints
+  (("Goal"
+    :use ((:instance poly-congruent-p-iff-equal-remainders
+                     (left left-a) (right left-b))
+          (:instance poly-congruent-p-iff-equal-remainders
+                     (left right-a) (right right-b))
+          (:instance poly-remainder-of-poly-mul-remainders
+                     (left left-a) (right right-a))
+          (:instance poly-remainder-of-poly-mul-remainders
+                     (left left-b) (right right-b)))
+    :in-theory (enable poly-congruent-p))))
+
+(defthm poly-congruent-p-of-poly-mul-same-right
+  (implies (poly-congruent-p left-a left-b modulus)
+           (poly-congruent-p (poly-mul left-a right)
+                             (poly-mul left-b right) modulus))
+  :hints (("Goal" :use ((:instance poly-congruent-p-of-poly-mul
+                                   (right-a right) (right-b right))))))
+
+(defthm poly-congruent-p-of-poly-mul-same-left
+  (implies (poly-congruent-p right-a right-b modulus)
+           (poly-congruent-p (poly-mul left right-a)
+                             (poly-mul left right-b) modulus))
+  :hints (("Goal" :use ((:instance poly-congruent-p-of-poly-mul
                                    (left-a left) (left-b left))))))
+
+(defthm poly-mul-poly-congruent-p-with-remainders
+  (poly-congruent-p
+   (poly-mul left right)
+   (poly-mul (poly-remainder left modulus)
+             (poly-remainder right modulus))
+   modulus)
+  :hints (("Goal"
+           :use ((:instance poly-remainder-of-poly-mul-remainders))
+           :in-theory (enable poly-congruent-p))))
 
 (defthm poly-neg-of-poly-add
   (implies (and (polynomial-p x) (polynomial-p y))
@@ -991,6 +1142,79 @@
 (defthm poly-congruent-regression-add-negative-bounded
  (not (poly-congruent-p (poly-add nil (polynomial-one))
                         (poly-add nil nil)
+                        (monomial (gfield::field-one) 1))))
+(defthm poly-congruent-regression-mul-two-pairs
+ (implies
+  (and (poly-congruent-p left-a left-b modulus)
+       (poly-congruent-p right-a right-b modulus))
+  (poly-congruent-p (poly-mul left-a right-a)
+                    (poly-mul left-b right-b) modulus))
+ :hints (("Goal" :by poly-congruent-p-of-poly-mul)))
+(defthm poly-congruent-regression-mul-same-right
+ (implies (poly-congruent-p left-a left-b modulus)
+          (poly-congruent-p (poly-mul left-a right)
+                            (poly-mul left-b right) modulus))
+ :hints (("Goal" :by poly-congruent-p-of-poly-mul-same-right)))
+(defthm poly-congruent-regression-mul-same-left
+ (implies (poly-congruent-p right-a right-b modulus)
+          (poly-congruent-p (poly-mul left right-a)
+                            (poly-mul left right-b) modulus))
+ :hints (("Goal" :by poly-congruent-p-of-poly-mul-same-left)))
+(defthm poly-congruent-regression-mul-remainders
+ (poly-congruent-p
+  (poly-mul left right)
+  (poly-mul (poly-remainder left modulus)
+            (poly-remainder right modulus)) modulus)
+ :hints (("Goal" :by poly-mul-poly-congruent-p-with-remainders)))
+(defthm poly-congruent-regression-mul-modulus-multiple
+ (poly-congruent-p
+  (poly-mul
+   (poly-add (polynomial-one)
+             (poly-mul multiplier (normalize modulus)))
+   right)
+  (poly-mul (polynomial-one) right) modulus)
+ :hints (("Goal"
+          :use ((:instance poly-congruent-p-of-poly-mul-same-right
+                           (left-a
+                            (poly-add
+                             (polynomial-one)
+                             (poly-mul multiplier (normalize modulus))))
+                           (left-b (polynomial-one)))
+                (:instance poly-add-modulus-multiple-poly-congruent-p
+                           (dividend (polynomial-one))))
+          :in-theory (disable poly-mul poly-add poly-congruent-p))))
+(defthm poly-congruent-regression-mul-trailing-zeros
+ (poly-congruent-p
+  (poly-mul (list (gfield::field-one) (gfield::field-zero)) right)
+  (poly-mul (polynomial-one) right) modulus))
+(defthm poly-congruent-regression-mul-noncanonical-coefficient
+ (poly-congruent-p
+  (poly-mul (list coefficient) right)
+  (poly-mul (normalize (list coefficient)) right) modulus))
+(defthm poly-congruent-regression-mul-zero
+ (and (poly-congruent-p (poly-mul left nil) nil modulus)
+      (poly-congruent-p (poly-mul nil right) nil modulus)))
+(defthm poly-congruent-regression-mul-one
+ (poly-congruent-p (poly-mul left (polynomial-one)) left modulus))
+(defthm poly-congruent-regression-mul-malformed-atoms
+ (poly-congruent-p (poly-mul 'bad-left 'bad-right) nil modulus))
+(defthm poly-congruent-regression-zero-modulus-mul
+ (implies (and (equal (normalize left-a) (normalize left-b))
+               (equal (normalize right-a) (normalize right-b)))
+          (poly-congruent-p (poly-mul left-a right-a)
+                            (poly-mul left-b right-b) nil))
+ :hints (("Goal"
+          :use ((:instance poly-congruent-p-of-poly-mul (modulus nil)))
+          :in-theory (disable poly-mul poly-congruent-p))))
+(defthm poly-congruent-regression-mul-negative-bounded
+ (not (poly-congruent-p (poly-mul (polynomial-one) (polynomial-one))
+                        (poly-mul nil (polynomial-one))
+                        (monomial (gfield::field-one) 1))))
+(defthm poly-congruent-regression-mul-no-cancellation
+ (and (not (poly-congruent-p nil (polynomial-one)
+                             (monomial (gfield::field-one) 1)))
+      (poly-congruent-p (poly-mul nil nil)
+                        (poly-mul (polynomial-one) nil)
                         (monomial (gfield::field-one) 1))))
 (defthm poly-remainder-regression-exact-divisibility
  (equal (poly-remainder (monomial (gfield::field-one) 2)
