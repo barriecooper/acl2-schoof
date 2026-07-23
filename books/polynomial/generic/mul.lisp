@@ -267,7 +267,7 @@
                 (consp x))
            (equal (raw-add x (list (gfield::field-zero))) x))
   :rule-classes nil
-  :hints (("Goal" :induct x
+  :hints (("Goal" :induct (coefficient-list-p x)
            :in-theory (enable raw-add))))
 
 (defthm raw-mul-singleton-left
@@ -281,9 +281,7 @@
            :use ((:instance raw-add-zero-singleton-right
                             (x (raw-scale a g))))
            :in-theory (e/d (raw-mul)
-                           (raw-add-zero-singleton-right
-                            raw-add-commutative
-                            raw-mul-commutative)))))
+                           (raw-add-commutative)))))
 
 (defthm len-raw-scale-less-than-zero-prefix-raw-mul
   (implies (and (true-listp f)
@@ -309,21 +307,16 @@
   :rule-classes nil
   :hints (("Goal" :induct (raw-mul f g)
            :in-theory (disable gfield::field-mul-commutative
-                               raw-add-commutative
-                               raw-mul-commutative))
+                               raw-add-commutative))
           ("Subgoal *1/2"
-           :cases ((consp (cdr f))))
-          ("Subgoal *1/2.2"
            :use ((:instance raw-mul-singleton-left
                             (a (car f)) (g g))
                  (:instance last-of-raw-scale
                             (a (car f)) (x g)))
            :in-theory (disable gfield::field-mul-commutative
                                raw-add-commutative
-                               raw-mul-commutative
-                               raw-mul-singleton-left
-                               last-of-raw-scale))
-          ("Subgoal *1/2.1"
+                               raw-mul))
+          ("Subgoal *1/3"
            :use ((:instance last-of-raw-add-when-right-longer
                             (x (raw-scale (car f) g))
                             (y (cons (gfield::field-zero)
@@ -339,11 +332,7 @@
                             (a (car f)) (f (cdr f)) (g g)))
            :in-theory (disable gfield::field-mul-commutative
                                raw-add-commutative
-                               raw-mul-commutative
-                               raw-add raw-scale raw-mul
-                               last-of-raw-add-when-right-longer
-                               last-of-zero-prefix
-                               len-raw-scale-less-than-zero-prefix-raw-mul))))
+                               raw-add raw-scale raw-mul))))
 
 (defthm len-raw-add-lower-bound-left
   (<= (len x) (len (raw-add x y)))
