@@ -325,14 +325,29 @@ The theorem inherits total normalization semantics, including normalized zero,
 atoms, dotted lists, trailing zeroes, and noncanonical coefficients. Its
 nonzero hypothesis is necessary: zero scaling sends a nonzero polynomial to
 `nil`, which the zero polynomial divides, although zero does not divide the
-original polynomial. Raw Euclidean-gcd correctness and raw representatives,
-including negative units, are unchanged. `GPOLY-GCD`,
-`GPOLY-GCD-COMPUTATION`, and `GPOLY-MONIC-NORMALIZATION` remain Proved, and no
-monic gcd wrapper is introduced. Divisor-scaling invariance and the complete
-associate/two-way divisibility theory remain open. The next focused PR should
-prove that `POLY-SCALE(a,d)` divides `p` exactly when `d` divides `p`, for a
-fixed nonzero `a`; a later integration PR can connect both scaling laws to
-monic normalization.
+original polynomial. Divisor scaling now has the certified public law
+`POLY-DIVIDES-P-OF-POLY-SCALE-DIVISOR`: under the same fixed-nonzero scalar
+hypothesis, `POLY-SCALE(scalar,divisor)` divides a dividend exactly when the
+unscaled divisor does. The preferred proof is entirely above division internals.
+Reflexivity and multiplication closure show that the divisor divides its
+scaling. Reflexivity plus dividend-scaling invariance show that the scaling
+divides the original divisor, so inverse reasoning remains encapsulated in the
+previous public theorem. `POLY-DIVIDES-P-TRANSITIVE`, proved from the public
+Euclidean-remainder equivalence, composes these two directions. No coefficient
+induction or quotient-witness API is introduced.
+
+The divisor theorem inherits total normalization semantics for normalized zero,
+atoms, dotted lists, trailing zeroes, and noncanonical coefficients. Its
+nonzero hypothesis is necessary: zero scaling changes polynomial one into
+`nil`, and zero does not divide polynomial one although one divides itself.
+Raw Euclidean-gcd correctness and exact raw representatives, including the
+negative-unit representative, are unchanged. `GPOLY-GCD`,
+`GPOLY-GCD-COMPUTATION`, `GPOLY-MONIC-NORMALIZATION`, and both scaling
+obligations remain Proved, and no monic gcd wrapper is introduced. General associate theory
+remains open. The next focused PR should integrate monic normalization with
+divisibility by composing both scaling laws with the exact zero/nonzero behavior
+of `POLY-MONIC-NORMALIZE`; it should establish the precise two-sided
+relationships before any monic gcd wrapper.
 
 `POLY-DIVIDES-P-EUCLIDEAN-STEP-IFF` proves unconditionally that a candidate
 divides both `first` and `second` exactly when it divides both `second` and

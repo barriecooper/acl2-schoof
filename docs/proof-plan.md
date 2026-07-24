@@ -59,10 +59,13 @@ ACL2 obligations are genuinely proved and certified.
    using multiplication closure, constant multiplication, nested scaling, and
    the field inverse law. This theorem is total over malformed and
    noncanonical representations; its nonzero hypothesis is necessary. The
-   next focused PR is divisor-scaling invariance. After both scaling directions
-   are certified, a separate integration PR may establish the precise
-   divisibility/associate interface for monic normalization; only then should
-   a monic gcd wrapper follow. Uniqueness,
+   divisor-scaling invariance is now certified by mutual divisibility and
+   transitivity, with inverse reasoning inherited from dividend scaling. The
+   next focused PR is monic-normalization/divisibility integration: it should
+   establish the precise two-sided equivalences using both scaling laws and the
+   exact zero/nonzero behavior of `POLY-MONIC-NORMALIZE`; only then should a
+   monic gcd wrapper follow. General associate theory remains separate.
+   Uniqueness,
    extended gcd, and Bézout remain open. Later power uses include
    extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
