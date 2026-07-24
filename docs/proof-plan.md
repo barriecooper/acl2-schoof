@@ -75,13 +75,19 @@ ACL2 obligations are genuinely proved and certified.
    nonrecursive `POLY-MONIC-EXTENDED-EUCLIDEAN-GCD` scales both raw Bézout
    coefficients by the inverse leading coefficient, agrees exactly with
    `POLY-MONIC-EUCLIDEAN-GCD`, and unconditionally reconstructs that monic gcd.
+   The first monic Bézout coefficient is now connected to public reduction:
+   under gcd one, its product with the first input has the same remainder as
+   `POLYNOMIAL-ONE` modulo the second input, and this specializes to literal
+   one for a nonempty normalized second input of positive degree. Constant
+   moduli deliberately retain their zero-remainder semantics.
    The next focused PR should follow the earliest finite-field polynomial-tower
    dependency; select normalized-monic-gcd uniqueness only if a downstream
    algorithm requires equality rather than this divisibility interface, and
    inventory its degree, mutual-divisibility, monic-predicate, and associate
    prerequisites first.
-   Uniqueness, modular inversion, quotient fields, concrete XGCD instances,
-   and extension fields remain open. Later power uses include
+   Uniqueness, the executable modular-inverse wrapper, irreducibility implying
+   monic gcd one, quotient-ring operations and laws, quotient fields, concrete
+   polynomial-field instances, and extension fields remain open. Later power uses include
    extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.

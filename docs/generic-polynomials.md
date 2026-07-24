@@ -484,3 +484,22 @@ scale conventions make a zero raw gcd return exactly `(mv nil nil nil)`.
 This layer adds no recursion or division.  Modular inversion, reduction modulo
 a defining polynomial, quotient fields, concrete generated instances,
 extension fields, uniqueness, and general associate/unit theory remain open.
+
+## Monic XGCD reduction bridge (certified)
+
+`generic/monic-xgcd-reduction.lisp` connects the first coefficient returned by
+`POLY-MONIC-EXTENDED-EUCLIDEAN-GCD` to the existing public
+`POLY-REMAINDER`.  When the monic gcd is `POLYNOMIAL-ONE`, reducing that
+coefficient times the first input modulo the second input returns exactly
+`POLY-REMAINDER(POLYNOMIAL-ONE, second)`.  The theorem is unconditional beyond
+the gcd premise and therefore retains the library's total semantics for zero,
+malformed, noncanonical, and constant moduli.
+
+The result is literally `POLYNOMIAL-ONE` when `(normalize second)` is nonempty
+and has degree greater than zero.  This qualification is essential: reduction
+modulo normalized zero returns the normalized dividend, while reduction modulo
+every nonzero constant is `nil` (in particular, one modulo
+`POLYNOMIAL-ONE` is `nil`).  The division book's new total
+`POLY-REMAINDER-OF-POLY-ADD-DIVISOR-MULTIPLE` packages remainder invariance
+without a nonzero-modulus side condition.  No modular-inverse function,
+irreducibility notion, quotient operation, or field construction is added.
