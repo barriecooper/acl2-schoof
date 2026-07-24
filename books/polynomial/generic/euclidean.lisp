@@ -36,6 +36,44 @@
          (poly-divides-p divisor dividend))
   :hints (("Goal" :in-theory (enable poly-divides-p))))
 
+; The finite, executable half of the raw gcd specification.  Greatestness is
+; stated separately as a theorem with an arbitrary common divisor.
+(defun poly-common-divisor-p (candidate first second)
+  (declare (xargs :guard t))
+  (and (poly-divides-p candidate first)
+       (poly-divides-p candidate second)))
+
+(defthm booleanp-of-poly-common-divisor-p
+  (booleanp (poly-common-divisor-p candidate first second))
+  :hints (("Goal" :in-theory (enable poly-common-divisor-p))))
+
+(defthm poly-common-divisor-p-implies-divides-first
+  (implies (poly-common-divisor-p candidate first second)
+           (poly-divides-p candidate first))
+  :rule-classes :forward-chaining
+  :hints (("Goal" :in-theory (enable poly-common-divisor-p))))
+
+(defthm poly-common-divisor-p-implies-divides-second
+  (implies (poly-common-divisor-p candidate first second)
+           (poly-divides-p candidate second))
+  :rule-classes :forward-chaining
+  :hints (("Goal" :in-theory (enable poly-common-divisor-p))))
+
+(defthm poly-common-divisor-p-of-normalize-candidate
+  (equal (poly-common-divisor-p (normalize candidate) first second)
+         (poly-common-divisor-p candidate first second))
+  :hints (("Goal" :in-theory (enable poly-common-divisor-p))))
+
+(defthm poly-common-divisor-p-of-normalize-first
+  (equal (poly-common-divisor-p candidate (normalize first) second)
+         (poly-common-divisor-p candidate first second))
+  :hints (("Goal" :in-theory (enable poly-common-divisor-p))))
+
+(defthm poly-common-divisor-p-of-normalize-second
+  (equal (poly-common-divisor-p candidate first (normalize second))
+         (poly-common-divisor-p candidate first second))
+  :hints (("Goal" :in-theory (enable poly-common-divisor-p))))
+
 (defthm poly-divides-p-zero
   (poly-divides-p divisor nil)
   :hints (("Goal" :in-theory (enable poly-divides-p poly-remainder))))
@@ -462,6 +500,170 @@
           (:instance poly-divides-p-euclidean-step-iff))
     :in-theory (disable poly-euclidean-gcd poly-remainder poly-divides-p
                         normalize poly-divides-p-euclidean-step-iff))))
+
+; Public raw-gcd correctness interface.  These are packaging results only:
+; each direction is an explicit instance of its independently certified
+; mathematical theorem, with the recursive computation and division disabled.
+(defthm poly-common-divisor-p-of-euclidean-gcd
+  (poly-common-divisor-p
+   (poly-euclidean-gcd first second) first second)
+  :hints
+  (("Goal"
+    :use ((:instance poly-euclidean-gcd-divides-both))
+    :in-theory (e/d (poly-common-divisor-p)
+                    (poly-euclidean-gcd poly-divides-p
+                     poly-euclidean-gcd-divides-both)))))
+
+(defthm poly-common-divisor-p-greatestness
+  (implies
+   (poly-common-divisor-p divisor first second)
+   (poly-divides-p divisor (poly-euclidean-gcd first second)))
+  :hints
+  (("Goal"
+    :use ((:instance poly-common-divisor-divides-euclidean-gcd))
+    :in-theory (e/d (poly-common-divisor-p)
+                    (poly-euclidean-gcd poly-divides-p
+                     poly-common-divisor-divides-euclidean-gcd)))))
+
+(defthm poly-euclidean-gcd-raw-correct
+  (and
+   (poly-common-divisor-p
+    (poly-euclidean-gcd first second) first second)
+   (implies
+    (poly-common-divisor-p divisor first second)
+    (poly-divides-p divisor (poly-euclidean-gcd first second))))
+  :hints
+  (("Goal"
+    :use ((:instance poly-common-divisor-p-of-euclidean-gcd)
+          (:instance poly-common-divisor-p-greatestness))
+    :in-theory (disable poly-common-divisor-p poly-euclidean-gcd
+                        poly-divides-p
+                        poly-common-divisor-p-of-euclidean-gcd
+                        poly-common-divisor-p-greatestness))))
+
+; Exact structural regressions for the public specification.  They retain
+; normalization boundaries and raw, possibly non-monic, Euclidean outputs.
+(defthm poly-common-divisor-p-regression-boundaries
+  (and
+   (equal (poly-common-divisor-p nil nil nil) t)
+   (equal (poly-common-divisor-p
+           nil (list (gfield::field-zero))
+           (list (gfield::field-zero) (gfield::field-zero)))
+          t)
+   (equal (poly-common-divisor-p nil nil (polynomial-one)) nil)
+   (equal (poly-common-divisor-p
+           (polynomial-one) 'malformed-first
+           (list 'malformed-coefficient (gfield::field-zero)))
+          t)
+   (equal (poly-common-divisor-p
+           (polynomial-one)
+           (list (gfield::field-one) (gfield::field-zero))
+           (list (gfield::field-one) (gfield::field-one)
+                 (gfield::field-zero)))
+          t))
+  :hints (("Goal" :in-theory
+           (disable poly-divides-p-euclidean-remainder-iff))))
+
+(defthm poly-common-divisor-p-regression-visible-factor
+  (let ((factor (poly-add (monomial (gfield::field-one) 1)
+                          (polynomial-one))))
+    (and
+     (equal (poly-common-divisor-p
+             factor factor (poly-mul factor factor))
+            t)
+     (equal (poly-common-divisor-p
+             (list (gfield::field-neg (gfield::field-one)))
+             (list (gfield::field-neg (gfield::field-one))) nil)
+            t)))
+  :hints (("Goal" :in-theory
+           (disable poly-divides-p-euclidean-remainder-iff))))
+
+(defthm poly-common-divisor-p-regression-normalization
+  (equal
+   (poly-common-divisor-p
+    (normalize (list (gfield::field-one) (gfield::field-zero)))
+    (normalize (list (gfield::field-one) (gfield::field-zero)))
+    (normalize (list (gfield::field-one) (gfield::field-one)
+                     (gfield::field-zero))))
+   (poly-common-divisor-p
+    (list (gfield::field-one) (gfield::field-zero))
+    (list (gfield::field-one) (gfield::field-zero))
+    (list (gfield::field-one) (gfield::field-one)
+          (gfield::field-zero))))
+  :hints
+  (("Goal"
+    :use
+    ((:instance poly-common-divisor-p-of-normalize-candidate
+                (candidate
+                 (list (gfield::field-one) (gfield::field-zero)))
+                (first
+                 (normalize
+                  (list (gfield::field-one) (gfield::field-zero))))
+                (second
+                 (normalize
+                  (list (gfield::field-one) (gfield::field-one)
+                        (gfield::field-zero)))))
+     (:instance poly-common-divisor-p-of-normalize-first
+                (candidate
+                 (list (gfield::field-one) (gfield::field-zero)))
+                (first
+                 (list (gfield::field-one) (gfield::field-zero)))
+                (second
+                 (normalize
+                  (list (gfield::field-one) (gfield::field-one)
+                        (gfield::field-zero)))))
+     (:instance poly-common-divisor-p-of-normalize-second
+                (candidate
+                 (list (gfield::field-one) (gfield::field-zero)))
+                (first
+                 (list (gfield::field-one) (gfield::field-zero)))
+                (second
+                 (list (gfield::field-one) (gfield::field-one)
+                       (gfield::field-zero)))))
+    :in-theory
+    (disable normalize poly-common-divisor-p poly-divides-p
+             poly-common-divisor-p-of-normalize-candidate
+             poly-common-divisor-p-of-normalize-first
+             poly-common-divisor-p-of-normalize-second))))
+
+(defthm poly-common-divisor-p-regression-raw-gcd
+  (let ((negative-one (list (gfield::field-neg (gfield::field-one)))))
+    (and
+     (equal (poly-common-divisor-p
+             (poly-euclidean-gcd nil negative-one) nil negative-one)
+            t)
+     (equal (poly-divides-p
+             (polynomial-one) (poly-euclidean-gcd nil negative-one))
+            t)
+     (equal
+      (poly-common-divisor-p
+       (poly-euclidean-gcd
+        (poly-add (monomial (gfield::field-one) 1) (polynomial-one))
+        (monomial (gfield::field-one) 1))
+       (poly-add (monomial (gfield::field-one) 1) (polynomial-one))
+       (monomial (gfield::field-one) 1))
+      t)))
+  :hints
+  (("Goal"
+    :use
+    ((:instance poly-common-divisor-p-of-euclidean-gcd
+                (first nil)
+                (second
+                 (list (gfield::field-neg (gfield::field-one)))))
+     (:instance poly-common-divisor-p-of-euclidean-gcd
+                (first
+                 (poly-add (monomial (gfield::field-one) 1)
+                           (polynomial-one)))
+                (second (monomial (gfield::field-one) 1)))
+     (:instance poly-common-divisor-p-greatestness
+                (divisor (polynomial-one))
+                (first nil)
+                (second
+                 (list (gfield::field-neg (gfield::field-one))))))
+    :in-theory
+    (disable poly-euclidean-gcd-raw-correct
+             poly-divides-p-iff-congruent-zero
+             poly-divides-p-euclidean-remainder-iff))))
 
 ; Focused greatestness regressions use exact Boolean results.  Most are
 ; positive common-divisor examples; the zero/nonzero case intentionally checks
