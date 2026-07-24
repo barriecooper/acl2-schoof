@@ -320,3 +320,29 @@
  (and (equal (f7-poly-mul '(4 1) '(2 4)) '(1 4 4))
       (f7-poly-divides-p '(4 1) '(1 4 4))
       (f7-poly-divides-p '(1 2) '(1 4 4))))
+
+; The public remainder is already canonical, so normalizing it does not
+; change the length used by the generic Euclidean recursion.
+(defthm normalize-f7-poly-remainder-strict-length-bound
+  (implies (consp (f7-normalize modulus))
+           (< (len (f7-normalize (f7-poly-remainder dividend modulus)))
+              (len (f7-normalize modulus))))
+  :rule-classes :linear
+  :hints
+  (("Goal"
+    :use ((:instance f7-poly-divmod-final-remainder-degree-bound
+                     (f dividend) (g modulus))
+          (:instance f7-poly-remainder-canonical
+                     (f dividend) (g modulus))
+          (:instance f7-poly-remainder-is-divmod-remainder
+                     (f dividend) (g modulus))
+          (:instance f7-normalize-when-canonical
+                     (xs (f7-poly-remainder dividend modulus)))
+          (:instance f7-degree-when-canonical-nonzero
+                     (p (f7-poly-remainder dividend modulus)))
+          (:instance f7-degree-when-canonical-nonzero
+                     (p (f7-normalize modulus)))
+          (:instance f7-canonical-polynomial-p-of-normalize (xs modulus)))
+    :cases ((consp (f7-poly-remainder dividend modulus)))
+    :in-theory (disable f7-normalize f7-poly-remainder f7-poly-divmod
+                        f7-poly-degree f7-canonical-polynomial-p))))
