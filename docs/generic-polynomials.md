@@ -610,14 +610,17 @@ coefficients, and trailing zeros first receive the established coefficient
 fixing and normalization semantics.  Normalized zero, polynomial one, and all
 other constants are not irreducible.  Positive-degree nonmonic inputs are not
 rejected syntactically: scalar associates are judged by the same factor
-meaning, although the general scalar/monic-normalization invariance theorem is
-left for the prerequisite unit/associate lemma group.  The certified public
-facts are normalization invariance, positive degree and normalized nonzero
-consequences, and the direct factor characterization.
+meaning.  The certified divisor bridge uses the existing division quotient as
+the witness for `normalize(dividend) = quotient * normalize(divisor)`.  Thus a
+divisor of an irreducible polynomial is either a degree-zero unit or scalar
+associate in the focused, operational sense that the irreducible polynomial
+divides it; no general associates predicate is introduced.
 
-No divisor characterization or irreducible-implies-monic-GCD-one bridge is
-claimed here.  The former needs a reusable theorem connecting the
-remainder-defined divisibility predicate to a multiplication witness and
-associates; the latter additionally needs the genuinely mathematical
-irreducible-implies-prime/coprime argument.  The already-certified modular
-inverse law remains conditional on the literal computed monic GCD being one.
+Applying that alternative to the existing monic GCD proves that it is
+`POLYNOMIAL-ONE` unless the irreducible modulus divides the first input.  In
+particular, a nonzero representative fixed by `POLY-REMAINDER` cannot be so
+divisible (idempotence would make its remainder simultaneously itself and
+zero), and therefore has monic GCD one.  This is a logical bridge only: the
+existing modular inverse remains the transparent XGCD-derived computation,
+and no quotient field, concrete `F7[x]/(x^2+1)` interface, or new executable
+boundary is added.
