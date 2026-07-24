@@ -1,6 +1,6 @@
 (in-package "GPOLY")
 (include-book "pfield-instance")
-(include-book "monic-xgcd")
+(include-book "modular-inverse")
 
 
 ; Ordinary generated recursive division over the named concrete field.
@@ -1521,3 +1521,306 @@
                    (equal (f7-poly-leading-coefficient forward-g)
                           (gfield::f7-one)))
           (equal (consp forward-g) t)))))
+
+; The concrete modular inverse follows POLY-MODULAR-INVERSE literally.  It
+; performs one monic-XGCD computation and reduces that computation's first
+; Bezout coefficient with the retained F7 remainder operation.
+(defund f7-poly-modular-inverse (first modulus)
+  (declare (xargs :guard t))
+  (mv-let (gcd s coefficient-t)
+    (f7-poly-monic-extended-euclidean-gcd first modulus)
+    (declare (ignore gcd coefficient-t))
+    (f7-poly-remainder s modulus)))
+
+(verify-guards f7-poly-modular-inverse)
+
+(defthm f7-poly-modular-inverse-definition
+  (equal (f7-poly-modular-inverse first modulus)
+         (f7-poly-remainder
+          (mv-nth 1
+                  (f7-poly-monic-extended-euclidean-gcd first modulus))
+          modulus))
+  :hints (("Goal" :in-theory (enable f7-poly-modular-inverse))))
+
+; This is the complete substitution used for the generic modular-inverse
+; package.  Keeping it local avoids exporting a redundant aggregate theorem.
+(local
+ (defthm f7-poly-modular-inverse-correct-from-generic
+   (and
+    (f7-canonical-polynomial-p (f7-poly-modular-inverse first modulus))
+    (equal
+     (f7-poly-remainder
+      (f7-poly-mul (f7-poly-modular-inverse first modulus) first) modulus)
+     (f7-poly-remainder
+      (f7-poly-mul
+       (mv-nth 1
+               (f7-poly-monic-extended-euclidean-gcd first modulus))
+       first)
+      modulus))
+    (implies
+     (equal (f7-poly-monic-euclidean-gcd first modulus)
+            (f7-polynomial-one))
+     (equal
+      (f7-poly-remainder
+       (f7-poly-mul (f7-poly-modular-inverse first modulus) first) modulus)
+      (f7-poly-remainder (f7-polynomial-one) modulus))))
+   :hints
+   (("Goal"
+     :use
+     ((:functional-instance
+    poly-modular-inverse-canonical
+    (gfield::field-element-p gfield::f7-element-p)
+    (gfield::field-fix gfield::f7-fix)
+    (gfield::field-zero gfield::f7-zero)
+    (gfield::field-one gfield::f7-one)
+    (gfield::field-add gfield::f7-add)
+    (gfield::field-mul gfield::f7-mul)
+    (gfield::field-neg gfield::f7-neg)
+    (gfield::field-inv gfield::f7-inv)
+    (gfield::field-div gfield::f7-div)
+    (fix-coefficients f7-fix-coefficients)
+    (trim-trailing-zeros f7-trim-trailing-zeros)
+    (normalize f7-normalize)
+    (coefficient-list-p f7-coefficient-list-p)
+    (polynomial-p f7-polynomial-p)
+    (canonical-polynomial-p f7-canonical-polynomial-p)
+    (raw-add f7-raw-add) (poly-add f7-poly-add)
+    (raw-neg f7-raw-neg) (poly-neg f7-poly-neg)
+    (poly-sub f7-poly-sub)
+    (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+    (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+    (const f7-const) (polynomial-one f7-polynomial-one)
+    (zero-prefix f7-zero-prefix) (poly-shift f7-poly-shift)
+    (monomial f7-monomial) (poly-degree f7-poly-degree)
+    (poly-leading-coefficient f7-poly-leading-coefficient)
+    (poly-monic-normalize f7-poly-monic-normalize)
+    (poly-division-step-core f7-poly-division-step-core)
+    (poly-division-step f7-poly-division-step)
+    (poly-division-step-term f7-poly-division-step-term)
+    (poly-division-step-next f7-poly-division-step-next)
+    (poly-divmod-core f7-poly-divmod-core)
+    (poly-divmod f7-poly-divmod)
+    (poly-remainder f7-poly-remainder)
+    (poly-euclidean-gcd f7-poly-euclidean-gcd)
+    (poly-monic-euclidean-gcd f7-poly-monic-euclidean-gcd)
+    (poly-extended-euclidean-gcd f7-poly-extended-euclidean-gcd)
+    (poly-monic-extended-euclidean-gcd
+     f7-poly-monic-extended-euclidean-gcd)
+    (poly-modular-inverse f7-poly-modular-inverse))
+      (:functional-instance
+    poly-remainder-of-poly-mul-poly-modular-inverse
+    (gfield::field-element-p gfield::f7-element-p)
+    (gfield::field-fix gfield::f7-fix)
+    (gfield::field-zero gfield::f7-zero)
+    (gfield::field-one gfield::f7-one)
+    (gfield::field-add gfield::f7-add)
+    (gfield::field-mul gfield::f7-mul)
+    (gfield::field-neg gfield::f7-neg)
+    (gfield::field-inv gfield::f7-inv)
+    (gfield::field-div gfield::f7-div)
+    (fix-coefficients f7-fix-coefficients)
+    (trim-trailing-zeros f7-trim-trailing-zeros)
+    (normalize f7-normalize)
+    (coefficient-list-p f7-coefficient-list-p)
+    (polynomial-p f7-polynomial-p)
+    (canonical-polynomial-p f7-canonical-polynomial-p)
+    (raw-add f7-raw-add) (poly-add f7-poly-add)
+    (raw-neg f7-raw-neg) (poly-neg f7-poly-neg)
+    (poly-sub f7-poly-sub)
+    (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+    (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+    (const f7-const) (polynomial-one f7-polynomial-one)
+    (zero-prefix f7-zero-prefix) (poly-shift f7-poly-shift)
+    (monomial f7-monomial) (poly-degree f7-poly-degree)
+    (poly-leading-coefficient f7-poly-leading-coefficient)
+    (poly-monic-normalize f7-poly-monic-normalize)
+    (poly-division-step-core f7-poly-division-step-core)
+    (poly-division-step f7-poly-division-step)
+    (poly-division-step-term f7-poly-division-step-term)
+    (poly-division-step-next f7-poly-division-step-next)
+    (poly-divmod-core f7-poly-divmod-core)
+    (poly-divmod f7-poly-divmod)
+    (poly-remainder f7-poly-remainder)
+    (poly-euclidean-gcd f7-poly-euclidean-gcd)
+    (poly-monic-euclidean-gcd f7-poly-monic-euclidean-gcd)
+    (poly-extended-euclidean-gcd f7-poly-extended-euclidean-gcd)
+    (poly-monic-extended-euclidean-gcd
+     f7-poly-monic-extended-euclidean-gcd)
+    (poly-modular-inverse f7-poly-modular-inverse))
+      (:functional-instance
+    poly-modular-inverse-correct
+    (gfield::field-element-p gfield::f7-element-p)
+    (gfield::field-fix gfield::f7-fix)
+    (gfield::field-zero gfield::f7-zero)
+    (gfield::field-one gfield::f7-one)
+    (gfield::field-add gfield::f7-add)
+    (gfield::field-mul gfield::f7-mul)
+    (gfield::field-neg gfield::f7-neg)
+    (gfield::field-inv gfield::f7-inv)
+    (gfield::field-div gfield::f7-div)
+    (fix-coefficients f7-fix-coefficients)
+    (trim-trailing-zeros f7-trim-trailing-zeros)
+    (normalize f7-normalize)
+    (coefficient-list-p f7-coefficient-list-p)
+    (polynomial-p f7-polynomial-p)
+    (canonical-polynomial-p f7-canonical-polynomial-p)
+    (raw-add f7-raw-add) (poly-add f7-poly-add)
+    (raw-neg f7-raw-neg) (poly-neg f7-poly-neg)
+    (poly-sub f7-poly-sub)
+    (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+    (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+    (const f7-const) (polynomial-one f7-polynomial-one)
+    (zero-prefix f7-zero-prefix) (poly-shift f7-poly-shift)
+    (monomial f7-monomial) (poly-degree f7-poly-degree)
+    (poly-leading-coefficient f7-poly-leading-coefficient)
+    (poly-monic-normalize f7-poly-monic-normalize)
+    (poly-division-step-core f7-poly-division-step-core)
+    (poly-division-step f7-poly-division-step)
+    (poly-division-step-term f7-poly-division-step-term)
+    (poly-division-step-next f7-poly-division-step-next)
+    (poly-divmod-core f7-poly-divmod-core)
+    (poly-divmod f7-poly-divmod)
+    (poly-remainder f7-poly-remainder)
+    (poly-euclidean-gcd f7-poly-euclidean-gcd)
+    (poly-monic-euclidean-gcd f7-poly-monic-euclidean-gcd)
+    (poly-extended-euclidean-gcd f7-poly-extended-euclidean-gcd)
+    (poly-monic-extended-euclidean-gcd
+     f7-poly-monic-extended-euclidean-gcd)
+    (poly-modular-inverse f7-poly-modular-inverse)))
+     :in-theory (disable f7-poly-modular-inverse
+                         f7-poly-monic-extended-euclidean-gcd
+                         f7-poly-remainder f7-poly-mul)))))
+
+(defthm f7-poly-modular-inverse-canonical
+  (f7-canonical-polynomial-p (f7-poly-modular-inverse first modulus))
+  :hints (("Goal" :use f7-poly-modular-inverse-correct-from-generic)))
+
+(defthm f7-normalize-of-poly-modular-inverse
+  (equal (f7-normalize (f7-poly-modular-inverse first modulus))
+         (f7-poly-modular-inverse first modulus))
+  :hints (("Goal"
+           :use ((:instance f7-normalize-when-canonical
+                            (xs (f7-poly-modular-inverse first modulus)))
+                 (:instance f7-poly-modular-inverse-canonical)))))
+
+(defthm f7-poly-remainder-of-poly-mul-poly-modular-inverse
+  (equal
+   (f7-poly-remainder
+    (f7-poly-mul (f7-poly-modular-inverse first modulus) first) modulus)
+   (f7-poly-remainder
+    (f7-poly-mul
+     (mv-nth 1 (f7-poly-monic-extended-euclidean-gcd first modulus)) first)
+    modulus))
+  :hints (("Goal" :use f7-poly-modular-inverse-correct-from-generic)))
+
+(defthm f7-poly-modular-inverse-correct
+  (implies
+   (equal (f7-poly-monic-euclidean-gcd first modulus)
+          (f7-polynomial-one))
+   (equal
+    (f7-poly-remainder
+     (f7-poly-mul (f7-poly-modular-inverse first modulus) first) modulus)
+    (f7-poly-remainder (f7-polynomial-one) modulus)))
+  :hints (("Goal" :use f7-poly-modular-inverse-correct-from-generic)))
+
+(defthm f7-poly-modular-inverse-remainder-one
+  (implies
+   (and (equal (f7-poly-monic-euclidean-gcd first modulus)
+               (f7-polynomial-one))
+        (consp (f7-normalize modulus))
+        (< 0 (f7-poly-degree (f7-normalize modulus))))
+   (equal
+    (f7-poly-remainder
+     (f7-poly-mul (f7-poly-modular-inverse first modulus) first) modulus)
+    (f7-polynomial-one)))
+  :hints
+  (("Goal"
+    :use ((:instance f7-poly-modular-inverse-correct)
+          (:functional-instance
+    poly-remainder-of-polynomial-one-when-positive-degree
+    (gfield::field-element-p gfield::f7-element-p)
+    (gfield::field-fix gfield::f7-fix)
+    (gfield::field-zero gfield::f7-zero)
+    (gfield::field-one gfield::f7-one)
+    (gfield::field-add gfield::f7-add)
+    (gfield::field-mul gfield::f7-mul)
+    (gfield::field-neg gfield::f7-neg)
+    (gfield::field-inv gfield::f7-inv)
+    (gfield::field-div gfield::f7-div)
+    (fix-coefficients f7-fix-coefficients)
+    (trim-trailing-zeros f7-trim-trailing-zeros)
+    (normalize f7-normalize)
+    (coefficient-list-p f7-coefficient-list-p)
+    (polynomial-p f7-polynomial-p)
+    (canonical-polynomial-p f7-canonical-polynomial-p)
+    (raw-add f7-raw-add) (poly-add f7-poly-add)
+    (raw-neg f7-raw-neg) (poly-neg f7-poly-neg)
+    (poly-sub f7-poly-sub)
+    (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+    (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+    (const f7-const) (polynomial-one f7-polynomial-one)
+    (zero-prefix f7-zero-prefix) (poly-shift f7-poly-shift)
+    (monomial f7-monomial) (poly-degree f7-poly-degree)
+    (poly-leading-coefficient f7-poly-leading-coefficient)
+    (poly-monic-normalize f7-poly-monic-normalize)
+    (poly-division-step-core f7-poly-division-step-core)
+    (poly-division-step f7-poly-division-step)
+    (poly-division-step-term f7-poly-division-step-term)
+    (poly-division-step-next f7-poly-division-step-next)
+    (poly-divmod-core f7-poly-divmod-core)
+    (poly-divmod f7-poly-divmod)
+    (poly-remainder f7-poly-remainder)
+    (poly-euclidean-gcd f7-poly-euclidean-gcd)
+    (poly-monic-euclidean-gcd f7-poly-monic-euclidean-gcd)
+    (poly-extended-euclidean-gcd f7-poly-extended-euclidean-gcd)
+    (poly-monic-extended-euclidean-gcd
+     f7-poly-monic-extended-euclidean-gcd)
+    (poly-modular-inverse f7-poly-modular-inverse)))
+    :in-theory (disable f7-poly-modular-inverse f7-poly-remainder
+                        f7-poly-mul f7-polynomial-one f7-normalize
+                        f7-poly-degree f7-poly-monic-euclidean-gcd))))
+
+; Exact total executions cover successful units, non-units, degenerate
+; moduli, fixed coefficients, and malformed list representations.
+(assert-event
+ (and
+  (equal (f7-poly-modular-inverse '(1 0 0 0 1) '(1 1 1)) '(0 6))
+  (equal (f7-poly-modular-inverse '(1) '(1 1 1)) '(1))
+  (equal (f7-poly-modular-inverse '(3) '(1 1 1)) '(5))
+  (equal (f7-poly-modular-inverse '(1 0 1) '(1 1)) '(4))
+  (equal (f7-poly-modular-inverse '(1 2 1) '(1 1)) nil)
+  (equal (f7-poly-modular-inverse nil '(1 1)) nil)
+  (equal (f7-poly-modular-inverse '(2 3) nil) '(5))
+  (equal (f7-poly-modular-inverse nil nil) nil)
+  (equal (f7-poly-modular-inverse '(1 1) '(1)) nil)
+  (equal (f7-poly-modular-inverse '(2 0 2) '(2 2)) '(2))
+  (equal (f7-poly-modular-inverse '(1 0 1 0 0) '(1 1 0)) '(4))
+  (equal (f7-poly-modular-inverse '(8 -7 8) '(8 8)) '(4))
+  (equal (f7-poly-modular-inverse 'bad 'modulus) nil)
+  (equal (f7-poly-modular-inverse '(1 0 1 . bad) '(1 1 . tail)) '(4))))
+
+(assert-event
+ (let* ((first '(1 0 0 0 1))
+        (modulus '(1 1 1)))
+   (mv-let (g s tt)
+     (f7-poly-monic-extended-euclidean-gcd first modulus)
+     (let* ((inverse (f7-poly-modular-inverse first modulus))
+            (product (f7-poly-mul first inverse))
+            (remainder (f7-poly-remainder product modulus)))
+       (and (equal g '(1)) (equal s '(0 6))
+            (equal tt '(1 0 6 1))
+            (equal inverse s)
+            (equal product '(0 6 0 0 0 6))
+            (equal remainder '(1))
+            (equal remainder (f7-polynomial-one))
+            (f7-canonical-polynomial-p inverse)
+            (equal (f7-normalize inverse) inverse))))))
+
+(assert-event
+ (mv-let (g s tt)
+   (f7-poly-monic-extended-euclidean-gcd '(1 2 1) '(1 1))
+   (declare (ignore s tt))
+   (and (equal g '(1 1))
+        (equal (f7-poly-modular-inverse '(1 2 1) '(1 1)) nil)
+        (not (equal (f7-poly-monic-euclidean-gcd '(1 2 1) '(1 1))
+                    (f7-polynomial-one))))))

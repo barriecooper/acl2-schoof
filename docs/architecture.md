@@ -59,9 +59,7 @@ The next algebraic layers deliberately separate two constructions:
 The concrete dependency audit after the certified F7 monic GCD is recorded in
 `f7-extension-field-reconnaissance.md`.  Generic raw/monic XGCD and modular
 inverse are already certified; the smallest next implementation is therefore
-the transparent **concrete F7 raw XGCD instance**, now certified with exact raw-GCD and unconditional Bezout interfaces.  Concrete monic XGCD is the next XGCD layer, not new generic theory.
-Its recursive triple must retain the raw, unit-sensitive GCD, with monic
-rescaling of both Bezout coefficients deferred to a separate wrapper PR.
+the transparent **concrete F7 raw XGCD instance**, now certified with exact raw-GCD and unconditional Bezout interfaces.  Concrete raw and monic XGCD are certified. The concrete F7 modular-inverse layer now transparently reduces the first monic-XGCD coefficient through the retained remainder path. It is total, but its inverse certificate explicitly requires monic GCD one; later residue-ring code must distinguish this unit condition from field inversion supplied only by irreducibility or another unit guarantee. No claim is made that reducible Schoof division-polynomial quotients are fields.
 
 Neither set of quotient laws is complete. The dependency path first resolves
 concrete named-field guards and instantiation, proves that irreducibility
