@@ -6,7 +6,7 @@ The preferred first candidate remains the constant-first polynomial `(1 0 1)`,
 or x^2+1.  Direct F7 evaluation at the seven canonical elements `0` through
 `6` gives respectively `1, 2, 5, 3, 3, 5, 2`; hence none of those seven
 values is zero.  This execution fact is not called an irreducibility proof:
-the generic theory does not yet certify the quadratic root criterion.
+the generic theory now certifies the one-way quadratic root criterion as a logical theorem, not a decision procedure.  Transporting its quantified witnesses to the concrete F7 boundary and certifying `x^2+1` remain open.
 
 Negative/boundary examples are normalized zero `nil`, polynomial one `(1)`,
 the nonzero constant `(3)`, and reducible x^2-1 represented by `(6 0 1)`
