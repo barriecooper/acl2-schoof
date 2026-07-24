@@ -3,11 +3,12 @@
 
 ; Formal degree and leading coefficient are structural properties of the
 ; normalized dense representation, not properties recovered from evaluation.
-(verify-guards fix-coefficients)
-(verify-guards trim-trailing-zeros)
-(verify-guards normalize)
 (def-degree-instance poly-degree poly-leading-coefficient normalize
                      gfield::field-zero)
+(verify-guards poly-degree)
+(verify-guards poly-leading-coefficient)
+(def-monic-normalize-instance poly-monic-normalize normalize poly-scale
+                              poly-leading-coefficient gfield::field-inv)
 
 (defthm poly-degree-of-normalize
   (equal (poly-degree (normalize p)) (poly-degree p)))
@@ -197,6 +198,96 @@
           (:instance poly-leading-coefficient-of-poly-scale-when-nonzero))
     :in-theory (disable poly-scale poly-leading-coefficient normalize))))
 
+(defthm poly-monic-normalize-of-normalize
+  (equal (poly-monic-normalize (normalize poly))
+         (poly-monic-normalize poly))
+  :hints
+  (("Goal"
+    :use ((:instance poly-scale-of-normalize
+                     (a (gfield::field-inv
+                         (poly-leading-coefficient poly)))
+                     (x poly))
+          (:instance poly-leading-coefficient-of-normalize (p poly)))
+    :in-theory (e/d (poly-monic-normalize)
+                    (poly-scale normalize poly-leading-coefficient
+                     poly-leading-coefficient-when-canonical-nonzero)))))
+
+(defthm canonical-polynomial-p-of-poly-monic-normalize
+  (canonical-polynomial-p (poly-monic-normalize poly))
+  :hints (("Goal" :in-theory (enable poly-monic-normalize))))
+
+(defthm normalize-of-poly-monic-normalize
+  (equal (normalize (poly-monic-normalize poly))
+         (poly-monic-normalize poly))
+  :hints
+  (("Goal"
+    :use ((:instance canonical-polynomial-p-of-poly-monic-normalize)
+          (:instance normalize-when-canonical
+                     (xs (poly-monic-normalize poly))))
+    :in-theory (disable poly-monic-normalize normalize))))
+
+(local
+ (defthm consp-of-inverse-leading-coefficient-scale
+   (implies (consp (normalize poly))
+            (consp
+             (poly-scale
+              (gfield::field-inv (poly-leading-coefficient poly))
+              poly)))
+   :hints
+   (("Goal"
+     :cases ((consp
+              (poly-scale
+               (gfield::field-inv (poly-leading-coefficient poly))
+               poly)))
+     :use ((:instance poly-leading-coefficient-of-poly-scale
+                      (scalar (gfield::field-inv
+                               (poly-leading-coefficient poly))))
+           (:instance poly-leading-coefficient-equal-zero
+                      (p (poly-scale
+                          (gfield::field-inv
+                           (poly-leading-coefficient poly))
+                          poly)))
+           (:instance poly-leading-coefficient-equal-zero (p poly))
+           (:instance gfield::field-mul-inverse-left
+                      (x (poly-leading-coefficient poly))))
+     :in-theory (disable poly-scale normalize poly-leading-coefficient
+                         poly-leading-coefficient-of-poly-scale
+                         gfield::field-mul-inverse-left)))))
+
+(defthm poly-leading-coefficient-of-poly-monic-normalize
+  (equal (poly-leading-coefficient (poly-monic-normalize poly))
+         (if (consp (normalize poly))
+             (gfield::field-one)
+           (gfield::field-zero)))
+  :hints
+  (("Goal"
+    :cases ((consp (normalize poly)))
+    :use ((:instance poly-leading-coefficient-of-poly-scale
+                     (scalar (gfield::field-inv
+                              (poly-leading-coefficient poly))))
+          (:instance poly-leading-coefficient-nonzero-when-canonical-nonzero
+                     (p (normalize poly)))
+          (:instance poly-leading-coefficient-of-normalize (p poly))
+          (:instance gfield::field-mul-inverse-left
+                     (x (poly-leading-coefficient poly))))
+    :in-theory (e/d (poly-monic-normalize)
+                    (poly-scale poly-leading-coefficient normalize
+                     poly-leading-coefficient-of-poly-scale
+                     poly-leading-coefficient-nonzero-when-canonical-nonzero
+                     gfield::field-mul-inverse-left)))))
+
+(defthm consp-of-poly-monic-normalize
+  (equal (consp (poly-monic-normalize poly))
+         (consp (normalize poly)))
+  :hints
+  (("Goal"
+    :cases ((consp (normalize poly)))
+    :use ((:instance consp-of-inverse-leading-coefficient-scale))
+    :in-theory (e/d (poly-monic-normalize)
+                    (poly-leading-coefficient normalize
+                     poly-scale
+                     poly-leading-coefficient-of-poly-monic-normalize)))))
+
 (defthm poly-degree-less-than-input-length
   (implies (consp (normalize p))
            (< (poly-degree p) (len p)))
@@ -226,6 +317,3 @@
 (defthm poly-leading-coefficient-of-normalized-singleton
   (equal (poly-leading-coefficient (normalize (list a)))
          (gfield::field-fix a)))
-
-(verify-guards poly-degree)
-(verify-guards poly-leading-coefficient)

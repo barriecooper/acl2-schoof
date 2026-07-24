@@ -101,6 +101,17 @@
        (let ((p (,normalize poly)))
          (if (consp p) (car (last p)) (,field-zero))))))
 
+; Monic normalization is a total, nonrecursive operation.  Its explicit zero
+; branch avoids assigning mathematical significance to the total inverse of
+; zero supplied by a field instance.
+(defmacro def-monic-normalize-instance
+  (monic-normalize normalize poly-scale leading-coefficient field-inv)
+  `(defun ,monic-normalize (poly)
+     (declare (xargs :guard t))
+     (if (consp (,normalize poly))
+         (,poly-scale (,field-inv (,leading-coefficient poly)) poly)
+       nil)))
+
 
 ; Monomial/shift construction is shared by the generic theory and instances.
 ; The expansion contains exactly three ordinary DEFUN events.

@@ -124,3 +124,7 @@
          (if (consp poly)
              (gfield::field-fix (car poly))
            (gfield::field-zero))))
+
+(verify-guards fix-coefficients)
+(verify-guards trim-trailing-zeros)
+(verify-guards normalize)
