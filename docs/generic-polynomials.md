@@ -430,8 +430,9 @@ divisor exactly when both inputs normalize to zero.  The raw result is
 canonical as a polynomial representation but need not be monic; it may be a
 negative unit or another non-monic associate.  The specification therefore
 determines a gcd only up to multiplication by nonzero field units.  It adds no
-existential quotient witnesses, XGCD/Bézout machinery, or concrete PFIELD/F7
-API.  Uniqueness and associate and unit-invariance theory remain open; the
+existential quotient witnesses or concrete PFIELD/F7 API.  The separate raw
+XGCD layer described below now supplies Bézout coefficients.  Uniqueness,
+associate theory, and unit-invariance theory remain open; the
 subsequent certified layers now provide monic normalization and the transparent
 monic-gcd wrapper described above.
 
@@ -450,7 +451,23 @@ the strict degree bound, and the canonical degree/length characterization;
 it does not unfold recursive division.  A zero normalized divisor is the
 recursion base case.  Raw algebraic gcd correctness is publicly packaged, and
 the later transparent monic wrapper is mathematically certified.  No quotient
-witnesses, extended gcd, Bézout coefficients, modular inverses, or concrete
-PFIELD/F7 APIs are introduced.  The next Euclidean-layer dependency is generic
-XGCD/Bézout; uniqueness and general associate/unit theory remain separate and
-should only be added if a downstream equality argument requires them.
+witnesses, modular inverses, or concrete PFIELD/F7 APIs are introduced by
+those layers.
+
+## Raw generic extended Euclidean gcd (certified)
+
+`generic/xgcd.lisp` adds the transparent, total
+`POLY-EXTENDED-EUCLIDEAN-GCD`.  It returns `(mv gcd s t)`, calls
+`POLY-DIVMOD` once per nonzero step, recurses from `(first,second)` to
+`(second,remainder)`, and uses `(len (normalize second))` as its measure.  Its
+base result is exactly `(mv (normalize first) (polynomial-one) nil)`; its step
+returns `t-next` and `s-next - t-next*quotient` as the two coefficients.
+
+All three projections are canonical and normalized.  The gcd projection is
+exactly the existing raw `POLY-EUCLIDEAN-GCD`, without monic rescaling, and the
+unconditional certified identity is `s*first + t*second = gcd`.  Focused exact
+regressions cover zero, malformed and dotted inputs, trailing zeros, coefficient
+fixing, equal inputs, exact division, and a multi-step quotient chain.  This
+completes only raw generic XGCD and its Bézout certificate.  Monic XGCD and
+coefficient rescaling, quotient-field inversion, modular inversion, concrete
+instances, uniqueness, and general associate/unit theory remain open.
