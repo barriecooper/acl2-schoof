@@ -22,6 +22,7 @@ Allowed statuses are **Proved**, **Open**, and **Postponed**. No row marked open
 | F7-MONIC-DIVISIBILITY | Certify concrete F7 monic-normalization divisibility transport without retaining a GCD. | Functionally instantiate the two generic monic-normalization divisibility equivalences using the complete F7 field and polynomial substitution. | F7-DIVMOD; GPOLY-MONIC-NORMALIZATION-DIVISIBILITY | Proved | `generic/f7-division.lisp` generates the divisor-first predicates and certifies both argument-position equivalences plus common-divisor transport. The former multiplication-fixing obligation is discharged by the focused F7 congruence bridge. Concrete raw/monic GCD, XGCD, modular inverse, and all later layers remain open. |
 | F7-GCD-FIELD-CONGRUENCE | Supply the complete concrete field-operation fixing interface needed by a future functional instance of the generic raw and monic GCD package. | Addition and multiplication respect equality of fixed representatives; total inversion does likewise, including the fixed-zero class. | F7 field kernel; F7-MONIC-DIVISIBILITY | Proved | `generic/f7-division.lisp` retains only the binary addition/multiplication bridges and unary inverse bridge exposed by the audit. Zero and one are constants, negation already reduces through its fixer, and division is the derived multiplication/inverse operation, so no separate bridges are required. The disposable full-GCD probe passed the field-interface constraints; concrete raw/monic GCD definitions remain open. |
 | F7-DIVMOD | Generate and certify recursive concrete F7 quotient/remainder. | Instantiate generic recursion using the retained concrete length decrease. | F7-DIV-STEP | Proved | `generic/f7-division.lisp` provides ordinary divmod and projection definitions, transported canonicality/reconstruction/degree facts, verified guards, and focused executions. Concrete GCD, XGCD, modular inverse, irreducibility, quotient/extension fields, and Schoof remain open. |
+| F7-RAW-GCD | Retain the ordinary concrete F7 Euclidean recursion and certify its raw common-divisor specification. | Functionally instantiate `POLY-EUCLIDEAN-GCD-RAW-CORRECT` using the F7 division stack and focused fixing-congruence bridges. | F7-DIVMOD; F7-GCD-FIELD-CONGRUENCE; GPOLY-GCD | Proved | `F7-POLY-EUCLIDEAN-GCD` uses the generic measure, branch, remainder projection, argument order, and raw base result. Its guards, direct raw-correctness instance, divisibility corollaries, and exact total-execution regressions certify in `generic/f7-division.lisp`. The concrete monic wrapper, F7 XGCD, polynomial modular inverse, and every later layer remain open. |
 | PFIELD-CONCRETE-DIVISION | Add a concrete PFIELD division runtime boundary. | A constrained modulus adapter is not a named executable field. | Field-interface architecture | Postponed | Prefer a named prime field for the first executable Schoof path. |
 | GPOLY-MOD-REDUCTION | Canonical remainder, normalization, idempotence, zero-modulus fallback, and a strict nonzero-modulus degree bound. | Build modular reduction on certified generic division. | Generic divmod | Proved | `POLY-REMAINDER` and its certified theorem package in `generic/reduction.lisp`. |
 | GPOLY-MOD-CONGRUENCE | Invariance under adding modulus multiples, congruence defined by equality of canonical remainders, and compatibility with addition and multiplication. | Certified uniqueness of bounded Euclidean remainders and quotient/remainder algebra over canonical polynomials. | GPOLY-MOD-REDUCTION | Proved | The equivalence, normalization, modulus-multiple, zero-modulus, bounded-representative, and additive packages are joined by `POLY-REMAINDER-OF-POLY-MUL-REMAINDER-LEFT`, `POLY-REMAINDER-OF-POLY-MUL-REMAINDER-RIGHT`, `POLY-REMAINDER-OF-POLY-MUL-REMAINDERS`, `POLY-CONGRUENT-P-OF-POLY-MUL` and its one-sided corollaries, and `POLY-MUL-POLY-CONGRUENT-P-WITH-REMAINDERS`. The multiplication laws are unconditional, including zero-modulus normalized-equality semantics. No quotient-ring operation or concrete congruence API is claimed. |
@@ -54,7 +55,7 @@ Allowed statuses are **Proved**, **Open**, and **Postponed**. No row marked open
 
 The 2006 FUNPOL quotient/remainder books do not provide a small functional-instance bridge to the explicit-modulus HS/PFIELD interface. GPOLY is now the authoritative layer for new polynomial algebra, and its generic division, reconstruction, and remainder-degree bound are certified. The older HS/PFIELD polynomial layer is retained as a legacy/root-count bridge unless an explicit bridge requires it; new gcd, derivative, modular-reduction, quotient-ring, and extension-field work must not be independently duplicated in both stacks.
 
-## Concrete F7 GCD instantiation audit (blocked prerequisite)
+## Concrete F7 GCD instantiation audit (raw instance complete)
 
 The July 2026 concrete-GCD audit confirmed that generated Euclidean admission
 can use the public F7 remainder projection with measure
@@ -66,11 +67,11 @@ for multiplication (for example certification log subgoal `29.7''`), rather
 than a GCD-recursion obligation.  No incomplete F7 GCD definitions are retained.
 The monic-transport prerequisite and the complete field-operation congruence interface are now certified.  The functional-instance audit required binary addition and multiplication congruence and zero-sensitive unary inverse congruence; fixing, zero, one, negation, and derived division introduced no additional bridge.  With those facts supplied explicitly, the disposable full raw/monic GCD probe reached the polynomial/GCD theorem layer without another field-fixing checkpoint.  The generated F7 divisor-first predicates and common-divisor transport are retained, but no F7 GCD definition or correctness theorem is retained.  Concrete raw and monic GCD, F7 XGCD, polynomial modular inverse, and every later layer remain open.
 
-The attempted retained F7 GCD instance on 2026-07-24 confirmed that the generated
-recursion admits from `NORMALIZE-F7-POLY-REMAINDER-STRICT-LENGTH-BOUND`, but the
-full `POLY-EUCLIDEAN-GCD-RAW-CORRECT` functional instance did not complete in a
-focused certification run and was removed under the stopping rule.  No ACL2
-logical obligation was reported before interruption, so no new mathematics is
-claimed missing.  The smallest next PR is proof-engineering the already audited
-functional instance with the three retained field congruence bridges; F7 XGCD
-and polynomial modular inverse remain open.
+The retained raw instance now certifies directly.  Reproduction showed that the
+earlier interruption was not evidence of a missing theorem: with the complete
+raw-only substitution (and no monic-normalization symbols), ACL2 discharges the
+functional constraints and instantiated conclusion in the focused book without
+forcing or destructor-elimination domination.  The concrete recursion, guards,
+raw correctness, small divisibility interface, and exact executions are closed.
+The concrete monic wrapper is deliberately deferred; F7 XGCD and polynomial
+modular inverse remain open with all later algebraic and Schoof layers.
