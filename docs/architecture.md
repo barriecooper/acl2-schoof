@@ -55,7 +55,12 @@ layers: irreducibility plus an explicit nonzero representative fixed by
 the transparent XGCD-derived `POLY-MODULAR-INVERSE`; no inverse algorithm,
 quotient object, or executable boundary was added. The certified F7 examples
 for `x^2+1` are regression witnesses only, not an implementation of
-`F7[x]/(x^2+1)` as a field.
+`F7[x]/(x^2+1)` as a field.  The presentation-specific `F7X2` boundary now
+defines its carrier representatives: normalized constant-first F7 polynomials
+of degree below two, fixed by the existing remainder modulo `(1 0 1)`.  This is
+not a quotient-equivalence-class object, and it adds no extension arithmetic or
+`GFIELD` instance.  Irreducibility and modular-inverse certificates remain
+downstream facts for later field promotion.
 
 ## Subsequent algebraic layers
 
