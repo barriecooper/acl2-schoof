@@ -17,6 +17,7 @@
 (include-book "polynomial/generic/euclidean")
 (include-book "polynomial/generic/irreducibility")
 (include-book "polynomial/generic/quadratic-irreducibility")
+(include-book "polynomial/generic/f7-quadratic-irreducibility")
 (include-book "polynomial/generic/xgcd")
 (include-book "polynomial/generic/monic-xgcd")
 (include-book "polynomial/generic/monic-xgcd-reduction")

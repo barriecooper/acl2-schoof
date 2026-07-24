@@ -209,9 +209,11 @@ package would sacrifice reuse.
 6. **Irreducibility interface.** Define the generic semantic predicate and prove
    the irreducible/nonzero-representative-to-monic-GCD-one bridge.  This is one
    new mathematical idea and cannot be hidden in a concrete computation PR.
-7. **One concrete irreducibility certificate.** Prove the selected modulus
-   satisfies that predicate, with exhaustive finite checks only as certified
-   supporting lemmas.  Do not build a general decision procedure yet.
+7. **One concrete irreducibility certificate (complete).**
+   `F7-X-SQUARED-PLUS-ONE-IS-IRREDUCIBLE` certifies the selected modulus through
+   the generic logical quadratic criterion. Its only exhaustion is the seven
+   coefficient-field elements; it neither enumerates factors or quotient
+   elements nor provides a general decision procedure.
 8. **Named fixed F7 extension field.** Connect PRs 4--7, prove the inverse law
    and the remaining GFIELD laws, verify guards, add focused concrete inverse and
    operation regressions, then instantiate existing generic polynomial
