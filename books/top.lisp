@@ -14,4 +14,5 @@
 (include-book "polynomial/generic/xgcd")
 (include-book "polynomial/generic/monic-xgcd")
 (include-book "polynomial/generic/monic-xgcd-reduction")
+(include-book "polynomial/generic/modular-inverse")
 (include-book "curve/f11-golden")
