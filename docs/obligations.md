@@ -65,3 +65,12 @@ functional instance generated an unresolved field-fixing congruence obligation
 for multiplication (for example certification log subgoal `29.7''`), rather
 than a GCD-recursion obligation.  No incomplete F7 GCD definitions are retained.
 The monic-transport prerequisite and the complete field-operation congruence interface are now certified.  The functional-instance audit required binary addition and multiplication congruence and zero-sensitive unary inverse congruence; fixing, zero, one, negation, and derived division introduced no additional bridge.  With those facts supplied explicitly, the disposable full raw/monic GCD probe reached the polynomial/GCD theorem layer without another field-fixing checkpoint.  The generated F7 divisor-first predicates and common-divisor transport are retained, but no F7 GCD definition or correctness theorem is retained.  Concrete raw and monic GCD, F7 XGCD, polynomial modular inverse, and every later layer remain open.
+
+The attempted retained F7 GCD instance on 2026-07-24 confirmed that the generated
+recursion admits from `NORMALIZE-F7-POLY-REMAINDER-STRICT-LENGTH-BOUND`, but the
+full `POLY-EUCLIDEAN-GCD-RAW-CORRECT` functional instance did not complete in a
+focused certification run and was removed under the stopping rule.  No ACL2
+logical obligation was reported before interruption, so no new mathematics is
+claimed missing.  The smallest next PR is proof-engineering the already audited
+functional instance with the three retained field congruence bridges; F7 XGCD
+and polynomial modular inverse remain open.
