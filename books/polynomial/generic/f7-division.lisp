@@ -1,6 +1,6 @@
 (in-package "GPOLY")
 (include-book "pfield-instance")
-(include-book "euclidean")
+(include-book "xgcd")
 
 
 ; Ordinary generated recursive division over the named concrete field.
@@ -454,6 +454,438 @@
   (implies (f7-poly-common-divisor-p divisor first second)
            (f7-poly-divides-p divisor (f7-poly-euclidean-gcd first second)))
   :hints (("Goal" :use ((:instance f7-poly-euclidean-gcd-raw-correct)))))
+
+; Concrete raw extended Euclidean computation.  This is the generic XGCD
+; recursion specialized transparently to F7; its one DIVMOD call supplies both
+; the quotient used in the Bezout update and the remainder used for descent.
+(defun f7-poly-extended-euclidean-gcd (first second)
+  (declare
+   (xargs
+    :measure (len (f7-normalize second))
+    :hints
+    (("Goal"
+      :use ((:instance normalize-f7-poly-remainder-strict-length-bound
+                       (dividend first) (modulus second))
+            (:instance f7-poly-remainder-is-divmod-remainder
+                       (f first) (g second)))
+      :in-theory (disable f7-normalize f7-poly-remainder f7-poly-divmod)))))
+  (if (consp (f7-normalize second))
+      (mv-let (quotient remainder)
+        (f7-poly-divmod first second)
+        (mv-let (gcd s-next t-next)
+          (f7-poly-extended-euclidean-gcd second remainder)
+          (mv gcd t-next
+              (f7-poly-sub s-next (f7-poly-mul t-next quotient)))))
+    (mv (f7-normalize first) (f7-polynomial-one) nil)))
+
+(verify-guards f7-poly-extended-euclidean-gcd)
+
+(defthm f7-poly-extended-euclidean-gcd-zero-second
+  (implies (not (consp (f7-normalize second)))
+           (equal (f7-poly-extended-euclidean-gcd first second)
+                  (mv (f7-normalize first) (f7-polynomial-one) nil)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (e/d (f7-poly-extended-euclidean-gcd)
+                                      (f7-normalize f7-polynomial-one)))))
+
+(defthm f7-poly-extended-euclidean-gcd-nonzero-second
+  (implies
+   (consp (f7-normalize second))
+   (equal
+    (f7-poly-extended-euclidean-gcd first second)
+    (mv-let (quotient remainder)
+      (f7-poly-divmod first second)
+      (mv-let (gcd s-next t-next)
+        (f7-poly-extended-euclidean-gcd second remainder)
+        (mv gcd t-next
+            (f7-poly-sub s-next (f7-poly-mul t-next quotient)))))))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (e/d (f7-poly-extended-euclidean-gcd)
+                                      (f7-poly-divmod f7-normalize
+                                       f7-poly-sub f7-poly-mul)))))
+
+(defthm f7-poly-extended-euclidean-gcd-gcd-is-f7-poly-euclidean-gcd
+  (equal (mv-nth 0 (f7-poly-extended-euclidean-gcd first second))
+         (f7-poly-euclidean-gcd first second))
+
+  :hints (("Goal" :by (:functional-instance
+                        poly-extended-euclidean-gcd-gcd-is-poly-euclidean-gcd
+         (gfield::field-element-p gfield::f7-element-p)
+         (gfield::field-fix gfield::f7-fix) (gfield::field-zero gfield::f7-zero)
+         (gfield::field-one gfield::f7-one) (gfield::field-add gfield::f7-add)
+         (gfield::field-mul gfield::f7-mul) (gfield::field-neg gfield::f7-neg)
+         (gfield::field-inv gfield::f7-inv) (gfield::field-div gfield::f7-div)
+         (fix-coefficients f7-fix-coefficients)
+         (trim-trailing-zeros f7-trim-trailing-zeros) (normalize f7-normalize)
+         (coefficient-list-p f7-coefficient-list-p)
+         (polynomial-p f7-polynomial-p)
+         (canonical-polynomial-p f7-canonical-polynomial-p)
+         (raw-add f7-raw-add) (poly-add f7-poly-add)
+         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg) (poly-sub f7-poly-sub)
+         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+         (const f7-const) (polynomial-one f7-polynomial-one)
+         (zero-prefix f7-zero-prefix) (poly-shift f7-poly-shift)
+         (monomial f7-monomial) (poly-degree f7-poly-degree)
+         (poly-leading-coefficient f7-poly-leading-coefficient)
+         (poly-division-step-core f7-poly-division-step-core)
+         (poly-division-step f7-poly-division-step)
+         (poly-division-step-term f7-poly-division-step-term)
+         (poly-division-step-next f7-poly-division-step-next)
+         (poly-divmod-core f7-poly-divmod-core) (poly-divmod f7-poly-divmod)
+         (poly-remainder f7-poly-remainder)
+         (poly-euclidean-gcd f7-poly-euclidean-gcd)
+         (poly-extended-euclidean-gcd f7-poly-extended-euclidean-gcd)))))
+
+(defthm f7-poly-extended-euclidean-gcd-gcd-canonical
+  (f7-canonical-polynomial-p
+   (mv-nth 0 (f7-poly-extended-euclidean-gcd first second)))
+
+  :hints (("Goal" :by (:functional-instance
+                        poly-extended-euclidean-gcd-gcd-canonical
+         (gfield::field-element-p gfield::f7-element-p)
+         (gfield::field-fix gfield::f7-fix) (gfield::field-zero gfield::f7-zero)
+         (gfield::field-one gfield::f7-one) (gfield::field-add gfield::f7-add)
+         (gfield::field-mul gfield::f7-mul) (gfield::field-neg gfield::f7-neg)
+         (gfield::field-inv gfield::f7-inv) (gfield::field-div gfield::f7-div)
+         (fix-coefficients f7-fix-coefficients)
+         (trim-trailing-zeros f7-trim-trailing-zeros) (normalize f7-normalize)
+         (coefficient-list-p f7-coefficient-list-p)
+         (polynomial-p f7-polynomial-p)
+         (canonical-polynomial-p f7-canonical-polynomial-p)
+         (raw-add f7-raw-add) (poly-add f7-poly-add)
+         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg) (poly-sub f7-poly-sub)
+         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+         (const f7-const) (polynomial-one f7-polynomial-one)
+         (zero-prefix f7-zero-prefix) (poly-shift f7-poly-shift)
+         (monomial f7-monomial) (poly-degree f7-poly-degree)
+         (poly-leading-coefficient f7-poly-leading-coefficient)
+         (poly-division-step-core f7-poly-division-step-core)
+         (poly-division-step f7-poly-division-step)
+         (poly-division-step-term f7-poly-division-step-term)
+         (poly-division-step-next f7-poly-division-step-next)
+         (poly-divmod-core f7-poly-divmod-core) (poly-divmod f7-poly-divmod)
+         (poly-remainder f7-poly-remainder)
+         (poly-euclidean-gcd f7-poly-euclidean-gcd)
+         (poly-extended-euclidean-gcd f7-poly-extended-euclidean-gcd)))))
+
+(defthm f7-poly-extended-euclidean-gcd-first-coefficient-canonical
+  (f7-canonical-polynomial-p
+   (mv-nth 1 (f7-poly-extended-euclidean-gcd first second)))
+
+  :hints (("Goal" :by (:functional-instance
+                        poly-extended-euclidean-gcd-first-coefficient-canonical
+         (gfield::field-element-p gfield::f7-element-p)
+         (gfield::field-fix gfield::f7-fix) (gfield::field-zero gfield::f7-zero)
+         (gfield::field-one gfield::f7-one) (gfield::field-add gfield::f7-add)
+         (gfield::field-mul gfield::f7-mul) (gfield::field-neg gfield::f7-neg)
+         (gfield::field-inv gfield::f7-inv) (gfield::field-div gfield::f7-div)
+         (fix-coefficients f7-fix-coefficients)
+         (trim-trailing-zeros f7-trim-trailing-zeros) (normalize f7-normalize)
+         (coefficient-list-p f7-coefficient-list-p)
+         (polynomial-p f7-polynomial-p)
+         (canonical-polynomial-p f7-canonical-polynomial-p)
+         (raw-add f7-raw-add) (poly-add f7-poly-add)
+         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg) (poly-sub f7-poly-sub)
+         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+         (const f7-const) (polynomial-one f7-polynomial-one)
+         (zero-prefix f7-zero-prefix) (poly-shift f7-poly-shift)
+         (monomial f7-monomial) (poly-degree f7-poly-degree)
+         (poly-leading-coefficient f7-poly-leading-coefficient)
+         (poly-division-step-core f7-poly-division-step-core)
+         (poly-division-step f7-poly-division-step)
+         (poly-division-step-term f7-poly-division-step-term)
+         (poly-division-step-next f7-poly-division-step-next)
+         (poly-divmod-core f7-poly-divmod-core) (poly-divmod f7-poly-divmod)
+         (poly-remainder f7-poly-remainder)
+         (poly-euclidean-gcd f7-poly-euclidean-gcd)
+         (poly-extended-euclidean-gcd f7-poly-extended-euclidean-gcd)))))
+
+(defthm f7-poly-extended-euclidean-gcd-second-coefficient-canonical
+  (f7-canonical-polynomial-p
+   (mv-nth 2 (f7-poly-extended-euclidean-gcd first second)))
+
+  :hints (("Goal" :by (:functional-instance
+                        poly-extended-euclidean-gcd-second-coefficient-canonical
+         (gfield::field-element-p gfield::f7-element-p)
+         (gfield::field-fix gfield::f7-fix) (gfield::field-zero gfield::f7-zero)
+         (gfield::field-one gfield::f7-one) (gfield::field-add gfield::f7-add)
+         (gfield::field-mul gfield::f7-mul) (gfield::field-neg gfield::f7-neg)
+         (gfield::field-inv gfield::f7-inv) (gfield::field-div gfield::f7-div)
+         (fix-coefficients f7-fix-coefficients)
+         (trim-trailing-zeros f7-trim-trailing-zeros) (normalize f7-normalize)
+         (coefficient-list-p f7-coefficient-list-p)
+         (polynomial-p f7-polynomial-p)
+         (canonical-polynomial-p f7-canonical-polynomial-p)
+         (raw-add f7-raw-add) (poly-add f7-poly-add)
+         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg) (poly-sub f7-poly-sub)
+         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+         (const f7-const) (polynomial-one f7-polynomial-one)
+         (zero-prefix f7-zero-prefix) (poly-shift f7-poly-shift)
+         (monomial f7-monomial) (poly-degree f7-poly-degree)
+         (poly-leading-coefficient f7-poly-leading-coefficient)
+         (poly-division-step-core f7-poly-division-step-core)
+         (poly-division-step f7-poly-division-step)
+         (poly-division-step-term f7-poly-division-step-term)
+         (poly-division-step-next f7-poly-division-step-next)
+         (poly-divmod-core f7-poly-divmod-core) (poly-divmod f7-poly-divmod)
+         (poly-remainder f7-poly-remainder)
+         (poly-euclidean-gcd f7-poly-euclidean-gcd)
+         (poly-extended-euclidean-gcd f7-poly-extended-euclidean-gcd)))))
+
+(defthm f7-poly-extended-euclidean-gcd-bezout
+  (equal
+   (f7-poly-add
+    (f7-poly-mul
+     (mv-nth 1 (f7-poly-extended-euclidean-gcd first second)) first)
+    (f7-poly-mul
+     (mv-nth 2 (f7-poly-extended-euclidean-gcd first second)) second))
+   (mv-nth 0 (f7-poly-extended-euclidean-gcd first second)))
+
+  :hints (("Goal" :by (:functional-instance
+                        poly-extended-euclidean-gcd-bezout
+         (gfield::field-element-p gfield::f7-element-p)
+         (gfield::field-fix gfield::f7-fix) (gfield::field-zero gfield::f7-zero)
+         (gfield::field-one gfield::f7-one) (gfield::field-add gfield::f7-add)
+         (gfield::field-mul gfield::f7-mul) (gfield::field-neg gfield::f7-neg)
+         (gfield::field-inv gfield::f7-inv) (gfield::field-div gfield::f7-div)
+         (fix-coefficients f7-fix-coefficients)
+         (trim-trailing-zeros f7-trim-trailing-zeros) (normalize f7-normalize)
+         (coefficient-list-p f7-coefficient-list-p)
+         (polynomial-p f7-polynomial-p)
+         (canonical-polynomial-p f7-canonical-polynomial-p)
+         (raw-add f7-raw-add) (poly-add f7-poly-add)
+         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg) (poly-sub f7-poly-sub)
+         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+         (const f7-const) (polynomial-one f7-polynomial-one)
+         (zero-prefix f7-zero-prefix) (poly-shift f7-poly-shift)
+         (monomial f7-monomial) (poly-degree f7-poly-degree)
+         (poly-leading-coefficient f7-poly-leading-coefficient)
+         (poly-division-step-core f7-poly-division-step-core)
+         (poly-division-step f7-poly-division-step)
+         (poly-division-step-term f7-poly-division-step-term)
+         (poly-division-step-next f7-poly-division-step-next)
+         (poly-divmod-core f7-poly-divmod-core) (poly-divmod f7-poly-divmod)
+         (poly-remainder f7-poly-remainder)
+         (poly-euclidean-gcd f7-poly-euclidean-gcd)
+         (poly-extended-euclidean-gcd f7-poly-extended-euclidean-gcd)))))
+
+; Focused exact-value raw-XGCD regressions.  Each event records the full
+; triple, all projections, both Bezout products, their sum, and the raw GCD.
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(1 2 1) '(2 3 1))
+   (and
+        (equal g '(6 6)) (equal s '(1)) (equal tt '(6))
+        (equal g (f7-poly-euclidean-gcd '(1 2 1) '(2 3 1)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(1 2 1)) '(1 2 1))
+        (equal (f7-poly-mul tt '(2 3 1)) '(5 4 6))
+        (equal (f7-poly-add '(1 2 1) '(5 4 6)) '(6 6))
+        (equal (f7-poly-add (f7-poly-mul s '(1 2 1))
+                            (f7-poly-mul tt '(2 3 1)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(2 3 1) '(1 2 1))
+   (and
+        (equal g '(1 1)) (equal s '(1)) (equal tt '(6))
+        (equal g (f7-poly-euclidean-gcd '(2 3 1) '(1 2 1)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(2 3 1)) '(2 3 1))
+        (equal (f7-poly-mul tt '(1 2 1)) '(6 5 6))
+        (equal (f7-poly-add '(2 3 1) '(6 5 6)) '(1 1))
+        (equal (f7-poly-add (f7-poly-mul s '(2 3 1))
+                            (f7-poly-mul tt '(1 2 1)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(1 0 1) '(1 1))
+   (and
+        (equal g '(2)) (equal s '(1)) (equal tt '(1 6))
+        (equal g (f7-poly-euclidean-gcd '(1 0 1) '(1 1)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(1 0 1)) '(1 0 1))
+        (equal (f7-poly-mul tt '(1 1)) '(1 0 6))
+        (equal (f7-poly-add '(1 0 1) '(1 0 6)) '(2))
+        (equal (f7-poly-add (f7-poly-mul s '(1 0 1))
+                            (f7-poly-mul tt '(1 1)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(1 2 1) '(1 1))
+   (and
+        (equal g '(1 1)) (equal s nil) (equal tt '(1))
+        (equal g (f7-poly-euclidean-gcd '(1 2 1) '(1 1)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(1 2 1)) nil)
+        (equal (f7-poly-mul tt '(1 1)) '(1 1))
+        (equal (f7-poly-add nil '(1 1)) '(1 1))
+        (equal (f7-poly-add (f7-poly-mul s '(1 2 1))
+                            (f7-poly-mul tt '(1 1)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(1 0 0 0 1) '(1 1 1))
+   (and
+        (equal g '(1)) (equal s '(0 6)) (equal tt '(1 0 6 1))
+        (equal g (f7-poly-euclidean-gcd '(1 0 0 0 1) '(1 1 1)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(1 0 0 0 1)) '(0 6 0 0 0 6))
+        (equal (f7-poly-mul tt '(1 1 1)) '(1 1 0 0 0 1))
+        (equal (f7-poly-add '(0 6 0 0 0 6) '(1 1 0 0 0 1)) '(1))
+        (equal (f7-poly-add (f7-poly-mul s '(1 0 0 0 1))
+                            (f7-poly-mul tt '(1 1 1)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(2 3) nil)
+   (and
+        (equal g '(2 3)) (equal s '(1)) (equal tt nil)
+        (equal g (f7-poly-euclidean-gcd '(2 3) nil))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(2 3)) '(2 3))
+        (equal (f7-poly-mul tt nil) nil)
+        (equal (f7-poly-add '(2 3) nil) '(2 3))
+        (equal (f7-poly-add (f7-poly-mul s '(2 3))
+                            (f7-poly-mul tt nil))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd nil '(2 3))
+   (and
+        (equal g '(2 3)) (equal s nil) (equal tt '(1))
+        (equal g (f7-poly-euclidean-gcd nil '(2 3)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s nil) nil)
+        (equal (f7-poly-mul tt '(2 3)) '(2 3))
+        (equal (f7-poly-add nil '(2 3)) '(2 3))
+        (equal (f7-poly-add (f7-poly-mul s nil)
+                            (f7-poly-mul tt '(2 3)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd nil nil)
+   (and
+        (equal g nil) (equal s '(1)) (equal tt nil)
+        (equal g (f7-poly-euclidean-gcd nil nil))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s nil) nil)
+        (equal (f7-poly-mul tt nil) nil)
+        (equal (f7-poly-add nil nil) nil)
+        (equal (f7-poly-add (f7-poly-mul s nil)
+                            (f7-poly-mul tt nil))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(3) '(5))
+   (and
+        (equal g '(5)) (equal s nil) (equal tt '(1))
+        (equal g (f7-poly-euclidean-gcd '(3) '(5)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(3)) nil)
+        (equal (f7-poly-mul tt '(5)) '(5))
+        (equal (f7-poly-add nil '(5)) '(5))
+        (equal (f7-poly-add (f7-poly-mul s '(3))
+                            (f7-poly-mul tt '(5)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(2 4) '(3 6))
+   (and
+        (equal g '(3 6)) (equal s nil) (equal tt '(1))
+        (equal g (f7-poly-euclidean-gcd '(2 4) '(3 6)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(2 4)) nil)
+        (equal (f7-poly-mul tt '(3 6)) '(3 6))
+        (equal (f7-poly-add nil '(3 6)) '(3 6))
+        (equal (f7-poly-add (f7-poly-mul s '(2 4))
+                            (f7-poly-mul tt '(3 6)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(3 6) '(2 4))
+   (and
+        (equal g '(2 4)) (equal s nil) (equal tt '(1))
+        (equal g (f7-poly-euclidean-gcd '(3 6) '(2 4)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(3 6)) nil)
+        (equal (f7-poly-mul tt '(2 4)) '(2 4))
+        (equal (f7-poly-add nil '(2 4)) '(2 4))
+        (equal (f7-poly-add (f7-poly-mul s '(3 6))
+                            (f7-poly-mul tt '(2 4)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(1 2 1 0 0) '(2 3 1 0))
+   (and
+        (equal g '(6 6)) (equal s '(1)) (equal tt '(6))
+        (equal g (f7-poly-euclidean-gcd '(1 2 1 0 0) '(2 3 1 0)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(1 2 1 0 0)) '(1 2 1))
+        (equal (f7-poly-mul tt '(2 3 1 0)) '(5 4 6))
+        (equal (f7-poly-add '(1 2 1) '(5 4 6)) '(6 6))
+        (equal (f7-poly-add (f7-poly-mul s '(1 2 1 0 0))
+                            (f7-poly-mul tt '(2 3 1 0)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(8 -5 8) '(9 -4 8))
+   (and
+        (equal g '(6 6)) (equal s '(1)) (equal tt '(6))
+        (equal g (f7-poly-euclidean-gcd '(8 -5 8) '(9 -4 8)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(8 -5 8)) '(1 2 1))
+        (equal (f7-poly-mul tt '(9 -4 8)) '(5 4 6))
+        (equal (f7-poly-add '(1 2 1) '(5 4 6)) '(6 6))
+        (equal (f7-poly-add (f7-poly-mul s '(8 -5 8))
+                            (f7-poly-mul tt '(9 -4 8)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd 'bad '(2 3))
+   (and
+        (equal g '(2 3)) (equal s nil) (equal tt '(1))
+        (equal g (f7-poly-euclidean-gcd 'bad '(2 3)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s 'bad) nil)
+        (equal (f7-poly-mul tt '(2 3)) '(2 3))
+        (equal (f7-poly-add nil '(2 3)) '(2 3))
+        (equal (f7-poly-add (f7-poly-mul s 'bad)
+                            (f7-poly-mul tt '(2 3)))
+               g))))
+(assert-event
+ (mv-let (g s tt) (f7-poly-extended-euclidean-gcd '(1 2 . bad) '(2 4 . tail))
+   (and
+        (equal g '(2 4)) (equal s nil) (equal tt '(1))
+        (equal g (f7-poly-euclidean-gcd '(1 2 . bad) '(2 4 . tail)))
+        (f7-canonical-polynomial-p g)
+        (f7-canonical-polynomial-p s)
+        (f7-canonical-polynomial-p tt)
+        (equal (f7-poly-mul s '(1 2 . bad)) nil)
+        (equal (f7-poly-mul tt '(2 4 . tail)) '(2 4))
+        (equal (f7-poly-add nil '(2 4)) '(2 4))
+        (equal (f7-poly-add (f7-poly-mul s '(1 2 . bad))
+                            (f7-poly-mul tt '(2 4 . tail)))
+               g))))
 
 ; Exact raw representatives are intentional: reversed inputs and scalar
 ; associates need not return equal (or monic) polynomials.
