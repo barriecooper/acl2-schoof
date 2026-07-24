@@ -453,9 +453,22 @@ monic-gcd wrapper described above.
 `GPOLY-MOD-CONGRUENCE` is proved by the one-sided and simultaneous
 `POLY-REMAINDER-OF-POLY-MUL-*` laws, `POLY-CONGRUENT-P-OF-POLY-MUL` and its
 one-sided corollaries, and
-`POLY-MUL-POLY-CONGRUENT-P-WITH-REMAINDERS`. No quotient-ring operation, concrete
-reduction/congruence API, gcd correctness, modular inverse, extension field, or concrete
-F7/PFIELD division API is introduced here.
+`POLY-MUL-POLY-CONGRUENT-P-WITH-REMAINDERS`.
+
+`generic/reduced-arithmetic.lisp` exposes `POLY-REDUCED-ADD`,
+`POLY-REDUCED-NEG`, `POLY-REDUCED-SUB`, and `POLY-REDUCED-MUL`. Each is exactly
+one existing normalized public operation followed by `POLY-REMAINDER`; there is
+no recursion, modulus classification, GCD test, or alternate reducer. Zero
+modulus recovers normalized polynomial arithmetic, polynomial one and every
+normalized nonzero constant modulus return `nil`, and positive-degree moduli
+return bounded canonical representatives. The certified interface includes
+normalization and reduction fixed points, all-operand normalization invariance,
+and representative invariance using the existing remainder arithmetic laws.
+The F7 specializations exercise reducible and irreducible-looking moduli without
+making irreducibility or field claims. These are representative operations
+only: quotient-ring laws, quotient equality packaging, reduced-one unit laws,
+irreducibility, and field promotion remain open. The same runtime supports both
+reducible Schoof coordinate quotients and moduli later proved irreducible.
 
 The Euclidean remainder step additionally has a certified natural-valued
 descent measure: for a nonempty normalized divisor, the length of the

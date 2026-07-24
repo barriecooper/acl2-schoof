@@ -1,0 +1,64 @@
+(in-package "GPOLY")
+(include-book "f7-division")
+
+; Concrete execution witnesses use the same transparent operation/remainder
+; chain as the generic boundary.  They do not introduce a concrete quotient
+; object or duplicate the generic structural proofs.
+(defun f7-poly-reduced-add (left right modulus)
+  (f7-poly-remainder (f7-poly-add left right) modulus))
+(defun f7-poly-reduced-neg (polynomial modulus)
+  (f7-poly-remainder (f7-poly-neg polynomial) modulus))
+(defun f7-poly-reduced-sub (left right modulus)
+  (f7-poly-remainder (f7-poly-sub left right) modulus))
+(defun f7-poly-reduced-mul (left right modulus)
+  (f7-poly-remainder (f7-poly-mul left right) modulus))
+
+(verify-guards f7-poly-reduced-add)
+(verify-guards f7-poly-reduced-neg)
+(verify-guards f7-poly-reduced-sub)
+(verify-guards f7-poly-reduced-mul)
+
+; x^2+1 is used only as an irreducible-looking execution example.  No
+; irreducibility or field conclusion is asserted.
+(defthm f7-poly-reduced-arithmetic-exact-regressions
+  (and
+   ; Addition requiring reduction, addition below the bound, and cancellation.
+   (equal (f7-poly-add '(0 0 1) '(3)) '(3 0 1))
+   (equal (f7-poly-reduced-add '(0 0 1) '(3) '(1 0 1)) '(2))
+   (equal (f7-poly-reduced-add '(1 2) '(3) '(1 0 1)) '(4 2))
+   (equal (f7-poly-reduced-add '(1 2) '(6 5) '(1 0 1)) nil)
+   ; Negation and subtraction retain their public arithmetic boundaries.
+   (equal (f7-poly-reduced-neg '(1 2) '(1 0 1)) '(6 5))
+   (equal (f7-poly-reduced-sub '(1 2) '(3 4) '(1 0 1)) '(5 5))
+   ; A degree-four product substantially reduces; zero and one are explicit.
+   (equal (f7-poly-mul '(1 1 1) '(1 1 1)) '(1 2 3 2 1))
+   (equal (f7-poly-reduced-mul '(1 1 1) '(1 1 1) '(1 0 1)) '(6))
+   (equal (f7-poly-reduced-mul '(1 2) nil '(1 0 1)) nil)
+   (equal (f7-poly-reduced-mul '(3 4 5) '(1) '(1 0 1)) '(5 4))
+   ; Total modulus semantics.
+   (equal (f7-poly-reduced-add '(8 -1 0) '(3) nil) '(4 6))
+   (equal (f7-poly-reduced-sub '(1 2) '(3 4) '(1)) nil)
+   (equal (f7-poly-reduced-mul '(1 2) '(3 4) '(3)) nil)
+   ; Trailing zeros, out-of-range coefficients, atoms, and dotted lists.
+   (equal (f7-poly-reduced-add '(8 -1 0 0) '(3) '(1 0 1 0)) '(4 6))
+   (equal (f7-poly-reduced-neg 'malformed '(1 0 1)) nil)
+   (equal (f7-poly-reduced-add '(1 2) '(3) 'malformed-modulus) '(4 2))
+   (equal (f7-poly-reduced-sub '(1 2 . 9) '(3 . 8) '(1 0 1)) '(5 2))
+   (equal (f7-poly-reduced-add '(0 0 1) '(3) '(1 0 1 . 9)) '(2))
+   ; A small reducible-modulus execution example, with no field claim.
+   (equal (f7-poly-reduced-mul '(1 1) '(1 1) '(6 0 1)) '(2 2))))
+
+(defthm f7-poly-reduced-arithmetic-boundary-regressions
+  (let* ((modulus '(1 0 1))
+         (result (f7-poly-reduced-mul '(1 1 1) '(1 1 1) modulus)))
+    (and (f7-canonical-polynomial-p result)
+         (equal (f7-normalize result) result)
+         (equal (f7-poly-remainder result modulus) result)
+         (or (equal result nil)
+             (< (f7-poly-degree result)
+                (f7-poly-degree (f7-normalize modulus))))
+         (equal (f7-poly-reduced-add '(8 -1 0 0) '(3) '(1 0 1 0))
+                (f7-poly-reduced-add
+                 (f7-normalize '(8 -1 0 0))
+                 (f7-normalize '(3))
+                 (f7-normalize '(1 0 1 0)))))))
