@@ -861,6 +861,43 @@
     :in-theory (disable poly-leading-coefficient-of-poly-scale
                         poly-scale poly-leading-coefficient))))
 
+(defthm poly-monic-normalize-regression-raw-negative-unit-gcd
+  (let ((negative-one (list (gfield::field-neg (gfield::field-one)))))
+    (and
+     (equal (poly-monic-normalize
+             (poly-euclidean-gcd nil negative-one))
+            (polynomial-one))
+     (equal
+      (poly-leading-coefficient
+       (poly-monic-normalize
+        (poly-euclidean-gcd nil negative-one)))
+      (gfield::field-one))))
+  :hints
+  (("Goal"
+    :use ((:instance poly-leading-coefficient-of-poly-monic-normalize
+                     (poly
+                      (poly-euclidean-gcd
+                       nil
+                       (list (gfield::field-neg
+                              (gfield::field-one))))))
+          (:instance poly-mul-const-left
+                     (a (gfield::field-inv
+                         (gfield::field-neg (gfield::field-one))))
+                     (p (const (gfield::field-neg
+                                (gfield::field-one)))))
+          (:instance poly-mul-of-consts
+                     (a (gfield::field-inv
+                         (gfield::field-neg (gfield::field-one))))
+                     (b (gfield::field-neg (gfield::field-one))))
+          (:instance gfield::field-mul-inverse-left
+                     (x (gfield::field-neg (gfield::field-one)))))
+    :in-theory (e/d (poly-monic-normalize polynomial-one const)
+                    (poly-euclidean-gcd poly-scale
+                     poly-leading-coefficient
+                     poly-mul-const-left poly-mul-of-consts
+                     gfield::field-mul-inverse-left
+                     poly-leading-coefficient-of-poly-monic-normalize)))))
+
 (defthm poly-euclidean-gcd-divides-regression-noncanonical
   (let ((first (list (gfield::field-one) (gfield::field-zero)))
         (second (list (gfield::field-one) (gfield::field-one)

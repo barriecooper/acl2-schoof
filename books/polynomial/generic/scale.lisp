@@ -3,6 +3,7 @@
 
 ; Coefficientwise scalar multiplication is raw; the public boundary fixes and
 ; canonicalizes both inputs according to the existing GPOLY policy.
+(set-verify-guards-eagerness 2)
 (def-scale-instance raw-scale poly-scale normalize
                     gfield::field-fix gfield::field-mul)
 

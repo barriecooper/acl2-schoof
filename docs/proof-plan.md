@@ -50,10 +50,14 @@ ACL2 obligations are genuinely proved and certified.
    Euclidean-step equivalence as the complete recursive algebraic bridge.
    These directions are now packaged under a transparent public raw-gcd
    correctness interface by direct theorem composition, without new induction,
-   recursion, or division reasoning. The next focused milestone is to inventory
-   leading-coefficient, scalar-multiplication, field-inversion, and
-   nonzero-polynomial support before introducing generic monic normalization.
-   Proving that normalization preserves divisibility/associates and certifying
+   recursion, or division reasoning. Transparent generic monic normalization
+   is now structurally certified: normalized zero maps explicitly to `nil`,
+   nonzero input is inverse-leading-coefficient scaled, zero/nonzero status is
+   exact, output is canonical and normalized, and its leading coefficient is
+   respectively field zero or field one. The next focused milestone is to
+   inventory whether dividend scaling, divisor scaling, explicit associates,
+   or direct two-way divisibility gives the cleanest proof that monic
+   normalization preserves divisibility-theoretic content. Certifying
    a monic gcd wrapper follow as separate stages; uniqueness,
    extended gcd, and Bézout remain open. Later power uses include
    extension-field arithmetic,
@@ -93,8 +97,10 @@ across a remainder step are now certified, unconditionally including
 zero-normalized inputs. Raw algebraic gcd correctness is now exposed by the
 public `POLY-COMMON-DIVISOR-P` interface: the computed result is a common
 divisor, and every common divisor divides it. The raw result remains canonical
-but potentially non-monic. Monic normalization, associate/unit invariance,
-uniqueness, extended gcd, and Bézout correctness are still open. No concrete
+but potentially non-monic. Monic normalization's elementary representation
+and leading-coefficient interface is certified, but associate/unit invariance,
+divisibility preservation, a monic gcd wrapper, uniqueness, extended gcd, and
+Bézout correctness are still open. No concrete
 PFIELD/F7 gcd API was introduced, and recursive
 concrete F7 divmod remains postponed. The first executable
 Schoof path may target a named prime field; arbitrary finite-field execution is

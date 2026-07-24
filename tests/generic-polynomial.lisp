@@ -32,6 +32,47 @@
 (assert-event (equal (f7-poly-scale 9 '(1 8 14 0)) '(2 2)))
 (assert-event
  (equal (f7-poly-leading-coefficient (f7-poly-scale 3 '(1 2 3))) 2))
+; Monic normalization keeps constant-first order and treats normalized zero
+; explicitly, including malformed and noncanonical representations.
+(assert-event (equal (f7-poly-monic-normalize nil) nil))
+(assert-event (equal (f7-poly-monic-normalize 'malformed-poly) nil))
+(assert-event
+ (equal (f7-poly-monic-normalize '(1 2 . malformed-tail)) '(4 1)))
+(assert-event (equal (f7-poly-monic-normalize '(0 0 0)) nil))
+(assert-event (equal (f7-poly-monic-normalize '(7)) nil))
+(assert-event (equal (f7-poly-monic-normalize '(0 0 0 0 0)) nil))
+(assert-event
+ (equal (f7-poly-monic-normalize '(8 -1 10 0)) '(5 2 1)))
+(assert-event (equal (f7-poly-monic-normalize '(1)) '(1)))
+(assert-event (equal (f7-poly-monic-normalize '(3)) '(1)))
+(assert-event (equal (f7-poly-monic-normalize '(-2)) '(1)))
+(assert-event (equal (f7-poly-monic-normalize '(-1)) '(1)))
+(assert-event (equal (f7-poly-monic-normalize '(1 2)) '(4 1)))
+(assert-event (equal (f7-poly-monic-normalize '(1 2 3)) '(5 3 1)))
+(assert-event
+ (equal (f7-poly-monic-normalize '(8 9 10 0 0)) '(5 3 1)))
+(assert-event
+ (equal (f7-poly-monic-normalize (f7-normalize '(8 9 10 0 0)))
+        (f7-poly-monic-normalize '(8 9 10 0 0))))
+(assert-event
+ (equal (equal (f7-poly-monic-normalize '(7 14)) nil)
+        (equal (f7-normalize '(7 14)) nil)))
+(assert-event
+ (equal (consp (f7-poly-monic-normalize '(1 2 0)))
+        (consp (f7-normalize '(1 2 0)))))
+(assert-event
+ (f7-canonical-polynomial-p (f7-poly-monic-normalize '(8 9 10 0))))
+(assert-event
+ (equal (f7-normalize (f7-poly-monic-normalize '(8 9 10 0)))
+        (f7-poly-monic-normalize '(8 9 10 0))))
+(assert-event
+ (equal (f7-poly-leading-coefficient (f7-poly-monic-normalize '(0 0))) 0))
+(assert-event
+ (equal (f7-poly-leading-coefficient (f7-poly-monic-normalize '(1 2))) 1))
+(assert-event
+ (equal (f7-poly-leading-coefficient
+         (f7-poly-monic-normalize '(1 2 3)))
+        1))
 (defthm normalized-output-is-canonical-regression
   (canonical-polynomial-p (normalize xs)))
 (defthm pfield-generated-normalization-preserves-evaluation-regression
