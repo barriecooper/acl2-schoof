@@ -75,6 +75,14 @@
            (equal xs nil))
   :rule-classes nil)
 
+(defthm normalize-equal-nil-when-not-consp
+  (implies (not (consp (normalize xs)))
+           (equal (normalize xs) nil))
+  :hints
+  (("Goal"
+    :use ((:instance canonical-zero-polynomial-is-nil
+                     (xs (normalize xs)))))))
+
 (defthm canonical-nonzero-iff-consp
   (implies (canonical-polynomial-p xs)
            (equal (not (poly-zerop xs)) (consp xs))))
