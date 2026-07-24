@@ -12,6 +12,8 @@
   (f7-poly-remainder (f7-poly-sub left right) modulus))
 (defun f7-poly-reduced-mul (left right modulus)
   (f7-poly-remainder (f7-poly-mul left right) modulus))
+(defun f7-poly-reduced-one (modulus)
+  (f7-poly-remainder (f7-polynomial-one) modulus))
 
 ; Concrete execution spelling of the generic quotient-equality boundary.
 (defun f7-poly-congruent-p (left right modulus)
@@ -22,6 +24,7 @@
 (verify-guards f7-poly-reduced-neg)
 (verify-guards f7-poly-reduced-sub)
 (verify-guards f7-poly-reduced-mul)
+(verify-guards f7-poly-reduced-one)
 (verify-guards f7-poly-congruent-p)
 
 (defthm f7-poly-congruent-p-exact-regressions
@@ -108,3 +111,48 @@
                  (f7-normalize '(8 -1 0 0))
                  (f7-normalize '(3))
                  (f7-normalize '(1 0 1 0)))))))
+
+(defthm f7-poly-reduced-ring-law-regressions
+  (let* ((m '(1 0 1))
+         (a '(0 0 1))
+         (b '(3 4 5))
+         (c '(8 -1 0 0))
+         (ra (f7-poly-remainder a m))
+         (rb (f7-poly-remainder b m))
+         (rc (f7-poly-remainder c m))
+         (one (f7-poly-reduced-one m))
+         (add-left (f7-poly-reduced-add
+                    (f7-poly-reduced-add a b m) c m))
+         (add-right (f7-poly-reduced-add
+                     a (f7-poly-reduced-add b c m) m))
+         (mul-left (f7-poly-reduced-mul
+                    (f7-poly-reduced-mul a b m) c m))
+         (mul-right (f7-poly-reduced-mul
+                     a (f7-poly-reduced-mul b c m) m)))
+    (and
+     (equal ra '(6)) (equal rb '(5 4)) (equal rc '(1 6))
+     (equal one '(1))
+     (equal add-left '(5 3)) (equal add-right '(5 3))
+     (equal (f7-poly-reduced-add 'malformed nil m) nil)
+     (equal (f7-poly-reduced-add a (f7-poly-reduced-neg a m) m) nil)
+     (equal (f7-poly-reduced-neg (f7-poly-reduced-neg c m) m) rc)
+     (equal (f7-poly-reduced-sub b c m)
+            (f7-poly-reduced-add b (f7-poly-reduced-neg c m) m))
+     (equal mul-left '(5 1)) (equal mul-right '(5 1))
+     (equal (f7-poly-reduced-mul b one m) rb)
+     (equal (f7-poly-reduced-mul nil '(1 2 . 9) m) nil)
+     (equal (f7-poly-reduced-mul a (f7-poly-reduced-add b c m) m)
+            (f7-poly-reduced-add (f7-poly-reduced-mul a b m)
+                                 (f7-poly-reduced-mul a c m) m))
+     (equal (f7-poly-reduced-mul (f7-poly-reduced-add a b m) c m)
+            (f7-poly-reduced-add (f7-poly-reduced-mul a c m)
+                                 (f7-poly-reduced-mul b c m) m))
+     (equal (f7-poly-reduced-one nil) '(1))
+     (equal (f7-poly-reduced-one '(1)) nil)
+     (equal (f7-poly-reduced-one '(3)) nil)
+     (equal (f7-poly-reduced-one '(6 0 1)) '(1))
+     (equal (f7-poly-reduced-mul '(1 1) '(1 1) '(6 0 1)) '(2 2))
+     (f7-canonical-polynomial-p mul-left)
+     (equal (f7-normalize mul-left) mul-left)
+     (equal (f7-poly-remainder mul-left m) mul-left)))
+  :rule-classes nil)

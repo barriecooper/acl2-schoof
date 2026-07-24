@@ -234,6 +234,14 @@
            :in-theory (disable poly-add poly-mul poly-neg
                                canonical-polynomial-p polynomial-p))))
 
+(defthm poly-mul-of-poly-neg-left-total
+  (equal (poly-mul (poly-neg x) y)
+         (poly-neg (poly-mul x y)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance poly-mul-of-poly-neg-left
+                            (x (normalize x)) (y y))))))
+
 (defthm poly-add-right-cancel-canonical
   (implies (and (canonical-polynomial-p x)
                 (canonical-polynomial-p y)

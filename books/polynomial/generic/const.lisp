@@ -8,8 +8,18 @@
 (defun polynomial-one ()
   (list (gfield::field-one)))
 
+(verify-guards polynomial-one)
+
 (defthm canonical-polynomial-p-of-polynomial-one
   (canonical-polynomial-p (polynomial-one)))
+
+(defthm poly-mul-of-polynomial-one-left
+  (equal (poly-mul (polynomial-one) x) (normalize x))
+  :hints (("Goal" :in-theory (enable polynomial-one))))
+
+(defthm poly-mul-of-polynomial-one-right
+  (equal (poly-mul x (polynomial-one)) (normalize x))
+  :hints (("Goal" :in-theory (enable polynomial-one))))
 
 (defthm canonical-polynomial-p-of-const
   (canonical-polynomial-p (const a))
