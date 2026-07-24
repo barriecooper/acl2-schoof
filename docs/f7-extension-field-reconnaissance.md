@@ -27,7 +27,7 @@ not from the repository as a whole.
 | Divisibility/common divisors | Divisor-first `poly-divides-p`, `poly-common-divisor-p`, normalization laws, closure, transitivity, Euclidean-step equivalence, and monic-scaling transport | `f7-poly-divides-p`, `f7-poly-common-divisor-p`, fixing/normalization interfaces, both monic-normalization transports, and common-divisor transport | No monic-gcd uniqueness theorem, but it is not needed next |
 | Raw Euclidean GCD | `poly-euclidean-gcd`, equations, canonicality, divides-both, greatestness, and `poly-euclidean-gcd-raw-correct` | `f7-poly-euclidean-gcd`, equations/guards, direct correctness instance and divisibility corollaries, including order- and scalar-sensitive exact results | Complete |
 | Monic Euclidean GCD | `poly-monic-euclidean-gcd`, exactly monic normalization of raw GCD; structural and common-divisor correctness package | `f7-poly-monic-euclidean-gcd`, exactly the public wrapper stated in the task; guards, structural interface, correctness, total semantics, and exact regressions | Uniqueness remains open and optional |
-| Raw XGCD/Bézout | `poly-extended-euclidean-gcd` returns `(g,s,t)`, follows the raw GCD remainder chain, calls `poly-divmod` once per step, has canonical projections, proves `g = poly-euclidean-gcd`, and proves `s*a+t*b=g` | None | **Selected next unit**: transparent F7 instance/runtime and its direct theorem package |
+| Raw XGCD/Bézout | `poly-extended-euclidean-gcd` returns `(g,s,t)`, follows the raw GCD remainder chain, calls `poly-divmod` once per step, has canonical projections, proves `g = poly-euclidean-gcd`, and proves `s*a+t*b=g` | `f7-poly-extended-euclidean-gcd` is the guard-verified transparent specialization with the same certified interface and exact executions | Complete |
 | Monic XGCD | `poly-monic-extended-euclidean-gcd` calls raw XGCD once, scales both coefficients by the inverse leading coefficient, returns the monic GCD, and proves its Bézout identity | None | Later small wrapper after F7 raw XGCD |
 | Modular reduction/congruence | `poly-congruent-p` is equality of canonical remainders; equivalence, bounded-representative equality, modulus-multiple, and add/neg/sub/mul compatibility are certified | Concrete remainder exists, but there is no named F7 congruence or residue-class operation API | Functionally instantiate only the interface actually needed by quotient operations |
 | Modular inverse | `poly-modular-inverse` reduces the monic-XGCD first coefficient; canonicality and the conditional product-remainder theorem are certified, including literal one for positive-degree modulus | None | Small concrete wrapper/instance after F7 monic XGCD |
@@ -167,11 +167,11 @@ Sequence D is useful only for the irreducibility certificate and final named
 field; duplicating XGCD concretely without instantiating the generic theorem
 package would sacrifice reuse.
 
-1. **F7 raw XGCD instance (exact next PR).** Add the transparent generated or
-   handwritten `f7-poly-extended-euclidean-gcd` recursion with the exact generic
-   control flow.  Prove projection equality to raw F7 GCD, canonical projections,
-   unconditional raw Bézout, guards, and focused exact executions.  Depends only
-   on certified F7 divmod/GCD/operations and generic XGCD.  It cannot be combined
+1. **F7 raw XGCD instance (complete).** The transparent handwritten specialization
+   `f7-poly-extended-euclidean-gcd` has the exact generic
+   control flow.  Projection equality to raw F7 GCD, canonical projections,
+   unconditional raw Bézout, guards, and focused exact executions now certify.
+   It depends only on certified F7 divmod/GCD/operations and generic XGCD and cannot be combined
    with monic scaling without mixing recursion/instantiation with a distinct unit
    argument.
 2. **F7 monic XGCD wrapper.** Add one nonrecursive wrapper scaling both raw

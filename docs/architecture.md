@@ -59,7 +59,7 @@ The next algebraic layers deliberately separate two constructions:
 The concrete dependency audit after the certified F7 monic GCD is recorded in
 `f7-extension-field-reconnaissance.md`.  Generic raw/monic XGCD and modular
 inverse are already certified; the smallest next implementation is therefore
-the transparent **concrete F7 raw XGCD instance**, not new generic theory.
+the transparent **concrete F7 raw XGCD instance**, now certified with exact raw-GCD and unconditional Bezout interfaces.  Concrete monic XGCD is the next XGCD layer, not new generic theory.
 Its recursive triple must retain the raw, unit-sensitive GCD, with monic
 rescaling of both Bezout coefficients deferred to a separate wrapper PR.
 
