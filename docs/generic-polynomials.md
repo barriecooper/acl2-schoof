@@ -594,3 +594,30 @@ remain open.
 ## Concrete F7 modular inverse (certified)
 
 `generic/f7-division.lisp` now specializes the generic modular-inverse candidate literally: one `F7-POLY-MONIC-EXTENDED-EUCLIDEAN-GCD` call selects its first Bezout coefficient and one existing `F7-POLY-REMAINDER` call canonicalizes it. The guard-verified total function does not separately test the GCD; correctness is conditional on `F7-POLY-MONIC-EUCLIDEAN-GCD` being polynomial one, and the literal-one remainder corollary additionally requires positive modulus degree. This supplies inversion only for units modulo a modulus. Later quotient-ring operations and field inversion under irreducibility remain open.
+
+## Generic logical irreducibility boundary
+
+`generic/irreducibility.lisp` defines a polynomial unit to mean formal degree
+zero after the existing total normalization.  It defines `POLY-REDUCIBLE-P`
+by an explicitly logical `DEFUN-SK` witness equation: two nonunit factors whose
+existing `POLY-MUL` is the normalized input.  `POLY-IRREDUCIBLE-P` means
+positive degree and absence of such a witness.  This is not an executable
+factor search, certificate checker, factorization algorithm, or new equality,
+division, or normalization operation.
+
+The boundary is total.  Atoms, malformed/dotted tails, out-of-range
+coefficients, and trailing zeros first receive the established coefficient
+fixing and normalization semantics.  Normalized zero, polynomial one, and all
+other constants are not irreducible.  Positive-degree nonmonic inputs are not
+rejected syntactically: scalar associates are judged by the same factor
+meaning, although the general scalar/monic-normalization invariance theorem is
+left for the prerequisite unit/associate lemma group.  The certified public
+facts are normalization invariance, positive degree and normalized nonzero
+consequences, and the direct factor characterization.
+
+No divisor characterization or irreducible-implies-monic-GCD-one bridge is
+claimed here.  The former needs a reusable theorem connecting the
+remainder-defined divisibility predicate to a multiplication witness and
+associates; the latter additionally needs the genuinely mathematical
+irreducible-implies-prime/coprime argument.  The already-certified modular
+inverse law remains conditional on the literal computed monic GCD being one.

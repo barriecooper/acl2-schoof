@@ -1,5 +1,21 @@
 # F7 polynomial GCD to extension-field reconnaissance
 
+## July 2026 modulus reconnaissance update
+
+The preferred first candidate remains the constant-first polynomial `(1 0 1)`,
+or x^2+1.  Direct F7 evaluation at the seven canonical elements `0` through
+`6` gives respectively `1, 2, 5, 3, 3, 5, 2`; hence none of those seven
+values is zero.  This execution fact is not called an irreducibility proof:
+the generic theory does not yet certify the quadratic root criterion.
+
+Negative/boundary examples are normalized zero `nil`, polynomial one `(1)`,
+the nonzero constant `(3)`, and reducible x^2-1 represented by `(6 0 1)`
+(with roots `1` and `6`).  `(1 0 1 0)`, `(8 0 1)`, and malformed dotted-tail
+variants normalize/fix to the same candidate under the existing total
+semantics.  Coefficients outside `0..6` are fixed by F7 arithmetic; they are
+not a distinct irreducibility domain.  No concrete certificate or extension
+field is introduced by this reconnaissance.
+
 ## Audit snapshot and scope
 
 This is an architecture audit, not an implementation claim.  The authoritative
