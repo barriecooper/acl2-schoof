@@ -85,8 +85,14 @@ ACL2 obligations are genuinely proved and certified.
    algorithm requires equality rather than this divisibility interface, and
    inventory its degree, mutual-divisibility, monic-predicate, and associate
    prerequisites first.
-   Uniqueness, the executable modular-inverse wrapper, irreducibility implying
-   monic gcd one, quotient-ring operations and laws, quotient fields, concrete
+   The total nonrecursive `POLY-MODULAR-INVERSE` wrapper is now certified.  It
+   returns the reduced first monic-XGCD coefficient, is canonical and
+   normalized for every ACL2 input, and is conditionally inverse-correct when
+   the monic gcd is one; normalized positive-degree moduli specialize the
+   product remainder to literal one.  Zero-normalized moduli retain the
+   normalized coefficient and nonzero constants return zero.
+   Uniqueness, irreducibility implying monic gcd one, quotient-ring operations
+   and additional congruence laws, quotient fields, concrete
    polynomial-field instances, and extension fields remain open. Later power uses include
    extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,

@@ -501,5 +501,28 @@ modulo normalized zero returns the normalized dividend, while reduction modulo
 every nonzero constant is `nil` (in particular, one modulo
 `POLYNOMIAL-ONE` is `nil`).  The division book's new total
 `POLY-REMAINDER-OF-POLY-ADD-DIVISOR-MULTIPLE` packages remainder invariance
-without a nonzero-modulus side condition.  No modular-inverse function,
-irreducibility notion, quotient operation, or field construction is added.
+without a nonzero-modulus side condition.
+
+## Generic modular-inverse candidate (certified)
+
+`generic/modular-inverse.lisp` adds the single transparent, nonrecursive
+`POLY-MODULAR-INVERSE`.  It calls `POLY-MONIC-EXTENDED-EUCLIDEAN-GCD` exactly
+once, selects its first Bézout coefficient, and returns that coefficient's
+public `POLY-REMAINDER` modulo the supplied modulus.  Thus every ACL2 input
+produces a canonical, normalized reduced candidate; the function has no
+success flag, gcd test, exceptional result, or new recursion.
+
+Correctness is conditional.  When `POLY-MONIC-EUCLIDEAN-GCD(first,modulus)` is
+`POLYNOMIAL-ONE`, multiplying the candidate by `first` and reducing returns
+`POLY-REMAINDER(POLYNOMIAL-ONE,modulus)`.  The existing unconditional
+multiplication/remainder compatibility theorem transports the certificate
+from the Bézout coefficient to its reduced representative.  When the
+normalized modulus is additionally nonempty and has positive degree, the
+right-hand side is literally `POLYNOMIAL-ONE`.
+
+For a zero-normalized modulus the candidate is the normalized monic-XGCD
+coefficient.  For every nonzero constant modulus it is `nil`, including
+modulus `POLYNOMIAL-ONE`; no literal-one claim is made for constants.
+Irreducibility implying monic gcd one, additional quotient-ring congruence
+laws, quotient-field laws, concrete polynomial-field instances, and extension
+fields remain open.
