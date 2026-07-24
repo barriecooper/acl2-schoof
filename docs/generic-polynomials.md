@@ -481,9 +481,14 @@ XGCD once and scales both raw coefficients by
 its unconditional certificate reconstructs that monic gcd.  Total inverse and
 scale conventions make a zero raw gcd return exactly `(mv nil nil nil)`.
 
-This layer adds no recursion or division.  Modular inversion, reduction modulo
-a defining polynomial, quotient fields, concrete generated instances,
-extension fields, uniqueness, and general associate/unit theory remain open.
+This layer adds no recursion or division.  The concrete F7 specialization now
+retains the same uniform body as `F7-POLY-MONIC-EXTENDED-EUCLIDEAN-GCD`: one
+raw call followed only by leading coefficient/inverse, monic normalization, and
+scaling of both coefficients.  Its guards, exact projection, unconditional
+Bézout identity, structural interface, and total executions are certified.
+Polynomial modular inversion, reduction modulo a defining polynomial, quotient
+fields, extension fields, uniqueness, and general associate/unit theory remain
+open.
 
 ## Monic XGCD reduction bridge (certified)
 
