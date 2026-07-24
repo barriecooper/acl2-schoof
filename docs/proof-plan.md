@@ -184,8 +184,11 @@ regressions, not a quotient-field API. Literal-one inverse correctness requires
 a normalized positive-degree modulus; constant moduli retain their
 zero-remainder semantics. The presentation-specific `F7X2` carrier boundary
 is now certified: arbitrary ACL2 objects reduce to normalized F7 polynomials
-of degree below two, without quotient classes. Extension operations, field
-laws, and a GFIELD instance remain open, as do elliptic-curve arithmetic, division polynomials, Hasse
+of degree below two, and every recognized carrier value is uniquely
+reconstructible from its constant and linear F7 coefficients. Recognized-value
+equality is ordinary ACL2 equality and is coefficient-extensional; noncanonical
+inputs are compared only after `F7X2-FIX`. Extension operations, field laws, and
+a GFIELD instance remain open, as do elliptic-curve arithmetic, division polynomials, Hasse
 theory, and Schoof. No concrete
 PFIELD/F7 gcd API was introduced. The complete concrete F7 one-step semantic
 theorem layer, including the strict length-decrease prerequisite, is certified;
