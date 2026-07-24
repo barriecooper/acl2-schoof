@@ -18,14 +18,24 @@
   (implies (and (equal (gfield::f7-fix x1) (gfield::f7-fix x2))
                 (equal (gfield::f7-fix y1) (gfield::f7-fix y2)))
            (equal (gfield::f7-add x1 y1) (gfield::f7-add x2 y2)))
+  :rule-classes nil
   :hints (("Goal" :in-theory (e/d (gfield::f7-add)
                                     (gfield::f7-fix)))))
 (defthm f7-mul-fixed-congruence-for-divmod-instantiation
   (implies (and (equal (gfield::f7-fix x1) (gfield::f7-fix x2))
                 (equal (gfield::f7-fix y1) (gfield::f7-fix y2)))
            (equal (gfield::f7-mul x1 y1) (gfield::f7-mul x2 y2)))
+  :rule-classes nil
   :hints (("Goal" :in-theory (e/d (gfield::f7-mul)
                                     (gfield::f7-fix)))))
+(defthm f7-inv-fixed-congruence-for-gcd-instantiation
+  (implies (equal (gfield::f7-fix x1) (gfield::f7-fix x2))
+           (equal (gfield::f7-inv x1) (gfield::f7-inv x2)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance gfield::f7-inv-logical-definition (x x1))
+                 (:instance gfield::f7-inv-logical-definition (x x2)))
+           :in-theory (disable gfield::f7-inv-logical-definition))))
 (defthm f7-trim-change-implies-last-zero-for-divmod-instantiation
   (implies (and (f7-coefficient-list-p xs)
                 (not (equal (f7-trim-trailing-zeros xs) xs)))
@@ -289,6 +299,19 @@
 (assert-event (equal (gfield::f7-mul 15 10)
                      (gfield::f7-mul (gfield::f7-fix 1)
                                      (gfield::f7-fix 3))))
+(assert-event
+ (and (equal (gfield::f7-add 15 -4) (gfield::f7-add 1 3))
+      (equal (gfield::f7-add 'bad 7) (gfield::f7-add nil 0))
+      (equal (gfield::f7-inv -6) (gfield::f7-inv 1))
+      (equal (gfield::f7-inv 0) 0)
+      (equal (gfield::f7-inv 7) 0)
+      (equal (gfield::f7-inv -7) 0)
+      (equal (gfield::f7-inv 'bad) 0)
+      (equal (gfield::f7-div -6 8) (gfield::f7-div 1 1))
+      (equal (gfield::f7-div 3 0) 0)
+      (equal (gfield::f7-div 3 7) 0)
+      (equal (gfield::f7-div 3 -7) 0)
+      (equal (gfield::f7-div 'bad 'also-bad) 0)))
 (assert-event
  (and (equal (f7-poly-mul '(1 2) '(3)) '(3 6))
       (f7-poly-divides-p '(1 2) '(3 6))

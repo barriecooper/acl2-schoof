@@ -176,4 +176,4 @@ not imported code or claims of proof.
 
 ## Concrete F7 monic-divisibility prerequisite
 
-The F7 divisor-first divisibility and common-divisor predicates now accompany certified transport through `F7-POLY-MONIC-NORMALIZE` in either argument.  This discharges the coefficient-fixing/multiplication blocker without retaining concrete Euclidean GCD definitions.  Concrete raw and monic GCD, XGCD, modular inverse, irreducibility, quotient/extension fields, curves, and Schoof remain future work.
+The F7 divisor-first divisibility and common-divisor predicates now accompany certified transport through `F7-POLY-MONIC-NORMALIZE` in either argument.  The audited functional-instance field interface is complete: binary addition and multiplication and unary total inversion have focused fixing-congruence bridges, while constants, negation, and derived division require no additional retained theorem.  A disposable full raw/monic GCD probe cleared these field constraints and was removed.  Concrete raw and monic GCD, XGCD, modular inverse, irreducibility, quotient/extension fields, curves, and Schoof remain future work.
