@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
-# Deliberately conservative: comments and strings are scanned too.
-pat='[(][[:space:]]*(skip-proofs|set-ld-skip-proofsp|defaxiom|defttag|set-raw-mode(-(on|off))?!?|progn!|defattach(!|-system)?|include-raw)([[:space:])]|$)'
+# Deliberately conservative: comments and strings are scanned too.  An ACL2
+# package prefix is optional so ACL2::DEFAXIOM cannot evade the same policy as
+# DEFAXIOM.  Keep this list aligned with the focused cases in
+# test-check-trust.sh.
+package='([[:alnum:]_$*+<>=!?./-]+::)?'
+construct='(skip-proofs|set-ld-skip-proofsp|defaxiom|defttag|set-raw-mode(-(on|off))?!?|progn!|defattach(!|-system)?|include-raw)'
+pat="[(][[:space:]]*${package}${construct}([[:space:])]|$)"
 if (($# == 0)); then
   paths=(books tests)
 else
   paths=("$@")
 fi
 set +e
-grep -E -r -n -i --include='*.lisp' --include='*.acl2' "$pat" "${paths[@]}"
+grep -E -r -n -H -i --include='*.lisp' --include='*.acl2' "$pat" "${paths[@]}"
 rc=$?
 set -e
 case "$rc" in
