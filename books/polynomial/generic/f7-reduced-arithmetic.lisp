@@ -156,3 +156,71 @@
      (equal (f7-normalize mul-left) mul-left)
      (equal (f7-poly-remainder mul-left m) mul-left)))
   :rule-classes nil)
+
+; Focused unit-law executions.  These record the complete canonical data for
+; a unit modulo a reducible polynomial, an irreducible-looking execution-only
+; modulus, total constant moduli, and normalized malformed representations.
+(assert-event
+ (let* ((first '(0 1))
+        (modulus '(6 0 1))       ; x^2 - 1, deliberately reducible
+        (inverse (f7-poly-modular-inverse first modulus))
+        (one (f7-poly-reduced-one modulus))
+        (left (f7-poly-reduced-mul inverse first modulus))
+        (right (f7-poly-reduced-mul first inverse modulus)))
+   (and (equal (f7-normalize first) '(0 1))
+        (equal (f7-normalize modulus) '(6 0 1))
+        (equal (f7-poly-monic-euclidean-gcd first modulus) '(1))
+        (equal inverse '(0 1))
+        (equal one '(1))
+        (equal left '(1)) (equal right '(1))
+        (equal left one) (equal right one)
+        (f7-canonical-polynomial-p inverse)
+        (equal (f7-normalize inverse) inverse)
+        (equal (f7-poly-remainder inverse modulus) inverse))))
+
+(assert-event
+ (let* ((first '(1 0 0 0 1))
+        (modulus '(1 1 1))       ; no irreducibility claim
+        (inverse (f7-poly-modular-inverse first modulus))
+        (one (f7-poly-reduced-one modulus))
+        (left (f7-poly-reduced-mul inverse first modulus))
+        (right (f7-poly-reduced-mul first inverse modulus)))
+   (and (equal (f7-normalize first) '(1 0 0 0 1))
+        (equal (f7-normalize modulus) '(1 1 1))
+        (equal (f7-poly-monic-euclidean-gcd first modulus) '(1))
+        (equal inverse '(0 6))
+        (equal one '(1))
+        (equal left '(1)) (equal right '(1))
+        (equal left one) (equal right one)
+        (f7-canonical-polynomial-p inverse)
+        (equal (f7-normalize inverse) inverse)
+        (equal (f7-poly-remainder inverse modulus) inverse))))
+
+(assert-event
+ (let ((modulus '(6 0 1)))
+   (and (equal (f7-poly-monic-euclidean-gcd '(6 1) modulus) '(6 1))
+        (not (equal (f7-poly-monic-euclidean-gcd '(6 1) modulus)
+                    (f7-polynomial-one))))))
+
+(assert-event
+ (and
+  ; Zero-normalized modulus: only normalized nonzero constants meet the
+  ; monic-GCD-one condition; ordinary normalized multiplication remains.
+  (equal (f7-normalize '(3)) '(3))
+  (equal (f7-poly-monic-euclidean-gcd '(3) nil) '(1))
+  (equal (f7-poly-modular-inverse '(3) nil) '(5))
+  (equal (f7-poly-reduced-one nil) '(1))
+  (equal (f7-poly-reduced-mul '(3) '(5) nil) '(1))
+  (equal (f7-poly-reduced-mul '(5) '(3) nil) '(1))
+  ; Polynomial-one and every normalized nonzero constant modulus are the
+  ; trivial ring, including malformed/trailing input normalization.
+  (equal (f7-poly-monic-euclidean-gcd '(8 -7 8) '(1)) '(1))
+  (equal (f7-poly-modular-inverse '(8 -7 8) '(1)) nil)
+  (equal (f7-poly-reduced-one '(1)) nil)
+  (equal (f7-poly-reduced-mul '(8 -7 8) nil '(1)) nil)
+  (equal (f7-poly-reduced-mul nil '(8 -7 8) '(1)) nil)
+  (equal (f7-poly-monic-euclidean-gcd '(1 0 1 . bad) '(9 0 . tail)) '(1))
+  (equal (f7-poly-modular-inverse '(1 0 1 . bad) '(9 0 . tail)) nil)
+  (equal (f7-poly-reduced-one '(9 0 . tail)) nil)
+  (equal (f7-poly-reduced-mul '(1 0 1 . bad) nil '(9 0 . tail)) nil)
+  (equal (f7-poly-reduced-mul nil '(1 0 1 . bad) '(9 0 . tail)) nil)))

@@ -43,8 +43,11 @@ congruence and its additive and multiplicative compatibility; divisibility;
 raw Euclidean GCD and monic GCD post-processing; raw XGCD with unconditional
 Bezout; monic XGCD with monic Bezout; the XGCD remainder bridge; and the total
 `POLY-MODULAR-INVERSE` candidate with its conditional correctness theorem.
-Literal-one correctness for that candidate requires a nonempty normalized
-positive-degree modulus; constant moduli retain their zero-remainder semantics.
+Its generic reduced-product laws now return `POLY-REDUCED-ONE` in both
+orientations under the exact monic-GCD-one condition, with no degree or
+irreducibility hypothesis.  Literal polynomial-one correctness still requires
+a nonempty normalized positive-degree modulus; constant moduli retain their
+trivial-ring zero-remainder semantics.
 
 ## Subsequent algebraic layers
 
