@@ -6,10 +6,12 @@
 (include-book "field/pfield-adapter")
 
 (include-book "polynomial/generic/f7-division")
+(include-book "polynomial/generic/f7-reduced-arithmetic")
 (include-book "polynomial/generic/monomial")
 (include-book "polynomial/generic/division-step")
 (include-book "polynomial/generic/division")
 (include-book "polynomial/generic/reduction")
+(include-book "polynomial/generic/reduced-arithmetic")
 (include-book "polynomial/generic/euclidean")
 (include-book "polynomial/generic/xgcd")
 (include-book "polynomial/generic/monic-xgcd")

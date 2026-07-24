@@ -50,10 +50,15 @@ ACL2 obligations are genuinely proved and certified.
    packaged as the sole total canonical-representative boundary, including
    normalized fixed point and exact zero, constant, polynomial-one, malformed,
    noncanonical, and positive-degree semantics. It is shared by reducible
-   Schoof quotients and irreducible quotients later promoted to fields; it does
-   not itself supply quotient operations, units, or field inversion. The
-   Euclidean remainder step now has a certified
-   normalized-divisor-length descent theorem. The raw `POLY-EUCLIDEAN-GCD`
+   Schoof quotients and irreducible quotients later promoted to fields. Four
+   transparent reduced representative operations now compose addition,
+   negation, subtraction, or multiplication with that remainder. Their guards,
+   structural closure, exact total modulus semantics, and representative
+   invariance are certified, with concrete F7 executions. They are not quotient
+   objects and do not establish quotient-ring laws, reduced-one unit laws,
+   irreducibility, or field promotion. The Euclidean remainder step now has a
+   certified normalized-divisor-length descent theorem. The raw
+   `POLY-EUCLIDEAN-GCD`
    recursion is defined and certified on `(len (normalize second))`: it stops at an
    empty normalized second argument, otherwise transitions from `(a,b)` to
    `(b,poly-remainder(a,b))`, and has certified canonical output. It is not
