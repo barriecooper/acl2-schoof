@@ -2,10 +2,11 @@
 
 Each milestone must remain independently certifiable.
 
-The current certified development is only over prime fields `F_p`; the
-long-term target is arbitrary finite fields `F_q`, where `q = p^n`.  Further
-polynomial algebra is paused at the coefficient-field architecture decision in
-`finite-field-architecture.md`.  A milestone is complete only when its stated
+The current executable named-field development is over prime fields `F_p`; the
+long-term target is arbitrary finite fields `F_q`, where `q = p^n`. Generic
+polynomial development is active in the authoritative GFIELD/GPOLY stack, while
+concrete recursive named-field instantiation still requires the documented
+guard-contract resolution. A milestone is complete only when its stated
 ACL2 obligations are genuinely proved and certified.
 
 1. Prime-field polynomial arithmetic, canonical forms, evaluation, and degree
@@ -37,7 +38,7 @@ ACL2 obligations are genuinely proved and certified.
    certified, including compatibility with addition, negation, subtraction,
    and multiplication. The Euclidean remainder step now has a certified
    normalized-divisor-length descent theorem. The raw `POLY-EUCLIDEAN-GCD`
-   recursion is now admitted on `(len (normalize second))`: it stops at an
+   recursion is defined and certified on `(len (normalize second))`: it stops at an
    empty normalized second argument, otherwise transitions from `(a,b)` to
    `(b,poly-remainder(a,b))`, and has certified canonical output. It is not
    monic. Generic
@@ -80,11 +81,8 @@ ACL2 obligations are genuinely proved and certified.
    `POLYNOMIAL-ONE` modulo the second input, and this specializes to literal
    one for a nonempty normalized second input of positive degree. Constant
    moduli deliberately retain their zero-remainder semantics.
-   The next focused PR should follow the earliest finite-field polynomial-tower
-   dependency; select normalized-monic-gcd uniqueness only if a downstream
-   algorithm requires equality rather than this divisibility interface, and
-   inventory its degree, mutual-divisibility, monic-predicate, and associate
-   prerequisites first.
+   Normalized-monic-gcd uniqueness remains optional unless a downstream
+   algorithm requires equality rather than the certified divisibility interface.
    The total nonrecursive `POLY-MODULAR-INVERSE` wrapper is now certified.  It
    returns the reduced first monic-XGCD coefficient, is canonical and
    normalized for every ACL2 input, and is conditionally inverse-correct when
@@ -102,21 +100,33 @@ ACL2 obligations are genuinely proved and certified.
    executable concrete definitions, and certified correctness bridges are all
    required for future computational layers.  Concrete generated division, extension fields, and arbitrary finite-field
    execution are not complete.
-2. Certified extension fields and generic polynomial instances, then rational
+2. Documentation and CI maintenance, then concrete named-field instantiation
+   through modular inversion and resolution of its inverse/division guards.
+3. Prove that irreducibility implies monic GCD one and provide executable
+   irreducibility certificates for selected defining polynomials.
+4. Build quotient fields modulo those certified irreducible polynomials for
+   coefficient-field extensions. Separately, build general polynomial quotient
+   rings for Schoof division-polynomial calculations; those moduli need not be
+   irreducible.
+5. Certified extension fields and generic polynomial instances, then rational
    functions over `F_q(t)` and well-defined operations.
-3. Valuation at infinity, including product and cancellation laws.
-4. Generic twisted elliptic curve over an abstract finite field and its
+6. Valuation at infinity, including product and cancellation laws.
+7. Generic twisted elliptic curve over an abstract finite field and its
    rational-function group operations.
-5. Frobenius/scalar-multiplication maps and their quadratic degree sequence.
-6. Point-count connection, kernels, and the necessary separability results.
-7. Integer quadratic conclusion yielding Hasse's bound.
-8. Division polynomials and quotient-coordinate algebra.
-9. Schoof trace residues and certified CRT reconstruction.
+8. Frobenius/scalar-multiplication maps and their quadratic degree sequence.
+9. Point-count connection, torsion kernels, and necessary separability results.
+10. Integer quadratic conclusion yielding Hasse's bound.
+11. Division polynomials and quotient-coordinate algebra over the general
+    quotient rings.
+12. Schoof trace residues and certified bounded CRT reconstruction.
 
 
 ## Generic recursive division (certified)
 
-`books/polynomial/generic/division.lisp` certifies `POLY-DIVMOD-CORE` and the total `(mv q r)` public `POLY-DIVMOD`.  Canonical remainder length is the measure, the one-step decrease theorem supplies termination, and an accumulator invariant supplies normalized reconstruction without evaluation extensionality.  The final remainder is zero or strictly below the normalized nonzero divisor.  Guards are verified separately.  No executable boundary or concrete PFIELD/F7 instance is added; concrete generated division, uniqueness, gcd, and extended gcd remain open.
+`books/polynomial/generic/division.lisp` certifies `POLY-DIVMOD-CORE` and the total `(mv q r)` public `POLY-DIVMOD`.  Canonical remainder length is the measure, the one-step decrease theorem supplies termination, and an accumulator invariant supplies normalized reconstruction without evaluation extensionality.  The final remainder is zero or strictly below the normalized nonzero divisor.  Guards are verified separately. No executable boundary or concrete PFIELD/F7 recursive
+instance is added; concrete generated division through modular inversion and
+uniqueness remain open. Generic divisibility, GCD, XGCD, and modular inversion
+are defined and certified in their later books.
 
 ## Architecture and top-down interfaces
 
@@ -134,14 +144,28 @@ divisor, and every common divisor divides it. The raw result remains canonical
 but potentially non-monic. Monic normalization's representation,
 leading-coefficient, and divisibility interfaces are certified, as is the
 transparent monic-gcd wrapper. Its common-divisor and greatestness correctness
-is now certified compositionally. Monic XGCD post-processing and its Bézout
-correctness are also certified. Modular
-inversion, quotient-field reduction, concrete instances, associate theory, and
-uniqueness remain open. No concrete
+is now certified compositionally. Raw XGCD and unconditional Bezout, monic XGCD
+and monic Bezout, the XGCD remainder bridge, and the total conditional
+`POLY-MODULAR-INVERSE` candidate are certified. Literal-one inverse correctness
+requires a normalized positive-degree modulus; constant moduli retain their
+zero-remainder semantics. Quotient-field laws, concrete instances, associate
+theory, and uniqueness remain open. No concrete
 PFIELD/F7 gcd API was introduced, and recursive
 concrete F7 divmod remains postponed. The first executable
 Schoof path may target a named prime field; arbitrary finite-field execution is
 a later architectural phase.
+
+The maintained next dependency chain is documentation and CI maintenance;
+concrete named-field instantiation and guard resolution;
+irreducibility-to-monic-GCD-one; executable irreducibility certificates for
+selected defining polynomials; irreducible-modulus quotient fields for
+coefficient extensions; general quotient rings, separately, for Schoof
+division-polynomial calculations; and then elliptic-curve, Frobenius, torsion,
+and bounded CRT layers. The detailed status remains authoritative in
+`obligations.md`. In particular, irreducibility and its executable
+certification, concrete recursive instances, quotient-field laws, unfinished
+general quotient-ring operations, extension fields, curves, Hasse, Frobenius,
+division polynomials, Schoof residues, and CRT reconstruction remain open.
 
 Top-down planning requires interfaces for base-to-extension-field embedding,
 q-power Frobenius, Frobenius preservation of the curve, Frobenius fixed points
