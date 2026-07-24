@@ -143,3 +143,18 @@ projections. The generic public interface is functionally instantiated for
 canonicality, reconstruction, and the conditional strict remainder bound;
 guard verification remains separate execution assurance. Concrete F7 GCD,
 F7 polynomial modular inverse, quotient/extension fields, curves, and Schoof remain open.
+# F7X2 canonical representative fixer
+
+`F7X2-FIX` is a transparent, nonrecursive composition of the existing concrete
+`F7-POLY-REMAINDER` with the fixed modulus `(1 0 1)`.  Its logical and
+executable definitions are identical; no `MBE`, attachment, or alternate
+runtime is involved.  Atoms and malformed/dotted tails are discarded by the
+existing polynomial normalization, coefficients are fixed modulo 7, trailing
+zeroes are trimmed, and polynomials of arbitrary degree are reduced modulo
+`x^2+1`.  Thus zero and modulus multiples fix to `nil`, constants retain their
+canonical singleton form, and already canonical degree-below-two lists are
+fixed points.  The certified regressions cover atoms, dotted lists, coefficient
+fixing, trailing zeroes, the modulus, and `x^3 = 6x`.  These checks establish
+the intended execution path; the certified fixed-point, normalization, and
+degree theorems establish the representation invariant.  No complexity claim
+is made beyond reuse of the existing division runtime.

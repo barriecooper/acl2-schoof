@@ -182,8 +182,10 @@ GCD-one bridge and existing conditional inverse laws. Selected constants,
 `x`, and `1+x` modulo the certified irreducible F7 polynomial `x^2+1` are
 regressions, not a quotient-field API. Literal-one inverse correctness requires
 a normalized positive-degree modulus; constant moduli retain their
-zero-remainder semantics. Field promotion and an `F7[x]/(x^2+1)` interface
-remain open, as do elliptic-curve arithmetic, division polynomials, Hasse
+zero-remainder semantics. The presentation-specific `F7X2` carrier boundary
+is now certified: arbitrary ACL2 objects reduce to normalized F7 polynomials
+of degree below two, without quotient classes. Extension operations, field
+laws, and a GFIELD instance remain open, as do elliptic-curve arithmetic, division polynomials, Hasse
 theory, and Schoof. No concrete
 PFIELD/F7 gcd API was introduced. The complete concrete F7 one-step semantic
 theorem layer, including the strict length-decrease prerequisite, is certified;

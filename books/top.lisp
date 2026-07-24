@@ -6,6 +6,7 @@
 (include-book "field/pfield-adapter")
 
 (include-book "polynomial/generic/f7-division")
+(include-book "polynomial/generic/f7x2-representation")
 (include-book "polynomial/generic/f7-reduced-arithmetic")
 (include-book "polynomial/generic/monomial")
 (include-book "polynomial/generic/division-step")
