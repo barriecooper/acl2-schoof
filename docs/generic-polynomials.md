@@ -302,19 +302,33 @@ The recursive case uses `POLY-DIVIDES-P-EUCLIDEAN-STEP-IFF` as its complete
 algebraic bridge; it does not unfold recursive division or repeat
 reconstruction or congruence reasoning.  The raw result may still be non-monic.
 
-The complementary common-divisor greatestness direction is now independently
+The complementary common-divisor greatestness direction is independently
 certified by `POLY-COMMON-DIVISOR-DIVIDES-EUCLIDEAN-GCD`: every polynomial that
 divides both inputs divides the raw Euclidean result.  Its induction follows
 `POLY-EUCLIDEAN-GCD` while retaining an arbitrary candidate divisor.  The base
 case rewrites the result to `NORMALIZE(first)` and uses dividend-normalization
 invariance; the recursive case uses `POLY-DIVIDES-P-EUCLIDEAN-STEP-IFF` as the
 entire algebraic bridge to the recursive pair.  It repeats neither
-reconstruction and congruence algebra nor recursive division.  Thus the two
-mathematical directions needed for raw gcd correctness are certified
-separately, but they have not yet been packaged under one public raw-gcd
-specification.  The raw result can remain non-monic, and uniqueness,
-associates/unit invariance, monic normalization, XGCD/Bézout, and concrete
-PFIELD/F7 APIs remain open or postponed.
+reconstruction and congruence algebra nor recursive division.
+`POLY-COMMON-DIVISOR-P` now packages the finite, executable part of the public
+raw-gcd specification: a candidate divides both inputs.  It is transparent,
+nonrecursive, total, guarded by `t`, and has normalization laws for all three
+arguments and forward rules for both divisibility facts.
+`POLY-COMMON-DIVISOR-P-OF-EUCLIDEAN-GCD` is a direct instance of the certified
+divides-both direction, and `POLY-COMMON-DIVISOR-P-GREATESTNESS` is a direct
+instance of the independently certified greatestness direction.  The combined
+`POLY-EUCLIDEAN-GCD-RAW-CORRECT` theorem exposes both facts at one public entry
+point.  These packaging proofs use neither induction nor division reasoning.
+
+The interface is unconditional over nil, malformed atoms and coefficients,
+noncanonical lists, and trailing-zero representations.  Zero is a common
+divisor exactly when both inputs normalize to zero.  The raw result is
+canonical as a polynomial representation but need not be monic; it may be a
+negative unit or another non-monic associate.  The specification therefore
+determines a gcd only up to multiplication by nonzero field units.  It adds no
+existential quotient witnesses, XGCD/Bézout machinery, or concrete PFIELD/F7
+API.  Uniqueness, associate and unit-invariance theory, and monic normalization
+remain open.
 
 `GPOLY-MOD-CONGRUENCE` is proved by the one-sided and simultaneous
 `POLY-REMAINDER-OF-POLY-MUL-*` laws, `POLY-CONGRUENT-P-OF-POLY-MUL` and its
@@ -329,9 +343,11 @@ canonical remainder (and hence of its normalization) is strictly less than
 the length of the normalized divisor.  This follows only from canonicality,
 the strict degree bound, and the canonical degree/length characterization;
 it does not unfold recursive division.  A zero normalized divisor is the
-recursion base case.  Full algebraic gcd correctness packaging remains open,
-and monic normalization is not defined.  No quotient witnesses, extended
+recursion base case.  Raw algebraic gcd correctness is now publicly packaged,
+while monic normalization is not defined.  No quotient witnesses, extended
 gcd, Bézout coefficients, modular inverses, or concrete PFIELD/F7 APIs are
-introduced.  The next focused PR should package the two certified directions
-in an explicit raw-gcd correctness interface without adding new recursion or
-monic normalization.
+introduced.  The next focused PR should inventory leading-coefficient,
+scalar-multiplication, field-inversion, and nonzero-polynomial infrastructure
+before introducing generic monic normalization.  Later stages should prove
+that normalization preserves divisibility/associates, certify a monic gcd
+wrapper, and only then develop XGCD/Bézout.
