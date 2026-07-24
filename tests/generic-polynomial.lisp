@@ -30,6 +30,19 @@
 (assert-event (equal (f7-poly-scale 3 '(1 2 3)) '(3 6 2)))
 (assert-event (equal (f7-poly-scale -1 '(1 2 3)) '(6 5 4)))
 (assert-event (equal (f7-poly-scale 9 '(1 8 14 0)) '(2 2)))
+; F7 representatives exercise the divisor-scaling scalar boundary: 9
+; requires FIELD-FIX and fixes to the nonzero scalar 2; the remaining cases
+; cover one, negative one, another nontrivial unit, and total divisor shapes.
+(assert-event (equal (gfield::f7-fix 9) 2))
+(assert-event (not (equal (gfield::f7-fix 9) 0)))
+(assert-event (equal (f7-poly-scale 9 '(1 1)) '(2 2)))
+(assert-event (equal (f7-poly-scale 1 '(1 1)) '(1 1)))
+(assert-event (equal (f7-poly-scale -1 '(1 1)) '(6 6)))
+(assert-event (equal (f7-poly-scale 3 '(1 1)) '(3 3)))
+(assert-event (equal (f7-poly-scale 3 'malformed-divisor) nil))
+(assert-event (equal (f7-poly-scale 3 '(1 1 . malformed-tail)) '(3 3)))
+(assert-event (equal (f7-poly-scale 3 '(1 1 0 0)) '(3 3)))
+(assert-event (equal (f7-poly-scale 3 '(8 -1 0)) '(3 4)))
 (assert-event
  (equal (f7-poly-leading-coefficient (f7-poly-scale 3 '(1 2 3))) 2))
 ; Monic normalization keeps constant-first order and treats normalized zero

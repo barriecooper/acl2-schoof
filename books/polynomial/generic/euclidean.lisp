@@ -352,6 +352,169 @@
                 (modulus divisor)))
     :in-theory (disable poly-divides-p poly-congruent-p poly-remainder))))
 
+; Divisibility is transitive.  The proof stays at the public remainder
+; interface: if MIDDLE divides DIVIDEND its remainder is zero, and the
+; Euclidean-remainder equivalence transfers divisibility by DIVISOR.
+(defthm poly-divides-p-transitive
+  (implies (and (poly-divides-p divisor middle)
+                (poly-divides-p middle dividend))
+           (poly-divides-p divisor dividend))
+  :hints
+  (("Goal"
+    :use ((:instance poly-divides-p-euclidean-remainder-iff
+                     (divisor divisor) (first dividend) (second middle))
+          (:instance poly-divides-p-iff-zero-remainder
+                     (divisor middle) (dividend dividend))
+          (:instance poly-divides-p-zero (divisor divisor)))
+    :in-theory (disable poly-divides-p poly-remainder))))
+
+; These two local facts expose the mutual-divisibility construction used by
+; divisor scaling.  The reverse direction reuses the inverse reasoning already
+; sealed inside dividend-scaling invariance.
+(local
+ (defthm poly-divisor-divides-p-poly-scale
+   (poly-divides-p divisor (poly-scale scalar divisor))
+   :hints
+   (("Goal"
+     :use ((:instance poly-divides-p-self (dividend divisor))
+           (:instance poly-divides-p-of-poly-mul
+                      (divisor divisor) (left divisor)
+                      (right (const scalar)))
+           (:instance poly-mul-const-right (p divisor) (a scalar)))
+     :in-theory (disable poly-divides-p poly-mul poly-scale
+                         poly-divides-p-self poly-divides-p-of-poly-mul
+                         poly-mul-const-right)))))
+
+(local
+ (defthm poly-scale-divisor-divides-p-divisor
+   (implies
+    (not (equal (gfield::field-fix scalar)
+                (gfield::field-zero)))
+    (poly-divides-p (poly-scale scalar divisor) divisor))
+   :hints
+   (("Goal"
+     :use ((:instance poly-divides-p-self
+                      (dividend (poly-scale scalar divisor)))
+           (:instance poly-divides-p-of-poly-scale-dividend
+                      (scalar scalar)
+                      (divisor (poly-scale scalar divisor))
+                      (dividend divisor)))
+     :in-theory (disable poly-divides-p poly-scale poly-divides-p-self
+                         poly-divides-p-of-poly-scale-dividend)))))
+
+(defthm poly-divides-p-of-poly-scale-divisor
+  (implies
+   (not (equal (gfield::field-fix scalar)
+               (gfield::field-zero)))
+   (equal
+    (poly-divides-p (poly-scale scalar divisor) dividend)
+    (poly-divides-p divisor dividend)))
+  :hints
+  (("Goal"
+    :use ((:instance poly-divides-p-transitive
+                     (divisor (poly-scale scalar divisor))
+                     (middle divisor) (dividend dividend))
+          (:instance poly-divides-p-transitive
+                     (divisor divisor)
+                     (middle (poly-scale scalar divisor))
+                     (dividend dividend))
+          (:instance poly-divisor-divides-p-poly-scale)
+          (:instance poly-scale-divisor-divides-p-divisor))
+    :in-theory (disable poly-divides-p poly-scale
+                        poly-divides-p-transitive))))
+
+(defthm poly-divides-p-of-poly-scale-divisor-regression-public-theorem
+  (implies
+   (not (equal (gfield::field-fix scalar) (gfield::field-zero)))
+   (and
+    (implies (poly-divides-p divisor dividend)
+             (poly-divides-p (poly-scale scalar divisor) dividend))
+    (implies (poly-divides-p (poly-scale scalar divisor) dividend)
+             (poly-divides-p divisor dividend))))
+  :hints
+  (("Goal"
+    :use ((:instance poly-divides-p-of-poly-scale-divisor))
+    :in-theory (disable poly-divides-p-of-poly-scale-divisor
+                        poly-divides-p poly-scale))))
+
+; Exact total-semantics regressions exercise both implications through the
+; public equivalence.  They cover represented zero, malformed/dotted inputs,
+; trailing zeros, noncanonical coefficients, and scalars fixed by the field.
+(defthm poly-divides-p-of-poly-scale-divisor-regression-boundaries
+  (let ((one (polynomial-one)))
+    (and
+     (equal (poly-divides-p (poly-scale (gfield::field-one) nil) nil)
+            (poly-divides-p nil nil))
+     (equal (poly-divides-p
+             (poly-scale (gfield::field-one)
+                         (list (gfield::field-zero) (gfield::field-zero))) nil)
+            (poly-divides-p
+             (list (gfield::field-zero) (gfield::field-zero)) nil))
+     (equal (poly-divides-p (poly-scale (gfield::field-one) 'malformed-divisor) nil)
+            (poly-divides-p 'malformed-divisor nil))
+     (equal (poly-divides-p
+             (poly-scale (gfield::field-one)
+                         (cons (gfield::field-one) 'malformed-tail)) one)
+            (poly-divides-p
+             (cons (gfield::field-one) 'malformed-tail) one))
+     (equal (poly-divides-p
+             (poly-scale (gfield::field-one)
+                         (list (gfield::field-one) (gfield::field-zero))) one)
+            (poly-divides-p
+             (list (gfield::field-one) (gfield::field-zero)) one))
+     (equal (poly-divides-p
+             (poly-scale (gfield::field-one)
+                         (list 'malformed-coefficient
+                               (gfield::field-one))) one)
+            (poly-divides-p
+             (list 'malformed-coefficient (gfield::field-one)) one))))
+  :hints
+  (("Goal"
+    :in-theory (e/d (poly-divides-p-of-poly-scale-divisor)
+                    (poly-divides-p poly-scale)))))
+
+(defthm poly-divides-p-of-poly-scale-divisor-regression-scalars-and-signs
+  (let ((one (polynomial-one))
+        (linear (list (gfield::field-one) (gfield::field-one))))
+    (and
+     (equal (poly-divides-p (poly-scale (gfield::field-one) one) linear)
+            (poly-divides-p one linear))
+     (equal (poly-divides-p
+             (poly-scale (gfield::field-neg (gfield::field-one)) one) linear)
+            (poly-divides-p one linear))
+     (equal (poly-divides-p
+             (poly-scale (gfield::field-neg (gfield::field-one)) nil) linear)
+            (poly-divides-p nil linear))))
+  :hints
+  (("Goal"
+    :use ((:instance poly-divides-p-of-poly-scale-divisor
+                     (scalar (gfield::field-one))
+                     (divisor (polynomial-one))
+                     (dividend
+                      (list (gfield::field-one) (gfield::field-one))))
+          (:instance poly-divides-p-of-poly-scale-divisor
+                     (scalar (gfield::field-neg (gfield::field-one)))
+                     (divisor (polynomial-one))
+                     (dividend
+                      (list (gfield::field-one) (gfield::field-one))))
+          (:instance poly-divides-p-of-poly-scale-divisor
+                     (scalar (gfield::field-neg (gfield::field-one)))
+                     (divisor nil)
+                     (dividend
+                      (list (gfield::field-one) (gfield::field-one)))))
+    :in-theory (disable poly-divides-p-of-poly-scale-divisor
+                        poly-divides-p poly-scale))))
+
+; Zero scaling changes the nonzero divisor ONE into NIL.  ONE divides itself,
+; while NIL does not divide ONE, so the nonzero hypothesis is necessary.
+(defthm poly-divides-p-of-poly-scale-divisor-regression-zero-counterexample
+  (and (equal (poly-divides-p
+               (poly-scale (gfield::field-zero) (polynomial-one))
+               (polynomial-one))
+              nil)
+       (equal (poly-divides-p (polynomial-one) (polynomial-one)) t))
+  :hints (("Goal" :in-theory (enable poly-divides-p))))
+
 (defthm poly-divides-p-euclidean-step-iff
   (iff
    (and (poly-divides-p divisor first)
@@ -751,6 +914,32 @@
              poly-common-divisor-p-of-normalize-candidate
              poly-common-divisor-p-of-normalize-first
              poly-common-divisor-p-of-normalize-second))))
+
+; Preserve and exercise the exact raw negative-unit gcd representative.  The
+; divisor theorem scales it for divisibility only; it does not normalize it.
+(defthm poly-divides-p-of-poly-scale-divisor-regression-raw-negative-unit-gcd
+  (let* ((negative-one
+          (list (gfield::field-neg (gfield::field-one))))
+         (raw-gcd (poly-euclidean-gcd nil negative-one)))
+    (and
+     (equal raw-gcd negative-one)
+     (equal (poly-divides-p
+             (poly-scale (gfield::field-neg (gfield::field-one)) raw-gcd)
+             negative-one)
+            (poly-divides-p raw-gcd negative-one))))
+  :hints
+  (("Goal"
+    :use ((:instance poly-divides-p-of-poly-scale-divisor
+                     (scalar (gfield::field-neg (gfield::field-one)))
+                     (divisor
+                      (poly-euclidean-gcd
+                       nil (list (gfield::field-neg
+                                  (gfield::field-one)))))
+                     (dividend
+                      (list (gfield::field-neg (gfield::field-one))))))
+    :in-theory (e/d (poly-euclidean-gcd)
+                    (poly-divides-p-of-poly-scale-divisor
+                     poly-divides-p poly-scale)))))
 
 (defthm poly-common-divisor-p-regression-raw-gcd
   (let ((negative-one (list (gfield::field-neg (gfield::field-one)))))
