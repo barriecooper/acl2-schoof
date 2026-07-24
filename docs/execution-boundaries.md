@@ -33,7 +33,8 @@ shape, not benchmark measurements.
 | Generic raw Euclidean computation | Transparent recursive `poly-euclidean-gcd` | Same ordinary DEFUN; no concrete instance or API | Controlled zero/nonzero equations, canonicality, and result-normalization | Default guard `T`, verified during DEFUN admission | Focused constant-first structural regressions in `generic/euclidean.lisp` | 1 — abstract ordinary definition; no MBE split and no algebraic gcd claim |
 | Generic monic Euclidean wrapper | Transparent nonrecursive `poly-monic-euclidean-gcd`, exactly `poly-monic-normalize` of the raw result | Same ordinary DEFUND; no second algorithm or concrete gcd API | Public equation and structural laws; certified common-divisor correctness and greatestness transported from raw gcd through unconditional monic-normalization divisibility equivalences | Default guard `T` from total component functions; no separate guard event | Focused constant-first generic boundary and correctness regressions preserve the visible raw negative-unit representative, cover total malformed/noncanonical shapes, and exercise both public correctness directions | 1 — transparent generic boundary; no MBE split and no concrete PFIELD/F7 gcd API |
 | Generic polynomial divisibility | Canonical-zero test on `poly-remainder` | `poly-divides-p`, a transparent ordinary nonrecursive DEFUN with divisor-first order | Boolean and zero-remainder characterizations, congruence-to-zero equivalence, normalization/boundary/closure laws, and unconditional Euclidean-step common-divisor invariance | Guard `T`, verified during DEFUN admission; no separate guard event is needed | Focused constant-first structural regressions in `generic/euclidean.lisp`, including malformed and normalized-zero cases | 1 — no logical/executable split, witness choice, attachment, or concrete API |
-| Concrete F7 one-step division | Generated semantic experiment only | Not retained | Complete semantic theorem group certified experimentally, then reverted | Blocked: `F7-INV` guard obligations require arbitrary integer input nonzero modulo 7 | None retained | Open — no executable boundary exists |
+| Concrete F7 coefficient inverse/division | Total prime-field semantics; inverse of fixed zero is zero | Ordinary `f7-inv` / `f7-div` DEFUNs | `f7-inv-logical-definition`; left/right inverse cancellation | Both guards explicitly verified on `T` | Zero, noncanonical-zero, malformed atom, and dotted-object assertions in `tests/pfield-adapter.lisp` | 2 — ordinary concrete executable definitions; coefficient prerequisite closed |
+| Concrete F7 one-step polynomial division | Generated semantic experiment only | Not retained | Complete semantic theorem group certified experimentally, then reverted | Coefficient guards are closed; generated one-step theorem instances remain required for recursive termination transport | None retained | Open — no polynomial division API exists |
 | F11 polynomial degree / leading coefficient | Same transparent two-DEFUN template | `f11-poly-degree`; `f11-poly-leading-coefficient` | Identical normalized structural equations | Explicitly verified | `books/curve/f11-golden.lisp` cubic assertions | 2 — golden concrete runtime; no MBE split |
 | Named F11 golden field | PFIELD adapter specialized at modulus 11 | `f11-element-p`, `f11-fix`, `f11-zero`, `f11-one`, `f11-add`, `f11-mul`, `f11-neg` | PFIELD adapter laws and functional instantiation; primality of 11 is concrete | Every named DEFUN explicitly verified | `books/curve/f11-golden.lisp` | 2 — ordinary concrete named runtime code; no split |
 | F11 golden polynomial and curve fixture | `def-normalize-eval-instance` ordinary DEFUN template | Four generated polynomial functions, fixed cubic helpers, and bounded enumerators | Generic normalization/evaluation semantics transported through PFIELD; curve data and nonsingularity are concrete computations | Every runtime DEFUN explicitly verified | `books/curve/f11-golden.lisp` | 2 — transparent ordinary DEFUNs; no MBE split |
@@ -117,13 +118,22 @@ and functional instantiation) are not prohibited. They trigger the review and
 evidence requirements instead.
 
 
-## F7 division guard blocker
+## F7 division instantiation boundary
 
-The concrete F7 one-step boundary is open and was not retained. In the reverted
-experiment, `F7-INV` called `PFIELD::INV` on `F7-FIX x`, and `F7-DIV` depended
-on `F7-INV`. `VERIFY-GUARDS F7-INV` generated obligations requiring an
-arbitrary integer input to be nonzero modulo 7. Although the complete generated
-one-step semantic theorem group certified experimentally, guard verification
-did not complete, so no executable boundary is inventoried as present. This is
-an open field-interface/guard-contract decision. Guard verification would not
-by itself prove semantic correctness.
+The original coefficient-level blocker is resolved. `F7-INV` now fixes its
+argument once and branches explicitly at zero before calling the guarded
+`PFIELD::INV`.  Its certified logical-definition theorem proves that this is
+exactly the previous total value, including inverse-of-zero equal to zero;
+malformed objects are fixed to zero.  `F7-INV` and `F7-DIV` now have verified
+guards on guard `T`.
+
+Concrete recursive division is still open and no F7 divmod API is inventoried
+as present.  A direct attempt to transport the generic recursive termination
+theorem exposed the next exact obligation: the functional instance of
+`POLY-DIVISION-STEP-CORE-LENGTH-DECREASES` must retain the complete concrete
+one-step semantic theorem group so that F7 inverse cancellation and normalized
+leading-term decrease discharge the generated constraints.  Reconstructing
+that group ad hoc inside the recursive instance would duplicate the reverted
+experiment; the prerequisite is a focused generated theorem-instance layer,
+not another division algorithm.  Guard verification alone would not establish
+that semantic decrease.
