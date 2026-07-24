@@ -843,6 +843,24 @@
          (poly-divides-p (poly-euclidean-gcd nil negative-one)
                          negative-one))))
 
+(defthm poly-leading-coefficient-scale-regression-raw-negative-unit-gcd
+  (let ((negative-one (list (gfield::field-neg (gfield::field-one)))))
+    (equal
+     (poly-leading-coefficient
+      (poly-scale (gfield::field-one)
+                  (poly-euclidean-gcd nil negative-one)))
+     (gfield::field-neg (gfield::field-one))))
+  :hints
+  (("Goal"
+    :use ((:instance poly-leading-coefficient-of-poly-scale
+                     (scalar (gfield::field-one))
+                     (poly (poly-euclidean-gcd
+                            nil
+                            (list (gfield::field-neg
+                                   (gfield::field-one)))))))
+    :in-theory (disable poly-leading-coefficient-of-poly-scale
+                        poly-scale poly-leading-coefficient))))
+
 (defthm poly-euclidean-gcd-divides-regression-noncanonical
   (let ((first (list (gfield::field-one) (gfield::field-zero)))
         (second (list (gfield::field-one) (gfield::field-one)

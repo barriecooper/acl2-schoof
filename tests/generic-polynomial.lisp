@@ -17,6 +17,21 @@
 (assert-event (equal (f7-normalize '(1 0 2 0)) '(1 0 2)))
 (assert-event (equal (f7-fix-coefficients '(-1 8 15)) '(6 1 1)))
 (assert-event (equal (f7-normalize (f7-normalize '(1 2 0 0))) '(1 2)))
+(assert-event (equal (f7-poly-scale 3 nil) nil))
+(assert-event (equal (f7-poly-scale 3 '(0 0 0)) nil))
+(assert-event (equal (f7-poly-scale 0 '(1 2 3)) nil))
+(assert-event (equal (f7-poly-scale 1 '(1 2 0)) '(1 2)))
+(assert-event (equal (f7-poly-scale 9 '(1 2 3)) '(2 4 6)))
+(assert-event (equal (f7-poly-scale 3 'malformed-poly) nil))
+(assert-event (equal (f7-poly-scale 3 '(1 2 . malformed-tail)) '(3 6)))
+(assert-event (equal (f7-poly-scale 3 '(1 2 0 0)) '(3 6)))
+(assert-event (equal (f7-poly-scale 3 '(2)) '(6)))
+(assert-event (equal (f7-poly-scale 3 '(1 2)) '(3 6)))
+(assert-event (equal (f7-poly-scale 3 '(1 2 3)) '(3 6 2)))
+(assert-event (equal (f7-poly-scale -1 '(1 2 3)) '(6 5 4)))
+(assert-event (equal (f7-poly-scale 9 '(1 8 14 0)) '(2 2)))
+(assert-event
+ (equal (f7-poly-leading-coefficient (f7-poly-scale 3 '(1 2 3))) 2))
 (defthm normalized-output-is-canonical-regression
   (canonical-polynomial-p (normalize xs)))
 (defthm pfield-generated-normalization-preserves-evaluation-regression

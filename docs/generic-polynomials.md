@@ -165,6 +165,19 @@ facts inferred from evaluation (which is not extensional over finite fields).
 The same transparent two-`DEFUN` template supplies constrained PFIELD and
 ordinary executable F7/F11 operations.
 
+Leading coefficient now commutes unconditionally with generic scalar
+multiplication: the leader of `POLY-SCALE(scalar, poly)` is `FIELD-MUL` of the
+scalar and the leader of `poly`.  Total fixing and normalization include zero
+scalars, zero-normalized polynomials, malformed atoms and tails, coefficients
+requiring fixing, and trailing-zero representations.  The nonzero proof is
+structural: `RAW-SCALE` preserves list shape and maps the final coefficient,
+while canonical final-coefficient nonzeroness and the field no-zero-divisor
+law show that normalization retains the scaled leader.  This completes the
+scaling/leading-coefficient bridge needed before generic monic normalization.
+No monic-normalization function, inverse-scaling operation, divisibility or
+associate-preservation result, or monic gcd wrapper is introduced; raw gcd
+correctness is unchanged and its result may still be non-monic.
+
 The certified multiplication consequences are structural.  For nonempty
 canonical factors, `RAW-LEADING-COEFFICIENT-OF-RAW-MUL` identifies the final
 raw coefficient, in input order, as the field product of the two final input

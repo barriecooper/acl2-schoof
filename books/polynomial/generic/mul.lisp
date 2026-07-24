@@ -124,9 +124,6 @@
   (equal (raw-scale a (cons (gfield::field-zero) x))
          (cons (gfield::field-zero) (raw-scale a x))))
 
-(defthm consp-of-raw-scale
-  (equal (consp (raw-scale a x)) (consp x)))
-
 (defthm fix-coefficients-of-raw-scale
   (equal (fix-coefficients (raw-scale a x)) (raw-scale a x)))
 

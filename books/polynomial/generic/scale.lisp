@@ -21,11 +21,23 @@
 (defthm coefficient-list-p-of-raw-scale
   (coefficient-list-p (raw-scale a x)))
 
+(defthm consp-of-raw-scale
+  (equal (consp (raw-scale a x)) (consp x)))
+
 (defthm raw-scale-of-field-fix
   (equal (raw-scale (gfield::field-fix a) x) (raw-scale a x)))
 
 (defthm raw-scale-of-fix-coefficients
   (equal (raw-scale a (fix-coefficients x)) (raw-scale a x)))
+
+(defthm raw-leading-coefficient-of-raw-scale
+  (implies (and (coefficient-list-p x)
+                (consp x))
+           (and (gfield::field-element-p (car (last x)))
+                (equal (car (last (raw-scale a x)))
+                       (gfield::field-mul a (car (last x))))))
+  :rule-classes nil
+  :hints (("Goal" :induct (raw-scale a x))))
 
 (defthm canonical-polynomial-p-of-poly-scale
   (canonical-polynomial-p (poly-scale a x)))
@@ -85,6 +97,12 @@
 (defthm poly-scale-of-nil
   (equal (poly-scale a nil) nil))
 
+(defthm poly-scale-when-normalize-nil
+  (implies (equal (normalize x) nil)
+           (equal (poly-scale a x) nil))
+  :hints
+  (("Goal" :in-theory (enable poly-scale))))
+
 (defthm raw-scale-by-one
   (equal (raw-scale (gfield::field-one) x) (fix-coefficients x)))
 
@@ -112,6 +130,40 @@
                  (:instance gfield::field-mul-fixed-congruence
                             (x1 a) (x2 (gfield::field-zero))
                             (y1 x) (y2 x))))))
+
+(defthm canonical-polynomial-p-of-raw-scale-when-nonzero
+  (implies (and (canonical-polynomial-p x)
+                (consp x)
+                (not (equal (gfield::field-fix a)
+                            (gfield::field-zero))))
+           (canonical-polynomial-p (raw-scale a x)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance raw-leading-coefficient-of-raw-scale)
+          (:instance equal-field-mul-zero
+                     (x (car (last x)))))
+    :in-theory (e/d (canonical-polynomial-p)
+                    (raw-scale)))))
+
+(defthm normalize-of-raw-scale-when-canonical-nonzero
+  (implies (and (canonical-polynomial-p x)
+                (consp x)
+                (not (equal (gfield::field-fix a)
+                            (gfield::field-zero))))
+           (equal (normalize (raw-scale a x))
+                  (raw-scale a x)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance canonical-polynomial-p-of-raw-scale-when-nonzero)
+          (:instance normalize-when-canonical (xs (raw-scale a x)))))))
+
+(defthm poly-scale-when-field-fix-zero
+  (implies (equal (gfield::field-fix a) (gfield::field-zero))
+           (equal (poly-scale a x) nil))
+  :hints
+  (("Goal" :in-theory (enable poly-scale))))
 
 (defthm normalize-raw-scale-of-normalize
   (equal (normalize (raw-scale a (normalize x)))

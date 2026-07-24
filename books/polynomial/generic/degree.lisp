@@ -136,6 +136,67 @@
   (equal (equal (poly-leading-coefficient p) (gfield::field-zero))
          (equal (normalize p) nil)))
 
+(defthm poly-leading-coefficient-of-poly-scale-when-nonzero
+  (implies (and (not (equal (gfield::field-fix scalar)
+                            (gfield::field-zero)))
+                (consp (normalize poly)))
+           (equal (poly-leading-coefficient (poly-scale scalar poly))
+                  (gfield::field-mul scalar
+                                     (poly-leading-coefficient poly))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance raw-leading-coefficient-of-raw-scale
+                     (a scalar) (x (normalize poly)))
+          (:instance normalize-of-raw-scale-when-canonical-nonzero
+                     (a scalar) (x (normalize poly)))
+          (:instance poly-leading-coefficient-when-canonical-nonzero
+                     (p (normalize poly)))
+          (:instance poly-leading-coefficient-when-canonical-nonzero
+                     (p (raw-scale scalar (normalize poly)))))
+    :in-theory (e/d (poly-scale canonical-polynomial-p)
+                    (poly-leading-coefficient-when-canonical-nonzero
+                     normalize poly-leading-coefficient)))))
+
+(defthm poly-leading-coefficient-of-poly-scale-when-scalar-zero
+  (implies (equal (gfield::field-fix scalar) (gfield::field-zero))
+           (equal (poly-leading-coefficient (poly-scale scalar poly))
+                  (gfield::field-mul scalar
+                                     (poly-leading-coefficient poly))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance poly-scale-when-field-fix-zero
+                     (a scalar) (x poly))
+          (:instance equal-field-mul-zero
+                     (a scalar) (x (poly-leading-coefficient poly))))
+    :in-theory (enable poly-leading-coefficient))))
+
+(defthm poly-leading-coefficient-of-poly-scale-when-poly-zero
+  (implies (not (consp (normalize poly)))
+           (equal (poly-leading-coefficient (poly-scale scalar poly))
+                  (gfield::field-mul scalar
+                                     (poly-leading-coefficient poly))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance poly-scale-when-normalize-nil
+                     (a scalar) (x poly))
+          (:instance poly-leading-coefficient-equal-zero (p poly)))
+    :in-theory (enable poly-leading-coefficient))))
+
+(defthm poly-leading-coefficient-of-poly-scale
+  (equal (poly-leading-coefficient (poly-scale scalar poly))
+         (gfield::field-mul scalar (poly-leading-coefficient poly)))
+  :hints
+  (("Goal"
+    :cases ((equal (gfield::field-fix scalar) (gfield::field-zero))
+            (consp (normalize poly)))
+    :use ((:instance poly-leading-coefficient-of-poly-scale-when-scalar-zero)
+          (:instance poly-leading-coefficient-of-poly-scale-when-poly-zero)
+          (:instance poly-leading-coefficient-of-poly-scale-when-nonzero))
+    :in-theory (disable poly-scale poly-leading-coefficient normalize))))
+
 (defthm poly-degree-less-than-input-length
   (implies (consp (normalize p))
            (< (poly-degree p) (len p)))
