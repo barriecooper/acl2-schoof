@@ -344,10 +344,27 @@ Raw Euclidean-gcd correctness and exact raw representatives, including the
 negative-unit representative, are unchanged. `GPOLY-GCD`,
 `GPOLY-GCD-COMPUTATION`, `GPOLY-MONIC-NORMALIZATION`, and both scaling
 obligations remain Proved, and no monic gcd wrapper is introduced. General associate theory
-remains open. The next focused PR should integrate monic normalization with
-divisibility by composing both scaling laws with the exact zero/nonzero behavior
-of `POLY-MONIC-NORMALIZE`; it should establish the precise two-sided
-relationships before any monic gcd wrapper.
+remains open.
+
+Monic normalization now preserves divisibility in either argument position,
+unconditionally.  `POLY-DIVIDES-P-OF-POLY-MONIC-NORMALIZE-DIVIDEND` and
+`POLY-DIVIDES-P-OF-POLY-MONIC-NORMALIZE-DIVISOR` split explicitly on normalized
+zero.  That branch uses the explicit `nil` result and normalization invariance;
+the nonzero branch recognizes monic normalization as scaling by the fixed
+nonzero inverse of the leading coefficient and directly applies the two
+certified scaling laws.  Thus malformed atoms, dotted tails, zero-normalized
+representations, trailing zeroes, and noncanonical coefficients inherit the
+total normalization semantics.  No coefficient induction, quotient witness,
+or low-level division reasoning is added.  Raw Euclidean-gcd correctness and
+exact representatives, including the negative-unit result, remain unchanged,
+and monic normalization remains explicit.  No associate predicate or monic gcd
+wrapper is introduced.
+
+The next focused PR should introduce the transparent wrapper
+`POLY-MONIC-EUCLIDEAN-GCD(a,b) =
+POLY-MONIC-NORMALIZE(POLY-EUCLIDEAN-GCD(a,b))`.  Inventory the ledger first: if
+its correctness interface is substantial, split structural specification from
+common-divisor and greatestness correctness.
 
 `POLY-DIVIDES-P-EUCLIDEAN-STEP-IFF` proves unconditionally that a candidate
 divides both `first` and `second` exactly when it divides both `second` and

@@ -62,6 +62,13 @@
 (assert-event (equal (f7-poly-monic-normalize '(-1)) '(1)))
 (assert-event (equal (f7-poly-monic-normalize '(1 2)) '(4 1)))
 (assert-event (equal (f7-poly-monic-normalize '(1 2 3)) '(5 3 1)))
+; Concrete F7 operands used by the generic dividend- and divisor-position
+; divisibility regressions: this quadratic changes every coefficient, while
+; fixed/noncanonical representations still select the same monic polynomial.
+(assert-event (equal (f7-poly-monic-normalize '(2 4 6)) '(5 3 1)))
+(assert-event (equal (f7-poly-monic-normalize '(9 11 13 0)) '(5 3 1)))
+(assert-event
+ (equal (f7-poly-monic-normalize '(2 4 6 . malformed-tail)) '(5 3 1)))
 (assert-event
  (equal (f7-poly-monic-normalize '(8 9 10 0 0)) '(5 3 1)))
 (assert-event

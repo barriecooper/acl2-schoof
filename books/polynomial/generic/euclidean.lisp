@@ -423,6 +423,159 @@
     :in-theory (disable poly-divides-p poly-scale
                         poly-divides-p-transitive))))
 
+; On the nonzero branch of monic normalization, its scaling scalar is a
+; fixed nonzero field element.  Keep this bridge local: the public interface
+; below states the divisibility consequence rather than exposing proof
+; plumbing about the chosen scalar.
+(local
+ (defthm field-inv-of-poly-leading-coefficient-nonzero
+   (implies
+    (consp (normalize poly))
+    (not
+     (equal
+      (gfield::field-fix
+       (gfield::field-inv (poly-leading-coefficient poly)))
+      (gfield::field-zero))))
+   :hints
+   (("Goal"
+     :use ((:instance canonical-polynomial-p-of-normalize (xs poly))
+           (:instance poly-leading-coefficient-nonzero-when-canonical-nonzero
+                      (p (normalize poly)))
+           (:instance poly-leading-coefficient-of-normalize (p poly))
+           (:instance gfield::field-inv-nonzero
+                      (x (poly-leading-coefficient poly))))
+     :in-theory
+     (disable normalize poly-leading-coefficient
+              canonical-polynomial-p-of-normalize
+              poly-leading-coefficient-nonzero-when-canonical-nonzero
+              poly-leading-coefficient-of-normalize
+              gfield::field-inv-nonzero)))))
+
+(defthm poly-divides-p-of-poly-monic-normalize-dividend
+  (equal
+   (poly-divides-p divisor (poly-monic-normalize dividend))
+   (poly-divides-p divisor dividend))
+  :hints
+  (("Goal"
+    :cases ((consp (normalize dividend)))
+    :use ((:instance field-inv-of-poly-leading-coefficient-nonzero
+                     (poly dividend))
+          (:instance poly-divides-p-of-poly-scale-dividend
+                     (scalar
+                      (gfield::field-inv
+                       (poly-leading-coefficient dividend))))
+          (:instance poly-divides-p-of-normalize-dividend))
+    :in-theory
+    (e/d (poly-monic-normalize)
+         (poly-divides-p poly-scale normalize poly-leading-coefficient
+          poly-divides-p-of-poly-scale-dividend
+          poly-divides-p-of-normalize-dividend)))))
+
+(defthm poly-divides-p-of-poly-monic-normalize-divisor
+  (equal
+   (poly-divides-p (poly-monic-normalize divisor) dividend)
+   (poly-divides-p divisor dividend))
+  :hints
+  (("Goal"
+    :cases ((consp (normalize divisor)))
+    :use ((:instance field-inv-of-poly-leading-coefficient-nonzero
+                     (poly divisor))
+          (:instance poly-divides-p-of-poly-scale-divisor
+                     (scalar
+                      (gfield::field-inv
+                       (poly-leading-coefficient divisor))))
+          (:instance poly-divides-p-of-normalize-divisor))
+    :in-theory
+    (e/d (poly-monic-normalize)
+         (poly-divides-p poly-scale normalize poly-leading-coefficient
+          poly-divides-p-of-poly-scale-divisor
+          poly-divides-p-of-normalize-divisor)))))
+
+; Focused regressions exercise the public equivalences, rather than reopening
+; remainder or scaling.  Together these cover normalized zero, malformed and
+; dotted inputs, trailing zeroes, coefficient fixing, constants, and positive
+; and negative divisibility outcomes in both argument positions.
+(defthm poly-divides-p-of-poly-monic-normalize-regression-boundaries
+  (let ((one (polynomial-one))
+        (linear (list (gfield::field-one) (gfield::field-one)))
+        (quadratic
+         (list (gfield::field-neg (gfield::field-one))
+               (gfield::field-one)
+               (gfield::field-neg (gfield::field-one)))))
+    (and
+     (equal (poly-divides-p one (poly-monic-normalize nil))
+            (poly-divides-p one nil))
+     (equal (poly-divides-p (poly-monic-normalize nil) linear)
+            (poly-divides-p nil linear))
+     (equal (poly-divides-p one
+                            (poly-monic-normalize
+                             (list (gfield::field-zero))))
+            (poly-divides-p one (list (gfield::field-zero))))
+     (equal (poly-divides-p
+             (poly-monic-normalize (list (gfield::field-zero))) linear)
+            (poly-divides-p (list (gfield::field-zero)) linear))
+     (equal (poly-divides-p one
+                            (poly-monic-normalize 'malformed-dividend))
+            (poly-divides-p one 'malformed-dividend))
+     (equal (poly-divides-p
+             (poly-monic-normalize 'malformed-divisor) linear)
+            (poly-divides-p 'malformed-divisor linear))
+     (equal (poly-divides-p
+             one (poly-monic-normalize
+                  (cons (gfield::field-one) 'malformed-tail)))
+            (poly-divides-p
+             one (cons (gfield::field-one) 'malformed-tail)))
+     (equal (poly-divides-p
+             (poly-monic-normalize
+              (cons (gfield::field-one) 'malformed-tail)) linear)
+            (poly-divides-p
+             (cons (gfield::field-one) 'malformed-tail) linear))
+     (equal (poly-divides-p
+             linear
+             (poly-monic-normalize
+              (list (gfield::field-one) (gfield::field-one)
+                    (gfield::field-zero))))
+            (poly-divides-p
+             linear
+             (list (gfield::field-one) (gfield::field-one)
+                   (gfield::field-zero))))
+     (equal (poly-divides-p
+             (poly-monic-normalize
+              (list 'malformed-coefficient
+                    (gfield::field-neg (gfield::field-one))))
+             quadratic)
+            (poly-divides-p
+             (list 'malformed-coefficient
+                   (gfield::field-neg (gfield::field-one)))
+             quadratic))
+     (equal (poly-divides-p linear (poly-monic-normalize quadratic))
+            (poly-divides-p linear quadratic))
+     (equal (poly-divides-p (poly-monic-normalize quadratic) linear)
+            (poly-divides-p quadratic linear))))
+  :hints
+  (("Goal"
+    :in-theory
+    (disable poly-divides-p poly-monic-normalize))))
+
+(defthm poly-divides-p-of-poly-monic-normalize-regression-public-theorems
+  (and
+   (implies (poly-divides-p divisor dividend)
+            (poly-divides-p divisor
+                            (poly-monic-normalize dividend)))
+   (implies (poly-divides-p divisor (poly-monic-normalize dividend))
+            (poly-divides-p divisor dividend))
+   (implies (poly-divides-p divisor dividend)
+            (poly-divides-p (poly-monic-normalize divisor)
+                            dividend))
+   (implies (poly-divides-p (poly-monic-normalize divisor) dividend)
+            (poly-divides-p divisor dividend)))
+  :hints
+  (("Goal"
+    :use ((:instance poly-divides-p-of-poly-monic-normalize-dividend)
+          (:instance poly-divides-p-of-poly-monic-normalize-divisor))
+    :in-theory
+    (disable poly-divides-p poly-monic-normalize))))
+
 (defthm poly-divides-p-of-poly-scale-divisor-regression-public-theorem
   (implies
    (not (equal (gfield::field-fix scalar) (gfield::field-zero)))
@@ -1235,6 +1388,39 @@
                      poly-mul-const-left poly-mul-of-consts
                      gfield::field-mul-inverse-left
                      poly-leading-coefficient-of-poly-monic-normalize)))))
+
+; The raw negative-unit result above remains exact.  Monic normalization is
+; applied explicitly here, once in each divisibility argument position.
+(defthm poly-monic-normalize-divisibility-regression-raw-negative-unit-gcd
+  (let* ((negative-one
+          (list (gfield::field-neg (gfield::field-one))))
+         (raw-gcd (poly-euclidean-gcd nil negative-one)))
+    (and
+     (equal raw-gcd negative-one)
+     (equal (poly-divides-p (polynomial-one)
+                            (poly-monic-normalize raw-gcd))
+            (poly-divides-p (polynomial-one) raw-gcd))
+     (equal (poly-divides-p (poly-monic-normalize raw-gcd) negative-one)
+            (poly-divides-p raw-gcd negative-one))))
+  :hints
+  (("Goal"
+    :use
+    ((:instance poly-divides-p-of-poly-monic-normalize-dividend
+                (divisor (polynomial-one))
+                (dividend
+                 (poly-euclidean-gcd
+                  nil (list (gfield::field-neg (gfield::field-one))))))
+     (:instance poly-divides-p-of-poly-monic-normalize-divisor
+                (divisor
+                 (poly-euclidean-gcd
+                  nil (list (gfield::field-neg (gfield::field-one)))))
+                (dividend
+                 (list (gfield::field-neg (gfield::field-one))))))
+    :in-theory
+    (e/d (poly-euclidean-gcd)
+         (poly-divides-p poly-monic-normalize
+          poly-divides-p-of-poly-monic-normalize-dividend
+          poly-divides-p-of-poly-monic-normalize-divisor)))))
 
 (defthm poly-euclidean-gcd-divides-regression-noncanonical
   (let ((first (list (gfield::field-one) (gfield::field-zero)))
