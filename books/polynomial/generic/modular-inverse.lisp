@@ -1,5 +1,6 @@
 (in-package "GPOLY")
 (include-book "monic-xgcd-reduction")
+(include-book "reduced-ring")
 
 ; This total candidate deliberately does not test the gcd.  It performs one
 ; monic XGCD call and reduces its first Bezout coefficient through the public
@@ -90,6 +91,41 @@
              poly-modular-inverse-definition
              poly-remainder-of-poly-mul-poly-modular-inverse
              poly-monic-extended-euclidean-gcd-first-coefficient-reduction))))
+
+; The existing correctness theorem already has exactly the canonical-output
+; equation needed by reduced multiplication.  No remainder-fixed operand or
+; positive-degree modulus hypothesis is necessary, so this also covers the
+; total zero and constant-modulus semantics.
+(defthm poly-reduced-mul-modular-inverse-left
+  (implies
+   (equal (poly-monic-euclidean-gcd first modulus) (polynomial-one))
+   (equal
+    (poly-reduced-mul (poly-modular-inverse first modulus) first modulus)
+    (poly-reduced-one modulus)))
+  :hints
+  (("Goal"
+    :use ((:instance poly-modular-inverse-correct))
+    :in-theory (enable poly-reduced-mul-definition
+                       poly-reduced-one-definition))))
+
+; Derive the requested opposite orientation only from the certified
+; commutativity of reduced multiplication.
+(defthm poly-reduced-mul-modular-inverse-right
+  (implies
+   (equal (poly-monic-euclidean-gcd first modulus) (polynomial-one))
+   (equal
+    (poly-reduced-mul first (poly-modular-inverse first modulus) modulus)
+    (poly-reduced-one modulus)))
+  :hints
+  (("Goal"
+    :use ((:instance poly-reduced-mul-modular-inverse-left)
+          (:instance poly-reduced-mul-commutative
+                     (a first)
+                     (b (poly-modular-inverse first modulus))))
+    :in-theory (disable poly-reduced-mul poly-reduced-one
+                        poly-modular-inverse
+                        poly-reduced-mul-modular-inverse-left
+                        poly-reduced-mul-commutative))))
 
 (defthm poly-modular-inverse-remainder-one
   (implies

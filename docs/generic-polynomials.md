@@ -473,7 +473,7 @@ arbitrary representations, with focused fixed-representative corollaries.
 Zero modulus gives normalized polynomial arithmetic; polynomial one and every
 normalized nonzero constant give the trivial ring; positive-degree moduli are
 covered regardless of reducibility. Irreducibility, unit characterization,
-modular-inverse unit laws, and field promotion remain open. The runtime supports both
+field promotion remains open. The runtime supports both
 reducible Schoof coordinate quotients and moduli later proved irreducible.
 
 `POLY-CONGRUENT-P` remains the only generic quotient-equality relation.  Its
@@ -570,12 +570,25 @@ from the Bézout coefficient to its reduced representative.  When the
 normalized modulus is additionally nonempty and has positive degree, the
 right-hand side is literally `POLYNOMIAL-ONE`.
 
+The generic unit interface now states this certificate directly in reduced
+ring notation.  Under that same exact monic-GCD-equals-`POLYNOMIAL-ONE`
+condition, both `POLY-REDUCED-MUL(first, inverse, modulus)` and its symmetric
+orientation are literally `POLY-REDUCED-ONE(modulus)`.  The first proof is a
+direct restatement of the certified Bézout/remainder result, and the other is
+derived from reduced multiplication commutativity.  Operands are arbitrary
+ACL2 objects; no remainder-fixed, positive-degree, or irreducibility premise
+is added.
+
 For a zero-normalized modulus the candidate is the normalized monic-XGCD
 coefficient.  For every nonzero constant modulus it is `nil`, including
 modulus `POLYNOMIAL-ONE`; no literal-one claim is made for constants.
-Irreducibility implying monic gcd one, additional quotient-ring congruence
-laws, quotient-field laws, concrete polynomial-field instances, and extension
-fields remain open.
+This proves that the existing computation is an inverse whenever its certified
+monic GCD is one.  It neither proves the converse characterization of units nor
+that every nonzero representative is invertible.  Reducible quotient rings can
+still have nonzero nonunits and zero divisors; irreducibility remains the later
+hypothesis for field promotion.  Irreducibility implying monic gcd one,
+quotient-field laws, concrete polynomial-field instances, and extension fields
+remain open.
 
 
 ## Concrete F7 modular inverse (certified)

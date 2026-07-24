@@ -115,8 +115,11 @@ ACL2 obligations are genuinely proved and certified.
    the monic gcd is one; normalized positive-degree moduli specialize the
    product remainder to literal one.  Zero-normalized moduli retain the
    normalized coefficient and nonzero constants return zero.
-   Uniqueness, irreducibility implying monic gcd one, quotient-ring operations
-   and additional congruence laws, quotient fields, concrete
+   Both generic reduced-product orientations are now literally reduced one
+   under that exact condition; one is the existing Bézout/remainder theorem in
+   reduced notation and the other follows by commutativity.  The converse unit
+   characterization, uniqueness, irreducibility implying monic gcd one,
+   quotient fields, concrete
    polynomial-field instances, and extension fields remain open. Later power uses include
    extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
