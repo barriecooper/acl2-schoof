@@ -466,9 +466,21 @@ normalization and reduction fixed points, all-operand normalization invariance,
 and representative invariance using the existing remainder arithmetic laws.
 The F7 specializations exercise reducible and irreducible-looking moduli without
 making irreducibility or field claims. These are representative operations
-only: quotient-ring laws, quotient equality packaging, reduced-one unit laws,
+only: quotient-ring laws, reduced-one unit laws,
 irreducibility, and field promotion remain open. The same runtime supports both
 reducible Schoof coordinate quotients and moduli later proved irreducible.
+
+`POLY-CONGRUENT-P` remains the only generic quotient-equality relation.  Its
+meaning is exactly equality of `POLY-REMAINDER` results for every ACL2 input;
+it is not defined through divisibility or witnesses and creates no ACL2
+quotient object.  `generic/quotient-equivalence.lisp` packages equality
+implication, remainder-fixed collapse, exact constant cases, and literal
+result equality when any of the four reduced operations receives congruent
+operands.  For normalized-zero modulus the relation is equality of normalized
+polynomials; for polynomial one or any normalized nonzero constant every pair
+is equivalent because both remainders are `nil`; for positive degree it is
+equality of bounded canonical remainders.  No irreducibility premise occurs,
+so this is neither field promotion nor a field-only equality relation.
 
 The Euclidean remainder step additionally has a certified natural-valued
 descent measure: for a nonempty normalized divisor, the length of the

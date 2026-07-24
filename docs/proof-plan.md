@@ -56,7 +56,12 @@ ACL2 obligations are genuinely proved and certified.
    structural closure, exact total modulus semantics, and representative
    invariance are certified, with concrete F7 executions. They are not quotient
    objects and do not establish quotient-ring laws, reduced-one unit laws,
-   irreducibility, or field promotion. The Euclidean remainder step now has a
+   irreducibility, or field promotion. Quotient equality is now explicitly
+   packaged as equality of canonical remainders, with equivalence,
+   normalization/remainder invariance, fixed-representative collapse, exact
+   modulus boundaries, and literal equality compatibility for all four reduced
+   operations. The complete quotient-ring and unit-law packages remain open.
+   The Euclidean remainder step now has a
    certified normalized-divisor-length descent theorem. The raw
    `POLY-EUCLIDEAN-GCD`
    recursion is defined and certified on `(len (normalize second))`: it stops at an

@@ -91,12 +91,19 @@ Congruence is also compatible with addition, additive negation, subtraction,
 and multiplication. Either or both multiplication factors may be replaced by
 their canonical remainders before the product is reduced. These laws are
 unconditional and cover zero-modulus normalized equality.
-`GPOLY-MOD-CONGRUENCE` is therefore proved. No quotient-ring operation or
-concrete congruence API is introduced.
+`GPOLY-MOD-CONGRUENCE` is therefore proved.  The focused
+`generic/quotient-equivalence.lisp` package retains this single relation and
+adds equality implication, remainder-fixed collapse to literal equality,
+exact constant-modulus consequences, and literal representative equality for
+all four reduced operations.  These compatibility theorems use the existing
+unconditional representative-invariance equations and are deliberately not
+ACL2 congruence rules.  The small `F7-POLY-CONGRUENT-P` spelling exists only to
+make the concrete total-semantics regressions executable; it duplicates no
+generic equivalence proof.
 
 `POLY-REMAINDER` is the canonical-representative operation for both reducible
 quotient rings needed by Schoof and irreducible quotients later promoted to
-extension fields. Quotient equality remains the separate equality-of-reduced-
+extension fields. Quotient equality is the separate equality-of-reduced-
 representatives relation. A modular-inverse result is useful only under its
 explicit monic-GCD-one certificate, while field inversion additionally awaits
 irreducibility or another unit theorem. `nil` always remains the concrete zero
