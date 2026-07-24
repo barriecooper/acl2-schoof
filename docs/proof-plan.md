@@ -131,8 +131,8 @@ ACL2 obligations are genuinely proved and certified.
    execution are not complete.
 2. Documentation and CI maintenance, then concrete named-field instantiation
    through modular inversion and resolution of its inverse/division guards.
-3. Prove that irreducibility implies monic GCD one and provide executable
-   irreducibility certificates for selected defining polynomials.
+3. Use the certified irreducibility-to-monic-GCD-one bridge and provide further
+   executable irreducibility certificates for selected defining polynomials.
 4. Build quotient fields modulo those certified irreducible polynomials for
    coefficient-field extensions. Separately, build general polynomial quotient
    rings for Schoof division-polynomial calculations; those moduli need not be
@@ -186,14 +186,13 @@ Schoof path may target a named prime field; arbitrary finite-field execution is
 a later architectural phase.
 
 The maintained next dependency chain is documentation and CI maintenance;
-concrete named-field instantiation and guard resolution;
-irreducibility-to-monic-GCD-one; executable irreducibility certificates for
+concrete named-field instantiation and guard resolution; executable irreducibility certificates for
 selected defining polynomials; irreducible-modulus quotient fields for
 coefficient extensions; general quotient rings, separately, for Schoof
 division-polynomial calculations; and then elliptic-curve, Frobenius, torsion,
 and bounded CRT layers. The detailed status remains authoritative in
-`obligations.md`. In particular, irreducibility and its executable
-certification, concrete recursive instances, quotient-field laws, unfinished
+`obligations.md`. In particular, further executable irreducibility
+certification, quotient-field laws, unfinished
 general quotient-ring operations, extension fields, curves, Hasse, Frobenius,
 division polynomials, Schoof residues, and CRT reconstruction remain open.
 
