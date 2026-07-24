@@ -373,12 +373,20 @@ wrapper and instantiate the monic-normalization structural API; they introduce
 no recursion, induction, guards, coefficient reasoning, or low-level division
 reasoning.
 
-The ledger deliberately separates this Proved structural boundary from the
-Open wrapper-correctness obligation.  The next focused PR should use raw-gcd
-common-divisor/greatestness correctness and both monic-normalization
-divisibility equivalences to prove wrapper correctness compositionally, without
-reopening Euclidean recursion.  General associate theory and uniqueness remain
-open.
+The wrapper is now certified to divide both inputs, and every common divisor
+of the inputs is certified to divide the wrapper.  The proof is purely
+compositional: divisor-position monic-normalization invariance transports each
+raw-gcd divides-input theorem, while dividend-position invariance transports
+raw-gcd greatestness.  Both equivalences are unconditional, so nil, malformed
+atoms and coefficients, dotted tails, trailing zeroes, and other
+zero-normalized or noncanonical representations retain the existing total
+semantics.  Only the public wrapper equation and common-divisor definition are
+controlled expansions.  No Euclidean recursion, induction, zero/nonzero split,
+inverse or coefficient reasoning, quotient witness, multiplication/scaling
+proof, or low-level division reasoning is introduced.  The raw representative,
+including the visible negative-unit result, is unchanged.  This completes
+monic-gcd correctness, not uniqueness; associate theory and a monic predicate
+remain absent.
 
 `POLY-DIVIDES-P-EUCLIDEAN-STEP-IFF` proves unconditionally that a candidate
 divides both `first` and `second` exactly when it divides both `second` and

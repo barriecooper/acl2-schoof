@@ -1041,6 +1041,81 @@
                         poly-common-divisor-p-of-euclidean-gcd
                         poly-common-divisor-p-greatestness))))
 
+; Monic-gcd correctness is transported entirely through the public wrapper
+; equation and the two unconditional monic-normalization divisibility laws.
+; In particular, these proofs do not inspect either Euclidean recursion or
+; the scaling used to implement monic normalization.
+(defthm poly-monic-euclidean-gcd-divides-first
+  (poly-divides-p (poly-monic-euclidean-gcd first second) first)
+  :hints
+  (("Goal"
+    :use
+    ((:instance poly-euclidean-gcd-divides-first)
+     (:instance poly-divides-p-of-poly-monic-normalize-divisor
+                (divisor (poly-euclidean-gcd first second))
+                (dividend first)))
+    :in-theory
+    (enable poly-monic-euclidean-gcd-is-monic-normalize))))
+
+(defthm poly-monic-euclidean-gcd-divides-second
+  (poly-divides-p (poly-monic-euclidean-gcd first second) second)
+  :hints
+  (("Goal"
+    :use
+    ((:instance poly-euclidean-gcd-divides-second)
+     (:instance poly-divides-p-of-poly-monic-normalize-divisor
+                (divisor (poly-euclidean-gcd first second))
+                (dividend second)))
+    :in-theory
+    (enable poly-monic-euclidean-gcd-is-monic-normalize))))
+
+(defthm poly-common-divisor-p-of-poly-monic-euclidean-gcd
+  (poly-common-divisor-p
+   (poly-monic-euclidean-gcd first second) first second)
+  :hints
+  (("Goal"
+    :use ((:instance poly-monic-euclidean-gcd-divides-first)
+          (:instance poly-monic-euclidean-gcd-divides-second))
+    :in-theory
+    (e/d (poly-common-divisor-p)
+         (poly-divides-p poly-monic-euclidean-gcd
+          poly-monic-euclidean-gcd-divides-first
+          poly-monic-euclidean-gcd-divides-second)))))
+
+(defthm poly-divides-p-of-poly-monic-euclidean-gcd
+  (implies
+   (poly-common-divisor-p common first second)
+   (poly-divides-p common
+                   (poly-monic-euclidean-gcd first second)))
+  :hints
+  (("Goal"
+    :use
+    ((:instance poly-common-divisor-p-greatestness (divisor common))
+     (:instance poly-divides-p-of-poly-monic-normalize-dividend
+                (divisor common)
+                (dividend (poly-euclidean-gcd first second))))
+    :in-theory
+    (enable poly-monic-euclidean-gcd-is-monic-normalize))))
+
+(defthm poly-monic-euclidean-gcd-correct
+  (and
+   (poly-common-divisor-p
+    (poly-monic-euclidean-gcd first second) first second)
+   (implies
+    (poly-common-divisor-p common first second)
+    (poly-divides-p common
+                    (poly-monic-euclidean-gcd first second))))
+  :hints
+  (("Goal"
+    :use
+    ((:instance poly-common-divisor-p-of-poly-monic-euclidean-gcd)
+     (:instance poly-divides-p-of-poly-monic-euclidean-gcd))
+    :in-theory
+    (disable poly-common-divisor-p poly-divides-p
+             poly-monic-euclidean-gcd
+             poly-common-divisor-p-of-poly-monic-euclidean-gcd
+             poly-divides-p-of-poly-monic-euclidean-gcd))))
+
 ; Exact structural regressions for the public specification.  They retain
 ; normalization boundaries and raw, possibly non-monic, Euclidean outputs.
 (defthm poly-common-divisor-p-regression-boundaries
@@ -1634,3 +1709,197 @@
     :in-theory (e/d (poly-monic-euclidean-gcd)
                     (poly-euclidean-gcd poly-monic-normalize
                      poly-monic-normalize-regression-raw-negative-unit-gcd)))))
+
+; Exact correctness regressions stay at the generic boundary.  They cover the
+; total input shapes without evaluating or reopening the Euclidean algorithm.
+(defthm poly-monic-euclidean-gcd-correctness-regression-boundaries
+  (let ((one (polynomial-one))
+        (zero-constant (list (gfield::field-zero)))
+        (linear (list (gfield::field-one) (gfield::field-one)))
+        (quadratic
+         (list (gfield::field-one) (gfield::field-zero)
+               (gfield::field-one))))
+    (and
+     (equal (poly-common-divisor-p
+             (poly-monic-euclidean-gcd nil nil) nil nil)
+            t)
+     (equal (poly-divides-p (poly-monic-euclidean-gcd nil one) nil) t)
+     (equal (poly-divides-p (poly-monic-euclidean-gcd nil one) one) t)
+     (equal (poly-divides-p (poly-monic-euclidean-gcd one nil) one) t)
+     (equal (poly-divides-p (poly-monic-euclidean-gcd one nil) nil) t)
+     (equal (poly-common-divisor-p
+             (poly-monic-euclidean-gcd
+              'malformed-first 'malformed-second)
+             'malformed-first 'malformed-second)
+            t)
+     (equal (poly-common-divisor-p
+             (poly-monic-euclidean-gcd
+              (cons (gfield::field-one) 'malformed-tail) linear)
+             (cons (gfield::field-one) 'malformed-tail) linear)
+            t)
+     (equal (poly-common-divisor-p
+             (poly-monic-euclidean-gcd
+              (list (gfield::field-one) (gfield::field-zero))
+              (list (gfield::field-one) (gfield::field-one)
+                    (gfield::field-zero)))
+             (list (gfield::field-one) (gfield::field-zero))
+             (list (gfield::field-one) (gfield::field-one)
+                   (gfield::field-zero)))
+            t)
+     (equal (poly-common-divisor-p
+             (poly-monic-euclidean-gcd
+              (list (gfield::field-zero) (gfield::field-zero))
+              zero-constant)
+             (list (gfield::field-zero) (gfield::field-zero))
+             zero-constant)
+            t)
+     (equal (poly-common-divisor-p
+             (poly-monic-euclidean-gcd
+              (list 'malformed-coefficient (gfield::field-zero))
+              (list (gfield::field-one)
+                    'noncanonical-coefficient))
+             (list 'malformed-coefficient (gfield::field-zero))
+             (list (gfield::field-one)
+                   'noncanonical-coefficient))
+            t)
+     (equal (poly-common-divisor-p
+             (poly-monic-euclidean-gcd linear linear) linear linear)
+            t)
+     (equal (poly-common-divisor-p
+             (poly-monic-euclidean-gcd quadratic linear)
+             quadratic linear)
+            t)
+     (equal (poly-common-divisor-p
+             (poly-monic-euclidean-gcd linear
+                                       (list (gfield::field-zero)
+                                             (gfield::field-one)))
+             linear
+             (list (gfield::field-zero) (gfield::field-one)))
+            t)
+     (equal (poly-common-divisor-p
+             (poly-monic-euclidean-gcd quadratic quadratic)
+             quadratic quadratic)
+            t)))
+  :hints
+  (("Goal"
+    :use
+    ((:instance poly-common-divisor-p-of-poly-monic-euclidean-gcd
+                (first nil) (second nil)))
+    :in-theory
+    (disable poly-common-divisor-p poly-divides-p
+             poly-monic-euclidean-gcd
+             poly-monic-euclidean-gcd-is-monic-normalize
+             poly-monic-euclidean-gcd-regression-boundaries
+             poly-monic-euclidean-gcd-regression-polynomials
+             poly-monic-euclidean-gcd-regression-raw-negative-unit))))
+
+(defthm poly-monic-euclidean-gcd-correctness-regression-greatestness
+  (let* ((factor (list (gfield::field-one) (gfield::field-one)))
+         (square (poly-mul factor factor)))
+    (and
+     ; A visible shared linear factor divides the monic wrapper.
+     (implies (poly-common-divisor-p factor factor square)
+              (equal (poly-divides-p
+                      factor (poly-monic-euclidean-gcd factor square))
+                     t))
+     ; The public raw gcd is itself a chosen common divisor, so greatestness
+     ; transports it directly into the monic representative.
+     (equal (poly-divides-p
+             (poly-euclidean-gcd factor square)
+             (poly-monic-euclidean-gcd factor square))
+            t)))
+  :hints
+  (("Goal"
+    :use
+    ((:instance poly-divides-p-of-poly-monic-euclidean-gcd
+                (common (list (gfield::field-one)
+                              (gfield::field-one)))
+                (first (list (gfield::field-one)
+                             (gfield::field-one)))
+                (second
+                 (poly-mul
+                  (list (gfield::field-one) (gfield::field-one))
+                  (list (gfield::field-one) (gfield::field-one)))))
+     (:instance poly-common-divisor-p-of-euclidean-gcd
+                (first (list (gfield::field-one)
+                             (gfield::field-one)))
+                (second
+                 (poly-mul
+                  (list (gfield::field-one) (gfield::field-one))
+                  (list (gfield::field-one) (gfield::field-one)))))
+     (:instance poly-divides-p-of-poly-monic-euclidean-gcd
+                (common
+                 (poly-euclidean-gcd
+                  (list (gfield::field-one) (gfield::field-one))
+                  (poly-mul
+                   (list (gfield::field-one) (gfield::field-one))
+                   (list (gfield::field-one) (gfield::field-one)))))
+                (first (list (gfield::field-one)
+                             (gfield::field-one)))
+                (second
+                 (poly-mul
+                  (list (gfield::field-one) (gfield::field-one))
+                  (list (gfield::field-one) (gfield::field-one))))))
+    :in-theory
+    (disable poly-common-divisor-p poly-divides-p
+             poly-monic-euclidean-gcd poly-euclidean-gcd poly-mul
+             poly-monic-euclidean-gcd-is-monic-normalize
+             poly-divides-p-of-poly-monic-normalize-dividend
+             poly-euclidean-gcd-raw-correct
+             poly-monic-euclidean-gcd-correct
+             poly-monic-euclidean-gcd-divides-first
+             poly-monic-euclidean-gcd-divides-second
+             poly-common-divisor-p-of-poly-monic-euclidean-gcd
+             poly-divides-p-of-poly-monic-euclidean-gcd))))
+
+; NIL is not a common divisor of a nonzero input; this exact negative check
+; prevents an implication-only regression from accidentally admitting it.
+(defthm poly-monic-euclidean-gcd-correctness-regression-not-common
+  (equal (poly-common-divisor-p nil (polynomial-one) nil) nil)
+  :hints
+  (("Goal"
+    :in-theory
+    (e/d (poly-common-divisor-p)
+         (poly-divides-p poly-remainder)))))
+
+(defthm poly-monic-euclidean-gcd-correctness-regression-negative-unit
+  (let* ((negative-one
+          (list (gfield::field-neg (gfield::field-one))))
+         (raw-gcd (poly-euclidean-gcd nil negative-one))
+         (monic-gcd (poly-monic-euclidean-gcd nil negative-one)))
+    (and
+     (equal raw-gcd negative-one)
+     (equal monic-gcd (polynomial-one))
+     (equal (poly-divides-p monic-gcd nil) t)
+     (equal (poly-divides-p monic-gcd negative-one) t)
+     (equal (poly-divides-p raw-gcd nil) t)
+     (equal (poly-divides-p raw-gcd negative-one) t)
+     (equal (poly-divides-p (polynomial-one) monic-gcd) t)))
+  :hints
+  (("Goal"
+    :use
+    ((:instance poly-monic-euclidean-gcd-regression-raw-negative-unit)
+     (:instance poly-monic-euclidean-gcd-divides-first
+                (first nil)
+                (second
+                 (list (gfield::field-neg (gfield::field-one)))))
+     (:instance poly-monic-euclidean-gcd-divides-second
+                (first nil)
+                (second
+                 (list (gfield::field-neg (gfield::field-one)))))
+     (:instance poly-euclidean-gcd-divides-first
+                (first nil)
+                (second
+                 (list (gfield::field-neg (gfield::field-one)))))
+     (:instance poly-euclidean-gcd-divides-second
+                (first nil)
+                (second
+                 (list (gfield::field-neg (gfield::field-one)))))
+     (:instance poly-divides-p-of-poly-monic-euclidean-gcd
+                (common (polynomial-one))
+                (first nil)
+                (second
+                 (list (gfield::field-neg (gfield::field-one))))))
+    :in-theory
+    (disable poly-divides-p poly-common-divisor-p
+             poly-euclidean-gcd poly-monic-euclidean-gcd))))
