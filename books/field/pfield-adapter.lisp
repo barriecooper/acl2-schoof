@@ -365,7 +365,10 @@
 (defun f7-add (x y) (pfield::add (f7-fix x) (f7-fix y) 7))
 (defun f7-mul (x y) (pfield::mul (f7-fix x) (f7-fix y) 7))
 (defun f7-neg (x) (pfield::neg (f7-fix x) 7))
-(defun f7-inv (x) (pfield::inv (f7-fix x) 7))
+(defun f7-inv (x)
+  (let ((x (f7-fix x)))
+    (if (equal x 0) 0
+      (pfield::inv x 7))))
 (defun f7-sub (x y) (f7-add x (f7-neg y)))
 (defun f7-div (x y) (f7-mul x (f7-inv y)))
 (def-pow-instance f7-pow-spec f7-pow-fast f7-pow
@@ -385,6 +388,17 @@
                        (pfield-neg f7-neg)
                        (pfield-inv f7-inv))
             :in-theory (enable dm::primep))))
+
+; This equation records that the explicit zero branch changes only the guard
+; contract, not the established total prime-field semantics.
+(defthm f7-inv-logical-definition
+  (equal (f7-inv x) (pfield::inv (f7-fix x) 7))
+  :hints (("Goal" :in-theory (enable f7-inv))))
+
+(verify-guards f7-fix)
+(verify-guards f7-mul)
+(verify-guards f7-inv)
+(verify-guards f7-div)
 
 ; F7 power assurance.  The small PFIELD proof pattern is specialized directly;
 ; neither recursive power function is mapped by functional instantiation.
@@ -413,6 +427,28 @@
 (defthm f7-mul-commutative
   (equal (f7-mul x y) (f7-mul y x))
   :rule-classes ((:rewrite :loop-stopper nil)))
+
+(defthm f7-mul-inverse-left
+  (implies (not (equal (f7-fix x) (f7-zero)))
+           (equal (f7-mul (f7-inv x) x) (f7-one)))
+  :hints (("Goal" :use ((:instance pfield::mul-of-inv-arg1
+                                    (x (f7-fix x)) (p 7)))
+           :do-not '(preprocess)
+           :in-theory (e/d (f7-fix f7-mul f7-inv f7-zero f7-one dm::primep)
+                            (pfield::mul-of-inv-arg1
+                             f7-inv-logical-definition
+                             f7-mul-commutative)))))
+
+(defthm f7-mul-inverse-right
+  (implies (not (equal (f7-fix x) (f7-zero)))
+           (equal (f7-mul x (f7-inv x)) (f7-one)))
+  :hints (("Goal" :use ((:instance f7-mul-commutative
+                                   (x x) (y (f7-inv x)))
+                          (:instance f7-mul-inverse-left))
+           :do-not '(preprocess)
+           :in-theory (disable f7-mul-commutative
+                               f7-inv-logical-definition))))
+
 (in-theory (disable f7-mul-commutative))
 
 (defthm f7-pow-spec-successor
@@ -493,9 +529,7 @@
              (x (f7-pow-spec (f7-fix x) (nfix n)))))
            :in-theory (disable f7-mul-commutative f7-mul f7-pow-spec))))
 
-(verify-guards f7-fix)
 (verify-guards f7-one)
-(verify-guards f7-mul)
 (verify-guards f7-pow-fast)
 (verify-guards f7-pow
   :hints (("Goal" :use f7-pow-fast-correct
