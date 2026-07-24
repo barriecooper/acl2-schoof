@@ -2386,6 +2386,7 @@
       (f7-poly-scale
        (gfield::f7-inv (f7-poly-leading-coefficient poly)) poly)
     nil))
+(verify-guards f7-poly-monic-normalize)
 (verify-guards f7-raw-mul)
 (verify-guards f7-poly-mul)
 (verify-guards f7-polynomial-one)

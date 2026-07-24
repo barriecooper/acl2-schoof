@@ -185,3 +185,33 @@
        (mv-let (q r) (,divmod f g)
          (declare (ignore q))
          r))))
+
+; Divisibility and Euclidean gcd are kept in two small generators so the raw
+; recursion and its monic post-processing remain separately inspectable.
+(defmacro def-divisibility-instance (divides common-divisor remainder)
+  `(progn
+     (defun ,divides (divisor dividend)
+       (declare (xargs :guard t))
+       (equal (,remainder dividend divisor) nil))
+     (defun ,common-divisor (candidate first second)
+       (declare (xargs :guard t))
+       (and (,divides candidate first)
+            (,divides candidate second)))))
+
+(defmacro def-euclidean-gcd-instance
+  (euclidean-gcd monic-euclidean-gcd normalize remainder monic-normalize
+                 termination-theorem)
+  `(progn
+     (defun ,euclidean-gcd (first second)
+       (declare
+        (xargs
+         :measure (len (,normalize second))
+         :hints (("Goal"
+                  :use ((:instance ,termination-theorem
+                                   (dividend first) (modulus second)))
+                  :in-theory (disable ,normalize ,remainder)))))
+       (if (consp (,normalize second))
+           (,euclidean-gcd second (,remainder first second))
+         (,normalize first)))
+     (defun ,monic-euclidean-gcd (first second)
+       (,monic-normalize (,euclidean-gcd first second)))))

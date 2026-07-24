@@ -51,3 +51,17 @@ Allowed statuses are **Proved**, **Open**, and **Postponed**. No row marked open
 # Abstract polynomial division reuse
 
 The 2006 FUNPOL quotient/remainder books do not provide a small functional-instance bridge to the explicit-modulus HS/PFIELD interface. GPOLY is now the authoritative layer for new polynomial algebra, and its generic division, reconstruction, and remainder-degree bound are certified. The older HS/PFIELD polynomial layer is retained as a legacy/root-count bridge unless an explicit bridge requires it; new gcd, derivative, modular-reduction, quotient-ring, and extension-field work must not be independently duplicated in both stacks.
+
+## Concrete F7 GCD instantiation audit (blocked prerequisite)
+
+The July 2026 concrete-GCD audit confirmed that generated Euclidean admission
+can use the public F7 remainder projection with measure
+`(len (f7-normalize second))`.  The missing prerequisite is a certified F7
+monic-normalization/divisibility transport package suitable for functional
+instantiation of `POLY-MONIC-EUCLIDEAN-GCD-CORRECT`.  In particular, the attempted
+functional instance generated an unresolved field-fixing congruence obligation
+for multiplication (for example certification log subgoal `29.7''`), rather
+than a GCD-recursion obligation.  No incomplete F7 GCD definitions are retained.
+The smallest prerequisite PR should transport the existing generic monic
+normalization structural and two-position divisibility theorems to the named F7
+operations; F7 XGCD and polynomial modular inverse remain open after that work.
