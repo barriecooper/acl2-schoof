@@ -346,3 +346,143 @@
     :cases ((consp (f7-poly-remainder dividend modulus)))
     :in-theory (disable f7-normalize f7-poly-remainder f7-poly-divmod
                         f7-poly-degree f7-canonical-polynomial-p))))
+
+; This is the ordinary raw Euclidean recursion from DEF-EUCLIDEAN-GCD-INSTANCE,
+; expanded here because that generator also emits the deliberately deferred
+; monic wrapper.
+(defun f7-poly-euclidean-gcd (first second)
+  (declare
+   (xargs
+    :measure (len (f7-normalize second))
+    :hints (("Goal"
+             :use ((:instance normalize-f7-poly-remainder-strict-length-bound
+                              (dividend first) (modulus second)))
+             :in-theory (disable f7-normalize f7-poly-remainder)))))
+  (if (consp (f7-normalize second))
+      (f7-poly-euclidean-gcd second (f7-poly-remainder first second))
+    (f7-normalize first)))
+
+(verify-guards f7-poly-euclidean-gcd)
+
+; The raw theorem deliberately omits monic normalization: it is the direct
+; concrete instance of the generic raw common-divisor specification.
+(defthm f7-poly-euclidean-gcd-raw-correct
+  (and
+   (f7-poly-common-divisor-p
+    (f7-poly-euclidean-gcd first second) first second)
+   (implies
+    (f7-poly-common-divisor-p divisor first second)
+    (f7-poly-divides-p divisor (f7-poly-euclidean-gcd first second))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :by (:functional-instance
+         poly-euclidean-gcd-raw-correct
+         (gfield::field-element-p gfield::f7-element-p)
+         (gfield::field-fix gfield::f7-fix)
+         (gfield::field-zero gfield::f7-zero)
+         (gfield::field-one gfield::f7-one)
+         (gfield::field-add gfield::f7-add)
+         (gfield::field-mul gfield::f7-mul)
+         (gfield::field-neg gfield::f7-neg)
+         (gfield::field-inv gfield::f7-inv)
+         (gfield::field-div gfield::f7-div)
+         (fix-coefficients f7-fix-coefficients)
+         (trim-trailing-zeros f7-trim-trailing-zeros)
+         (normalize f7-normalize)
+         (coefficient-list-p f7-coefficient-list-p)
+         (polynomial-p f7-polynomial-p)
+         (canonical-polynomial-p f7-canonical-polynomial-p)
+         (raw-add f7-raw-add) (poly-add f7-poly-add)
+         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg)
+         (poly-sub f7-poly-sub)
+         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+         (zero-prefix f7-zero-prefix)
+         (poly-shift f7-poly-shift) (monomial f7-monomial)
+         (poly-degree f7-poly-degree)
+         (poly-leading-coefficient f7-poly-leading-coefficient)
+         (poly-division-step-core f7-poly-division-step-core)
+         (poly-division-step f7-poly-division-step)
+         (poly-division-step-term f7-poly-division-step-term)
+         (poly-division-step-next f7-poly-division-step-next)
+         (poly-divmod-core f7-poly-divmod-core)
+         (poly-divmod f7-poly-divmod)
+         (poly-remainder f7-poly-remainder)
+         (poly-divides-p f7-poly-divides-p)
+         (poly-common-divisor-p f7-poly-common-divisor-p)
+         (poly-euclidean-gcd f7-poly-euclidean-gcd)))
+   ("Subgoal 29.7''"
+    :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation
+                     (x1 gfield::x1) (x2 gfield::x2)
+                     (y1 gfield::y1) (y2 gfield::y2))))
+   ("Subgoal 29.7'"
+    :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation
+                     (x1 gfield::x1) (x2 gfield::x2)
+                     (y1 gfield::y1) (y2 gfield::y2))))
+   ("Subgoal 26.9"
+    :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation
+                     (x1 gfield::x1) (x2 gfield::x2)
+                     (y1 gfield::y1) (y2 gfield::y2))))
+   ("Subgoal 26.4"
+    :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation
+                     (x1 gfield::x1) (x2 gfield::x2)
+                     (y1 gfield::y1) (y2 gfield::y2))))
+   ("Subgoal 25.11"
+    :use ((:instance f7-add-fixed-congruence-for-divmod-instantiation
+                     (x1 gfield::x1) (x2 gfield::x2)
+                     (y1 gfield::y1) (y2 gfield::y2))))
+   ("Subgoal 25.6"
+    :use ((:instance f7-add-fixed-congruence-for-divmod-instantiation
+                     (x1 gfield::x1) (x2 gfield::x2)
+                     (y1 gfield::y1) (y2 gfield::y2))))
+   ("Subgoal 24.3"
+    :use ((:instance f7-inv-fixed-congruence-for-gcd-instantiation
+                     (x1 gfield::x1) (x2 gfield::x2))))))
+
+(defthm f7-poly-euclidean-gcd-divides-first
+  (f7-poly-divides-p (f7-poly-euclidean-gcd first second) first)
+  :hints (("Goal" :use ((:instance f7-poly-euclidean-gcd-raw-correct))
+           :in-theory (enable f7-poly-common-divisor-p))))
+
+(defthm f7-poly-euclidean-gcd-divides-second
+  (f7-poly-divides-p (f7-poly-euclidean-gcd first second) second)
+  :hints (("Goal" :use ((:instance f7-poly-euclidean-gcd-raw-correct))
+           :in-theory (enable f7-poly-common-divisor-p))))
+
+(defthm f7-poly-common-divisor-divides-euclidean-gcd
+  (implies (f7-poly-common-divisor-p divisor first second)
+           (f7-poly-divides-p divisor (f7-poly-euclidean-gcd first second)))
+  :hints (("Goal" :use ((:instance f7-poly-euclidean-gcd-raw-correct)))))
+
+; Exact raw representatives are intentional: reversed inputs and scalar
+; associates need not return equal (or monic) polynomials.
+(assert-event (equal (f7-poly-euclidean-gcd '(1 2 1) '(2 3 1)) '(6 6)))
+(assert-event (equal (f7-poly-euclidean-gcd '(2 3 1) '(1 2 1)) '(1 1)))
+(assert-event (equal (f7-poly-euclidean-gcd '(1 0 1) '(1 1)) '(2)))
+(assert-event (equal (f7-poly-euclidean-gcd '(1 2 1) '(1 1)) '(1 1)))
+(assert-event
+ (equal (f7-poly-euclidean-gcd '(1 0 0 0 1) '(1 1 1)) '(1)))
+(assert-event (equal (f7-poly-euclidean-gcd '(2 3) nil) '(2 3)))
+(assert-event (equal (f7-poly-euclidean-gcd nil '(2 3)) '(2 3)))
+(assert-event (equal (f7-poly-euclidean-gcd nil nil) nil))
+(assert-event (equal (f7-poly-euclidean-gcd '(3) '(5)) '(5)))
+(assert-event (equal (f7-poly-euclidean-gcd '(2 4) '(3 6)) '(3 6)))
+(assert-event (equal (f7-poly-euclidean-gcd '(3 6) '(2 4)) '(2 4)))
+(assert-event
+ (equal (f7-poly-euclidean-gcd '(1 2 1 0 0) '(2 3 1 0)) '(6 6)))
+(assert-event
+ (equal (f7-poly-euclidean-gcd '(8 -5 8) '(9 -4 8)) '(6 6)))
+(assert-event (equal (f7-poly-euclidean-gcd 'bad '(2 3)) '(2 3)))
+(assert-event
+ (equal (f7-poly-euclidean-gcd '(1 2 . bad) '(2 4 . tail)) '(2 4)))
+(assert-event
+ (and (f7-canonical-polynomial-p
+       (f7-poly-euclidean-gcd '(1 2 1) '(2 3 1)))
+      (f7-poly-divides-p
+       (f7-poly-euclidean-gcd '(1 2 1) '(2 3 1)) '(1 2 1))
+      (f7-poly-divides-p
+       (f7-poly-euclidean-gcd '(1 2 1) '(2 3 1)) '(2 3 1))
+      (f7-poly-common-divisor-p '(1 1) '(1 2 1) '(2 3 1))
+      (f7-poly-divides-p
+       '(1 1) (f7-poly-euclidean-gcd '(1 2 1) '(2 3 1)))))
