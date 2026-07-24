@@ -847,6 +847,64 @@
     :in-theory (disable poly-euclidean-gcd normalize
                         canonical-polynomial-p))))
 
+; This public boundary is transparent post-processing of the existing raw
+; Euclidean result, not a second gcd algorithm.  DEFUND keeps that composition
+; available by its named equation without enabling it accidentally in later
+; algebraic proofs.
+(defund poly-monic-euclidean-gcd (first second)
+  (poly-monic-normalize (poly-euclidean-gcd first second)))
+
+(defthm poly-monic-euclidean-gcd-is-monic-normalize
+  (equal (poly-monic-euclidean-gcd first second)
+         (poly-monic-normalize (poly-euclidean-gcd first second)))
+  :hints (("Goal" :in-theory (enable poly-monic-euclidean-gcd))))
+
+(defthm normalize-of-poly-monic-euclidean-gcd
+  (equal (normalize (poly-monic-euclidean-gcd first second))
+         (poly-monic-euclidean-gcd first second))
+  :hints
+  (("Goal"
+    :use ((:instance normalize-of-poly-monic-normalize
+                     (poly (poly-euclidean-gcd first second))))
+    :in-theory (e/d (poly-monic-euclidean-gcd)
+                    (normalize poly-monic-normalize
+                     normalize-of-poly-monic-normalize)))))
+
+(defthm canonical-polynomial-p-of-poly-monic-euclidean-gcd
+  (canonical-polynomial-p (poly-monic-euclidean-gcd first second))
+  :hints
+  (("Goal"
+    :use ((:instance canonical-polynomial-p-of-poly-monic-normalize
+                     (poly (poly-euclidean-gcd first second))))
+    :in-theory (e/d (poly-monic-euclidean-gcd)
+                    (poly-monic-normalize canonical-polynomial-p
+                     canonical-polynomial-p-of-poly-monic-normalize)))))
+
+(defthm consp-of-poly-monic-euclidean-gcd
+  (equal (consp (poly-monic-euclidean-gcd first second))
+         (consp (normalize (poly-euclidean-gcd first second))))
+  :hints
+  (("Goal"
+    :use ((:instance consp-of-poly-monic-normalize
+                     (poly (poly-euclidean-gcd first second))))
+    :in-theory (e/d (poly-monic-euclidean-gcd)
+                    (poly-monic-normalize normalize
+                     consp-of-poly-monic-normalize)))))
+
+(defthm poly-leading-coefficient-of-poly-monic-euclidean-gcd
+  (equal (poly-leading-coefficient
+          (poly-monic-euclidean-gcd first second))
+         (if (consp (normalize (poly-euclidean-gcd first second)))
+             (gfield::field-one)
+           (gfield::field-zero)))
+  :hints
+  (("Goal"
+    :use ((:instance poly-leading-coefficient-of-poly-monic-normalize
+                     (poly (poly-euclidean-gcd first second))))
+    :in-theory (e/d (poly-monic-euclidean-gcd)
+                    (poly-monic-normalize normalize poly-leading-coefficient
+                     poly-leading-coefficient-of-poly-monic-normalize)))))
+
 ; The conjunction is the natural invariant of the Euclidean recursion: the
 ; recursive result divides the new pair, and the public Euclidean-step theorem
 ; transports that fact back to the old pair.
@@ -1519,3 +1577,60 @@
           (gfield::field-zero) (gfield::field-one))
     (list (gfield::field-one) (gfield::field-zero)
           (gfield::field-one)))))
+
+; Exact structural regressions for the monic boundary.  Constant-first order
+; is visible throughout; malformed atoms and dotted tails inherit NORMALIZE's
+; total semantics before the raw Euclidean computation is post-processed.
+(defthm poly-monic-euclidean-gcd-regression-boundaries
+  (let ((one (polynomial-one)))
+    (and
+     (equal (poly-monic-euclidean-gcd nil nil) nil)
+     (equal (poly-monic-euclidean-gcd one nil) one)
+     (equal (poly-monic-euclidean-gcd nil one) one)
+     (equal (poly-monic-euclidean-gcd 'malformed-first
+                                      'malformed-second)
+            nil)
+     (equal (poly-monic-euclidean-gcd
+             (cons (gfield::field-one) 'malformed-tail) nil)
+            one)
+     (equal (poly-monic-euclidean-gcd
+             (list (gfield::field-one) (gfield::field-zero)) nil)
+            one)
+     (equal (poly-monic-euclidean-gcd
+             (list (gfield::field-zero) (gfield::field-zero)) nil)
+            nil)
+     (equal (poly-monic-euclidean-gcd
+             (list 'malformed-coefficient (gfield::field-zero)) nil)
+            (poly-monic-normalize
+             (normalize (list 'malformed-coefficient))))
+     (equal (poly-monic-euclidean-gcd (list (gfield::field-zero)) nil)
+            nil)))
+  :hints (("Goal" :in-theory (enable poly-monic-euclidean-gcd
+                                      poly-euclidean-gcd))))
+
+(defthm poly-monic-euclidean-gcd-regression-polynomials
+  (let* ((one (polynomial-one))
+         (linear (poly-add (monomial (gfield::field-one) 1) one))
+         (quadratic (poly-mul linear linear)))
+    (and
+     (equal (poly-monic-euclidean-gcd linear linear) linear)
+     (equal (poly-monic-euclidean-gcd quadratic linear) linear)
+     (equal (poly-monic-euclidean-gcd linear one) one)
+     (equal (poly-monic-euclidean-gcd
+             linear (monomial (gfield::field-one) 1))
+            one)
+     (equal (poly-monic-euclidean-gcd nil quadratic) quadratic))))
+
+; Keep the associate distinction explicit at the new boundary: the raw result
+; is still negative one, while only the wrapper returns field one.
+(defthm poly-monic-euclidean-gcd-regression-raw-negative-unit
+  (let ((negative-one (list (gfield::field-neg (gfield::field-one)))))
+    (and (equal (poly-euclidean-gcd nil negative-one) negative-one)
+         (equal (poly-monic-euclidean-gcd nil negative-one)
+                (polynomial-one))))
+  :hints
+  (("Goal"
+    :use ((:instance poly-monic-normalize-regression-raw-negative-unit-gcd))
+    :in-theory (e/d (poly-monic-euclidean-gcd)
+                    (poly-euclidean-gcd poly-monic-normalize
+                     poly-monic-normalize-regression-raw-negative-unit-gcd)))))
