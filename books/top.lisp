@@ -5,7 +5,7 @@
 (include-book "field/examples/f2")
 (include-book "field/pfield-adapter")
 
-(include-book "polynomial/generic/pfield-instance")
+(include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/monomial")
 (include-book "polynomial/generic/division-step")
 (include-book "polynomial/generic/division")
