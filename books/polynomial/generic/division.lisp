@@ -313,6 +313,25 @@
   :rule-classes nil
   :hints (("Goal" :use ((:instance poly-divmod-reconstruction)))))
 
+; A narrow functional-instantiation package for concrete recursive instances.
+(defthm poly-divmod-public-interface
+  (and (canonical-polynomial-p (mv-nth 0 (poly-divmod f g)))
+       (canonical-polynomial-p (mv-nth 1 (poly-divmod f g)))
+       (equal (poly-add (poly-mul (mv-nth 0 (poly-divmod f g))
+                                  (normalize g))
+                        (mv-nth 1 (poly-divmod f g)))
+              (normalize f))
+       (implies (consp (normalize g))
+                (or (equal (mv-nth 1 (poly-divmod f g)) nil)
+                    (< (poly-degree (mv-nth 1 (poly-divmod f g)))
+                       (poly-degree (normalize g))))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance poly-divmod-quotient-canonical)
+                 (:instance poly-divmod-remainder-canonical)
+                 (:instance poly-divmod-reconstruction)
+                 (:instance poly-divmod-final-remainder-degree-bound)))))
+
 ; Focused symbolic regressions.  The constrained field deliberately has no
 ; concrete evaluator; POLYNOMIAL-ONE makes cancellation shapes field-generic.
 (defthm poly-divmod-regression-malformed-atom

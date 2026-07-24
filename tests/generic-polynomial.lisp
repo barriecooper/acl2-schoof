@@ -1,5 +1,5 @@
 (in-package "GPOLY")
-(include-book "../books/polynomial/generic/pfield-instance")
+(include-book "../books/polynomial/generic/f7-division")
 (assert-event (equal (f7-normalize nil) nil))
 (assert-event (equal (f7-normalize '(0 0 0)) nil))
 (assert-event (equal (f7-normalize '(1 2 0)) '(1 2)))

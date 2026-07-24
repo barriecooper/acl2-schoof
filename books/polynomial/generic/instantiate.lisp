@@ -173,3 +173,15 @@
        (let ((f (,normalize f)) (g (,normalize g)))
          (let ((result (,core nil f g)))
            (mv (car result) (cdr result)))))))
+
+; Public projections deliberately call DIVMOD once and contain no recursion.
+(defmacro def-divmod-projections-instance (quotient remainder divmod)
+  `(progn
+     (defun ,quotient (f g)
+       (mv-let (q r) (,divmod f g)
+         (declare (ignore r))
+         q))
+     (defun ,remainder (f g)
+       (mv-let (q r) (,divmod f g)
+         (declare (ignore q))
+         r))))

@@ -51,7 +51,7 @@ regressions cover zero, one, and four-place shifts; zero and constant
 monomials; a degree-two monomial; and negative-index behavior.  The abstract
 theory now also has a certified named F7 instance (`f7-zero-prefix`,
 `f7-poly-shift`, and `f7-monomial`) with a direct zero-prefix normalization
-bridge.  F7 one-step division and recursive quotient/remainder remain open.
+bridge.  F7 one-step division and recursive quotient/remainder are now certified in `generic/pfield-instance.lisp` and `generic/f7-division.lisp`.
 
 No `MBE`, `DEFEXEC`, attachment, or other logical/executable boundary is added,
 and the ordinary concrete runtime classification is recorded in
@@ -61,7 +61,7 @@ and the ordinary concrete runtime classification is recorded in
 
 `GPOLY::POLY-DIVMOD-CORE` carries `(quotient remainder divisor)`, returns the transparent pair `(final-q . final-r)`, and measures `(len remainder)`.  It invokes `POLY-DIVISION-STEP-CORE` once per active iteration and reuses that pair.  `POLY-DIVMOD` normalizes each external operand once and returns `(mv q r)`.  The certified invariant is `final-q*g+final-r = accumulated-q*g+current-r`; the public consequence is `q*normalize(g)+r = normalize(f)`.  Canonicality, polynomial/true-list closure, the strict final remainder bound, inactive reductions, divisor-one reduction, determinism, and exact division are certified.  Both new ordinary `DEFUN`s have verified guards.
 
-No `MBE`, `DEFEXEC`, attachment, or separate executable specification is used.  The divisor is fixed and is not normalized in recursion.  Concrete PFIELD division and recursive F7 divmod are postponed.
+No `MBE`, `DEFEXEC`, attachment, or separate executable specification is used.  The divisor is fixed and is not normalized in recursion.  Concrete PFIELD division remains postponed; the named F7 recursive instance and its projections are ordinary generated definitions with verified guards.
 
 ## Certified remainder interface
 
@@ -95,7 +95,7 @@ concrete congruence API is introduced.
 
 This contract claims no gcd function, gcd or extended-gcd correctness,
 Bézout identity, Euclidean-domain result, irreducibility result, factorization,
-extension field, rational function, or curve operation.  One-step leading-term cancellation and generic recursive quotient/remainder, reconstruction, and final strict remainder-degree bound are certified. Concrete generated instances, uniqueness, gcd, and all broader Euclidean consequences remain open.
+extension field, rational function, or curve operation.  One-step leading-term cancellation and generic recursive quotient/remainder, reconstruction, and final strict remainder-degree bound are certified. The concrete F7 recursive instance is certified. Concrete gcd, uniqueness, and all broader F7 Euclidean consequences remain open.
 
 ## Certified one-step cancellation API
 
