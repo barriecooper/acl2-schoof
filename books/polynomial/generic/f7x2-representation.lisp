@@ -188,6 +188,129 @@
            :in-theory (disable f7x2-fix f7-poly-degree f7-normalize))))
 
 ; Exact executable representation boundary, including total malformed input.
+
+(local
+ (defthm f7x2-element-p-implies-normalized
+   (implies (f7x2-element-p x)
+            (equal (f7-normalize x) x))
+   :hints (("Goal" :use ((:instance f7x2-element-p-characterization))
+            :in-theory (disable f7x2-fix f7-poly-remainder)))))
+
+(local
+ (defthm len-of-f7x2-element-p
+   (implies (f7x2-element-p x)
+            (<= (len x) 2))
+   :rule-classes :linear
+   :hints (("Goal" :use ((:instance len-of-f7x2-fix))
+            :in-theory (enable f7x2-element-p)))))
+
+(local
+ (defthm f7-normalize-reconstruct-short-normalized
+   (implies (and (equal (f7-normalize x) x)
+                 (<= (len x) 2))
+            (equal (f7-normalize (list (gfield::f7-fix (car x))
+                                       (gfield::f7-fix (cadr x))))
+                   x))
+   :hints (("Goal" :cases ((not (consp x))
+                           (not (consp (cdr x)))
+                           (consp (cddr x)))
+            :in-theory (enable f7-normalize f7-fix-coefficients
+                               f7-trim-trailing-zeros)))))
+
+(defthm f7x2-reconstruct-from-coefficients
+  (implies (f7x2-element-p value)
+           (equal (f7-normalize
+                   (list (f7x2-constant-coefficient value)
+                         (f7x2-linear-coefficient value)))
+                  value))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7x2-element-p-implies-normalized (x value))
+                 (:instance len-of-f7x2-element-p (x value))
+                 (:instance f7-normalize-reconstruct-short-normalized
+                            (x value)))
+           :in-theory (e/d (f7x2-constant-coefficient
+                            f7x2-linear-coefficient
+                            f7x2-element-p)
+                           (f7x2-fix f7-poly-remainder
+                                     f7-normalize)))))
+
+(defthm f7x2-coefficient-extensionality
+  (implies (and (f7x2-element-p first)
+                (f7x2-element-p second)
+                (equal (f7x2-constant-coefficient first)
+                       (f7x2-constant-coefficient second))
+                (equal (f7x2-linear-coefficient first)
+                       (f7x2-linear-coefficient second)))
+           (equal first second))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7x2-reconstruct-from-coefficients
+                            (value first))
+                 (:instance f7x2-reconstruct-from-coefficients
+                            (value second)))
+           :in-theory (disable f7x2-fix f7-poly-remainder
+                               f7-normalize))))
+
+(defthm f7x2-fix-coefficient-extensionality
+  (implies (and (equal (f7x2-constant-coefficient first)
+                      (f7x2-constant-coefficient second))
+                (equal (f7x2-linear-coefficient first)
+                       (f7x2-linear-coefficient second)))
+           (equal (f7x2-fix first) (f7x2-fix second)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7x2-coefficient-extensionality
+                            (first (f7x2-fix first))
+                            (second (f7x2-fix second)))
+                 (:instance f7x2-element-p-of-f7x2-fix (x first))
+                 (:instance f7x2-element-p-of-f7x2-fix (x second)))
+           :in-theory (disable f7x2-fix f7-poly-remainder
+                               f7x2-element-p-of-f7x2-fix))))
+
+(defthm f7x2-reconstruction-regressions
+  (and (equal (f7-normalize
+               (list (f7x2-constant-coefficient nil)
+                     (f7x2-linear-coefficient nil)))
+              nil)
+       (equal (f7-normalize
+               (list (f7x2-constant-coefficient '(1))
+                     (f7x2-linear-coefficient '(1))))
+              '(1))
+       (equal (f7-normalize
+               (list (f7x2-constant-coefficient '(0 1))
+                     (f7x2-linear-coefficient '(0 1))))
+              '(0 1))
+       (equal (f7-normalize
+               (list (f7x2-constant-coefficient '(1 1))
+                     (f7x2-linear-coefficient '(1 1))))
+              '(1 1))
+       (implies (and (gfield::f7-element-p a)
+                     (not (equal a 0)))
+                (equal (f7-normalize
+                        (list (f7x2-constant-coefficient (list a))
+                              (f7x2-linear-coefficient (list a))))
+                       (list a)))
+       (implies (and (gfield::f7-element-p a)
+                     (gfield::f7-element-p b)
+                     (not (equal b 0)))
+                (equal (f7-normalize
+                        (list (f7x2-constant-coefficient (list a b))
+                              (f7x2-linear-coefficient (list a b))))
+                       (list a b))))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable f7x2-fix f7x2-constant-coefficient
+                                     f7x2-linear-coefficient
+                                     f7-normalize f7-fix-coefficients
+                                     f7-trim-trailing-zeros))))
+
+(defthm f7x2-fix-extensionality-regressions
+  (and (equal (f7x2-fix '(1 0)) (f7x2-fix '(1)))
+       (equal (f7x2-fix '(8 7)) (f7x2-fix '(1)))
+       (equal (f7x2-fix '(1 2 . bad)) (f7x2-fix '(1 2))))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable f7x2-fix))))
+
 (defthm f7x2-representation-regressions
   (and (equal (f7x2-fix nil) nil)
        (equal (f7x2-fix '(1)) '(1))
