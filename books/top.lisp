@@ -13,4 +13,5 @@
 (include-book "polynomial/generic/euclidean")
 (include-book "polynomial/generic/xgcd")
 (include-book "polynomial/generic/monic-xgcd")
+(include-book "polynomial/generic/monic-xgcd-reduction")
 (include-book "curve/f11-golden")

@@ -417,6 +417,40 @@
     (disable poly-divmod poly-remainder normalize poly-add poly-mul
              poly-degree canonical-polynomial-p))))
 
+; Public total form.  When the normalized modulus is zero, its product is zero
+; and POLY-ADD merely normalizes the dividend; otherwise this is the bounded
+; reconstruction theorem above with normalization hidden by POLY-MUL.
+(local
+ (defthm poly-mul-zero-normalized-right
+   (implies (equal (normalize modulus) nil)
+            (equal (poly-mul multiplier modulus) nil))
+   :hints (("Goal"
+            :use ((:instance poly-mul-normalize-right
+                             (x multiplier) (y modulus))
+                  (:instance poly-mul-of-nil-right (x multiplier)))
+            :in-theory (disable poly-mul normalize
+                                poly-mul-normalize-right)))))
+
+(defthm poly-remainder-of-poly-add-divisor-multiple
+  (equal
+   (poly-remainder
+    (poly-add dividend (poly-mul multiplier modulus)) modulus)
+   (poly-remainder dividend modulus))
+  :hints
+  (("Goal" :cases ((consp (normalize modulus))))
+   ("Subgoal 1"
+    :use ((:instance poly-remainder-of-poly-add-modulus-multiple))
+    :in-theory (disable poly-remainder poly-add poly-mul normalize))
+   ("Subgoal 2"
+    :use ((:instance poly-remainder-zero-normalized-modulus)
+          (:instance poly-remainder-zero-normalized-modulus
+                     (dividend
+                      (poly-add dividend (poly-mul multiplier modulus))))
+          (:instance normalize-equal-nil-when-not-consp (xs modulus))
+          (:instance poly-mul-zero-normalized-right)
+          (:instance poly-add-of-nil-right (x dividend)))
+    :in-theory (disable poly-remainder poly-add poly-mul normalize))))
+
 (verify-guards poly-remainder)
 
 ; Generic congruence is structural equality of the two canonical remainder
