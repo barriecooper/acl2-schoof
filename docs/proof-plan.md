@@ -150,8 +150,9 @@ and monic Bezout, the XGCD remainder bridge, and the total conditional
 requires a normalized positive-degree modulus; constant moduli retain their
 zero-remainder semantics. Quotient-field laws, concrete instances, associate
 theory, and uniqueness remain open. No concrete
-PFIELD/F7 gcd API was introduced, and recursive
-concrete F7 divmod remains postponed. The first executable
+PFIELD/F7 gcd API was introduced. The complete concrete F7 one-step semantic
+theorem layer, including the strict length-decrease prerequisite, is certified;
+recursive concrete F7 divmod and all projections remain postponed. The first executable
 Schoof path may target a named prime field; arbitrary finite-field execution is
 a later architectural phase.
 

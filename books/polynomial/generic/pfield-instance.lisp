@@ -1,6 +1,6 @@
 (in-package "GPOLY")
 (include-book "power")
-(include-book "degree")
+(include-book "division")
 (include-book "../../field/pfield-adapter")
 (include-book "std/lists/len" :dir :system)
 
@@ -2617,3 +2617,171 @@
                   (f7-poly-degree '(1 2))))
       (not (equal (f7-poly-leading-coefficient '(1 2 3))
                   (f7-poly-leading-coefficient '(1 2 4))))))
+
+; The concrete one-step boundary is generated independently of recursive
+; division.  Its result has the generic (quotient-term . next-dividend) shape.
+(verify-guards f7-raw-add)
+(verify-guards f7-poly-add)
+(verify-guards gfield::f7-neg)
+(verify-guards f7-raw-neg)
+(verify-guards f7-poly-neg)
+(verify-guards f7-poly-sub)
+(verify-guards f7-raw-scale)
+(verify-guards f7-raw-mul)
+(verify-guards f7-poly-mul)
+(def-division-step-instance
+  f7-poly-division-step-core f7-poly-division-step
+  f7-poly-division-step-term f7-poly-division-step-next
+  f7-poly-degree f7-poly-leading-coefficient f7-monomial f7-poly-sub
+  f7-poly-mul f7-normalize gfield::f7-div)
+
+(defthm f7-poly-division-step-core-term-properties
+  (implies (and (f7-canonical-polynomial-p remainder)
+                (f7-canonical-polynomial-p divisor)
+                (consp remainder) (consp divisor)
+                (<= (f7-poly-degree divisor) (f7-poly-degree remainder)))
+           (let ((term (car (f7-poly-division-step-core remainder divisor))))
+             (and (f7-canonical-polynomial-p term)
+                  (consp term)
+                  (equal (f7-poly-degree term)
+                         (- (f7-poly-degree remainder) (f7-poly-degree divisor)))
+                  (equal (f7-poly-leading-coefficient term)
+                         (gfield::f7-div (f7-poly-leading-coefficient remainder)
+                                         (f7-poly-leading-coefficient divisor))))))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance f7-leading-quotient-monomial-package))
+           :in-theory (enable f7-poly-division-step-core))))
+
+(defthm f7-poly-division-step-core-product-properties
+  (implies (and (f7-canonical-polynomial-p remainder)
+                (f7-canonical-polynomial-p divisor)
+                (consp remainder) (consp divisor)
+                (<= (f7-poly-degree divisor) (f7-poly-degree remainder)))
+           (let* ((term (car (f7-poly-division-step-core remainder divisor)))
+                  (product (f7-poly-mul term divisor)))
+             (and (f7-canonical-polynomial-p product) (consp product)
+                  (equal (f7-poly-degree product) (f7-poly-degree remainder))
+                  (equal (f7-poly-leading-coefficient product)
+                         (f7-poly-leading-coefficient remainder)))))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance f7-poly-division-step-core-term-properties)
+                          (:instance f7-poly-degree-of-poly-mul
+                           (f (car (f7-poly-division-step-core remainder divisor))) (g divisor))
+                          (:instance f7-consp-of-poly-mul-when-canonical-nonzero
+                           (f (car (f7-poly-division-step-core remainder divisor))) (g divisor))
+                          (:instance f7-poly-leading-coefficient-of-poly-mul
+                           (f (car (f7-poly-division-step-core remainder divisor))) (g divisor))
+                          (:instance f7-leading-coefficient-ordered-quotient-package))
+           :in-theory (disable f7-poly-division-step-core f7-poly-mul
+                               f7-poly-degree f7-poly-leading-coefficient
+                               gfield::f7-div gfield::f7-mul))))
+
+(defthm f7-poly-division-step-core-next-canonical
+  (implies (f7-canonical-polynomial-p remainder)
+           (f7-canonical-polynomial-p
+            (cdr (f7-poly-division-step-core remainder divisor))))
+  :hints (("Goal" :in-theory (enable f7-poly-division-step-core))))
+
+(defthm f7-poly-division-step-core-active-equations
+  (implies (and (consp remainder) (consp divisor)
+                (<= (f7-poly-degree divisor) (f7-poly-degree remainder)))
+           (let ((term (car (f7-poly-division-step-core remainder divisor))))
+             (and (equal term
+                         (f7-monomial
+                          (gfield::f7-div (f7-poly-leading-coefficient remainder)
+                                          (f7-poly-leading-coefficient divisor))
+                          (- (f7-poly-degree remainder) (f7-poly-degree divisor))))
+                  (equal (cdr (f7-poly-division-step-core remainder divisor))
+                         (f7-poly-sub remainder (f7-poly-mul term divisor))))))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable f7-poly-division-step-core))))
+
+(defthm f7-poly-division-step-core-degree-decreases
+  (implies (and (f7-canonical-polynomial-p remainder)
+                (f7-canonical-polynomial-p divisor)
+                (consp remainder) (consp divisor)
+                (<= (f7-poly-degree divisor) (f7-poly-degree remainder)))
+           (let ((next (cdr (f7-poly-division-step-core remainder divisor))))
+             (or (not (consp next))
+                 (< (f7-poly-degree next) (f7-poly-degree remainder)))))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance f7-poly-division-step-core-product-properties)
+                          (:instance f7-poly-degree-of-poly-sub-decreases-when-leading-terms-equal
+                           (f remainder)
+                           (h (f7-poly-mul
+                               (car (f7-poly-division-step-core remainder divisor)) divisor)))
+                          (:instance f7-poly-division-step-core-active-equations))
+           :in-theory (disable f7-poly-division-step-core))))
+
+(defthm f7-poly-division-step-core-reconstruction
+  (implies (f7-canonical-polynomial-p remainder)
+           (equal (f7-poly-add
+                   (f7-poly-mul (car (f7-poly-division-step-core remainder divisor)) divisor)
+                   (cdr (f7-poly-division-step-core remainder divisor)))
+                  remainder))
+  :rule-classes nil
+  :hints (("Goal" :cases ((and (consp remainder) (consp divisor)
+                                (<= (f7-poly-degree divisor)
+                                    (f7-poly-degree remainder))))
+           :use ((:instance f7-poly-add-left-to-poly-sub
+                          (x (f7-poly-mul
+                              (car (f7-poly-division-step-core remainder divisor)) divisor))
+                          (y remainder))
+                          (:instance f7-poly-division-step-core-active-equations))
+           :in-theory (enable f7-poly-division-step-core))))
+
+(defthm f7-poly-division-step-core-length-decreases
+  (implies (and (f7-canonical-polynomial-p remainder)
+                (f7-canonical-polynomial-p divisor)
+                (consp remainder) (consp divisor)
+                (<= (f7-poly-degree divisor) (f7-poly-degree remainder)))
+           (< (len (cdr (f7-poly-division-step-core remainder divisor)))
+              (len remainder)))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance f7-poly-division-step-core-product-properties)
+                          (:instance f7-len-of-poly-sub-less-when-equal-degree-and-leading
+                           (f remainder)
+                           (h (f7-poly-mul
+                               (car (f7-poly-division-step-core remainder divisor)) divisor)))
+                          (:instance f7-poly-division-step-core-active-equations))
+           :in-theory (disable f7-poly-division-step-core))))
+
+(defthm f7-poly-division-step-reconstruction
+  (equal (f7-poly-add
+          (f7-poly-mul (f7-poly-division-step-term remainder divisor)
+                       (f7-normalize divisor))
+          (f7-poly-division-step-next remainder divisor))
+         (f7-normalize remainder))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-poly-division-step-core-reconstruction
+                            (remainder (f7-normalize remainder))
+                            (divisor (f7-normalize divisor))))
+           :in-theory (e/d (f7-poly-division-step-term
+                             f7-poly-division-step-next
+                             f7-poly-division-step)
+                            (f7-poly-division-step-core f7-poly-add
+                             f7-poly-mul f7-poly-sub f7-monomial
+                             f7-normalize)))))
+
+(defthm f7-poly-division-step-degree-decreases
+  (implies (and (consp (f7-normalize remainder))
+                (consp (f7-normalize divisor))
+                (<= (f7-poly-degree divisor) (f7-poly-degree remainder)))
+           (let ((next (f7-poly-division-step-next remainder divisor)))
+             (or (not (consp next))
+                 (< (f7-poly-degree next) (f7-poly-degree remainder)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-poly-division-step-core-degree-decreases
+                            (remainder (f7-normalize remainder))
+                            (divisor (f7-normalize divisor))))
+           :in-theory (e/d (f7-poly-division-step-next
+                             f7-poly-division-step)
+                            (f7-poly-division-step-core f7-poly-degree
+                             f7-normalize)))))
+
+(verify-guards f7-poly-division-step-core)
+(verify-guards f7-poly-division-step)
+(verify-guards f7-poly-division-step-term)
+(verify-guards f7-poly-division-step-next)

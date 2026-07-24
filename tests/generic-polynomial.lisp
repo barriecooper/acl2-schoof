@@ -115,6 +115,37 @@
 (assert-event (equal (f7-poly-add '(1 2) '(2 5)) '(3)))
 (assert-event (equal (f7-poly-neg '(1 2)) '(6 5)))
 (assert-event (equal (f7-poly-sub '(1 2) '(1 2)) nil))
+
+; Concrete total one-step division: exact term, next state, normalization,
+; decrease, and reconstruction are checked rather than only list shape.
+(assert-event
+ (equal (f7-poly-division-step '(1 0 3) '(1 1))
+        (cons '(0 3) '(1 4))))
+(assert-event
+ (and (equal (f7-poly-division-step-term '(1 0 3) '(1 1)) '(0 3))
+      (equal (f7-poly-division-step-next '(1 0 3) '(1 1)) '(1 4))
+      (f7-canonical-polynomial-p
+       (f7-poly-division-step-next '(1 0 3) '(1 1)))
+      (< (len (f7-poly-division-step-next '(1 0 3) '(1 1)))
+         (len (f7-normalize '(1 0 3))))
+      (equal (f7-poly-add
+              (f7-poly-mul '(0 3) (f7-normalize '(1 1))) '(1 4))
+             (f7-normalize '(1 0 3)))))
+(assert-event
+ (equal (f7-poly-division-step '(-6 8 10 0 0) '(8 8 0))
+        (cons '(0 3) '(1 5))))
+(assert-event
+ (equal (f7-poly-division-step '(1 2 . malformed-tail) '(1))
+        (cons '(0 2) '(1))))
+(assert-event
+ (equal (f7-poly-division-step '(1 2) '(1 0 1))
+        (cons nil '(1 2))))
+(assert-event
+ (equal (f7-poly-division-step '(1 2) '(3))
+        (cons '(0 3) '(1))))
+(assert-event
+ (equal (f7-poly-division-step '(1 2 0) '(0 0 . malformed-tail))
+        (cons nil '(1 2))))
 (assert-event
  (equal (f7-poly-add (f7-normalize '(1 2 0)) '(3 4))
         (f7-poly-add '(1 2 0) '(3 4))))
