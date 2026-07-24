@@ -438,6 +438,188 @@
     :use ((:instance poly-euclidean-gcd-divides-both))
     :in-theory (disable poly-euclidean-gcd-divides-both))))
 
+; Greatestness with respect to divisibility follows the computation itself.
+; The arbitrary common divisor is transported to the recursive Euclidean pair
+; by the public step equivalence; the base case only normalizes the dividend.
+(defthm poly-common-divisor-divides-euclidean-gcd
+  (implies
+   (and (poly-divides-p divisor first)
+        (poly-divides-p divisor second))
+   (poly-divides-p divisor (poly-euclidean-gcd first second)))
+  :hints
+  (("Goal"
+    :induct (poly-euclidean-gcd first second)
+    :in-theory (e/d (poly-euclidean-gcd)
+                    (poly-remainder poly-divides-p normalize)))
+   ("Subgoal *1/2"
+    :use ((:instance poly-euclidean-gcd-zero-second)
+          (:instance poly-divides-p-of-normalize-dividend
+                     (dividend first)))
+    :in-theory (disable poly-euclidean-gcd poly-remainder poly-divides-p
+                        normalize))
+   ("Subgoal *1/1"
+    :use ((:instance poly-euclidean-gcd-nonzero-second)
+          (:instance poly-divides-p-euclidean-step-iff))
+    :in-theory (disable poly-euclidean-gcd poly-remainder poly-divides-p
+                        normalize poly-divides-p-euclidean-step-iff))))
+
+; Focused greatestness regressions use exact Boolean results.  Most are
+; positive common-divisor examples; the zero/nonzero case intentionally checks
+; that the implication is true because its common-divisor hypotheses are false.
+(defthm poly-common-divisor-greatestness-regression-boundaries
+  (and
+   (equal (poly-divides-p nil (poly-euclidean-gcd nil nil)) t)
+   (equal (poly-divides-p
+           (polynomial-one)
+           (poly-euclidean-gcd (polynomial-one) nil))
+          t)
+   (equal (poly-divides-p
+           (polynomial-one)
+           (poly-euclidean-gcd nil (polynomial-one)))
+          t)
+   (equal (poly-divides-p
+           (polynomial-one)
+           (poly-euclidean-gcd (polynomial-one) 'malformed-second))
+          t)
+   (equal (poly-divides-p
+           (polynomial-one)
+           (poly-euclidean-gcd 'malformed-first (polynomial-one)))
+          t)
+   (equal (poly-divides-p
+           nil
+           (poly-euclidean-gcd
+            (list (gfield::field-zero)) 'malformed-second))
+          t)
+   (equal
+    (implies
+     (and (poly-divides-p nil (polynomial-one))
+          (poly-divides-p nil (polynomial-one)))
+     (poly-divides-p
+      nil (poly-euclidean-gcd (polynomial-one) (polynomial-one))))
+    t))
+  :hints
+  (("Goal"
+    :use ((:instance poly-common-divisor-divides-euclidean-gcd
+                     (divisor nil) (first nil) (second nil))
+          (:instance poly-common-divisor-divides-euclidean-gcd
+                     (divisor (polynomial-one))
+                     (first (polynomial-one)) (second nil))
+          (:instance poly-common-divisor-divides-euclidean-gcd
+                     (divisor (polynomial-one))
+                     (first nil) (second (polynomial-one)))))))
+
+(defthm poly-common-divisor-greatestness-regression-positive
+  (let ((one (polynomial-one))
+        (negative-one (list (gfield::field-neg (gfield::field-one))))
+        (factor (poly-add (monomial (gfield::field-one) 1)
+                          (polynomial-one))))
+    (and
+     (equal (poly-divides-p
+             one (poly-euclidean-gcd
+                  (poly-add (monomial (gfield::field-one) 2) one)
+                  (poly-add (monomial (gfield::field-one) 1) one)))
+            t)
+     (equal (poly-divides-p
+             negative-one
+             (poly-euclidean-gcd negative-one negative-one))
+            t)
+     (equal (poly-divides-p
+             factor (poly-euclidean-gcd factor factor))
+            t)
+     (equal (poly-divides-p
+             factor
+             (poly-euclidean-gcd (poly-mul factor factor) factor))
+            t)))
+  :hints
+  (("Goal"
+    :use ((:instance poly-common-divisor-divides-euclidean-gcd
+                     (divisor (polynomial-one))
+                     (first (poly-add (monomial (gfield::field-one) 2)
+                                      (polynomial-one)))
+                     (second (poly-add (monomial (gfield::field-one) 1)
+                                       (polynomial-one))))
+          (:instance poly-common-divisor-divides-euclidean-gcd
+                     (divisor
+                      (list (gfield::field-neg (gfield::field-one))))
+                     (first
+                      (list (gfield::field-neg (gfield::field-one))))
+                     (second
+                      (list (gfield::field-neg (gfield::field-one)))))
+          (:instance poly-common-divisor-divides-euclidean-gcd
+                     (divisor
+                      (poly-add (monomial (gfield::field-one) 1)
+                                (polynomial-one)))
+                     (first
+                      (poly-add (monomial (gfield::field-one) 1)
+                                (polynomial-one)))
+                     (second
+                      (poly-add (monomial (gfield::field-one) 1)
+                                (polynomial-one))))
+          (:instance poly-common-divisor-divides-euclidean-gcd
+                     (divisor
+                      (poly-add (monomial (gfield::field-one) 1)
+                                (polynomial-one)))
+                     (first
+                      (poly-mul
+                       (poly-add (monomial (gfield::field-one) 1)
+                                 (polynomial-one))
+                       (poly-add (monomial (gfield::field-one) 1)
+                                 (polynomial-one))))
+                     (second
+                      (poly-add (monomial (gfield::field-one) 1)
+                                (polynomial-one))))))))
+
+(defthm poly-common-divisor-greatestness-regression-normalization
+  (and
+   (equal
+    (poly-divides-p
+     (polynomial-one)
+     (poly-euclidean-gcd
+      (list (gfield::field-one) (gfield::field-zero))
+      (list (gfield::field-one) (gfield::field-one)
+            (gfield::field-zero))))
+    t)
+   (equal
+    (poly-divides-p
+     nil
+     (poly-euclidean-gcd
+      (list (gfield::field-zero) (gfield::field-zero))
+      (list (gfield::field-zero))))
+    t)
+   (equal
+    (poly-divides-p
+     (polynomial-one)
+     (poly-euclidean-gcd
+      (list 'malformed-coefficient (gfield::field-zero))
+      (polynomial-one)))
+    t))
+  :hints
+  (("Goal"
+    :use ((:instance polynomial-one-divides-p
+                     (dividend
+                      (poly-euclidean-gcd
+                       (list (gfield::field-one) (gfield::field-zero))
+                       (list (gfield::field-one) (gfield::field-one)
+                             (gfield::field-zero)))))
+          (:instance polynomial-one-divides-p
+                     (dividend
+                      (poly-euclidean-gcd
+                       (list 'malformed-coefficient (gfield::field-zero))
+                       (polynomial-one))))))))
+
+(defthm poly-common-divisor-greatestness-regression-raw-associates
+  (let ((negative-one (list (gfield::field-neg (gfield::field-one))))
+        (one (polynomial-one)))
+    (and
+     (equal (poly-euclidean-gcd nil negative-one) negative-one)
+     (equal (poly-divides-p
+             one (poly-euclidean-gcd nil negative-one))
+            t)
+     (equal (poly-divides-p
+             negative-one
+             (poly-euclidean-gcd one negative-one))
+            t))))
+
 ; Correctness regressions exercise total inputs as well as a visibly non-monic
 ; raw answer.  The computation regressions below record further exact chains.
 (defthm poly-euclidean-gcd-divides-regression-boundaries

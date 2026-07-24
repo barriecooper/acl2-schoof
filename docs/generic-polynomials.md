@@ -302,6 +302,20 @@ The recursive case uses `POLY-DIVIDES-P-EUCLIDEAN-STEP-IFF` as its complete
 algebraic bridge; it does not unfold recursive division or repeat
 reconstruction or congruence reasoning.  The raw result may still be non-monic.
 
+The complementary common-divisor greatestness direction is now independently
+certified by `POLY-COMMON-DIVISOR-DIVIDES-EUCLIDEAN-GCD`: every polynomial that
+divides both inputs divides the raw Euclidean result.  Its induction follows
+`POLY-EUCLIDEAN-GCD` while retaining an arbitrary candidate divisor.  The base
+case rewrites the result to `NORMALIZE(first)` and uses dividend-normalization
+invariance; the recursive case uses `POLY-DIVIDES-P-EUCLIDEAN-STEP-IFF` as the
+entire algebraic bridge to the recursive pair.  It repeats neither
+reconstruction and congruence algebra nor recursive division.  Thus the two
+mathematical directions needed for raw gcd correctness are certified
+separately, but they have not yet been packaged under one public raw-gcd
+specification.  The raw result can remain non-monic, and uniqueness,
+associates/unit invariance, monic normalization, XGCD/Bézout, and concrete
+PFIELD/F7 APIs remain open or postponed.
+
 `GPOLY-MOD-CONGRUENCE` is proved by the one-sided and simultaneous
 `POLY-REMAINDER-OF-POLY-MUL-*` laws, `POLY-CONGRUENT-P-OF-POLY-MUL` and its
 one-sided corollaries, and
@@ -315,9 +329,9 @@ canonical remainder (and hence of its normalization) is strictly less than
 the length of the normalized divisor.  This follows only from canonicality,
 the strict degree bound, and the canonical degree/length characterization;
 it does not unfold recursive division.  A zero normalized divisor is the
-recursion base case.  Greatestness and full algebraic gcd correctness remain
-open, and monic normalization is not defined.  No quotient witnesses, extended
+recursion base case.  Full algebraic gcd correctness packaging remains open,
+and monic normalization is not defined.  No quotient witnesses, extended
 gcd, Bézout coefficients, modular inverses, or concrete PFIELD/F7 APIs are
-introduced.  The next focused proof propagates an arbitrary common divisor
-through the same Euclidean induction to show that it divides the computed
-result.
+introduced.  The next focused PR should package the two certified directions
+in an explicit raw-gcd correctness interface without adding new recursion or
+monic normalization.
