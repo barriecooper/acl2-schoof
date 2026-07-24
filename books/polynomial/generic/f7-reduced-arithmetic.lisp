@@ -13,10 +13,56 @@
 (defun f7-poly-reduced-mul (left right modulus)
   (f7-poly-remainder (f7-poly-mul left right) modulus))
 
+; Concrete execution spelling of the generic quotient-equality boundary.
+(defun f7-poly-congruent-p (left right modulus)
+  (equal (f7-poly-remainder left modulus)
+         (f7-poly-remainder right modulus)))
+
 (verify-guards f7-poly-reduced-add)
 (verify-guards f7-poly-reduced-neg)
 (verify-guards f7-poly-reduced-sub)
 (verify-guards f7-poly-reduced-mul)
+(verify-guards f7-poly-congruent-p)
+
+(defthm f7-poly-congruent-p-exact-regressions
+  (and
+   ; Different representations, the same exact representative.
+   (equal (f7-poly-remainder '(8 -1 0 0) '(1 0 1)) '(1 6))
+   (equal (f7-poly-remainder '(1 6) '(1 0 1)) '(1 6))
+   (f7-poly-congruent-p '(8 -1 0 0) '(1 6) '(1 0 1))
+   (not (equal '(8 -1 0 0) '(1 6)))
+   ; Distinct already-reduced representatives do not compare equal.
+   (not (f7-poly-congruent-p '(1 2) '(2 2) '(1 0 1)))
+   (equal (f7-poly-remainder '(1 2) '(1 0 1)) '(1 2))
+   (equal (f7-poly-remainder '(2 2) '(1 0 1)) '(2 2))
+   ; Adding one modulus multiple, trailing zeros, malformed total inputs.
+   (f7-poly-congruent-p '(2 2 1) '(1 2) '(1 0 1))
+   (f7-poly-congruent-p '(1 2 0 0) '(1 2) '(1 0 1))
+   (f7-poly-congruent-p 'malformed nil '(1 0 1))
+   (f7-poly-congruent-p '(1 2 . 9) '(1 2) '(1 0 1))
+   ; Exact total modulus semantics.
+   (f7-poly-congruent-p '(8 -1 0) '(1 6) nil)
+   (not (f7-poly-congruent-p '(1) '(2) nil))
+   (f7-poly-congruent-p '(1 2) '(6 5) '(1))
+   (f7-poly-congruent-p '(1 2) '(6 5) '(3))
+   ; Reducible x^2-1 and irreducible-looking x^2+1 examples.
+   (f7-poly-congruent-p '(0 0 1) '(1) '(6 0 1))
+   (f7-poly-congruent-p '(0 0 1) '(6) '(1 0 1))
+   ; Compatibility is checked at exact representative values.
+   (equal (f7-poly-reduced-add '(8 -1 0 0) '(3) '(1 0 1))
+          (f7-poly-reduced-add '(1 6) '(3) '(1 0 1)))
+   (equal (f7-poly-reduced-neg '(8 -1 0 0) '(1 0 1))
+          (f7-poly-reduced-neg '(1 6) '(1 0 1)))
+   (equal (f7-poly-reduced-sub '(8 -1 0 0) '(3) '(1 0 1))
+          (f7-poly-reduced-sub '(1 6) '(3) '(1 0 1)))
+   (equal (f7-poly-reduced-mul '(8 -1 0 0) '(3) '(1 0 1))
+          (f7-poly-reduced-mul '(1 6) '(3) '(1 0 1)))
+   ; For fixed representatives, congruence is literal equality.
+   (equal (f7-poly-congruent-p '(1 2) '(1 2) '(1 0 1))
+          (equal '(1 2) '(1 2)))
+   (equal (f7-poly-congruent-p '(1 2) '(2 2) '(1 0 1))
+          (equal '(1 2) '(2 2))))
+  :rule-classes nil)
 
 ; x^2+1 is used only as an irreducible-looking execution example.  No
 ; irreducibility or field conclusion is asserted.
