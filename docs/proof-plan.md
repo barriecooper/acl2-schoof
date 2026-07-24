@@ -71,13 +71,17 @@ ACL2 obligations are genuinely proved and certified.
    induction, inverse reasoning, or division expansion. Raw representatives
    and total malformed-input semantics are preserved. This does not prove
    uniqueness and introduces neither associate theory nor a monic predicate.
+   Raw generic XGCD and its monic post-processing are now certified.  The
+   nonrecursive `POLY-MONIC-EXTENDED-EUCLIDEAN-GCD` scales both raw Bézout
+   coefficients by the inverse leading coefficient, agrees exactly with
+   `POLY-MONIC-EUCLIDEAN-GCD`, and unconditionally reconstructs that monic gcd.
    The next focused PR should follow the earliest finite-field polynomial-tower
    dependency; select normalized-monic-gcd uniqueness only if a downstream
    algorithm requires equality rather than this divisibility interface, and
    inventory its degree, mutual-divisibility, monic-predicate, and associate
    prerequisites first.
-   Uniqueness,
-   extended gcd, and Bézout remain open. Later power uses include
+   Uniqueness, modular inversion, quotient fields, concrete XGCD instances,
+   and extension fields remain open. Later power uses include
    extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.
@@ -118,8 +122,10 @@ divisor, and every common divisor divides it. The raw result remains canonical
 but potentially non-monic. Monic normalization's representation,
 leading-coefficient, and divisibility interfaces are certified, as is the
 transparent monic-gcd wrapper. Its common-divisor and greatestness correctness
-is now certified compositionally. Associate/unit invariance, uniqueness,
-extended gcd, and Bézout correctness are still open. No concrete
+is now certified compositionally. Monic XGCD post-processing and its Bézout
+correctness are also certified. Modular
+inversion, quotient-field reduction, concrete instances, associate theory, and
+uniqueness remain open. No concrete
 PFIELD/F7 gcd API was introduced, and recursive
 concrete F7 divmod remains postponed. The first executable
 Schoof path may target a named prime field; arbitrary finite-field execution is

@@ -468,6 +468,19 @@ exactly the existing raw `POLY-EUCLIDEAN-GCD`, without monic rescaling, and the
 unconditional certified identity is `s*first + t*second = gcd`.  Focused exact
 regressions cover zero, malformed and dotted inputs, trailing zeros, coefficient
 fixing, equal inputs, exact division, and a multi-step quotient chain.  This
-completes only raw generic XGCD and its Bézout certificate.  Monic XGCD and
-coefficient rescaling, quotient-field inversion, modular inversion, concrete
-instances, uniqueness, and general associate/unit theory remain open.
+completes the raw generic XGCD and its Bézout certificate.
+
+## Monic generic extended Euclidean gcd (certified)
+
+`generic/monic-xgcd.lisp` adds the single transparent, nonrecursive
+`POLY-MONIC-EXTENDED-EUCLIDEAN-GCD` post-processing boundary.  It calls the raw
+XGCD once and scales both raw coefficients by
+`FIELD-INV(POLY-LEADING-COEFFICIENT(gcd))`, exactly the scalar used by
+`POLY-MONIC-NORMALIZE`.  Its first projection is exactly
+`POLY-MONIC-EUCLIDEAN-GCD`, all projections are canonical and normalized, and
+its unconditional certificate reconstructs that monic gcd.  Total inverse and
+scale conventions make a zero raw gcd return exactly `(mv nil nil nil)`.
+
+This layer adds no recursion or division.  Modular inversion, reduction modulo
+a defining polynomial, quotient fields, concrete generated instances,
+extension fields, uniqueness, and general associate/unit theory remain open.
