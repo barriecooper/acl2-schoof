@@ -486,3 +486,197 @@
       (f7-poly-common-divisor-p '(1 1) '(1 2 1) '(2 3 1))
       (f7-poly-divides-p
        '(1 1) (f7-poly-euclidean-gcd '(1 2 1) '(2 3 1)))))
+
+; This is the monic post-processing event from DEF-EUCLIDEAN-GCD-INSTANCE,
+; expanded alone because invoking that generator would redefine the retained
+; and already-certified raw recursion above.
+(defun f7-poly-monic-euclidean-gcd (first second)
+  (f7-poly-monic-normalize (f7-poly-euclidean-gcd first second)))
+
+(verify-guards f7-poly-monic-euclidean-gcd)
+
+(defthm f7-poly-monic-euclidean-gcd-is-monic-normalize
+  (equal (f7-poly-monic-euclidean-gcd first second)
+         (f7-poly-monic-normalize
+          (f7-poly-euclidean-gcd first second))))
+
+(defthm f7-canonical-polynomial-p-of-poly-monic-euclidean-gcd
+  (f7-canonical-polynomial-p
+   (f7-poly-monic-euclidean-gcd first second))
+  :hints (("Goal" :in-theory (enable f7-poly-monic-euclidean-gcd
+                                      f7-poly-monic-normalize))))
+
+(defthm f7-normalize-of-poly-monic-euclidean-gcd
+  (equal (f7-normalize (f7-poly-monic-euclidean-gcd first second))
+         (f7-poly-monic-euclidean-gcd first second))
+  :hints (("Goal"
+           :use ((:instance f7-normalize-when-canonical
+                            (xs (f7-poly-monic-euclidean-gcd first second)))
+                 (:instance
+                  f7-canonical-polynomial-p-of-poly-monic-euclidean-gcd))
+           :in-theory (disable f7-normalize
+                               f7-poly-monic-euclidean-gcd))))
+
+(defthm f7-consp-of-poly-monic-normalize
+  (equal (consp (f7-poly-monic-normalize poly))
+         (consp (f7-normalize poly)))
+  :rule-classes nil
+  :hints (("Goal" :by (:functional-instance
+    consp-of-poly-monic-normalize
+    (gfield::field-element-p gfield::f7-element-p)
+    (gfield::field-fix gfield::f7-fix)
+    (gfield::field-zero gfield::f7-zero)
+    (gfield::field-one gfield::f7-one)
+    (gfield::field-add gfield::f7-add)
+    (gfield::field-mul gfield::f7-mul)
+    (gfield::field-neg gfield::f7-neg)
+    (gfield::field-inv gfield::f7-inv)
+    (gfield::field-div gfield::f7-div)
+    (fix-coefficients f7-fix-coefficients)
+    (trim-trailing-zeros f7-trim-trailing-zeros)
+    (normalize f7-normalize)
+    (coefficient-list-p f7-coefficient-list-p)
+    (polynomial-p f7-polynomial-p)
+    (canonical-polynomial-p f7-canonical-polynomial-p)
+    (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+    (poly-leading-coefficient f7-poly-leading-coefficient)
+    (poly-monic-normalize f7-poly-monic-normalize)))))
+
+(defthm f7-poly-leading-coefficient-of-poly-monic-normalize
+  (equal (f7-poly-leading-coefficient (f7-poly-monic-normalize poly))
+         (if (consp (f7-normalize poly))
+             (gfield::f7-one) (gfield::f7-zero)))
+  :rule-classes nil
+  :hints (("Goal" :by (:functional-instance
+    poly-leading-coefficient-of-poly-monic-normalize
+    (gfield::field-element-p gfield::f7-element-p)
+    (gfield::field-fix gfield::f7-fix)
+    (gfield::field-zero gfield::f7-zero)
+    (gfield::field-one gfield::f7-one)
+    (gfield::field-add gfield::f7-add)
+    (gfield::field-mul gfield::f7-mul)
+    (gfield::field-neg gfield::f7-neg)
+    (gfield::field-inv gfield::f7-inv)
+    (gfield::field-div gfield::f7-div)
+    (fix-coefficients f7-fix-coefficients)
+    (trim-trailing-zeros f7-trim-trailing-zeros)
+    (normalize f7-normalize)
+    (coefficient-list-p f7-coefficient-list-p)
+    (polynomial-p f7-polynomial-p)
+    (canonical-polynomial-p f7-canonical-polynomial-p)
+    (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+    (poly-leading-coefficient f7-poly-leading-coefficient)
+    (poly-monic-normalize f7-poly-monic-normalize)))))
+
+(defthm f7-consp-of-poly-monic-euclidean-gcd
+  (equal (consp (f7-poly-monic-euclidean-gcd first second))
+         (consp (f7-normalize (f7-poly-euclidean-gcd first second))))
+  :hints (("Goal"
+           :use ((:instance f7-consp-of-poly-monic-normalize
+                            (poly (f7-poly-euclidean-gcd first second))))
+           :in-theory (enable f7-poly-monic-euclidean-gcd))))
+
+(defthm f7-poly-leading-coefficient-of-poly-monic-euclidean-gcd
+  (equal (f7-poly-leading-coefficient
+          (f7-poly-monic-euclidean-gcd first second))
+         (if (consp (f7-normalize
+                     (f7-poly-euclidean-gcd first second)))
+             (gfield::f7-one)
+           (gfield::f7-zero)))
+  :hints (("Goal"
+           :use ((:instance
+                  f7-poly-leading-coefficient-of-poly-monic-normalize
+                  (poly (f7-poly-euclidean-gcd first second))))
+           :in-theory (enable f7-poly-monic-euclidean-gcd))))
+
+; Correctness uses only the retained raw package and the two previously
+; certified monic-normalization/divisibility transport equivalences.
+(defthm f7-poly-monic-euclidean-gcd-divides-first
+  (f7-poly-divides-p
+   (f7-poly-monic-euclidean-gcd first second) first)
+  :hints (("Goal"
+           :use ((:instance f7-poly-euclidean-gcd-divides-first)
+                 (:instance f7-poly-divides-p-of-poly-monic-normalize-divisor
+                            (divisor (f7-poly-euclidean-gcd first second))
+                            (dividend first)))
+           :in-theory (enable
+                       f7-poly-monic-euclidean-gcd-is-monic-normalize))))
+
+(defthm f7-poly-monic-euclidean-gcd-divides-second
+  (f7-poly-divides-p
+   (f7-poly-monic-euclidean-gcd first second) second)
+  :hints (("Goal"
+           :use ((:instance f7-poly-euclidean-gcd-divides-second)
+                 (:instance f7-poly-divides-p-of-poly-monic-normalize-divisor
+                            (divisor (f7-poly-euclidean-gcd first second))
+                            (dividend second)))
+           :in-theory (enable
+                       f7-poly-monic-euclidean-gcd-is-monic-normalize))))
+
+(defthm f7-poly-common-divisor-p-of-poly-monic-euclidean-gcd
+  (f7-poly-common-divisor-p
+   (f7-poly-monic-euclidean-gcd first second) first second)
+  :hints (("Goal"
+           :use ((:instance f7-poly-monic-euclidean-gcd-divides-first)
+                 (:instance f7-poly-monic-euclidean-gcd-divides-second))
+           :in-theory (enable f7-poly-common-divisor-p))))
+
+(defthm f7-poly-divides-p-of-poly-monic-euclidean-gcd
+  (implies (f7-poly-common-divisor-p common first second)
+           (f7-poly-divides-p
+            common (f7-poly-monic-euclidean-gcd first second)))
+  :hints (("Goal"
+           :use ((:instance f7-poly-common-divisor-divides-euclidean-gcd
+                            (divisor common))
+                 (:instance f7-poly-divides-p-of-poly-monic-normalize-dividend
+                            (divisor common)
+                            (dividend
+                             (f7-poly-euclidean-gcd first second))))
+           :in-theory (enable
+                       f7-poly-monic-euclidean-gcd-is-monic-normalize))))
+
+(defthm f7-poly-monic-euclidean-gcd-correct
+  (and (f7-poly-common-divisor-p
+        (f7-poly-monic-euclidean-gcd first second) first second)
+       (implies (f7-poly-common-divisor-p common first second)
+                (f7-poly-divides-p
+                 common (f7-poly-monic-euclidean-gcd first second))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance
+                  f7-poly-common-divisor-p-of-poly-monic-euclidean-gcd)
+                 (:instance f7-poly-divides-p-of-poly-monic-euclidean-gcd))
+           :in-theory (disable f7-poly-common-divisor-p f7-poly-divides-p
+                               f7-poly-monic-euclidean-gcd))))
+
+; Focused exact ordinary-execution regressions for the transparent wrapper.
+(assert-event (equal (f7-poly-monic-euclidean-gcd '(1 2 1) '(2 3 1)) '(1 1)))
+(assert-event (equal (f7-poly-monic-euclidean-gcd '(2 3 1) '(1 2 1)) '(1 1)))
+(assert-event (equal (f7-poly-monic-euclidean-gcd '(1 0 1) '(1 1)) '(1)))
+(assert-event (equal (f7-poly-monic-euclidean-gcd '(1 2 1) '(1 1)) '(1 1)))
+(assert-event
+ (equal (f7-poly-monic-euclidean-gcd '(1 0 0 0 1) '(1 1 1)) '(1)))
+(assert-event (equal (f7-poly-monic-euclidean-gcd '(2 3) nil) '(3 1)))
+(assert-event (equal (f7-poly-monic-euclidean-gcd nil '(2 3)) '(3 1)))
+(assert-event (equal (f7-poly-monic-euclidean-gcd nil nil) nil))
+(assert-event (equal (f7-poly-monic-euclidean-gcd '(3) '(5)) '(1)))
+(assert-event (equal (f7-poly-monic-euclidean-gcd '(2 4) '(3 6)) '(4 1)))
+(assert-event (equal (f7-poly-monic-euclidean-gcd '(3 6) '(2 4)) '(4 1)))
+(assert-event
+ (equal (f7-poly-monic-euclidean-gcd '(1 2 1 0 0) '(2 3 1 0)) '(1 1)))
+(assert-event
+ (equal (f7-poly-monic-euclidean-gcd '(8 -5 8) '(9 -4 8)) '(1 1)))
+(assert-event (equal (f7-poly-monic-euclidean-gcd 'bad '(2 3)) '(3 1)))
+(assert-event
+ (equal (f7-poly-monic-euclidean-gcd '(1 2 . bad) '(2 4 . tail)) '(4 1)))
+(assert-event
+ (let ((g (f7-poly-monic-euclidean-gcd '(1 2 1) '(2 3 1))))
+   (and (equal g (f7-poly-monic-normalize
+                  (f7-poly-euclidean-gcd '(1 2 1) '(2 3 1))))
+        (f7-canonical-polynomial-p g)
+        (equal (f7-normalize g) g)
+        (f7-poly-divides-p g '(1 2 1))
+        (f7-poly-divides-p g '(2 3 1))
+        (implies (f7-poly-common-divisor-p '(1 1) '(1 2 1) '(2 3 1))
+                 (f7-poly-divides-p '(1 1) g))
+        (equal (f7-poly-leading-coefficient g) (gfield::f7-one)))))
