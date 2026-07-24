@@ -310,6 +310,30 @@ exactly the polynomials whose normalization is `nil`.  The certified closure
 laws cover addition, negation, subtraction, and multiplication by an arbitrary
 polynomial.
 
+Dividend scaling has the certified public law
+`POLY-DIVIDES-P-OF-POLY-SCALE-DIVIDEND`: when `FIELD-FIX(scalar)` is not
+`FIELD-ZERO`, a divisor divides `POLY-SCALE(scalar,dividend)` exactly when it
+divides `dividend`. The forward construction multiplies the original dividend
+by the constant polynomial for `scalar`. The reverse construction multiplies
+the scaled dividend by the constant polynomial for `FIELD-INV(scalar)`, then
+uses `POLY-MUL-CONST-RIGHT`, `POLY-SCALE-NESTED`,
+`FIELD-MUL-INVERSE-LEFT`, and dividend-normalization invariance. The proof uses
+only the public algebraic interface: it introduces no coefficient induction
+and no quotient-witness API.
+
+The theorem inherits total normalization semantics, including normalized zero,
+atoms, dotted lists, trailing zeroes, and noncanonical coefficients. Its
+nonzero hypothesis is necessary: zero scaling sends a nonzero polynomial to
+`nil`, which the zero polynomial divides, although zero does not divide the
+original polynomial. Raw Euclidean-gcd correctness and raw representatives,
+including negative units, are unchanged. `GPOLY-GCD`,
+`GPOLY-GCD-COMPUTATION`, and `GPOLY-MONIC-NORMALIZATION` remain Proved, and no
+monic gcd wrapper is introduced. Divisor-scaling invariance and the complete
+associate/two-way divisibility theory remain open. The next focused PR should
+prove that `POLY-SCALE(a,d)` divides `p` exactly when `d` divides `p`, for a
+fixed nonzero `a`; a later integration PR can connect both scaling laws to
+monic normalization.
+
 `POLY-DIVIDES-P-EUCLIDEAN-STEP-IFF` proves unconditionally that a candidate
 divides both `first` and `second` exactly when it divides both `second` and
 `POLY-REMAINDER(first,second)`.  The proof remains above recursive division:

@@ -170,6 +170,132 @@
                      (right right) (modulus divisor)))
     :in-theory (disable poly-congruent-p poly-mul))))
 
+; Multiplying a known multiple by a constant proves the easy scaling
+; direction.  The converse multiplies by the inverse constant and uses only
+; the public constant/multiplication, nested-scaling, and normalization laws.
+(local
+ (defthm poly-divides-p-of-poly-scale-dividend-forward
+   (implies (poly-divides-p divisor dividend)
+            (poly-divides-p divisor (poly-scale scalar dividend)))
+   :hints
+   (("Goal"
+     :use ((:instance poly-divides-p-of-poly-mul
+                      (left dividend) (right (const scalar)))
+           (:instance poly-mul-const-right (p dividend) (a scalar)))
+     :in-theory (disable poly-divides-p poly-mul poly-scale
+                         poly-divides-p-of-poly-mul
+                         poly-mul-const-right)))))
+
+(local
+ (defthm poly-divides-p-of-poly-scale-dividend-backward
+   (implies
+    (and (not (equal (gfield::field-fix scalar)
+                     (gfield::field-zero)))
+         (poly-divides-p divisor (poly-scale scalar dividend)))
+    (poly-divides-p divisor dividend))
+   :hints
+   (("Goal"
+     :use ((:instance poly-divides-p-of-poly-mul
+                      (left (poly-scale scalar dividend))
+                      (right (const (gfield::field-inv scalar))))
+           (:instance poly-mul-const-right
+                      (p (poly-scale scalar dividend))
+                      (a (gfield::field-inv scalar)))
+           (:instance poly-scale-nested
+                      (a (gfield::field-inv scalar))
+                      (b scalar) (x dividend))
+           (:instance gfield::field-mul-inverse-left (x scalar))
+           (:instance poly-scale-by-one (x dividend))
+           (:instance poly-divides-p-of-normalize-dividend
+                      (divisor divisor) (dividend dividend)))
+     :in-theory (disable poly-divides-p poly-mul poly-scale normalize
+                         poly-divides-p-of-poly-mul poly-mul-const-right
+                         poly-scale-by-one
+                         poly-divides-p-of-normalize-dividend
+                         gfield::field-mul-inverse-left)))))
+
+(defthm poly-divides-p-of-poly-scale-dividend
+  (implies
+   (not (equal (gfield::field-fix scalar)
+               (gfield::field-zero)))
+   (equal (poly-divides-p divisor (poly-scale scalar dividend))
+          (poly-divides-p divisor dividend)))
+  :hints
+  (("Goal"
+    :use ((:instance poly-divides-p-of-poly-scale-dividend-forward)
+          (:instance poly-divides-p-of-poly-scale-dividend-backward))
+    :in-theory (disable poly-divides-p poly-scale))))
+
+(defthm poly-divides-p-of-poly-scale-dividend-regression-boundaries
+  (let ((one (polynomial-one))
+        (minus-one (gfield::field-neg (gfield::field-one))))
+    (and
+     ; Literal and represented zero, malformed atoms, dotted tails, and
+     ; trailing zero coefficients all pass through the total interfaces.
+     (equal (poly-divides-p one (poly-scale (gfield::field-one) nil)) t)
+     (equal (poly-divides-p one
+                            (poly-scale minus-one
+                                        (list (gfield::field-zero)
+                                              (gfield::field-zero))))
+            t)
+     (equal (poly-divides-p one
+                            (poly-scale minus-one 'malformed-dividend))
+            t)
+     (equal (poly-divides-p one
+                            (poly-scale minus-one
+                                        (cons (gfield::field-one)
+                                              'malformed-tail)))
+            t)
+     (equal (poly-divides-p one
+                            (poly-scale minus-one
+                                        (list (gfield::field-one)
+                                              (gfield::field-zero))))
+            t)
+     ; Coefficients are fixed before divisibility observes the dividend.
+     (equal (poly-divides-p one
+                            (poly-scale minus-one
+                                        (list 'malformed-coefficient
+                                              (gfield::field-one))))
+            t)))
+  :hints (("Goal" :use ((:instance polynomial-one-divides-p)))))
+
+(defthm poly-divides-p-of-poly-scale-dividend-regression-positive-negative
+  (let ((one (polynomial-one))
+        (linear (list (gfield::field-one) (gfield::field-one))))
+    (and
+     (equal (poly-divides-p one
+                            (poly-scale (gfield::field-neg
+                                         (gfield::field-one))
+                                        linear))
+            t)
+     (equal (poly-divides-p nil
+                            (poly-scale (gfield::field-one) linear))
+            nil)))
+  :hints (("Goal" :in-theory (enable poly-divides-p))))
+
+; This is the excluded case: zero scaling makes a nonzero dividend divisible
+; by the zero polynomial, although that divisor did not divide the original.
+(defthm poly-divides-p-of-poly-scale-dividend-regression-zero-counterexample
+  (and (equal (poly-divides-p
+               nil (poly-scale (gfield::field-zero) (polynomial-one)))
+              t)
+       (equal (poly-divides-p nil (polynomial-one)) nil))
+  :hints (("Goal" :in-theory (enable poly-divides-p))))
+
+(defthm poly-divides-p-of-poly-scale-dividend-regression-public-theorem
+  (implies
+   (not (equal (gfield::field-fix scalar) (gfield::field-zero)))
+   (and
+    (implies (poly-divides-p divisor dividend)
+             (poly-divides-p divisor (poly-scale scalar dividend)))
+    (implies (poly-divides-p divisor (poly-scale scalar dividend))
+             (poly-divides-p divisor dividend))))
+  :hints
+  (("Goal"
+    :use ((:instance poly-divides-p-of-poly-scale-dividend))
+    :in-theory (disable poly-divides-p-of-poly-scale-dividend
+                        poly-divides-p poly-scale))))
+
 
 ; Reconstruction and congruence compatibility show that, modulo any divisor
 ; of SECOND, FIRST and its Euclidean remainder have the same representative.
@@ -842,6 +968,29 @@
          (poly-divides-p (poly-euclidean-gcd nil negative-one) nil)
          (poly-divides-p (poly-euclidean-gcd nil negative-one)
                          negative-one))))
+
+(defthm poly-divides-p-of-poly-scale-dividend-regression-raw-negative-unit-gcd
+  (let* ((negative-one
+          (list (gfield::field-neg (gfield::field-one))))
+         (raw-gcd (poly-euclidean-gcd nil negative-one)))
+    (and
+     (equal raw-gcd negative-one)
+     (equal (poly-divides-p
+             (polynomial-one)
+             (poly-scale (gfield::field-neg (gfield::field-one)) raw-gcd))
+            (poly-divides-p (polynomial-one) raw-gcd))))
+  :hints
+  (("Goal"
+    :use ((:instance poly-divides-p-of-poly-scale-dividend
+                     (scalar (gfield::field-neg (gfield::field-one)))
+                     (divisor (polynomial-one))
+                     (dividend
+                      (poly-euclidean-gcd
+                       nil
+                       (list (gfield::field-neg
+                              (gfield::field-one)))))))
+    :in-theory (disable poly-divides-p-of-poly-scale-dividend
+                        poly-divides-p poly-scale))))
 
 (defthm poly-leading-coefficient-scale-regression-raw-negative-unit-gcd
   (let ((negative-one (list (gfield::field-neg (gfield::field-one)))))

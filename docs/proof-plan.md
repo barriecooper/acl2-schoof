@@ -54,11 +54,15 @@ ACL2 obligations are genuinely proved and certified.
    is now structurally certified: normalized zero maps explicitly to `nil`,
    nonzero input is inverse-leading-coefficient scaled, zero/nonzero status is
    exact, output is canonical and normalized, and its leading coefficient is
-   respectively field zero or field one. The next focused milestone is to
-   inventory whether dividend scaling, divisor scaling, explicit associates,
-   or direct two-way divisibility gives the cleanest proof that monic
-   normalization preserves divisibility-theoretic content. Certifying
-   a monic gcd wrapper follow as separate stages; uniqueness,
+   respectively field zero or field one. Divisibility is now certified
+   invariant when only the dividend is scaled by a fixed nonzero field scalar,
+   using multiplication closure, constant multiplication, nested scaling, and
+   the field inverse law. This theorem is total over malformed and
+   noncanonical representations; its nonzero hypothesis is necessary. The
+   next focused PR is divisor-scaling invariance. After both scaling directions
+   are certified, a separate integration PR may establish the precise
+   divisibility/associate interface for monic normalization; only then should
+   a monic gcd wrapper follow. Uniqueness,
    extended gcd, and Bézout remain open. Later power uses include
    extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
