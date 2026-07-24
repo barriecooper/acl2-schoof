@@ -40,15 +40,19 @@ ACL2 obligations are genuinely proved and certified.
    recursion is now admitted on `(len (normalize second))`: it stops at an
    empty normalized second argument, otherwise transitions from `(a,b)` to
    `(b,poly-remainder(a,b))`, and has certified canonical output. It is not
-   monic, and no recursive algebraic gcd correctness is claimed. Generic
+   monic. Generic
    divisor-first divisibility is now decidable by canonical zero remainder,
    and common divisors are certified invariant across one Euclidean step using
-   reconstruction and congruence algebra. The next focused milestone is to
-   prove that the recursive result divides both inputs; afterward prove that
-   every common divisor divides the result and package raw gcd correctness
-   before treating monic normalization separately. Monic normalization,
-   greatestness, associates/unit invariance, extended gcd, and Bézout remain
-   open. Later power uses include
+   reconstruction and congruence algebra. Independent Euclidean inductions now
+   certify both that the recursive result divides both inputs and that every
+   common divisor divides the result. The greatestness induction retains the
+   arbitrary divisor, uses normalization invariance at the base, and uses the
+   Euclidean-step equivalence as the complete recursive algebraic bridge. The
+   next focused milestone is to package these two directions under a precise
+   public raw-gcd correctness interface, preferably without new mathematical
+   proof or recursion. Generic monic normalization and a certified monic gcd
+   wrapper follow as separate stages; associates/unit invariance, uniqueness,
+   extended gcd, and Bézout remain open. Later power uses include
    extension-field arithmetic,
    Frobenius, derived finite-field inversion, irreducibility tests,
    elliptic-curve scalar/endomorphism calculations, and Schoof computations.
