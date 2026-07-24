@@ -266,9 +266,13 @@ logical/executable boundary.
 remainder projection of one call to public `POLY-DIVMOD`; it neither copies nor
 reimplements division recursion and inherits that API's input normalization.
 The certified package proves the direct divmod connection, unconditional
-canonicality, invariance under normalizing either operand, normalized-zero and
-literal-`nil` modulus fallback to `NORMALIZE(dividend)`, the strict degree bound
-for a nonempty normalized modulus, and idempotence.  The lower-degree helper is
+canonicality and its explicit `NORMALIZE` fixed-point form, invariance under
+normalizing either operand, normalized-zero and literal-`nil` modulus fallback
+to `NORMALIZE(dividend)`, the strict degree bound for a nonempty normalized
+modulus, and unconditional idempotence. Literal zero is preserved for every
+modulus. Polynomial one is preserved exactly by the positive-degree theorem;
+polynomial-one and every other normalized nonzero constant modulus instead
+produce literal `nil`. The lower-degree helper is
 a public-division consequence, not a new induction. `POLY-REMAINDER` is an
 ordinary transparent `DEFUN` with explicitly verified guards; the constrained
 generic field is not claimed as a concrete runtime field.
@@ -280,6 +284,16 @@ degree (or `nil`), `POLY-REMAINDER` returns that remainder.  This theorem is
 derived from the certified division reconstruction together with generic
 polynomial cancellation, nonzero-product, and degree algebra.  It introduces
 neither a second reduction algorithm nor a concrete reduction API.
+
+This existing public remainder is therefore the canonical-representative
+boundary; no `reduce` alias is introduced. It is total on every ACL2 object:
+atoms and dotted tails are discarded by normalization, coefficients are fixed,
+and trailing zeroes are trimmed before division. The boundary is shared by
+possibly reducible Schoof coordinate quotients and by irreducible quotients
+which may later be promoted to extension fields. Equality of representatives
+is ordinary structural equality after reduction; `POLY-CONGRUENT-P` names the
+separate quotient equivalence. Neither reduction nor congruence makes a field
+claim.
 
 The same generic reduction book now defines `POLY-CONGRUENT-P` as structural
 equality of canonical `POLY-REMAINDER` results.  The relation is certified as

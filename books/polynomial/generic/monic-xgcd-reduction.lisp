@@ -35,19 +35,6 @@
                         poly-monic-extended-euclidean-gcd-bezout-when-one
                         poly-remainder-of-poly-add-divisor-multiple))))
 
-(defthm poly-remainder-of-polynomial-one-when-positive-degree
-  (implies (and (consp (normalize modulus))
-                (< 0 (poly-degree (normalize modulus))))
-           (equal (poly-remainder (polynomial-one) modulus)
-                  (polynomial-one)))
-  :hints
-  (("Goal"
-    :use ((:instance poly-remainder-canonical-lower-degree
-                     (dividend (polynomial-one)))
-          (:instance poly-degree-of-polynomial-one))
-    :in-theory (disable poly-remainder polynomial-one normalize poly-degree
-                        canonical-polynomial-p))))
-
 (defthm poly-monic-extended-euclidean-gcd-first-coefficient-remainder-one
   (implies
    (and (equal (poly-monic-euclidean-gcd first second) (polynomial-one))

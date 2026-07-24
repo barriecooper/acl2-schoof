@@ -22,6 +22,18 @@
                             (f dividend) (g modulus)))
            :in-theory (enable poly-remainder))))
 
+; Canonicality is the representation invariant; this spelling is the public
+; fixed-point form used by clients which do not need to unfold the recognizer.
+(defthm normalize-of-poly-remainder
+  (equal (normalize (poly-remainder dividend modulus))
+         (poly-remainder dividend modulus))
+  :hints (("Goal"
+           :use ((:instance poly-remainder-canonical)
+                 (:instance normalize-when-canonical
+                            (xs (poly-remainder dividend modulus))))
+           :in-theory (disable poly-remainder normalize
+                               canonical-polynomial-p))))
+
 (defthm poly-remainder-of-normalize-dividend
   (equal (poly-remainder (normalize dividend) modulus)
          (poly-remainder dividend modulus))
@@ -53,6 +65,18 @@
                                poly-remainder-of-normalize-modulus
                                poly-remainder-zero-modulus))))
 
+(defthm poly-remainder-zero-dividend
+  (equal (poly-remainder nil modulus) nil)
+  :hints (("Goal"
+           :use ((:instance poly-divmod-zero-dividend (g modulus)))
+           :in-theory (enable poly-remainder))))
+
+(defthm poly-remainder-polynomial-one-modulus
+  (equal (poly-remainder dividend (polynomial-one)) nil)
+  :hints (("Goal"
+           :use ((:instance poly-divmod-divisor-one-remainder (f dividend)))
+           :in-theory (enable poly-remainder))))
+
 (defthm poly-remainder-strict-degree-bound
   (implies (consp (normalize modulus))
            (or (equal (poly-remainder dividend modulus) nil)
@@ -63,6 +87,19 @@
            :use ((:instance poly-divmod-final-remainder-degree-bound
                             (f dividend) (g modulus)))
            :in-theory (enable poly-remainder))))
+
+; Every normalized nonzero constant is a unit in the coefficient field, so
+; the executable division path returns the literal zero polynomial.
+(defthm poly-remainder-nonzero-constant-modulus
+  (implies (and (consp (normalize modulus))
+                (equal (poly-degree (normalize modulus)) 0))
+           (equal (poly-remainder dividend modulus) nil))
+  :hints
+  (("Goal"
+    :use ((:instance poly-remainder-strict-degree-bound)
+          (:instance poly-degree-lower-bound
+                     (p (poly-remainder dividend modulus))))
+    :in-theory (disable poly-remainder normalize poly-degree))))
 
 ; This is the natural-valued measure fact needed by the next Euclidean
 ; recursion.  It is a consequence of the public remainder contract; in
@@ -108,6 +145,19 @@
                             (f dividend) (g modulus))
                  (:instance normalize-when-canonical (xs dividend)))
            :in-theory (enable poly-remainder))))
+
+(defthm poly-remainder-of-polynomial-one-when-positive-degree
+  (implies (and (consp (normalize modulus))
+                (< 0 (poly-degree (normalize modulus))))
+           (equal (poly-remainder (polynomial-one) modulus)
+                  (polynomial-one)))
+  :hints
+  (("Goal"
+    :use ((:instance poly-remainder-canonical-lower-degree
+                     (dividend (polynomial-one)))
+          (:instance poly-degree-of-polynomial-one))
+    :in-theory (disable poly-remainder polynomial-one normalize poly-degree
+                        canonical-polynomial-p))))
 
 (defthm poly-remainder-idempotent
   (equal (poly-remainder (poly-remainder dividend modulus) modulus)
