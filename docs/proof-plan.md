@@ -1,5 +1,15 @@
 # Proof plan
 
+## Immediate F7 extension-field dependency
+
+The post-monic-GCD reconnaissance is in
+`f7-extension-field-reconnaissance.md`.  The generic raw XGCD, monic scaling,
+reduction bridge, and modular-inverse candidate are already certified.  The
+next implementation unit is only the concrete F7 raw XGCD instance and its
+projection, canonicality, unconditional Bezout, guard, and exact-execution
+package.  Quotient operations, irreducibility, and field laws remain open and
+must not be folded into that PR.
+
 Each milestone must remain independently certifiable.
 
 The current executable named-field development is over prime fields `F_p`; the

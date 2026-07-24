@@ -56,6 +56,13 @@ The next algebraic layers deliberately separate two constructions:
   Schoof torsion and division-polynomial calculations. Their moduli need not be
   irreducible.
 
+The concrete dependency audit after the certified F7 monic GCD is recorded in
+`f7-extension-field-reconnaissance.md`.  Generic raw/monic XGCD and modular
+inverse are already certified; the smallest next implementation is therefore
+the transparent **concrete F7 raw XGCD instance**, not new generic theory.
+Its recursive triple must retain the raw, unit-sensitive GCD, with monic
+rescaling of both Bezout coefficients deferred to a separate wrapper PR.
+
 Neither set of quotient laws is complete. The dependency path first resolves
 concrete named-field guards and instantiation, proves that irreducibility
 implies monic GCD one, and supplies executable irreducibility certificates for
