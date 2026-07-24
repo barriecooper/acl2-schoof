@@ -343,8 +343,7 @@ nonzero hypothesis is necessary: zero scaling changes polynomial one into
 Raw Euclidean-gcd correctness and exact raw representatives, including the
 negative-unit representative, are unchanged. `GPOLY-GCD`,
 `GPOLY-GCD-COMPUTATION`, `GPOLY-MONIC-NORMALIZATION`, and both scaling
-obligations remain Proved, and no monic gcd wrapper is introduced. General associate theory
-remains open.
+obligations remain Proved. General associate theory remains open.
 
 Monic normalization now preserves divisibility in either argument position,
 unconditionally.  `POLY-DIVIDES-P-OF-POLY-MONIC-NORMALIZE-DIVIDEND` and
@@ -357,14 +356,29 @@ representations, trailing zeroes, and noncanonical coefficients inherit the
 total normalization semantics.  No coefficient induction, quotient witness,
 or low-level division reasoning is added.  Raw Euclidean-gcd correctness and
 exact representatives, including the negative-unit result, remain unchanged,
-and monic normalization remains explicit.  No associate predicate or monic gcd
-wrapper is introduced.
+and monic normalization remains explicit.  No associate predicate is
+introduced.
 
-The next focused PR should introduce the transparent wrapper
-`POLY-MONIC-EUCLIDEAN-GCD(a,b) =
-POLY-MONIC-NORMALIZE(POLY-EUCLIDEAN-GCD(a,b))`.  Inventory the ledger first: if
-its correctness interface is substantial, split structural specification from
-common-divisor and greatestness correctness.
+`POLY-MONIC-EUCLIDEAN-GCD(a,b)` is now the transparent, total composition
+`POLY-MONIC-NORMALIZE(POLY-EUCLIDEAN-GCD(a,b))`, not a new gcd algorithm.  Its
+public structural interface states the exact composition, canonical and
+normalized output, exact preservation of normalized zero/nonzero status, and
+an unconditional leading coefficient of field zero or field one.  The raw
+Euclidean result remains unchanged: in particular, its negative-unit example
+still returns negative one, while the wrapper explicitly post-processes that
+representative to polynomial one.  Atoms, dotted tails, trailing zeroes,
+zero-normalized inputs, and malformed or noncanonical coefficients inherit the
+existing component normalization semantics.  These proofs expand only the
+wrapper and instantiate the monic-normalization structural API; they introduce
+no recursion, induction, guards, coefficient reasoning, or low-level division
+reasoning.
+
+The ledger deliberately separates this Proved structural boundary from the
+Open wrapper-correctness obligation.  The next focused PR should use raw-gcd
+common-divisor/greatestness correctness and both monic-normalization
+divisibility equivalences to prove wrapper correctness compositionally, without
+reopening Euclidean recursion.  General associate theory and uniqueness remain
+open.
 
 `POLY-DIVIDES-P-EUCLIDEAN-STEP-IFF` proves unconditionally that a candidate
 divides both `first` and `second` exactly when it divides both `second` and
@@ -426,7 +440,7 @@ the length of the normalized divisor.  This follows only from canonicality,
 the strict degree bound, and the canonical degree/length characterization;
 it does not unfold recursive division.  A zero normalized divisor is the
 recursion base case.  Raw algebraic gcd correctness is now publicly packaged,
-while monic normalization is not defined.  No quotient witnesses, extended
+while the monic wrapper's mathematical correctness is deferred.  No quotient witnesses, extended
 gcd, Bézout coefficients, modular inverses, or concrete PFIELD/F7 APIs are
 introduced.  The next focused PR should inventory leading-coefficient,
 scalar-multiplication, field-inversion, and nonzero-polynomial infrastructure

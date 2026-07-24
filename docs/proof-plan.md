@@ -63,12 +63,13 @@ ACL2 obligations are genuinely proved and certified.
    transitivity, with inverse reasoning inherited from dividend scaling. The
    unconditional dividend- and divisor-position monic-normalization
    equivalences are now certified by explicit normalized-zero branches and the
-   two scaling laws, without induction or division expansion. The next focused
-   PR should introduce the transparent `POLY-MONIC-EUCLIDEAN-GCD` wrapper. It
-   should certify transparency, canonical/normalized output, the zero-or-one
-   leading coefficient, the exact raw-gcd relationship, and compositionally
-   obtained common-divisor and greatestness correctness; split structural and
-   correctness PRs if the ledger inventory shows a substantial interface.
+   two scaling laws, without induction or division expansion. This focused PR
+   has introduced the transparent `POLY-MONIC-EUCLIDEAN-GCD` wrapper and
+   certified transparency, canonical/normalized output, exact nonemptiness,
+   the zero-or-one leading coefficient, and the exact raw-gcd relationship.
+   The next focused PR should obtain common-divisor and greatestness correctness
+   compositionally from raw-gcd correctness and the two monic-normalization
+   divisibility equivalences, without reopening Euclidean recursion.
    General associate theory remains separate.
    Uniqueness,
    extended gcd, and Bézout remain open. Later power uses include
@@ -109,10 +110,11 @@ across a remainder step are now certified, unconditionally including
 zero-normalized inputs. Raw algebraic gcd correctness is now exposed by the
 public `POLY-COMMON-DIVISOR-P` interface: the computed result is a common
 divisor, and every common divisor divides it. The raw result remains canonical
-but potentially non-monic. Monic normalization's elementary representation
-and leading-coefficient interface is certified, but associate/unit invariance,
-divisibility preservation, a monic gcd wrapper, uniqueness, extended gcd, and
-Bézout correctness are still open. No concrete
+but potentially non-monic. Monic normalization's representation,
+leading-coefficient, and divisibility interfaces are certified, as is the
+transparent monic-gcd structural wrapper. Wrapper common-divisor/greatestness
+correctness is the next focused PR; associate/unit invariance, uniqueness,
+extended gcd, and Bézout correctness are still open. No concrete
 PFIELD/F7 gcd API was introduced, and recursive
 concrete F7 divmod remains postponed. The first executable
 Schoof path may target a named prime field; arbitrary finite-field execution is
