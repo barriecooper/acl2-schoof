@@ -182,6 +182,43 @@
         (equal (f7-normalize r) r)
         (equal (f7-poly-add (f7-poly-mul q '(1 1)) r) '(1 0 0 1)))))
 
+; Canonical-representative executions use the retained remainder projection,
+; not a second quotient reduction runtime.  Each representative is fixed by
+; normalization and repeated reduction; positive-degree nonzero results also
+; satisfy the strict degree bound.
+(assert-event
+ (let* ((large (f7-poly-remainder '(6 1 1) '(1 1)))
+        (bounded (f7-poly-remainder '(6) '(1 1)))
+        (exact (f7-poly-remainder '(1 0 0 1) '(1 1)))
+        (zero-dividend (f7-poly-remainder nil '(1 1)))
+        (zero-modulus (f7-poly-remainder '(8 9 0) nil))
+        (one-modulus (f7-poly-remainder '(1 2 3) '(1)))
+        (constant-modulus (f7-poly-remainder '(1 2 3) '(2)))
+        (trailing-zeroes (f7-poly-remainder '(8 9 0 0) '(1 1 0)))
+        (malformed-atom (f7-poly-remainder 'malformed '(1 1)))
+        (dotted (f7-poly-remainder '(1 2 . bad) '(1 1))))
+   (and (equal large '(6))
+        (equal bounded '(6))
+        (equal exact nil)
+        (equal zero-dividend nil)
+        (equal zero-modulus '(1 2))
+        (equal one-modulus nil)
+        (equal constant-modulus nil)
+        (equal trailing-zeroes '(6))
+        (equal malformed-atom nil)
+        (equal dotted '(6))
+        (f7-canonical-polynomial-p large)
+        (f7-canonical-polynomial-p bounded)
+        (f7-canonical-polynomial-p zero-modulus)
+        (equal (f7-normalize large) large)
+        (equal (f7-normalize bounded) bounded)
+        (equal (f7-normalize zero-modulus) zero-modulus)
+        (< (f7-poly-degree large) (f7-poly-degree (f7-normalize '(1 1))))
+        (< (f7-poly-degree bounded) (f7-poly-degree (f7-normalize '(1 1))))
+        (equal (f7-poly-remainder large '(1 1)) large)
+        (equal (f7-poly-remainder bounded '(1 1)) bounded)
+        (equal (f7-poly-remainder zero-modulus nil) zero-modulus))))
+
 (verify-guards f7-poly-divmod-core)
 (verify-guards f7-poly-divmod)
 (verify-guards f7-poly-quotient)

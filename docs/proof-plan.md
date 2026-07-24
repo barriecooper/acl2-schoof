@@ -46,7 +46,13 @@ ACL2 obligations are genuinely proved and certified.
    division are certified, including reconstruction and the final strict
    remainder-degree bound. Generic modular reduction and congruence are also
    certified, including compatibility with addition, negation, subtraction,
-   and multiplication. The Euclidean remainder step now has a certified
+   and multiplication. The existing public remainder is now explicitly
+   packaged as the sole total canonical-representative boundary, including
+   normalized fixed point and exact zero, constant, polynomial-one, malformed,
+   noncanonical, and positive-degree semantics. It is shared by reducible
+   Schoof quotients and irreducible quotients later promoted to fields; it does
+   not itself supply quotient operations, units, or field inversion. The
+   Euclidean remainder step now has a certified
    normalized-divisor-length descent theorem. The raw `POLY-EUCLIDEAN-GCD`
    recursion is defined and certified on `(len (normalize second))`: it stops at an
    empty normalized second argument, otherwise transitions from `(a,b)` to

@@ -70,7 +70,10 @@ public `POLY-DIVMOD` call. It inherits divmod's normalization boundary and has
 verified guards. Its semantic theorems establish canonical output, invariance
 under normalizing either input, fallback to `NORMALIZE(dividend)` when the
 normalized modulus is `nil`, a strict final degree bound when the normalized
-modulus is nonempty, and idempotence. The proof uses certified remainder
+modulus is nonempty, and idempotence. The fixed-point, zero-dividend,
+polynomial-one-modulus, nonzero-constant-modulus, and positive-degree
+polynomial-one theorems expose the exact total edge semantics without another
+algorithm. The proof uses certified remainder
 canonicality and degree bounds, inactive lower-degree division, and the zero
 fallback; it adds no recursive induction and uses no evaluation equality.
 The same public facts now yield `POLY-REMAINDER-STRICT-LENGTH-BOUND` and its
@@ -90,6 +93,14 @@ their canonical remainders before the product is reduced. These laws are
 unconditional and cover zero-modulus normalized equality.
 `GPOLY-MOD-CONGRUENCE` is therefore proved. No quotient-ring operation or
 concrete congruence API is introduced.
+
+`POLY-REMAINDER` is the canonical-representative operation for both reducible
+quotient rings needed by Schoof and irreducible quotients later promoted to
+extension fields. Quotient equality remains the separate equality-of-reduced-
+representatives relation. A modular-inverse result is useful only under its
+explicit monic-GCD-one certificate, while field inversion additionally awaits
+irreducibility or another unit theorem. `nil` always remains the concrete zero
+polynomial, never an abstract failure marker.
 
 ## Explicitly downstream
 
