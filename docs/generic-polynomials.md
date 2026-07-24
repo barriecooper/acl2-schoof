@@ -466,8 +466,14 @@ normalization and reduction fixed points, all-operand normalization invariance,
 and representative invariance using the existing remainder arithmetic laws.
 The F7 specializations exercise reducible and irreducible-looking moduli without
 making irreducibility or field claims. These are representative operations
-only: quotient-ring laws, reduced-one unit laws,
-irreducibility, and field promotion remain open. The same runtime supports both
+only until `generic/reduced-ring.lisp`, which now certifies the complete
+literal-equality commutative-ring interface and modulus-dependent
+`POLY-REDUCED-ONE`. Identity conclusions return the canonical remainder for
+arbitrary representations, with focused fixed-representative corollaries.
+Zero modulus gives normalized polynomial arithmetic; polynomial one and every
+normalized nonzero constant give the trivial ring; positive-degree moduli are
+covered regardless of reducibility. Irreducibility, unit characterization,
+modular-inverse unit laws, and field promotion remain open. The runtime supports both
 reducible Schoof coordinate quotients and moduli later proved irreducible.
 
 `POLY-CONGRUENT-P` remains the only generic quotient-equality relation.  Its

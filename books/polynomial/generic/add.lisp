@@ -220,9 +220,35 @@
                           (z (normalize z))))
            :in-theory (disable raw-add-commutative))))
 
+; POLY-ADD normalizes every input, so the polynomial hypotheses of the
+; structural theorem above are automatic at its public, total interface.
+(defthm poly-add-associative-total
+  (equal (poly-add (poly-add x y) z)
+         (poly-add x (poly-add y z)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance poly-add-associative
+                            (x (normalize x))
+                            (y (normalize y))
+                            (z (normalize z)))))))
+
 (defthm poly-add-inverse-right
   (implies (polynomial-p x)
            (equal (poly-add x (poly-neg x)) nil)))
+
+(defthm poly-add-inverse-right-total
+  (equal (poly-add x (poly-neg x)) nil)
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance poly-add-inverse-right
+                                    (x (normalize x)))))))
+
+(defthm poly-add-inverse-left-total
+  (equal (poly-add (poly-neg x) x) nil)
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance poly-add-commutative
+                                    (x (poly-neg x)) (y x))
+                         (:instance poly-add-inverse-right-total))
+           :in-theory (disable poly-add poly-neg raw-add-commutative))))
 
 (defthm poly-neg-of-nil
   (equal (poly-neg nil) nil))
@@ -234,6 +260,12 @@
 (defthm poly-neg-of-poly-neg
   (implies (polynomial-p x)
            (equal (poly-neg (poly-neg x)) (normalize x))))
+
+(defthm poly-neg-of-poly-neg-total
+  (equal (poly-neg (poly-neg x)) (normalize x))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance poly-neg-of-poly-neg
+                                    (x (normalize x)))))))
 
 (defthm poly-neg-double-canonical
   (implies (canonical-polynomial-p x)
@@ -249,3 +281,9 @@
 (defthm poly-sub-self
   (implies (polynomial-p x)
            (equal (poly-sub x x) nil)))
+
+(defthm poly-sub-self-total
+  (equal (poly-sub x x) nil)
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance poly-sub-self
+                                    (x (normalize x)))))))
