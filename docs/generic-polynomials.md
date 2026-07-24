@@ -531,3 +531,8 @@ modulus `POLYNOMIAL-ONE`; no literal-one claim is made for constants.
 Irreducibility implying monic gcd one, additional quotient-ring congruence
 laws, quotient-field laws, concrete polynomial-field instances, and extension
 fields remain open.
+
+
+## Concrete F7 modular inverse (certified)
+
+`generic/f7-division.lisp` now specializes the generic modular-inverse candidate literally: one `F7-POLY-MONIC-EXTENDED-EUCLIDEAN-GCD` call selects its first Bezout coefficient and one existing `F7-POLY-REMAINDER` call canonicalizes it. The guard-verified total function does not separately test the GCD; correctness is conditional on `F7-POLY-MONIC-EUCLIDEAN-GCD` being polynomial one, and the literal-one remainder corollary additionally requires positive modulus degree. This supplies inversion only for units modulo a modulus. Later quotient-ring operations and field inversion under irreducibility remain open.
