@@ -61,10 +61,15 @@ ACL2 obligations are genuinely proved and certified.
    noncanonical representations; its nonzero hypothesis is necessary. The
    divisor-scaling invariance is now certified by mutual divisibility and
    transitivity, with inverse reasoning inherited from dividend scaling. The
-   next focused PR is monic-normalization/divisibility integration: it should
-   establish the precise two-sided equivalences using both scaling laws and the
-   exact zero/nonzero behavior of `POLY-MONIC-NORMALIZE`; only then should a
-   monic gcd wrapper follow. General associate theory remains separate.
+   unconditional dividend- and divisor-position monic-normalization
+   equivalences are now certified by explicit normalized-zero branches and the
+   two scaling laws, without induction or division expansion. The next focused
+   PR should introduce the transparent `POLY-MONIC-EUCLIDEAN-GCD` wrapper. It
+   should certify transparency, canonical/normalized output, the zero-or-one
+   leading coefficient, the exact raw-gcd relationship, and compositionally
+   obtained common-divisor and greatestness correctness; split structural and
+   correctness PRs if the ledger inventory shows a substantial interface.
+   General associate theory remains separate.
    Uniqueness,
    extended gcd, and Bézout remain open. Later power uses include
    extension-field arithmetic,
