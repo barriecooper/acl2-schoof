@@ -12,8 +12,12 @@ normalization and evaluation, addition, subtraction, scaling, multiplication,
 constant embedding and powers, degree and leading coefficients, product
 leading-term and no-zero-divisor consequences, monomials and shifts, one-step
 leading-term cancellation, and recursive quotient/remainder division with
-reconstruction and a final remainder-degree bound.  The repository also
-contains the concrete F11 golden-curve fixture.
+reconstruction and a final remainder-degree bound. It also includes generic
+polynomial congruence, Euclidean division and remainder, divisor-first
+divisibility, raw Euclidean GCD and monic GCD post-processing, raw XGCD with an
+unconditional Bezout identity, monic XGCD with an unconditional monic Bezout
+identity, and the XGCD-to-remainder bridge. The repository also contains the
+concrete F11 golden-curve fixture.
 
 GPOLY algorithms are generic certified definitions over constrained field
 operations.  PFIELD is a constrained-modulus adapter, not ordinary arithmetic
@@ -24,13 +28,29 @@ a concrete F7 one-step boundary was not retained after its semantic theorem
 group certified experimentally because the existing F7 inverse/division guard
 contract blocked explicit guard verification. Recursive F7 divmod is postponed.
 
-Generic modular reduction is certified. The next mathematical milestone is
-generic polynomial congruence and its addition/multiplication compatibility.
-Still open are polynomial gcd and extended gcd, quotient/remainder uniqueness,
-irreducibility, arbitrary extension fields, rational functions, generic curve
-operations, Hasse, division polynomials, CRT trace reconstruction, and Schoof
-trace computation.  These are tracked in `docs/obligations.md`; the full
-Euclidean-polynomial milestone is not complete.
+The total generic `POLY-MODULAR-INVERSE` candidate is defined and certified. It
+reduces the first monic-XGCD coefficient and is conditionally correct when the
+monic GCD is polynomial one: the product reduces to the remainder of polynomial
+one. That remainder is literally polynomial one only for a nonempty normalized
+positive-degree modulus; nonzero constant moduli instead have zero-remainder
+semantics.
+
+The next dependency chain is documentation and CI maintenance; concrete
+named-field instantiation and guard resolution; a proof that irreducibility
+implies monic GCD one; executable irreducibility certificates for selected
+defining polynomials; irreducible-modulus quotient fields for coefficient-field
+extensions; and, separately, general polynomial quotient rings for Schoof
+division-polynomial calculations. Elliptic-curve, Frobenius, torsion, and
+bounded CRT layers follow. The quotient-field moduli must be irreducible,
+whereas the moduli used by the general Schoof quotient rings need not be.
+
+Genuinely unfinished work includes the irreducibility bridge and certificates,
+concrete recursive named-field instances through modular inversion,
+quotient-field laws, general quotient-ring operations not already certified,
+extension fields, elliptic curves, Hasse, Frobenius, division polynomials,
+Schoof residues, and bounded CRT reconstruction. See
+`docs/obligations.md` for the authoritative detailed status rather than treating
+this overview as an obligation ledger.
 
 ## Reproduce
 
