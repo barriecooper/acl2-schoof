@@ -173,3 +173,7 @@ q-power Frobenius, Frobenius preservation of the curve, Frobenius fixed points
 corresponding to rational points, finite splitting certificates, fibre-to-kernel
 completeness, and endomorphism degree and separability. These are requirements,
 not imported code or claims of proof.
+
+## Concrete F7 monic-divisibility prerequisite
+
+The F7 divisor-first divisibility and common-divisor predicates now accompany certified transport through `F7-POLY-MONIC-NORMALIZE` in either argument.  This discharges the coefficient-fixing/multiplication blocker without retaining concrete Euclidean GCD definitions.  Concrete raw and monic GCD, XGCD, modular inverse, irreducibility, quotient/extension fields, curves, and Schoof remain future work.

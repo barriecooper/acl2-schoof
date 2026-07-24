@@ -1,6 +1,6 @@
 (in-package "GPOLY")
 (include-book "pfield-instance")
-(include-book "division")
+(include-book "euclidean")
 
 
 ; Ordinary generated recursive division over the named concrete field.
@@ -176,3 +176,124 @@
 (verify-guards f7-poly-divmod)
 (verify-guards f7-poly-quotient)
 (verify-guards f7-poly-remainder)
+
+; Concrete divisor-first predicates are retained because the later monic GCD
+; correctness instance names them directly.
+(def-divisibility-instance
+  f7-poly-divides-p f7-poly-common-divisor-p f7-poly-remainder)
+
+; The complete substitution is intentionally visible at the theorem boundary.
+(defthm f7-poly-divides-p-of-poly-monic-normalize-dividend
+  (equal (f7-poly-divides-p divisor (f7-poly-monic-normalize dividend))
+         (f7-poly-divides-p divisor dividend))
+  :hints (("Goal" :by (:functional-instance
+    poly-divides-p-of-poly-monic-normalize-dividend
+    (gfield::field-element-p gfield::f7-element-p)
+    (gfield::field-fix gfield::f7-fix) (gfield::field-zero gfield::f7-zero)
+    (gfield::field-one gfield::f7-one) (gfield::field-add gfield::f7-add)
+    (gfield::field-mul gfield::f7-mul) (gfield::field-neg gfield::f7-neg)
+    (gfield::field-inv gfield::f7-inv) (gfield::field-div gfield::f7-div)
+    (fix-coefficients f7-fix-coefficients)
+    (trim-trailing-zeros f7-trim-trailing-zeros) (normalize f7-normalize)
+    (coefficient-list-p f7-coefficient-list-p) (polynomial-p f7-polynomial-p)
+    (canonical-polynomial-p f7-canonical-polynomial-p)
+    (raw-add f7-raw-add) (poly-add f7-poly-add) (raw-neg f7-raw-neg)
+    (poly-neg f7-poly-neg) (poly-sub f7-poly-sub)
+    (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+    (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+    (const f7-const) (polynomial-one f7-polynomial-one)
+    (zero-prefix f7-zero-prefix) (poly-shift f7-poly-shift)
+    (monomial f7-monomial) (poly-degree f7-poly-degree)
+    (poly-leading-coefficient f7-poly-leading-coefficient)
+    (poly-monic-normalize f7-poly-monic-normalize)
+    (poly-division-step-core f7-poly-division-step-core)
+    (poly-division-step f7-poly-division-step)
+    (poly-division-step-term f7-poly-division-step-term)
+    (poly-division-step-next f7-poly-division-step-next)
+    (poly-divmod-core f7-poly-divmod-core) (poly-divmod f7-poly-divmod)
+    (poly-remainder f7-poly-remainder) (poly-divides-p f7-poly-divides-p)
+    (poly-common-divisor-p f7-poly-common-divisor-p)))
+    ("Subgoal 29.7''" :use
+     ((:instance f7-mul-fixed-congruence-for-divmod-instantiation
+                 (x1 gfield::x1) (x2 gfield::x2)
+                 (y1 gfield::y1) (y2 gfield::y2))))
+    ("Subgoal 29.7'" :use
+     ((:instance f7-mul-fixed-congruence-for-divmod-instantiation
+                 (x1 gfield::x1) (x2 gfield::x2)
+                 (y1 gfield::y1) (y2 gfield::y2))))))
+
+(defthm f7-poly-divides-p-of-poly-monic-normalize-divisor
+  (equal (f7-poly-divides-p (f7-poly-monic-normalize divisor) dividend)
+         (f7-poly-divides-p divisor dividend))
+  :hints (("Goal" :by (:functional-instance
+    poly-divides-p-of-poly-monic-normalize-divisor
+    (gfield::field-element-p gfield::f7-element-p)
+    (gfield::field-fix gfield::f7-fix) (gfield::field-zero gfield::f7-zero)
+    (gfield::field-one gfield::f7-one) (gfield::field-add gfield::f7-add)
+    (gfield::field-mul gfield::f7-mul) (gfield::field-neg gfield::f7-neg)
+    (gfield::field-inv gfield::f7-inv) (gfield::field-div gfield::f7-div)
+    (fix-coefficients f7-fix-coefficients)
+    (trim-trailing-zeros f7-trim-trailing-zeros) (normalize f7-normalize)
+    (coefficient-list-p f7-coefficient-list-p) (polynomial-p f7-polynomial-p)
+    (canonical-polynomial-p f7-canonical-polynomial-p)
+    (raw-add f7-raw-add) (poly-add f7-poly-add) (raw-neg f7-raw-neg)
+    (poly-neg f7-poly-neg) (poly-sub f7-poly-sub)
+    (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+    (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+    (const f7-const) (polynomial-one f7-polynomial-one)
+    (zero-prefix f7-zero-prefix) (poly-shift f7-poly-shift)
+    (monomial f7-monomial) (poly-degree f7-poly-degree)
+    (poly-leading-coefficient f7-poly-leading-coefficient)
+    (poly-monic-normalize f7-poly-monic-normalize)
+    (poly-division-step-core f7-poly-division-step-core)
+    (poly-division-step f7-poly-division-step)
+    (poly-division-step-term f7-poly-division-step-term)
+    (poly-division-step-next f7-poly-division-step-next)
+    (poly-divmod-core f7-poly-divmod-core) (poly-divmod f7-poly-divmod)
+    (poly-remainder f7-poly-remainder) (poly-divides-p f7-poly-divides-p)
+    (poly-common-divisor-p f7-poly-common-divisor-p)))
+    ("Subgoal 29.7''" :use
+     ((:instance f7-mul-fixed-congruence-for-divmod-instantiation
+                 (x1 gfield::x1) (x2 gfield::x2)
+                 (y1 gfield::y1) (y2 gfield::y2))))
+    ("Subgoal 29.7'" :use
+     ((:instance f7-mul-fixed-congruence-for-divmod-instantiation
+                 (x1 gfield::x1) (x2 gfield::x2)
+                 (y1 gfield::y1) (y2 gfield::y2))))))
+
+(defthm f7-poly-common-divisor-p-of-poly-monic-normalize
+  (equal (f7-poly-common-divisor-p
+          candidate (f7-poly-monic-normalize first)
+          (f7-poly-monic-normalize second))
+         (f7-poly-common-divisor-p candidate first second))
+  :hints
+  (("Goal"
+    :use ((:instance f7-poly-divides-p-of-poly-monic-normalize-dividend
+                     (divisor candidate) (dividend first))
+          (:instance f7-poly-divides-p-of-poly-monic-normalize-dividend
+                     (divisor candidate) (dividend second)))
+    :in-theory (e/d (f7-poly-common-divisor-p)
+                    (f7-poly-divides-p
+                     f7-poly-divides-p-of-poly-monic-normalize-dividend)))))
+
+; Exact total-semantics and witness regressions.  The witness orientation is
+; DIVIDEND = DIVISOR * WITNESS, as checked by the explicit products below.
+(assert-event (equal (f7-poly-monic-normalize '(1 2)) '(4 1)))
+(assert-event (equal (f7-poly-monic-normalize '(3 1)) '(3 1)))
+(assert-event (equal (f7-poly-monic-normalize '(3)) '(1)))
+(assert-event (equal (f7-poly-monic-normalize nil) nil))
+(assert-event (equal (f7-poly-monic-normalize '(1 9)) '(4 1)))
+(assert-event (equal (f7-poly-monic-normalize '(1 2 0 0)) '(4 1)))
+(assert-event (equal (f7-poly-monic-normalize 'bad) nil))
+(assert-event (equal (f7-poly-monic-normalize '(1 2 . bad)) '(4 1)))
+(assert-event (equal (gfield::f7-mul 15 10)
+                     (gfield::f7-mul (gfield::f7-fix 1)
+                                     (gfield::f7-fix 3))))
+(assert-event
+ (and (equal (f7-poly-mul '(1 2) '(3)) '(3 6))
+      (f7-poly-divides-p '(1 2) '(3 6))
+      (f7-poly-divides-p (f7-poly-monic-normalize '(1 2)) '(3 6))))
+(assert-event
+ (and (equal (f7-poly-mul '(4 1) '(2 4)) '(1 4 4))
+      (f7-poly-divides-p '(4 1) '(1 4 4))
+      (f7-poly-divides-p '(1 2) '(1 4 4))))
