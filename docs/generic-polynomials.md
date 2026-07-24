@@ -431,8 +431,9 @@ canonical as a polynomial representation but need not be monic; it may be a
 negative unit or another non-monic associate.  The specification therefore
 determines a gcd only up to multiplication by nonzero field units.  It adds no
 existential quotient witnesses, XGCD/Bézout machinery, or concrete PFIELD/F7
-API.  Uniqueness, associate and unit-invariance theory, and monic normalization
-remain open.
+API.  Uniqueness and associate and unit-invariance theory remain open; the
+subsequent certified layers now provide monic normalization and the transparent
+monic-gcd wrapper described above.
 
 `GPOLY-MOD-CONGRUENCE` is proved by the one-sided and simultaneous
 `POLY-REMAINDER-OF-POLY-MUL-*` laws, `POLY-CONGRUENT-P-OF-POLY-MUL` and its
@@ -447,11 +448,9 @@ canonical remainder (and hence of its normalization) is strictly less than
 the length of the normalized divisor.  This follows only from canonicality,
 the strict degree bound, and the canonical degree/length characterization;
 it does not unfold recursive division.  A zero normalized divisor is the
-recursion base case.  Raw algebraic gcd correctness is now publicly packaged,
-while the monic wrapper's mathematical correctness is deferred.  No quotient witnesses, extended
-gcd, Bézout coefficients, modular inverses, or concrete PFIELD/F7 APIs are
-introduced.  The next focused PR should inventory leading-coefficient,
-scalar-multiplication, field-inversion, and nonzero-polynomial infrastructure
-before introducing generic monic normalization.  Later stages should prove
-that normalization preserves divisibility/associates, certify a monic gcd
-wrapper, and only then develop XGCD/Bézout.
+recursion base case.  Raw algebraic gcd correctness is publicly packaged, and
+the later transparent monic wrapper is mathematically certified.  No quotient
+witnesses, extended gcd, Bézout coefficients, modular inverses, or concrete
+PFIELD/F7 APIs are introduced.  The next Euclidean-layer dependency is generic
+XGCD/Bézout; uniqueness and general associate/unit theory remain separate and
+should only be added if a downstream equality argument requires them.
