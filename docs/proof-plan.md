@@ -175,10 +175,16 @@ leading-coefficient, and divisibility interfaces are certified, as is the
 transparent monic-gcd wrapper. Its common-divisor and greatestness correctness
 is now certified compositionally. Raw XGCD and unconditional Bezout, monic XGCD
 and monic Bezout, the XGCD remainder bridge, and the total conditional
-`POLY-MODULAR-INVERSE` candidate are certified. Literal-one inverse correctness
-requires a normalized positive-degree modulus; constant moduli retain their
-zero-remainder semantics. Quotient-field laws, concrete instances, associate
-theory, and uniqueness remain open. No concrete
+`POLY-MODULAR-INVERSE` candidate are certified. The downstream composition
+book proves both reduced unit laws for every nonzero remainder-fixed
+representative modulo an irreducible polynomial, using only the certified
+GCD-one bridge and existing conditional inverse laws. Selected constants,
+`x`, and `1+x` modulo the certified irreducible F7 polynomial `x^2+1` are
+regressions, not a quotient-field API. Literal-one inverse correctness requires
+a normalized positive-degree modulus; constant moduli retain their
+zero-remainder semantics. Field promotion and an `F7[x]/(x^2+1)` interface
+remain open, as do elliptic-curve arithmetic, division polynomials, Hasse
+theory, and Schoof. No concrete
 PFIELD/F7 gcd API was introduced. The complete concrete F7 one-step semantic
 theorem layer, including the strict length-decrease prerequisite, is certified;
 recursive concrete F7 divmod and all projections remain postponed. The first executable

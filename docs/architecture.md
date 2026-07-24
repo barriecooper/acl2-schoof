@@ -49,6 +49,14 @@ irreducibility hypothesis.  Literal polynomial-one correctness still requires
 a nonempty normalized positive-degree modulus; constant moduli retain their
 trivial-ring zero-remainder semantics.
 
+The narrowly downstream `irreducible-modular-inverse` book now composes those
+layers: irreducibility plus an explicit nonzero representative fixed by
+`POLY-REMAINDER` yields both `POLY-REDUCED-MUL` unit laws. The candidate remains
+the transparent XGCD-derived `POLY-MODULAR-INVERSE`; no inverse algorithm,
+quotient object, or executable boundary was added. The certified F7 examples
+for `x^2+1` are regression witnesses only, not an implementation of
+`F7[x]/(x^2+1)` as a field.
+
 ## Subsequent algebraic layers
 
 The next algebraic layers deliberately separate two constructions:
