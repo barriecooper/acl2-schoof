@@ -152,6 +152,42 @@
 (defthm f7-poly-remainder-canonical
   (f7-canonical-polynomial-p (f7-poly-remainder f g))
   :hints (("Goal" :use f7-poly-divmod-remainder-canonical)))
+
+; A single symbolic leading-term cancellation by the presentation modulus.
+; This deliberately opens the concrete recursion only for a canonical
+; degree-two dividend; the exported statement exposes only the remainder.
+(defthm f7-poly-remainder-degree-two-by-x2-plus-one
+  (implies (and (gfield::f7-element-p a)
+                (gfield::f7-element-p b)
+                (gfield::f7-element-p c)
+                (not (equal c 0)))
+           (equal (f7-poly-remainder (list a b c) '(1 0 1))
+                  (f7-normalize
+                   (list (gfield::f7-sub a c) b))))
+  :rule-classes nil
+  :hints (("Goal"
+           :in-theory
+           (enable f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+                   f7-poly-division-step-core f7-poly-degree
+                   f7-poly-leading-coefficient f7-monomial f7-zero-prefix
+                   f7-poly-sub f7-poly-add f7-raw-add f7-poly-neg f7-raw-neg
+                   f7-poly-mul f7-raw-mul f7-poly-scale f7-raw-scale
+                   f7-poly-shift f7-normalize f7-fix-coefficients
+                   f7-trim-trailing-zeros gfield::f7-div gfield::f7-inv
+                   gfield::f7-sub gfield::f7-add gfield::f7-neg
+                   gfield::f7-mul gfield::f7-fix))))
+
+(defthm f7-poly-remainder-degree-two-by-x2-plus-one-regressions
+  (and (equal (f7-poly-remainder '(0 0 1) '(1 0 1)) '(6))
+       (equal (f7-poly-remainder '(1 0 1) '(1 0 1)) nil)
+       (equal (f7-poly-remainder '(0 1 1) '(1 0 1)) '(6 1))
+       (equal (f7-poly-remainder '(1 1 1) '(1 0 1)) '(0 1))
+       (equal (f7-poly-remainder '(2 0 1) '(1 0 1)) '(1))
+       (equal (f7-poly-remainder '(3 4 3) '(1 0 1)) '(0 4)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable f7-poly-remainder
+                                      f7-poly-divmod
+                                      f7-poly-divmod-core))))
 (defthm f7-poly-divmod-zero-normalized-divisor
   (implies (equal (f7-normalize g) nil)
            (equal (f7-poly-divmod f g) (mv nil (f7-normalize f))))
