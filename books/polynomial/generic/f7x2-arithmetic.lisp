@@ -13,6 +13,34 @@
 (defun f7x2-mul (first second)
   (f7x2-fix (f7-poly-mul first second)))
 
+; This is the coefficient-only checkpoint that blocked the earlier bounded
+; convolution attempt.  Keep it local and non-rewriting: the reusable public
+; fact belongs to the concrete F7 coefficient interface.
+(local
+ (defthm f7-fixer-congruence-blocked-convolution-checkpoint
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b)
+                 (gfield::f7-element-p c)
+                 (gfield::f7-element-p d))
+            (equal
+             (gfield::f7-fix
+              (pfield::add
+               (gfield::f7-fix (pfield::mul a d 7))
+               (gfield::f7-fix
+                (mod (gfield::f7-fix (pfield::mul b c 7)) 7))
+               7))
+             (gfield::f7-fix
+              (pfield::add
+               (gfield::f7-fix (pfield::mul a d 7))
+               (gfield::f7-fix (pfield::mul b c 7))
+               7))))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance gfield::f7-element-p-of-f7-mul
+                             (x b) (y c)))
+            :in-theory (e/d (gfield::f7-mul)
+                            (gfield::f7-fix))))))
+
 ; The generic reduction package already proves that operation followed by
 ; remainder is invariant under replacing every operand by its remainder.  The
 ; following concrete specializations are kept local: the public interface

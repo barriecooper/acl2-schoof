@@ -414,6 +414,34 @@
 (defthm f7-fix-when-f7-element-p
   (implies (f7-element-p x) (equal (f7-fix x) x)))
 
+(defthm f7-fix-idempotent
+  (equal (f7-fix (f7-fix x)) (f7-fix x))
+  :hints (("Goal" :use ((:instance f7-fix-when-f7-element-p
+                          (x (f7-fix x))))
+           :in-theory (disable f7-fix-when-f7-element-p))))
+
+; F7-ADD fixes both operands at its public coefficient boundary.  These
+; one-sided rules expose that fact without expanding PFIELD arithmetic.
+(defthm f7-add-fix-left
+  (equal (f7-add (f7-fix x) y) (f7-add x y))
+  :hints (("Goal" :in-theory (e/d (f7-add f7-fix-idempotent)
+                                    (f7-fix)))))
+
+(defthm f7-add-fix-right
+  (equal (f7-add x (f7-fix y)) (f7-add x y))
+  :hints (("Goal" :in-theory (e/d (f7-add f7-fix-idempotent)
+                                    (f7-fix)))))
+
+(defthm f7-fixer-congruence-regressions
+  (and (equal (f7-add (f7-fix 0) 6) (f7-add 0 6))
+       (equal (f7-add 1 (f7-fix 5)) (f7-add 1 5))
+       (f7-element-p (f7-mul 3 4))
+       (equal (f7-add (f7-fix -8) 'arbitrary)
+              (f7-add -8 'arbitrary))
+       (equal (f7-add 'arbitrary (f7-fix 15))
+              (f7-add 'arbitrary 15)))
+  :rule-classes nil)
+
 (defthm f7-mul-one-left
   (equal (f7-mul (f7-one) x) (f7-fix x)))
 
