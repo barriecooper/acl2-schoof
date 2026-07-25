@@ -187,7 +187,12 @@ is now certified: arbitrary ACL2 objects reduce to normalized F7 polynomials
 of degree below two, and every recognized carrier value is uniquely
 reconstructible from its constant and linear F7 coefficients. Recognized-value
 equality is ordinary ACL2 equality and is coefficient-extensional; noncanonical
-inputs are compared only after `F7X2-FIX`. Extension operations, field laws, and
+inputs are compared only after `F7X2-FIX`. The two addition projection formulas
+are now certified unconditionally for arbitrary ACL2 operands by fixing and
+reconstructing both operands and applying the bounded normalized
+two-coefficient addition bridge. Recursive polynomial division remains
+encapsulated. The six negation, subtraction, and multiplication projection
+formulas, general ring laws, inversion, and field promotion remain open. Extension operations, field laws, and
 a GFIELD instance remain open, as do elliptic-curve arithmetic, division polynomials, Hasse
 theory, and Schoof. No concrete
 PFIELD/F7 gcd API was introduced. The complete concrete F7 one-step semantic
