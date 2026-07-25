@@ -617,6 +617,172 @@
                                f7-trim-trailing-zeros)
                  (gfield::f7-fix gfield::f7-element-p))))))
 
+; The only recursive multiplication calculation in the bounded bridge.  The
+; two case splits account for canonical constant/nil operands; in the genuine
+; linear case the public F7 fixer-congruence rules reconcile the raw ADD/MUL
+; presentation with the coefficient operations below.
+(local
+ (defthm f7-poly-mul-of-normalized-two-coefficients
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b)
+                 (gfield::f7-element-p c)
+                 (gfield::f7-element-p d))
+            (equal
+             (f7-poly-mul (f7-normalize (list a b))
+                          (f7-normalize (list c d)))
+             (f7-normalize
+              (list (gfield::f7-mul a c)
+                    (gfield::f7-add (gfield::f7-mul a d)
+                                    (gfield::f7-mul b c))
+                    (gfield::f7-mul b d)))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :cases ((equal b 0) (equal d 0))
+     :in-theory
+     (e/d (f7-poly-mul f7-raw-mul f7-raw-scale f7-raw-add
+                       f7-normalize f7-fix-coefficients
+                       f7-trim-trailing-zeros)
+          (f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+           f7-poly-division-step f7-poly-division-step-core))))))
+
+; Recognition is stated separately from the convolution so that reduction can
+; consume the bounded calculation with every multiplication recursion closed.
+(local
+ (defthm f7-convolution-coefficients-recognized
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b)
+                 (gfield::f7-element-p c)
+                 (gfield::f7-element-p d))
+            (and
+             (gfield::f7-element-p (gfield::f7-mul a c))
+             (gfield::f7-element-p
+              (gfield::f7-add (gfield::f7-mul a d)
+                              (gfield::f7-mul b c)))
+             (gfield::f7-element-p (gfield::f7-mul b d))))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-element-p-of-f7-add-for-raw-shape
+                             (x (gfield::f7-mul a d))
+                             (y (gfield::f7-mul b c))))))))
+
+(local
+ (defthm f7x2-fix-of-normalize-for-bounded-product
+   (equal (f7x2-fix (f7-normalize polynomial))
+          (f7x2-fix polynomial))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-poly-remainder-of-normalize-dividend
+                             (f polynomial) (g '(1 0 1))))
+            :in-theory
+            (e/d (f7x2-fix)
+                 (f7-poly-remainder f7-poly-divmod
+                  f7-poly-divmod-core f7-poly-division-step
+                  f7-poly-division-step-core))))))
+
+; Whole-value composition with the existing three-coefficient reduction
+; theorem.  In particular, the quadratic coefficient is subtracted from the
+; constant coefficient, expressing X^2 = -1 without opening division.
+(local
+ (defthm f7x2-fix-of-bounded-normalized-product
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b)
+                 (gfield::f7-element-p c)
+                 (gfield::f7-element-p d))
+            (equal
+             (f7x2-fix
+              (f7-poly-mul (f7-normalize (list a b))
+                           (f7-normalize (list c d))))
+             (f7-normalize
+              (list
+               (gfield::f7-sub (gfield::f7-mul a c)
+                               (gfield::f7-mul b d))
+               (gfield::f7-add (gfield::f7-mul a d)
+                               (gfield::f7-mul b c))))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-mul-of-normalized-two-coefficients)
+           (:instance f7-convolution-coefficients-recognized)
+           (:instance f7x2-fix-of-three-coefficients
+                      (a (gfield::f7-mul a c))
+                      (b (gfield::f7-add (gfield::f7-mul a d)
+                                        (gfield::f7-mul b c)))
+                      (c (gfield::f7-mul b d)))
+           (:instance f7x2-fix-of-normalize-for-bounded-product
+                      (polynomial
+                       (list (gfield::f7-mul a c)
+                             (gfield::f7-add (gfield::f7-mul a d)
+                                             (gfield::f7-mul b c))
+                             (gfield::f7-mul b d)))))
+     :in-theory
+     (disable f7-poly-mul f7-raw-mul f7-raw-scale f7-raw-add
+              f7x2-fix
+              f7-poly-remainder f7-poly-divmod
+              f7-poly-divmod-core f7-poly-division-step
+              f7-poly-division-step-core f7-normalize
+              gfield::f7-fix gfield::f7-add gfield::f7-mul
+              gfield::f7-sub)))))
+
+(local
+ (defthm f7x2-constant-projection-of-bounded-normalized-product
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b)
+                 (gfield::f7-element-p c)
+                 (gfield::f7-element-p d))
+            (equal
+             (f7x2-constant-coefficient
+              (f7-poly-mul (f7-normalize (list a b))
+                           (f7-normalize (list c d))))
+             (gfield::f7-sub (gfield::f7-mul a c)
+                             (gfield::f7-mul b d))))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7x2-fix-of-bounded-normalized-product)
+                  (:instance f7-convolution-coefficients-recognized)
+                  (:instance f7x2-constant-coefficient-of-fix
+                             (x (f7-poly-mul
+                                 (f7-normalize (list a b))
+                                 (f7-normalize (list c d))))))
+            :in-theory
+            (e/d (f7x2-constant-coefficient f7-normalize
+                                            f7-fix-coefficients
+                                            f7-trim-trailing-zeros
+                                            gfield::f7-sub)
+                 (f7-poly-mul f7x2-fix f7-poly-remainder
+                  f7-poly-divmod f7-poly-divmod-core
+                  f7-poly-division-step f7-poly-division-step-core
+                  gfield::f7-fix))))))
+
+(local
+ (defthm f7x2-linear-projection-of-bounded-normalized-product
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b)
+                 (gfield::f7-element-p c)
+                 (gfield::f7-element-p d))
+            (equal
+             (f7x2-linear-coefficient
+              (f7-poly-mul (f7-normalize (list a b))
+                           (f7-normalize (list c d))))
+             (gfield::f7-add (gfield::f7-mul a d)
+                             (gfield::f7-mul b c))))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7x2-fix-of-bounded-normalized-product)
+                  (:instance f7-convolution-coefficients-recognized)
+                  (:instance f7x2-linear-coefficient-of-fix
+                             (x (f7-poly-mul
+                                 (f7-normalize (list a b))
+                                 (f7-normalize (list c d))))))
+            :in-theory
+            (e/d (f7x2-linear-coefficient f7-normalize
+                                          f7-fix-coefficients
+                                          f7-trim-trailing-zeros)
+                 (f7-poly-mul f7x2-fix f7-poly-remainder
+                  f7-poly-divmod f7-poly-divmod-core
+                  f7-poly-division-step f7-poly-division-step-core
+                  gfield::f7-fix gfield::f7-add))))))
+
 (local
  (defthm f7-sub-zero-right-for-f7x2-addition
    (implies (gfield::f7-element-p a)
@@ -1165,6 +1331,78 @@
                        (f7-normalize '(3 4)))
           '(4 4)))
   :rule-classes nil)
+
+(defthm f7-bounded-normalized-multiplication-regressions
+  (and
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(1 2))
+                                  (f7-normalize '(3 4))))
+          '(2 3))
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(2 3))
+                                  (f7-normalize '(4 5))))
+          '(0 1))
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(0 2))
+                                  (f7-normalize '(0 3))))
+          '(1))
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(1 1))
+                                  (f7-normalize '(1 1))))
+          '(0 2))
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(1 1))
+                                  (f7-normalize '(1 6))))
+          '(2))
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(3 0))
+                                  (f7-normalize '(1 2))))
+          '(3 6))
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(1 2))
+                                  (f7-normalize '(3 0))))
+          '(3 6))
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(0 0))
+                                  (f7-normalize '(3 4))))
+          nil)
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(3 4))
+                                  (f7-normalize '(0 0))))
+          nil)
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(2 0))
+                                  (f7-normalize '(4 0))))
+          '(1))
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(0 2))
+                                  (f7-normalize '(3 4))))
+          '(6 6))
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(1 2 0))
+                                  (f7-normalize '(3 4 0))))
+          '(2 3))
+   (equal (f7x2-fix (f7-poly-mul (f7-normalize '(-6 9))
+                                  (f7-normalize '(10 -3))))
+          '(2 3)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance f7x2-fix-of-bounded-normalized-product
+                     (a 1) (b 2) (c 3) (d 4))
+          (:instance f7x2-fix-of-bounded-normalized-product
+                     (a 2) (b 3) (c 4) (d 5))
+          (:instance f7x2-fix-of-bounded-normalized-product
+                     (a 0) (b 2) (c 0) (d 3))
+          (:instance f7x2-fix-of-bounded-normalized-product
+                     (a 1) (b 1) (c 1) (d 1))
+          (:instance f7x2-fix-of-bounded-normalized-product
+                     (a 1) (b 1) (c 1) (d 6))
+          (:instance f7x2-fix-of-bounded-normalized-product
+                     (a 3) (b 0) (c 1) (d 2))
+          (:instance f7x2-fix-of-bounded-normalized-product
+                     (a 1) (b 2) (c 3) (d 0))
+          (:instance f7x2-fix-of-bounded-normalized-product
+                     (a 0) (b 0) (c 3) (d 4))
+          (:instance f7x2-fix-of-bounded-normalized-product
+                     (a 3) (b 4) (c 0) (d 0))
+          (:instance f7x2-fix-of-bounded-normalized-product
+                     (a 2) (b 0) (c 4) (d 0))
+          (:instance f7x2-fix-of-bounded-normalized-product
+                     (a 0) (b 2) (c 3) (d 4)))
+    :in-theory
+    (disable f7-poly-mul f7-raw-mul f7-raw-scale f7-raw-add
+             f7x2-fix f7-poly-remainder f7-poly-divmod
+             f7-poly-divmod-core f7-poly-division-step
+             f7-poly-division-step-core))))
 
 (defthm f7-bounded-normalized-negation-and-subtraction-regressions
   (and
