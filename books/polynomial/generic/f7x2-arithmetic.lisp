@@ -2458,3 +2458,84 @@
                        (f7x2-mul '(1 2) '(3 4)))))
    :rule-classes nil
    :hints (("Goal" :in-theory (enable f7x2-mul-left-distributive)))))
+
+; These two public bridges expose the existing fixed-modulus presentation as
+; the corresponding generated F7 reduced-ring operations.  Their rewrite
+; direction leaves the reusable variable-modulus interface visible.
+(defthm f7x2-add-is-f7-poly-reduced-add
+  (equal (f7x2-add first second)
+         (f7-poly-reduced-add first second '(1 0 1)))
+  :hints (("Goal"
+           :do-not '(preprocess)
+           :expand ((f7x2-add first second)
+                    (f7x2-fix (f7-poly-add first second))
+                    (f7-poly-reduced-add first second '(1 0 1)))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm f7x2-mul-is-f7-poly-reduced-mul
+  (equal (f7x2-mul first second)
+         (f7-poly-reduced-mul first second '(1 0 1)))
+  :hints (("Goal"
+           :do-not '(preprocess)
+           :expand ((f7x2-mul first second)
+                    (f7x2-fix (f7-poly-mul first second))
+                    (f7-poly-reduced-mul first second '(1 0 1)))
+           :in-theory (theory 'minimal-theory))))
+
+; This follows the established right-distributivity convention: THIRD is the
+; common right factor.  The proof crosses only the two fixed-modulus bridges
+; and the generated concrete F7 reduced-ring theorem.
+(defthm f7x2-mul-right-distributive
+  (equal (f7x2-mul (f7x2-add first second) third)
+         (f7x2-add (f7x2-mul first third)
+                   (f7x2-mul second third)))
+  :hints
+  (("Goal"
+    :use ((:instance f7x2-add-is-f7-poly-reduced-add
+                     (first first) (second second))
+          (:instance f7x2-mul-is-f7-poly-reduced-mul
+                     (first (f7x2-add first second)) (second third))
+          (:instance f7x2-mul-is-f7-poly-reduced-mul
+                     (first first) (second third))
+          (:instance f7x2-mul-is-f7-poly-reduced-mul
+                     (first second) (second third))
+          (:instance f7x2-add-is-f7-poly-reduced-add
+                     (first (f7x2-mul first third))
+                     (second (f7x2-mul second third)))
+          (:instance f7-poly-reduced-mul-right-distributive
+                     (first first) (second second) (third third)
+                     (modulus '(1 0 1))))
+    :in-theory
+    (e/d (f7x2-add-is-f7-poly-reduced-add
+          f7x2-mul-is-f7-poly-reduced-mul)
+         (f7x2-fix f7x2-add f7x2-mul
+          f7x2-add-commutative f7x2-add-associative
+          f7x2-mul-commutative f7x2-mul-associative
+          f7x2-mul-left-distributive
+          f7-poly-reduced-add f7-poly-reduced-mul
+          f7-poly-add f7-raw-add f7-poly-mul f7-raw-mul f7-raw-scale
+          f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+          f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+          f7-poly-division-step f7-poly-division-step-core
+          gfield::f7-fix gfield::f7-add gfield::f7-mul)))))
+
+(local
+ (defthm f7x2-mul-right-distributive-regressions
+   (and
+    ; Canonical constants and genuine linear elements.
+    (equal (f7x2-mul (f7x2-add (f7x2-zero) (f7x2-one)) '(2 3))
+           (f7x2-add (f7x2-mul (f7x2-zero) '(2 3))
+                       (f7x2-mul (f7x2-one) '(2 3))))
+    (equal (f7x2-mul (f7x2-add '(1 2) '(3 4)) '(5 6))
+           (f7x2-add (f7x2-mul '(1 2) '(5 6))
+                       (f7x2-mul '(3 4) '(5 6))))
+    ; Malformed and noncanonical total inputs.
+    (equal (f7x2-mul (f7x2-add '(bad 9 . tail) '(8 -3 0)) '(1 . bad))
+           (f7x2-add (f7x2-mul '(bad 9 . tail) '(1 . bad))
+                       (f7x2-mul '(8 -3 0) '(1 . bad))))
+    ; Unequal raw representatives whose fixes are equal.
+    (equal (f7x2-mul (f7x2-add '(1 2 0) '(3 4)) '(5 6))
+           (f7x2-add (f7x2-mul '(1 2) '(5 6))
+                       (f7x2-mul '(3 4) '(5 6)))))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (enable f7x2-mul-right-distributive)))))
