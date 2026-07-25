@@ -1368,6 +1368,47 @@
                     f7x2-linear-coefficient gfield::f7-add
                     gfield::f7-mul))))
 
+; Operational constants are proved only through the public coefficient
+; interface.  In particular, neither carrier operation nor the polynomial
+; implementation below it is enabled by these proofs.
+(defthm f7x2-add-zero-left
+  (equal (f7x2-add (f7x2-zero) value)
+         (f7x2-fix value))
+  :hints (("Goal"
+           :use ((:instance f7x2-coefficient-extensionality
+                            (first (f7x2-add (f7x2-zero) value))
+                            (second (f7x2-fix value))))
+           :in-theory (disable f7x2-add f7x2-fix))))
+
+(defthm f7x2-add-zero-right
+  (equal (f7x2-add value (f7x2-zero))
+         (f7x2-fix value))
+  :hints (("Goal"
+           :use ((:instance f7x2-coefficient-extensionality
+                            (first (f7x2-add value (f7x2-zero)))
+                            (second (f7x2-fix value))))
+           :in-theory (disable f7x2-add f7x2-fix))))
+
+(local
+ (defthm f7x2-add-zero-regressions
+   (and
+    (equal (f7x2-add (f7x2-zero) '(3 4)) '(3 4))
+    (equal (f7x2-add '(3 4) (f7x2-zero)) '(3 4))
+    (equal (f7x2-add (f7x2-zero) nil) (f7x2-fix nil))
+    (equal (f7x2-add (f7x2-zero) '(5)) (f7x2-fix '(5)))
+    (equal (f7x2-add '(1 2 0) (f7x2-zero)) (f7x2-fix '(1 2 0)))
+    (equal (f7x2-add (f7x2-zero) '(1 2 3 4))
+           (f7x2-fix '(1 2 3 4)))
+    (equal (f7x2-add '(-1 9) (f7x2-zero)) (f7x2-fix '(-1 9)))
+    (equal (f7x2-add (f7x2-zero) '(bad 9)) (f7x2-fix '(bad 9)))
+    (equal (f7x2-add '(1 2 . bad) (f7x2-zero))
+           (f7x2-fix '(1 2 . bad)))
+    (equal (f7x2-add (f7x2-zero) 'bad) (f7x2-fix 'bad))
+    (equal (f7x2-add (f7x2-zero) (f7x2-zero)) (f7x2-zero))
+    (equal (f7x2-add (f7x2-one) (f7x2-zero)) (f7x2-one)))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (disable f7x2-add f7x2-fix)))))
+
 (local
  (defthm f7x2-multiplication-coefficient-formula-regressions
    (and
