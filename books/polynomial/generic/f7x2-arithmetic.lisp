@@ -1588,6 +1588,84 @@
    :rule-classes nil
    :hints (("Goal" :in-theory (enable f7x2-add-commutative)))))
 
+; Addition associativity is likewise reconstructed through the two public
+; coefficient projections.  Its ordinary rewrite orientation removes one
+; left-nested addition, while the permutative commutativity rule above remains
+; governed by ACL2's loop stopper.
+(defthm f7x2-add-associative
+  (equal (f7x2-add (f7x2-add first second) third)
+         (f7x2-add first (f7x2-add second third)))
+  :hints
+  (("Goal"
+    :use ((:instance f7x2-coefficient-extensionality
+                     (first (f7x2-add (f7x2-add first second) third))
+                     (second (f7x2-add first (f7x2-add second third))))
+          (:instance f7-add-associative-for-polynomial-structure
+                     (x (f7x2-constant-coefficient first))
+                     (y (f7x2-constant-coefficient second))
+                     (z (f7x2-constant-coefficient third)))
+          (:instance f7-add-associative-for-polynomial-structure
+                     (x (f7x2-linear-coefficient first))
+                     (y (f7x2-linear-coefficient second))
+                     (z (f7x2-linear-coefficient third))))
+    :in-theory
+    (disable f7x2-add f7x2-fix f7x2-add-commutative
+             f7-add-associative-for-polynomial-structure
+             f7-add-commutative-for-polynomial-structure
+             gfield::f7-add gfield::f7-fix
+             f7-poly-add f7-raw-add f7-poly-neg f7-raw-neg
+             f7-poly-sub f7-poly-mul f7-raw-mul f7-raw-scale
+             f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+             f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+             f7-poly-division-step f7-poly-division-step-core))))
+
+(local
+ (defthm f7x2-add-associative-regressions
+   (and
+    (equal (f7x2-add (f7x2-add (f7x2-zero) (f7x2-one)) (f7x2-zero))
+           (f7x2-add (f7x2-zero) (f7x2-add (f7x2-one) (f7x2-zero))))
+    (equal (f7x2-add (f7x2-add '(1) '(2)) '(3))
+           (f7x2-add '(1) (f7x2-add '(2) '(3))))
+    (equal (f7x2-add (f7x2-add '(3) '(1 4)) '(2))
+           (f7x2-add '(3) (f7x2-add '(1 4) '(2))))
+    (equal (f7x2-add (f7x2-add '(1 2) '(3 4)) '(5 6))
+           (f7x2-add '(1 2) (f7x2-add '(3 4) '(5 6))))
+    (equal (f7x2-add (f7x2-add '(3 4) '(3 4)) '(3 4))
+           (f7x2-add '(3 4) (f7x2-add '(3 4) '(3 4))))
+    (equal (f7x2-add (f7x2-add nil nil) '(1 2))
+           (f7x2-add nil (f7x2-add nil '(1 2))))
+    (equal (f7x2-add (f7x2-add '(1 2 0) '(3)) '(4 5 6 7))
+           (f7x2-add '(1 2 0) (f7x2-add '(3) '(4 5 6 7))))
+    (equal (f7x2-add (f7x2-add '(-1 9) '(8 -3)) '(15 22))
+           (f7x2-add '(-1 9) (f7x2-add '(8 -3) '(15 22))))
+    (equal (f7x2-add (f7x2-add '(1/2 -3/2) '(2/3 5/4)) '(7/3 -2/5))
+           (f7x2-add '(1/2 -3/2) (f7x2-add '(2/3 5/4) '(7/3 -2/5))))
+    (equal (f7x2-add (f7x2-add 'bad #\A) "atom")
+           (f7x2-add 'bad (f7x2-add #\A "atom")))
+    (equal (f7x2-add (f7x2-add '(bad (also bad)) '(1 2)) '(#\Z symbol))
+           (f7x2-add '(bad (also bad)) (f7x2-add '(1 2) '(#\Z symbol))))
+    (equal (f7x2-add (f7x2-add '(1 2 . bad) '(3 4)) '(5 . tail))
+           (f7x2-add '(1 2 . bad) (f7x2-add '(3 4) '(5 . tail))))
+    (equal (f7x2-add (f7x2-add (f7x2-fix '(10 -3 8))
+                                (f7x2-fix '(1 9)))
+                      (f7x2-fix '(4 5)))
+           (f7x2-add (f7x2-fix '(10 -3 8))
+                     (f7x2-add (f7x2-fix '(1 9)) (f7x2-fix '(4 5)))))
+    (equal (f7x2-add (f7x2-add '(10 -3 8) '(1 2)) 'bad)
+           (f7x2-add '(10 -3 8) (f7x2-add '(1 2) 'bad)))
+    (equal (f7x2-add (f7x2-add 'bad '(1 2)) '(10 -3 8))
+           (f7x2-add 'bad (f7x2-add '(1 2) '(10 -3 8))))
+    (equal (f7x2-add (f7x2-add '(1 2) 'bad) '(3 4))
+           (f7x2-add '(1 2) (f7x2-add 'bad '(3 4))))
+    (equal (f7x2-add (f7x2-add (f7x2-zero) '(2 3)) '(4 5))
+           (f7x2-add (f7x2-zero) (f7x2-add '(2 3) '(4 5))))
+    (equal (f7x2-add (f7x2-add '(2 3) (f7x2-neg '(2 3))) '(4 5))
+           (f7x2-add '(2 3) (f7x2-add (f7x2-neg '(2 3)) '(4 5))))
+    (equal (f7x2-add (f7x2-add '(4 5) '(2 3)) (f7x2-neg '(2 3)))
+           (f7x2-add '(4 5) (f7x2-add '(2 3) (f7x2-neg '(2 3))))))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (enable f7x2-add-associative)))))
+
 (defthm f7x2-mul-one-left
   (equal (f7x2-mul (f7x2-one) value)
          (f7x2-fix value))
