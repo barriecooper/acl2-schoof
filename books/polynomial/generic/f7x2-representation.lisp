@@ -9,8 +9,17 @@
 (defun f7x2-element-p (x)
   (equal (f7x2-fix x) x))
 
+; Nullary carrier constants follow the GFIELD and concrete F7 interfaces.
+; Dense-polynomial normalization represents zero by NIL and one by the
+; singleton containing the concrete coefficient-field one.
+(defun f7x2-zero () nil)
+
+(defun f7x2-one () (list (gfield::f7-one)))
+
 (verify-guards f7x2-fix)
 (verify-guards f7x2-element-p)
+(verify-guards f7x2-zero)
+(verify-guards f7x2-one)
 
 ; The concrete division book already certifies canonical output and its final
 ; degree bound.  These small local bridges specialize those facts to the sole
@@ -165,6 +174,50 @@
 (defthm f7-element-p-of-f7x2-linear-coefficient
   (gfield::f7-element-p (f7x2-linear-coefficient x))
   :hints (("Goal" :in-theory (enable f7x2-linear-coefficient))))
+
+; Canonical zero/one interface.  Each rewrite strictly removes either the
+; outer carrier fixer or a projection; none expands polynomial arithmetic.
+(defthm f7x2-fix-of-zero
+  (equal (f7x2-fix (f7x2-zero)) (f7x2-zero))
+  :hints (("Goal" :in-theory (enable f7x2-zero f7x2-fix))))
+
+(defthm f7x2-fix-of-one
+  (equal (f7x2-fix (f7x2-one)) (f7x2-one))
+  :hints (("Goal" :in-theory (enable f7x2-one f7x2-fix))))
+
+(defthm f7x2-element-p-of-zero
+  (f7x2-element-p (f7x2-zero))
+  :hints (("Goal" :in-theory (e/d (f7x2-element-p)
+                                    (f7x2-zero f7x2-fix)))))
+
+(defthm f7x2-element-p-of-one
+  (f7x2-element-p (f7x2-one))
+  :hints (("Goal" :in-theory (e/d (f7x2-element-p)
+                                    (f7x2-one f7x2-fix)))))
+
+(defthm f7x2-constant-coefficient-of-zero
+  (equal (f7x2-constant-coefficient (f7x2-zero))
+         (gfield::f7-zero))
+  :hints (("Goal" :in-theory (enable f7x2-constant-coefficient
+                                     f7x2-zero gfield::f7-zero))))
+
+(defthm f7x2-linear-coefficient-of-zero
+  (equal (f7x2-linear-coefficient (f7x2-zero))
+         (gfield::f7-zero))
+  :hints (("Goal" :in-theory (enable f7x2-linear-coefficient
+                                     f7x2-zero gfield::f7-zero))))
+
+(defthm f7x2-constant-coefficient-of-one
+  (equal (f7x2-constant-coefficient (f7x2-one))
+         (gfield::f7-one))
+  :hints (("Goal" :in-theory (enable f7x2-constant-coefficient
+                                     f7x2-one gfield::f7-one))))
+
+(defthm f7x2-linear-coefficient-of-one
+  (equal (f7x2-linear-coefficient (f7x2-one))
+         (gfield::f7-zero))
+  :hints (("Goal" :in-theory (enable f7x2-linear-coefficient
+                                     f7x2-one gfield::f7-zero))))
 
 (defthm f7x2-constant-coefficient-of-fix
   (equal (f7x2-constant-coefficient (f7x2-fix x))
@@ -498,6 +551,38 @@
        (equal (f7x2-fix '(1 2 . bad)) (f7x2-fix '(1 2))))
   :rule-classes nil
   :hints (("Goal" :in-theory (enable f7x2-fix))))
+
+(defthm f7x2-zero-one-interface-regressions
+  (and (equal (f7x2-zero) nil)
+       (equal (f7x2-one) '(1))
+       (equal (f7x2-fix (f7x2-zero)) (f7x2-zero))
+       (equal (f7x2-fix (f7x2-one)) (f7x2-one))
+       (f7x2-element-p (f7x2-zero))
+       (f7x2-element-p (f7x2-one))
+       (equal (f7x2-constant-coefficient (f7x2-zero)) 0)
+       (equal (f7x2-linear-coefficient (f7x2-zero)) 0)
+       (equal (f7x2-constant-coefficient (f7x2-one)) 1)
+       (equal (f7x2-linear-coefficient (f7x2-one)) 0)
+       (equal (f7x2-fix '(0)) (f7x2-zero))
+       (equal (f7x2-fix '(0 0 0)) (f7x2-zero))
+       (equal (f7x2-fix '(1 0)) (f7x2-one))
+       (equal (f7x2-fix '(1 0 0 0)) (f7x2-one))
+       (equal (f7x2-fix '(8 7)) (f7x2-one))
+       (equal (f7-normalize
+               (list (f7x2-constant-coefficient (f7x2-zero))
+                     (f7x2-linear-coefficient (f7x2-zero))))
+              (f7x2-zero))
+       (equal (f7-normalize
+               (list (f7x2-constant-coefficient (f7x2-one))
+                     (f7x2-linear-coefficient (f7x2-one))))
+              (f7x2-one)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7x2-reconstruct-from-coefficients
+                            (value (f7x2-zero)))
+                 (:instance f7x2-reconstruct-from-coefficients
+                            (value (f7x2-one))))
+           :in-theory (enable f7x2-zero f7x2-one f7x2-fix))))
 
 (defthm f7x2-representation-regressions
   (and (equal (f7x2-fix nil) nil)
