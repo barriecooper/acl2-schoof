@@ -1389,6 +1389,113 @@
                             (second (f7x2-fix value))))
            :in-theory (disable f7x2-add f7x2-fix))))
 
+(defthm f7x2-mul-one-left
+  (equal (f7x2-mul (f7x2-one) value)
+         (f7x2-fix value))
+  :hints (("Goal"
+           :use ((:instance f7x2-coefficient-extensionality
+                            (first (f7x2-mul (f7x2-one) value))
+                            (second (f7x2-fix value)))
+                 (:instance f7x2-constant-coefficient-of-mul
+                            (first (f7x2-one)) (second value))
+                 (:instance f7x2-linear-coefficient-of-mul
+                            (first (f7x2-one)) (second value))
+                 (:instance gfield::f7-mul-one-left
+                            (x (f7x2-constant-coefficient value)))
+                 (:instance gfield::f7-mul-one-left
+                            (x (f7x2-linear-coefficient value))))
+           :in-theory (disable f7x2-mul f7x2-fix))))
+
+(defthm f7x2-mul-one-right
+  (equal (f7x2-mul value (f7x2-one))
+         (f7x2-fix value))
+  :hints (("Goal"
+           :use ((:instance f7x2-coefficient-extensionality
+                            (first (f7x2-mul value (f7x2-one)))
+                            (second (f7x2-fix value)))
+                 (:instance f7x2-constant-coefficient-of-mul
+                            (first value) (second (f7x2-one)))
+                 (:instance f7x2-linear-coefficient-of-mul
+                            (first value) (second (f7x2-one)))
+                 (:instance gfield::f7-mul-one-right
+                            (x (f7x2-constant-coefficient value)))
+                 (:instance gfield::f7-mul-one-right
+                            (x (f7x2-linear-coefficient value))))
+           :in-theory (disable f7x2-mul f7x2-fix))))
+
+(defthm f7x2-mul-zero-left
+  (equal (f7x2-mul (f7x2-zero) value)
+         (f7x2-zero))
+  :hints (("Goal"
+           :use ((:instance f7x2-coefficient-extensionality
+                            (first (f7x2-mul (f7x2-zero) value))
+                            (second (f7x2-zero)))
+                 (:instance f7x2-constant-coefficient-of-mul
+                            (first (f7x2-zero)) (second value))
+                 (:instance f7x2-linear-coefficient-of-mul
+                            (first (f7x2-zero)) (second value))
+                 (:instance gfield::f7-mul-zero-left
+                            (value (f7x2-constant-coefficient value)))
+                 (:instance gfield::f7-mul-zero-left
+                            (value (f7x2-linear-coefficient value))))
+           :in-theory (disable f7x2-mul f7x2-fix))))
+
+(defthm f7x2-mul-zero-right
+  (equal (f7x2-mul value (f7x2-zero))
+         (f7x2-zero))
+  :hints (("Goal"
+           :use ((:instance f7x2-coefficient-extensionality
+                            (first (f7x2-mul value (f7x2-zero)))
+                            (second (f7x2-zero)))
+                 (:instance f7x2-constant-coefficient-of-mul
+                            (first value) (second (f7x2-zero)))
+                 (:instance f7x2-linear-coefficient-of-mul
+                            (first value) (second (f7x2-zero)))
+                 (:instance gfield::f7-mul-zero-right
+                            (value (f7x2-constant-coefficient value)))
+                 (:instance gfield::f7-mul-zero-right
+                            (value (f7x2-linear-coefficient value))))
+           :in-theory (disable f7x2-mul f7x2-fix))))
+
+(local
+ (defthm f7x2-multiplicative-constant-regressions
+   (and
+    (equal (f7x2-mul (f7x2-one) (f7x2-zero))
+           (f7x2-fix (f7x2-zero)))
+    (equal (f7x2-mul (f7x2-one) (f7x2-one))
+           (f7x2-fix (f7x2-one)))
+    (equal (f7x2-mul (f7x2-one) '(5)) (f7x2-fix '(5)))
+    (equal (f7x2-mul '(3 4) (f7x2-one)) (f7x2-fix '(3 4)))
+    (equal (f7x2-mul (f7x2-one) nil) (f7x2-fix nil))
+    (equal (f7x2-mul '(1 2 0) (f7x2-one)) (f7x2-fix '(1 2 0)))
+    (equal (f7x2-mul (f7x2-one) '(1 2 3 4))
+           (f7x2-fix '(1 2 3 4)))
+    (equal (f7x2-mul '(-1 9) (f7x2-one)) (f7x2-fix '(-1 9)))
+    (equal (f7x2-mul (f7x2-one) '(1/2 3/4))
+           (f7x2-fix '(1/2 3/4)))
+    (equal (f7x2-mul 'bad (f7x2-one)) (f7x2-fix 'bad))
+    (equal (f7x2-mul (f7x2-one) '(bad 9)) (f7x2-fix '(bad 9)))
+    (equal (f7x2-mul '(1 2 . bad) (f7x2-one))
+           (f7x2-fix '(1 2 . bad)))
+    (equal (f7x2-mul (f7x2-one) (f7x2-fix '(10 -3 8)))
+           (f7x2-fix '(10 -3 8)))
+    (equal (f7x2-mul (f7x2-zero) (f7x2-zero)) (f7x2-zero))
+    (equal (f7x2-mul (f7x2-one) (f7x2-zero)) (f7x2-zero))
+    (equal (f7x2-mul (f7x2-zero) '(5)) (f7x2-zero))
+    (equal (f7x2-mul '(3 4) (f7x2-zero)) (f7x2-zero))
+    (equal (f7x2-mul (f7x2-zero) nil) (f7x2-zero))
+    (equal (f7x2-mul '(1 2 0) (f7x2-zero)) (f7x2-zero))
+    (equal (f7x2-mul (f7x2-zero) '(1 2 3 4)) (f7x2-zero))
+    (equal (f7x2-mul '(-1 9) (f7x2-zero)) (f7x2-zero))
+    (equal (f7x2-mul (f7x2-zero) '(1/2 3/4)) (f7x2-zero))
+    (equal (f7x2-mul 'bad (f7x2-zero)) (f7x2-zero))
+    (equal (f7x2-mul (f7x2-zero) '(bad 9)) (f7x2-zero))
+    (equal (f7x2-mul '(1 2 . bad) (f7x2-zero)) (f7x2-zero))
+    (equal (f7x2-mul (f7x2-zero) (f7x2-fix '(10 -3 8)))
+           (f7x2-zero)))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (disable f7x2-mul f7x2-fix)))))
+
 (local
  (defthm f7x2-add-zero-regressions
    (and
