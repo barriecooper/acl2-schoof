@@ -1418,6 +1418,65 @@
                             (x (f7x2-linear-coefficient value))))
            :in-theory (disable f7x2-add f7x2-neg f7x2-fix))))
 
+; Subtraction is used as addition to negation only as a local proof bridge.
+; Keeping this equality non-rewriting avoids globally expanding the smaller
+; F7X2-SUB term and lets the specialized rules below determine its normal
+; forms without overlap from a general subtraction rewrite.
+(local
+ (defthm f7x2-sub-as-add-neg
+   (equal (f7x2-sub first second)
+          (f7x2-add first (f7x2-neg second)))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7x2-coefficient-extensionality
+                             (first (f7x2-sub first second))
+                             (second (f7x2-add first (f7x2-neg second)))))
+            :in-theory (e/d (gfield::f7-sub)
+                            (f7x2-sub f7x2-add f7x2-neg f7x2-fix
+                             gfield::f7-add gfield::f7-neg))))))
+
+(local
+ (defthm f7x2-neg-zero
+   (equal (f7x2-neg (f7x2-zero)) (f7x2-zero))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7x2-coefficient-extensionality
+                             (first (f7x2-neg (f7x2-zero)))
+                             (second (f7x2-zero))))
+            :in-theory (disable f7x2-neg f7x2-fix)))))
+
+(defthm f7x2-sub-zero-right
+  (equal (f7x2-sub value (f7x2-zero))
+         (f7x2-fix value))
+  :hints (("Goal"
+           :use ((:instance f7x2-sub-as-add-neg
+                            (first value) (second (f7x2-zero)))
+                 (:instance f7x2-neg-zero)
+                 (:instance f7x2-add-zero-right))
+           :in-theory (disable f7x2-sub f7x2-add f7x2-neg f7x2-fix))))
+
+(defthm f7x2-sub-zero-left
+  (equal (f7x2-sub (f7x2-zero) value)
+         (f7x2-neg value))
+  :hints (("Goal"
+           :use ((:instance f7x2-sub-as-add-neg
+                            (first (f7x2-zero)) (second value))
+                 (:instance f7x2-add-zero-left
+                            (value (f7x2-neg value)))
+                 (:instance f7x2-fix-when-f7x2-element-p
+                            (x (f7x2-neg value)))
+                 (:instance f7x2-element-p-of-f7x2-neg))
+           :in-theory (disable f7x2-sub f7x2-add f7x2-neg f7x2-fix))))
+
+(defthm f7x2-sub-self
+  (equal (f7x2-sub value value)
+         (f7x2-zero))
+  :hints (("Goal"
+           :use ((:instance f7x2-sub-as-add-neg
+                            (first value) (second value))
+                 (:instance f7x2-add-inverse-right))
+           :in-theory (disable f7x2-sub f7x2-add f7x2-neg f7x2-fix))))
+
 (defthm f7x2-mul-one-left
   (equal (f7x2-mul (f7x2-one) value)
          (f7x2-fix value))
@@ -1580,6 +1639,61 @@
            (f7x2-zero)))
    :rule-classes nil
    :hints (("Goal" :in-theory (disable f7x2-add f7x2-neg f7x2-fix)))))
+
+(local
+ (defthm f7x2-subtraction-coherence-regressions
+   (and
+    ; Canonical zero, one, constants, and genuine linear values.
+    (equal (f7x2-sub (f7x2-zero) (f7x2-zero)) (f7x2-zero))
+    (equal (f7x2-sub (f7x2-one) (f7x2-zero)) (f7x2-fix (f7x2-one)))
+    (equal (f7x2-sub '(5) (f7x2-zero)) (f7x2-fix '(5)))
+    (equal (f7x2-sub '(3 4) (f7x2-zero)) (f7x2-fix '(3 4)))
+    ; NIL, trailing-zero, overlong, out-of-range, and rational inputs.
+    (equal (f7x2-sub nil (f7x2-zero)) (f7x2-fix nil))
+    (equal (f7x2-sub '(1 2 0) (f7x2-zero)) (f7x2-fix '(1 2 0)))
+    (equal (f7x2-sub '(1 2 3 4) (f7x2-zero)) (f7x2-fix '(1 2 3 4)))
+    (equal (f7x2-sub '(-1 9) (f7x2-zero)) (f7x2-fix '(-1 9)))
+    (equal (f7x2-sub '(1/2 3/4) (f7x2-zero)) (f7x2-fix '(1/2 3/4)))
+    ; Nonnumeric atoms, proper/improper malformed lists, and fixed inputs.
+    (equal (f7x2-sub 'bad (f7x2-zero)) (f7x2-fix 'bad))
+    (equal (f7x2-sub '(bad 9) (f7x2-zero)) (f7x2-fix '(bad 9)))
+    (equal (f7x2-sub '(1 2 . bad) (f7x2-zero)) (f7x2-fix '(1 2 . bad)))
+    (equal (f7x2-sub (f7x2-fix '(10 -3 8)) (f7x2-zero))
+           (f7x2-fix '(10 -3 8)))
+
+    (equal (f7x2-sub (f7x2-zero) (f7x2-zero)) (f7x2-neg (f7x2-zero)))
+    (equal (f7x2-sub (f7x2-zero) (f7x2-one)) (f7x2-neg (f7x2-one)))
+    (equal (f7x2-sub (f7x2-zero) '(5)) (f7x2-neg '(5)))
+    (equal (f7x2-sub (f7x2-zero) '(3 4)) (f7x2-neg '(3 4)))
+    (equal (f7x2-sub (f7x2-zero) nil) (f7x2-neg nil))
+    (equal (f7x2-sub (f7x2-zero) '(1 2 0)) (f7x2-neg '(1 2 0)))
+    (equal (f7x2-sub (f7x2-zero) '(1 2 3 4)) (f7x2-neg '(1 2 3 4)))
+    (equal (f7x2-sub (f7x2-zero) '(-1 9)) (f7x2-neg '(-1 9)))
+    (equal (f7x2-sub (f7x2-zero) '(1/2 3/4)) (f7x2-neg '(1/2 3/4)))
+    (equal (f7x2-sub (f7x2-zero) 'bad) (f7x2-neg 'bad))
+    (equal (f7x2-sub (f7x2-zero) '(bad 9)) (f7x2-neg '(bad 9)))
+    (equal (f7x2-sub (f7x2-zero) '(1 2 . bad)) (f7x2-neg '(1 2 . bad)))
+    (equal (f7x2-sub (f7x2-zero) (f7x2-fix '(10 -3 8)))
+           (f7x2-neg (f7x2-fix '(10 -3 8))))
+
+    (equal (f7x2-sub (f7x2-zero) (f7x2-zero)) (f7x2-zero))
+    (equal (f7x2-sub (f7x2-one) (f7x2-one)) (f7x2-zero))
+    (equal (f7x2-sub '(5) '(5)) (f7x2-zero))
+    (equal (f7x2-sub '(3 4) '(3 4)) (f7x2-zero))
+    (equal (f7x2-sub nil nil) (f7x2-zero))
+    (equal (f7x2-sub '(1 2 0) '(1 2 0)) (f7x2-zero))
+    (equal (f7x2-sub '(1 2 3 4) '(1 2 3 4)) (f7x2-zero))
+    (equal (f7x2-sub '(-1 9) '(-1 9)) (f7x2-zero))
+    (equal (f7x2-sub '(1/2 3/4) '(1/2 3/4)) (f7x2-zero))
+    (equal (f7x2-sub 'bad 'bad) (f7x2-zero))
+    (equal (f7x2-sub '(bad 9) '(bad 9)) (f7x2-zero))
+    (equal (f7x2-sub '(1 2 . bad) '(1 2 . bad)) (f7x2-zero))
+    (equal (f7x2-sub (f7x2-fix '(10 -3 8))
+                      (f7x2-fix '(10 -3 8)))
+           (f7x2-zero)))
+   :rule-classes nil
+   :hints (("Goal" :in-theory
+            (disable f7x2-sub f7x2-add f7x2-neg f7x2-fix)))))
 
 (local
  (defthm f7x2-multiplication-coefficient-formula-regressions
