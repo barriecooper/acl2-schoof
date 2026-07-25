@@ -429,6 +429,155 @@
                 (f7-poly-add f7-raw-add gfield::f7-add
                              gfield::f7-fix)))))
 
+; These bounded negation and subtraction calculations are internal polynomial
+; bridges for the later F7X2 coefficient proofs.  They deliberately stop below
+; the public carrier operations and keep all reduction and division machinery
+; closed.
+(local
+ (defthm f7-element-p-of-f7-neg-for-bounded-negation
+   (gfield::f7-element-p (gfield::f7-neg x))
+   :hints (("Goal" :in-theory (enable gfield::f7-element-p
+                                      gfield::f7-neg
+                                      gfield::f7-fix)))))
+
+(local
+ (defthm f7-poly-neg-of-normalized-two-coefficients
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b))
+            (equal (f7-poly-neg (f7-normalize (list a b)))
+                   (f7-normalize
+                    (list (gfield::f7-neg a)
+                          (gfield::f7-neg b)))))
+   :rule-classes nil
+   :hints (("Goal"
+            :cases ((equal b 0))
+            :in-theory
+            (e/d (f7-poly-neg f7-raw-neg f7-normalize
+                              f7-fix-coefficients f7-trim-trailing-zeros)
+                 (f7-poly-add f7-raw-add f7-poly-remainder
+                              f7-poly-divmod f7-poly-divmod-core
+                              f7-poly-division-step
+                              f7-poly-division-step-core))))))
+
+(local
+ (defthm f7-constant-projection-of-neg-of-normalized-two-coefficients
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b))
+            (equal
+             (gfield::f7-fix
+              (car (f7-poly-neg (f7-normalize (list a b)))))
+             (gfield::f7-neg a)))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-poly-neg-of-normalized-two-coefficients)
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation
+                             (x a)))
+            :in-theory
+            (e/d (f7-normalize f7-fix-coefficients
+                               f7-trim-trailing-zeros)
+                 (f7-poly-neg f7-raw-neg gfield::f7-neg
+                              gfield::f7-fix))))))
+
+(local
+ (defthm f7-linear-projection-of-neg-of-normalized-two-coefficients
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b))
+            (equal
+             (gfield::f7-fix
+              (cadr (f7-poly-neg (f7-normalize (list a b)))))
+             (gfield::f7-neg b)))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-poly-neg-of-normalized-two-coefficients)
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation
+                             (x b)))
+            :in-theory
+            (e/d (f7-normalize f7-fix-coefficients
+                               f7-trim-trailing-zeros)
+                 (f7-poly-neg f7-raw-neg gfield::f7-neg
+                              gfield::f7-fix))))))
+
+(local
+ (defthm f7-poly-sub-of-normalized-two-coefficients
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b)
+                 (gfield::f7-element-p c)
+                 (gfield::f7-element-p d))
+            (equal (f7-poly-sub (f7-normalize (list a b))
+                                (f7-normalize (list c d)))
+                   (f7-normalize
+                    (list (gfield::f7-sub a c)
+                          (gfield::f7-sub b d)))))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-poly-sub-definition
+                             (x (f7-normalize (list a b)))
+                             (y (f7-normalize (list c d))))
+                  (:instance f7-poly-neg-of-normalized-two-coefficients
+                             (a c) (b d))
+                  (:instance f7-poly-add-of-normalized-two-coefficients
+                             (c (gfield::f7-neg c))
+                             (d (gfield::f7-neg d)))
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation
+                             (x c))
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation
+                             (x d)))
+            :in-theory
+            (e/d (gfield::f7-sub)
+                 (f7-poly-sub f7-poly-neg f7-raw-neg
+                              f7-poly-add f7-raw-add f7-normalize
+                              f7-fix-coefficients f7-trim-trailing-zeros
+                              f7-poly-remainder f7-poly-divmod
+                              f7-poly-divmod-core f7-poly-division-step
+                              f7-poly-division-step-core))))))
+
+
+(local
+ (defthm f7-constant-projection-of-sub-of-normalized-two-coefficients
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b)
+                 (gfield::f7-element-p c)
+                 (gfield::f7-element-p d))
+            (equal
+             (gfield::f7-fix
+              (car (f7-poly-sub (f7-normalize (list a b))
+                                (f7-normalize (list c d)))))
+             (gfield::f7-sub a c)))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-poly-sub-of-normalized-two-coefficients))
+            :in-theory
+            (e/d (f7-normalize f7-fix-coefficients
+                               f7-trim-trailing-zeros
+                               gfield::f7-sub)
+                 (f7-poly-sub f7-poly-neg f7-raw-neg
+                              f7-poly-add f7-raw-add
+                              gfield::f7-add gfield::f7-neg
+                              gfield::f7-fix))))))
+
+(local
+ (defthm f7-linear-projection-of-sub-of-normalized-two-coefficients
+   (implies (and (gfield::f7-element-p a)
+                 (gfield::f7-element-p b)
+                 (gfield::f7-element-p c)
+                 (gfield::f7-element-p d))
+            (equal
+             (gfield::f7-fix
+              (cadr (f7-poly-sub (f7-normalize (list a b))
+                                 (f7-normalize (list c d)))))
+             (gfield::f7-sub b d)))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-poly-sub-of-normalized-two-coefficients))
+            :in-theory
+            (e/d (f7-normalize f7-fix-coefficients
+                               f7-trim-trailing-zeros
+                               gfield::f7-sub)
+                 (f7-poly-sub f7-poly-neg f7-raw-neg
+                              f7-poly-add f7-raw-add
+                              gfield::f7-add gfield::f7-neg
+                              gfield::f7-fix))))))
+
 (local
  (defthm f7-normalize-two-is-normalize-three-with-zero
    (implies (and (gfield::f7-element-p a)
@@ -705,6 +854,67 @@
                        (f7-normalize '(3 4)))
           '(4 4)))
   :rule-classes nil)
+
+(defthm f7-bounded-normalized-negation-and-subtraction-regressions
+  (and
+   (equal (f7-poly-neg (f7-normalize '(1 2))) '(6 5))
+   (equal (f7-poly-neg (f7-normalize '(3 0))) '(4))
+   (equal (f7-poly-neg (f7-normalize '(0 0))) nil)
+   (equal (f7-poly-neg (f7-normalize '(1 0))) '(6))
+   (equal (f7-poly-neg (f7-normalize '(0 2))) '(0 5))
+   (equal (f7-poly-sub (f7-normalize '(1 2))
+                       (f7-normalize '(3 4)))
+          '(5 5))
+   (equal (f7-poly-sub (f7-normalize '(1 2))
+                       (f7-normalize '(1 2)))
+          nil)
+   (equal (f7-poly-sub (f7-normalize '(1 2))
+                       (f7-normalize '(3 2)))
+          '(5))
+   (equal (f7-poly-sub (f7-normalize '(1 2))
+                       (f7-normalize '(1 4)))
+          '(0 5))
+   (equal (f7-poly-sub (f7-normalize '(1 0))
+                       (f7-normalize '(3 4)))
+          '(5 3))
+   (equal (f7-poly-sub (f7-normalize '(1 2))
+                       (f7-normalize '(3 0)))
+          '(5 2))
+   (equal (f7-poly-sub (f7-normalize '(0 0))
+                       (f7-normalize '(3 4)))
+          '(4 3))
+   (equal (f7-poly-sub (f7-normalize '(1 2))
+                       (f7-normalize '(0 0)))
+          '(1 2)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance f7-poly-neg-of-normalized-two-coefficients (a 1) (b 2))
+          (:instance f7-poly-neg-of-normalized-two-coefficients (a 3) (b 0))
+          (:instance f7-poly-neg-of-normalized-two-coefficients (a 0) (b 0))
+          (:instance f7-poly-neg-of-normalized-two-coefficients (a 1) (b 0))
+          (:instance f7-poly-neg-of-normalized-two-coefficients (a 0) (b 2))
+          (:instance f7-poly-sub-of-normalized-two-coefficients
+                     (a 1) (b 2) (c 3) (d 4))
+          (:instance f7-poly-sub-of-normalized-two-coefficients
+                     (a 1) (b 2) (c 1) (d 2))
+          (:instance f7-poly-sub-of-normalized-two-coefficients
+                     (a 1) (b 2) (c 3) (d 2))
+          (:instance f7-poly-sub-of-normalized-two-coefficients
+                     (a 1) (b 2) (c 1) (d 4))
+          (:instance f7-poly-sub-of-normalized-two-coefficients
+                     (a 1) (b 0) (c 3) (d 4))
+          (:instance f7-poly-sub-of-normalized-two-coefficients
+                     (a 1) (b 2) (c 3) (d 0))
+          (:instance f7-poly-sub-of-normalized-two-coefficients
+                     (a 0) (b 0) (c 3) (d 4))
+          (:instance f7-poly-sub-of-normalized-two-coefficients
+                     (a 1) (b 2) (c 0) (d 0)))
+    :in-theory
+    (disable f7-poly-neg f7-raw-neg f7-poly-sub
+             f7-poly-add f7-raw-add f7-poly-remainder
+             f7-poly-divmod f7-poly-divmod-core
+             f7-poly-division-step f7-poly-division-step-core))))
 
 
 (assert-event
