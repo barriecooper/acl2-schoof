@@ -13,6 +13,249 @@
 (defun f7x2-mul (first second)
   (f7x2-fix (f7-poly-mul first second)))
 
+; The generic reduction package already proves that operation followed by
+; remainder is invariant under replacing every operand by its remainder.  The
+; following concrete specializations are kept local: the public interface
+; below names the presentation-specific fixer rather than exposing the
+; generic quotient machinery.
+(local
+ (defthm f7-poly-reduced-add-of-remainders-for-f7x2
+   (equal (f7-poly-remainder
+           (f7-poly-add (f7-poly-remainder left modulus)
+                        (f7-poly-remainder right modulus)) modulus)
+          (f7-poly-remainder (f7-poly-add left right) modulus))
+   :rule-classes nil
+   :hints (("Goal" :use ((:functional-instance
+                         poly-reduced-add-of-remainders
+                         (gfield::field-element-p gfield::f7-element-p)
+                         (gfield::field-fix gfield::f7-fix)
+                         (gfield::field-zero gfield::f7-zero)
+                         (gfield::field-one gfield::f7-one)
+                         (gfield::field-add gfield::f7-add)
+                         (gfield::field-mul gfield::f7-mul)
+                         (gfield::field-neg gfield::f7-neg)
+                         (gfield::field-inv gfield::f7-inv)
+                         (gfield::field-div gfield::f7-div)
+                         (fix-coefficients f7-fix-coefficients)
+                         (trim-trailing-zeros f7-trim-trailing-zeros)
+                         (normalize f7-normalize)
+                         (coefficient-list-p f7-coefficient-list-p)
+                         (polynomial-p f7-polynomial-p)
+                         (canonical-polynomial-p f7-canonical-polynomial-p)
+                         (raw-add f7-raw-add) (poly-add f7-poly-add)
+                         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg)
+                         (poly-sub f7-poly-sub)
+                         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+                         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+                         (zero-prefix f7-zero-prefix)
+                         (poly-shift f7-poly-shift) (monomial f7-monomial)
+                         (poly-degree f7-poly-degree)
+                         (poly-leading-coefficient f7-poly-leading-coefficient)
+                         (poly-division-step-core f7-poly-division-step-core)
+                         (poly-division-step f7-poly-division-step)
+                         (poly-division-step-term f7-poly-division-step-term)
+                         (poly-division-step-next f7-poly-division-step-next)
+                         (poly-divmod-core f7-poly-divmod-core)
+                         (poly-divmod f7-poly-divmod)
+                         (poly-remainder f7-poly-remainder)
+                         (poly-reduced-add f7-poly-reduced-add)))
+            :in-theory (enable f7-poly-reduced-add))
+           ("Subgoal 29.2" :use gfield::f7-mul-inverse-right)
+           ("Subgoal 26.9" :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 26.4" :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 25.11" :use ((:instance f7-add-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 25.6" :use ((:instance f7-add-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 22.2.1" :use gfield::f7-element-p-of-f7-fix
+            :in-theory (enable gfield::f7-fix gfield::f7-element-p))
+           ("Subgoal 22.2.1'''" :in-theory (enable mod))
+           ("Subgoal 22.2.1'" :in-theory (enable mod))
+           ("Subgoal 21.2.1'" :in-theory (enable mod))
+           ("Subgoal 9.9.1'" :use ((:instance f7-poly-divmod-core)))
+           ("Subgoal 6.9.1'" :use ((:instance f7-poly-divmod-core)))
+           ("Subgoal 2.3'" :use f7-trim-change-implies-last-zero-for-divmod-instantiation)
+           ("Subgoal 2.1" :use ((:instance f7-canonical-polynomial-p-implies-last-nonzero (p xs))))
+           ("Subgoal 8.2.1'" :in-theory (enable mod))))
+ )
+
+
+(local
+ (defthm f7-poly-reduced-neg-of-remainder-for-f7x2
+   (equal (f7-poly-remainder
+           (f7-poly-neg (f7-poly-remainder polynomial modulus)) modulus)
+          (f7-poly-remainder (f7-poly-neg polynomial) modulus))
+   :rule-classes nil
+   :hints (("Goal" :use ((:functional-instance
+                         poly-reduced-neg-of-remainder
+                         (gfield::field-element-p gfield::f7-element-p)
+                         (gfield::field-fix gfield::f7-fix)
+                         (gfield::field-zero gfield::f7-zero)
+                         (gfield::field-one gfield::f7-one)
+                         (gfield::field-add gfield::f7-add)
+                         (gfield::field-mul gfield::f7-mul)
+                         (gfield::field-neg gfield::f7-neg)
+                         (gfield::field-inv gfield::f7-inv)
+                         (gfield::field-div gfield::f7-div)
+                         (fix-coefficients f7-fix-coefficients)
+                         (trim-trailing-zeros f7-trim-trailing-zeros)
+                         (normalize f7-normalize)
+                         (coefficient-list-p f7-coefficient-list-p)
+                         (polynomial-p f7-polynomial-p)
+                         (canonical-polynomial-p f7-canonical-polynomial-p)
+                         (raw-add f7-raw-add) (poly-add f7-poly-add)
+                         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg)
+                         (poly-sub f7-poly-sub)
+                         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+                         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+                         (zero-prefix f7-zero-prefix)
+                         (poly-shift f7-poly-shift) (monomial f7-monomial)
+                         (poly-degree f7-poly-degree)
+                         (poly-leading-coefficient f7-poly-leading-coefficient)
+                         (poly-division-step-core f7-poly-division-step-core)
+                         (poly-division-step f7-poly-division-step)
+                         (poly-division-step-term f7-poly-division-step-term)
+                         (poly-division-step-next f7-poly-division-step-next)
+                         (poly-divmod-core f7-poly-divmod-core)
+                         (poly-divmod f7-poly-divmod)
+                         (poly-remainder f7-poly-remainder)
+                         (poly-reduced-neg f7-poly-reduced-neg)))
+            :in-theory (enable f7-poly-reduced-neg))
+           ("Subgoal 29.2" :use gfield::f7-mul-inverse-right)
+           ("Subgoal 26.9" :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 26.4" :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 25.11" :use ((:instance f7-add-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 25.6" :use ((:instance f7-add-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 22.2.1" :use gfield::f7-element-p-of-f7-fix
+            :in-theory (enable gfield::f7-fix gfield::f7-element-p))
+           ("Subgoal 22.2.1'''" :in-theory (enable mod))
+           ("Subgoal 22.2.1'" :in-theory (enable mod))
+           ("Subgoal 21.2.1'" :in-theory (enable mod))
+           ("Subgoal 9.9.1'" :use ((:instance f7-poly-divmod-core)))
+           ("Subgoal 6.9.1'" :use ((:instance f7-poly-divmod-core)))
+           ("Subgoal 2.3'" :use f7-trim-change-implies-last-zero-for-divmod-instantiation)
+           ("Subgoal 2.1" :use ((:instance f7-canonical-polynomial-p-implies-last-nonzero (p xs))))
+           ("Subgoal 8.2.1'" :in-theory (enable mod))))
+ )
+
+
+(local
+ (defthm f7-poly-reduced-sub-of-remainders-for-f7x2
+   (equal (f7-poly-remainder
+           (f7-poly-sub (f7-poly-remainder left modulus)
+                        (f7-poly-remainder right modulus)) modulus)
+          (f7-poly-remainder (f7-poly-sub left right) modulus))
+   :rule-classes nil
+   :hints (("Goal" :use ((:functional-instance
+                         poly-reduced-sub-of-remainders
+                         (gfield::field-element-p gfield::f7-element-p)
+                         (gfield::field-fix gfield::f7-fix)
+                         (gfield::field-zero gfield::f7-zero)
+                         (gfield::field-one gfield::f7-one)
+                         (gfield::field-add gfield::f7-add)
+                         (gfield::field-mul gfield::f7-mul)
+                         (gfield::field-neg gfield::f7-neg)
+                         (gfield::field-inv gfield::f7-inv)
+                         (gfield::field-div gfield::f7-div)
+                         (fix-coefficients f7-fix-coefficients)
+                         (trim-trailing-zeros f7-trim-trailing-zeros)
+                         (normalize f7-normalize)
+                         (coefficient-list-p f7-coefficient-list-p)
+                         (polynomial-p f7-polynomial-p)
+                         (canonical-polynomial-p f7-canonical-polynomial-p)
+                         (raw-add f7-raw-add) (poly-add f7-poly-add)
+                         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg)
+                         (poly-sub f7-poly-sub)
+                         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+                         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+                         (zero-prefix f7-zero-prefix)
+                         (poly-shift f7-poly-shift) (monomial f7-monomial)
+                         (poly-degree f7-poly-degree)
+                         (poly-leading-coefficient f7-poly-leading-coefficient)
+                         (poly-division-step-core f7-poly-division-step-core)
+                         (poly-division-step f7-poly-division-step)
+                         (poly-division-step-term f7-poly-division-step-term)
+                         (poly-division-step-next f7-poly-division-step-next)
+                         (poly-divmod-core f7-poly-divmod-core)
+                         (poly-divmod f7-poly-divmod)
+                         (poly-remainder f7-poly-remainder)
+                         (poly-reduced-sub f7-poly-reduced-sub)))
+            :in-theory (enable f7-poly-reduced-sub))
+           ("Subgoal 29.2" :use gfield::f7-mul-inverse-right)
+           ("Subgoal 26.9" :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 26.4" :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 25.11" :use ((:instance f7-add-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 25.6" :use ((:instance f7-add-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 22.2.1" :use gfield::f7-element-p-of-f7-fix
+            :in-theory (enable gfield::f7-fix gfield::f7-element-p))
+           ("Subgoal 22.2.1'''" :in-theory (enable mod))
+           ("Subgoal 22.2.1'" :in-theory (enable mod))
+           ("Subgoal 21.2.1'" :in-theory (enable mod))
+           ("Subgoal 9.9.1'" :use ((:instance f7-poly-divmod-core)))
+           ("Subgoal 6.9.1'" :use ((:instance f7-poly-divmod-core)))
+           ("Subgoal 2.3'" :use f7-trim-change-implies-last-zero-for-divmod-instantiation)
+           ("Subgoal 2.1" :use ((:instance f7-canonical-polynomial-p-implies-last-nonzero (p xs))))
+           ("Subgoal 8.2.1'" :in-theory (enable mod))))
+ )
+
+
+(local
+ (defthm f7-poly-reduced-mul-of-remainders-for-f7x2
+   (equal (f7-poly-remainder
+           (f7-poly-mul (f7-poly-remainder left modulus)
+                        (f7-poly-remainder right modulus)) modulus)
+          (f7-poly-remainder (f7-poly-mul left right) modulus))
+   :rule-classes nil
+   :hints (("Goal" :use ((:functional-instance
+                         poly-reduced-mul-of-remainders
+                         (gfield::field-element-p gfield::f7-element-p)
+                         (gfield::field-fix gfield::f7-fix)
+                         (gfield::field-zero gfield::f7-zero)
+                         (gfield::field-one gfield::f7-one)
+                         (gfield::field-add gfield::f7-add)
+                         (gfield::field-mul gfield::f7-mul)
+                         (gfield::field-neg gfield::f7-neg)
+                         (gfield::field-inv gfield::f7-inv)
+                         (gfield::field-div gfield::f7-div)
+                         (fix-coefficients f7-fix-coefficients)
+                         (trim-trailing-zeros f7-trim-trailing-zeros)
+                         (normalize f7-normalize)
+                         (coefficient-list-p f7-coefficient-list-p)
+                         (polynomial-p f7-polynomial-p)
+                         (canonical-polynomial-p f7-canonical-polynomial-p)
+                         (raw-add f7-raw-add) (poly-add f7-poly-add)
+                         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg)
+                         (poly-sub f7-poly-sub)
+                         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+                         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+                         (zero-prefix f7-zero-prefix)
+                         (poly-shift f7-poly-shift) (monomial f7-monomial)
+                         (poly-degree f7-poly-degree)
+                         (poly-leading-coefficient f7-poly-leading-coefficient)
+                         (poly-division-step-core f7-poly-division-step-core)
+                         (poly-division-step f7-poly-division-step)
+                         (poly-division-step-term f7-poly-division-step-term)
+                         (poly-division-step-next f7-poly-division-step-next)
+                         (poly-divmod-core f7-poly-divmod-core)
+                         (poly-divmod f7-poly-divmod)
+                         (poly-remainder f7-poly-remainder)
+                         (poly-reduced-mul f7-poly-reduced-mul)))
+            :in-theory (enable f7-poly-reduced-mul))
+           ("Subgoal 29.2" :use gfield::f7-mul-inverse-right)
+           ("Subgoal 26.9" :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 26.4" :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 25.11" :use ((:instance f7-add-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 25.6" :use ((:instance f7-add-fixed-congruence-for-divmod-instantiation (x1 gfield::x1) (x2 gfield::x2) (y1 gfield::y1) (y2 gfield::y2))))
+           ("Subgoal 22.2.1" :use gfield::f7-element-p-of-f7-fix
+            :in-theory (enable gfield::f7-fix gfield::f7-element-p))
+           ("Subgoal 22.2.1'''" :in-theory (enable mod))
+           ("Subgoal 22.2.1'" :in-theory (enable mod))
+           ("Subgoal 21.2.1'" :in-theory (enable mod))
+           ("Subgoal 9.9.1'" :use ((:instance f7-poly-divmod-core)))
+           ("Subgoal 6.9.1'" :use ((:instance f7-poly-divmod-core)))
+           ("Subgoal 2.3'" :use f7-trim-change-implies-last-zero-for-divmod-instantiation)
+           ("Subgoal 2.1" :use ((:instance f7-canonical-polynomial-p-implies-last-nonzero (p xs))))
+           ("Subgoal 8.2.1'" :in-theory (enable mod))))
+ )
+
 
 (verify-guards f7x2-add
   :hints (("Goal" :in-theory (enable f7x2-add))))
@@ -22,6 +265,73 @@
   :hints (("Goal" :in-theory (enable f7x2-sub))))
 (verify-guards f7x2-mul
   :hints (("Goal" :in-theory (enable f7x2-mul))))
+
+(defthm f7x2-add-of-fixes
+  (equal (f7x2-add (f7x2-fix first) (f7x2-fix second))
+         (f7x2-add first second))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance f7-poly-reduced-add-of-remainders-for-f7x2
+                                   (left first) (right second)
+                                   (modulus '(1 0 1))))
+           :in-theory (enable f7x2-add f7x2-fix))))
+(defthm f7x2-neg-of-fix
+  (equal (f7x2-neg (f7x2-fix value)) (f7x2-neg value))
+  :hints (("Goal" :use ((:instance f7-poly-reduced-neg-of-remainder-for-f7x2
+                                   (polynomial value) (modulus '(1 0 1))))
+           :in-theory (enable f7x2-neg f7x2-fix))))
+(defthm f7x2-sub-of-fixes
+  (equal (f7x2-sub (f7x2-fix first) (f7x2-fix second))
+         (f7x2-sub first second))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance f7-poly-reduced-sub-of-remainders-for-f7x2
+                                   (left first) (right second)
+                                   (modulus '(1 0 1))))
+           :in-theory (enable f7x2-sub f7x2-fix))))
+(defthm f7x2-mul-of-fixes
+  (equal (f7x2-mul (f7x2-fix first) (f7x2-fix second))
+         (f7x2-mul first second))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance f7-poly-reduced-mul-of-remainders-for-f7x2
+                                   (left first) (right second)
+                                   (modulus '(1 0 1))))
+           :in-theory (enable f7x2-mul f7x2-fix))))
+
+(defthm f7x2-add-of-fix-left
+  (equal (f7x2-add (f7x2-fix first) second) (f7x2-add first second))
+  :hints (("Goal" :use ((:instance f7x2-add-of-fixes)
+                         (:instance f7x2-add-of-fixes
+                                    (first (f7x2-fix first))))
+           :in-theory (disable f7x2-add f7x2-fix))))
+(defthm f7x2-add-of-fix-right
+  (equal (f7x2-add first (f7x2-fix second)) (f7x2-add first second))
+  :hints (("Goal" :use ((:instance f7x2-add-of-fixes)
+                         (:instance f7x2-add-of-fixes
+                                    (second (f7x2-fix second))))
+           :in-theory (disable f7x2-add f7x2-fix))))
+(defthm f7x2-sub-of-fix-left
+  (equal (f7x2-sub (f7x2-fix first) second) (f7x2-sub first second))
+  :hints (("Goal" :use ((:instance f7x2-sub-of-fixes)
+                         (:instance f7x2-sub-of-fixes
+                                    (first (f7x2-fix first))))
+           :in-theory (disable f7x2-sub f7x2-fix))))
+(defthm f7x2-sub-of-fix-right
+  (equal (f7x2-sub first (f7x2-fix second)) (f7x2-sub first second))
+  :hints (("Goal" :use ((:instance f7x2-sub-of-fixes)
+                         (:instance f7x2-sub-of-fixes
+                                    (second (f7x2-fix second))))
+           :in-theory (disable f7x2-sub f7x2-fix))))
+(defthm f7x2-mul-of-fix-left
+  (equal (f7x2-mul (f7x2-fix first) second) (f7x2-mul first second))
+  :hints (("Goal" :use ((:instance f7x2-mul-of-fixes)
+                         (:instance f7x2-mul-of-fixes
+                                    (first (f7x2-fix first))))
+           :in-theory (disable f7x2-mul f7x2-fix))))
+(defthm f7x2-mul-of-fix-right
+  (equal (f7x2-mul first (f7x2-fix second)) (f7x2-mul first second))
+  :hints (("Goal" :use ((:instance f7x2-mul-of-fixes)
+                         (:instance f7x2-mul-of-fixes
+                                    (second (f7x2-fix second))))
+           :in-theory (disable f7x2-mul f7x2-fix))))
 
 (defthm f7x2-element-p-of-f7x2-add
   (f7x2-element-p (f7x2-add first second))
@@ -40,6 +350,17 @@
   :hints (("Goal" :use ((:instance f7x2-element-p-of-f7x2-fix (x (f7-poly-mul first second))))
            :in-theory (e/d (f7x2-mul) (f7x2-element-p-of-f7x2-fix)))) )
 
+(local
+ (defthm f7x2-fix-reconstruct
+   (equal (f7x2-fix value)
+          (f7-normalize
+           (list (f7x2-constant-coefficient value)
+                 (f7x2-linear-coefficient value))))
+   :hints (("Goal"
+            :use ((:instance f7x2-reconstruct-from-coefficients
+                             (value (f7x2-fix value))))
+            :in-theory (disable f7x2-fix f7-normalize)))))
+
 
 (assert-event
  (and
@@ -48,6 +369,12 @@
   (equal (f7x2-add '(1 1) '(1 1)) '(2 2))
   (equal (f7x2-add '(8 1 0) '(1 7))
          (f7x2-add (f7x2-fix '(8 1 0)) (f7x2-fix '(1 7))))
+  (equal (f7x2-add '(1 0) '(2))
+         (f7x2-add (f7x2-fix '(1 0)) '(2)))
+  (equal (f7x2-sub '(8 -1) '(3))
+         (f7x2-sub (f7x2-fix '(8 -1)) '(3)))
+  (equal (f7x2-neg '(1 2 . bad))
+         (f7x2-neg (f7x2-fix '(1 2 . bad))))
   (equal (f7x2-neg '(1 1)) '(6 6))
   (equal (f7x2-sub '(1 1) '(1 1)) nil)
   (equal (f7x2-sub '(0 1) '(1)) '(6 1))

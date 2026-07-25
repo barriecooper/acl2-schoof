@@ -63,7 +63,7 @@ constant and linear F7 coefficients.  Equality of recognized carrier elements
 is ordinary ACL2 equality and is coefficient-extensional; arbitrary ACL2 inputs
 must first pass through `F7X2-FIX` before those projections compare their
 canonical representatives.  This is not a quotient-equivalence-class object,
-and its downstream arithmetic book adds only transparent reduced addition, negation, subtraction, and multiplication.  These operations compute with the existing F7 polynomial arithmetic and then pass through `F7X2-FIX`; equality of canonical results remains ordinary ACL2 equality.  The multiplication boundary is intended to expose `(a+bx)(c+dx) = (ac-bd) + (ad+bc)x` in later field-law proofs.  No inverse, complete field-law package, elliptic-curve arithmetic, or `GFIELD` instance is introduced.
+and its downstream arithmetic book adds only transparent reduced addition, negation, subtraction, and multiplication.  These operations compute with the existing F7 polynomial arithmetic and then pass through `F7X2-FIX`; certified per-operand compatibility proves that fixing any operand first leaves the result unchanged, even for arbitrary malformed or noncanonical ACL2 objects. Equality of canonical results remains ordinary ACL2 equality.  The multiplication boundary is intended to expose `(a+bx)(c+dx) = (ac-bd) + (ad+bc)x` in later field-law proofs; its coefficient projection formulas remain open.  No inverse, complete field-law package, elliptic-curve arithmetic, or `GFIELD` instance is introduced.
 Irreducibility and modular-inverse certificates remain downstream facts for
 later field promotion.
 
