@@ -2395,3 +2395,66 @@
            (f7x2-mul '(1 2) (f7x2-mul '(3 4) '(5 6)))))
    :rule-classes nil
    :hints (("Goal" :in-theory (enable f7x2-mul-associative)))))
+
+; This follows the repository's established left-distributivity convention:
+; multiplication by FIRST is outside the sum in its right operand.  Cross only
+; the public arithmetic/fixer boundary.  In particular, the implementation of
+; F7X2-FIX and every concrete polynomial operation remain closed.
+(defthm f7x2-mul-left-distributive
+  (equal (f7x2-mul first (f7x2-add second third))
+         (f7x2-add (f7x2-mul first second)
+                   (f7x2-mul first third)))
+  :hints
+  (("Goal"
+    :use ((:instance f7x2-mul-of-fix-right
+                     (first first)
+                     (second (f7-poly-add second third)))
+          (:instance f7x2-add-of-fixes
+                     (first (f7-poly-mul first second))
+                     (second (f7-poly-mul first third)))
+          (:instance f7-poly-mul-left-distributive-from-generic
+                     (x first) (y second) (z third)))
+    :expand ((f7x2-add second third)
+             (f7x2-mul first second)
+             (f7x2-mul first third)
+             (f7x2-mul first (f7-poly-add second third))
+             (f7x2-add (f7-poly-mul first second)
+                       (f7-poly-mul first third)))
+    :in-theory
+    (disable f7x2-fix f7x2-add f7x2-mul
+             f7x2-add-of-fix-left f7x2-add-of-fix-right
+             f7x2-add-commutative f7x2-mul-commutative
+             f7x2-mul-associative
+             f7-poly-add f7-raw-add f7-poly-mul f7-raw-mul
+             f7-raw-scale f7-normalize f7-fix-coefficients
+             f7-trim-trailing-zeros f7-poly-remainder
+             f7-poly-divmod f7-poly-divmod-core
+             f7-poly-division-step f7-poly-division-step-core
+             gfield::f7-fix gfield::f7-add gfield::f7-mul))))
+
+(local
+ (defthm f7x2-mul-left-distributive-regressions
+   (and
+    (equal (f7x2-mul (f7x2-zero)
+                      (f7x2-add (f7x2-one) '(2 3)))
+           (f7x2-add (f7x2-mul (f7x2-zero) (f7x2-one))
+                       (f7x2-mul (f7x2-zero) '(2 3))))
+    (equal (f7x2-mul (f7x2-one) (f7x2-add '(1 2) '(3 4)))
+           (f7x2-add (f7x2-mul (f7x2-one) '(1 2))
+                       (f7x2-mul (f7x2-one) '(3 4))))
+    (equal (f7x2-mul '(1 2) (f7x2-add '(3 4) '(5 6)))
+           (f7x2-add (f7x2-mul '(1 2) '(3 4))
+                       (f7x2-mul '(1 2) '(5 6))))
+    (equal (f7x2-mul '(bad 9 . tail)
+                      (f7x2-add '(8 -3 0) '(1 . bad)))
+           (f7x2-add (f7x2-mul '(bad 9 . tail) '(8 -3 0))
+                       (f7x2-mul '(bad 9 . tail) '(1 . bad))))
+    (equal (f7x2-mul (f7x2-fix '(10 -3 8))
+                      (f7x2-add '(1 2 0) '(3 4)))
+           (f7x2-add (f7x2-mul (f7x2-fix '(10 -3 8)) '(1 2 0))
+                       (f7x2-mul (f7x2-fix '(10 -3 8)) '(3 4))))
+    (equal (f7x2-mul '(1 2 0) (f7x2-add '(8 9) '(3 4)))
+           (f7x2-add (f7x2-mul '(8 9) '(1 2 0))
+                       (f7x2-mul '(1 2) '(3 4)))))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (enable f7x2-mul-left-distributive)))))
