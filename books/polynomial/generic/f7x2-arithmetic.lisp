@@ -1389,6 +1389,35 @@
                             (second (f7x2-fix value))))
            :in-theory (disable f7x2-add f7x2-fix))))
 
+; Additive inverses likewise stay entirely at the public coefficient
+; interface.  The two orientations deliberately use the corresponding
+; concrete F7 rule rather than obtaining either result by commutativity.
+(defthm f7x2-add-inverse-left
+  (equal (f7x2-add (f7x2-neg value) value)
+         (f7x2-zero))
+  :hints (("Goal"
+           :use ((:instance f7x2-coefficient-extensionality
+                            (first (f7x2-add (f7x2-neg value) value))
+                            (second (f7x2-zero)))
+                 (:instance gfield::f7-add-inverse-left
+                            (value (f7x2-constant-coefficient value)))
+                 (:instance gfield::f7-add-inverse-left
+                            (value (f7x2-linear-coefficient value))))
+           :in-theory (disable f7x2-add f7x2-neg f7x2-fix))))
+
+(defthm f7x2-add-inverse-right
+  (equal (f7x2-add value (f7x2-neg value))
+         (f7x2-zero))
+  :hints (("Goal"
+           :use ((:instance f7x2-coefficient-extensionality
+                            (first (f7x2-add value (f7x2-neg value)))
+                            (second (f7x2-zero)))
+                 (:instance f7-add-inverse-right-for-subtraction
+                            (x (f7x2-constant-coefficient value)))
+                 (:instance f7-add-inverse-right-for-subtraction
+                            (x (f7x2-linear-coefficient value))))
+           :in-theory (disable f7x2-add f7x2-neg f7x2-fix))))
+
 (defthm f7x2-mul-one-left
   (equal (f7x2-mul (f7x2-one) value)
          (f7x2-fix value))
@@ -1515,6 +1544,42 @@
     (equal (f7x2-add (f7x2-one) (f7x2-zero)) (f7x2-one)))
    :rule-classes nil
    :hints (("Goal" :in-theory (disable f7x2-add f7x2-fix)))))
+
+(local
+ (defthm f7x2-additive-inverse-regressions
+   (and
+    (equal (f7x2-add (f7x2-neg (f7x2-zero)) (f7x2-zero)) (f7x2-zero))
+    (equal (f7x2-add (f7x2-zero) (f7x2-neg (f7x2-zero))) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg (f7x2-one)) (f7x2-one)) (f7x2-zero))
+    (equal (f7x2-add (f7x2-one) (f7x2-neg (f7x2-one))) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg '(5)) '(5)) (f7x2-zero))
+    (equal (f7x2-add '(5) (f7x2-neg '(5))) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg '(3 4)) '(3 4)) (f7x2-zero))
+    (equal (f7x2-add '(3 4) (f7x2-neg '(3 4))) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg nil) nil) (f7x2-zero))
+    (equal (f7x2-add nil (f7x2-neg nil)) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg '(1 2 0)) '(1 2 0)) (f7x2-zero))
+    (equal (f7x2-add '(1 2 0) (f7x2-neg '(1 2 0))) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg '(1 2 3 4)) '(1 2 3 4)) (f7x2-zero))
+    (equal (f7x2-add '(1 2 3 4) (f7x2-neg '(1 2 3 4))) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg '(-1 9)) '(-1 9)) (f7x2-zero))
+    (equal (f7x2-add '(-1 9) (f7x2-neg '(-1 9))) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg '(1/2 3/4)) '(1/2 3/4)) (f7x2-zero))
+    (equal (f7x2-add '(1/2 3/4) (f7x2-neg '(1/2 3/4))) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg 'bad) 'bad) (f7x2-zero))
+    (equal (f7x2-add 'bad (f7x2-neg 'bad)) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg '(bad 9)) '(bad 9)) (f7x2-zero))
+    (equal (f7x2-add '(bad 9) (f7x2-neg '(bad 9))) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg '(1 2 . bad)) '(1 2 . bad)) (f7x2-zero))
+    (equal (f7x2-add '(1 2 . bad) (f7x2-neg '(1 2 . bad))) (f7x2-zero))
+    (equal (f7x2-add (f7x2-neg (f7x2-fix '(10 -3 8)))
+                       (f7x2-fix '(10 -3 8)))
+           (f7x2-zero))
+    (equal (f7x2-add (f7x2-fix '(10 -3 8))
+                       (f7x2-neg (f7x2-fix '(10 -3 8))))
+           (f7x2-zero)))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (disable f7x2-add f7x2-neg f7x2-fix)))))
 
 (local
  (defthm f7x2-multiplication-coefficient-formula-regressions
