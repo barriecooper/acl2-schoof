@@ -79,6 +79,54 @@
      (defun ,poly-mul (x y)
        (,normalize (,raw-mul (,normalize x) (,normalize y))))))
 
+; A deliberately narrow first generator for concrete reduced-ring instances.
+; Every public name and every functional substitution is supplied by the
+; caller.  A NIL theorem name selects definitions and guard verification only;
+; the sole theorem selector currently supported is the right-distributive law.
+; The expansion contains only ordinary DEFUN, VERIFY-GUARDS, and (when
+; selected) DEFTHM events.
+(defmacro def-reduced-ring-instance
+  (reduced-add reduced-neg reduced-sub reduced-mul reduced-one
+               poly-add poly-neg poly-sub poly-mul polynomial-one remainder
+               mul-right-distributive-name mul-right-distributive-source
+               functional-substitution common-goal-hints theorem-hints
+               theorem-rule-classes)
+  `(progn
+     (defun ,reduced-add (left right modulus)
+       (,remainder (,poly-add left right) modulus))
+     (defun ,reduced-neg (polynomial modulus)
+       (,remainder (,poly-neg polynomial) modulus))
+     (defun ,reduced-sub (left right modulus)
+       (,remainder (,poly-sub left right) modulus))
+     (defun ,reduced-mul (left right modulus)
+       (,remainder (,poly-mul left right) modulus))
+     (defun ,reduced-one (modulus)
+       (,remainder (,polynomial-one) modulus))
+     (verify-guards ,reduced-add)
+     (verify-guards ,reduced-neg)
+     (verify-guards ,reduced-sub)
+     (verify-guards ,reduced-mul)
+     (verify-guards ,reduced-one)
+     ,@(and mul-right-distributive-name
+            `((defthm ,mul-right-distributive-name
+                (equal
+                 (,reduced-mul
+                  (,reduced-add first second modulus) third modulus)
+                 (,reduced-add
+                  (,reduced-mul first third modulus)
+                  (,reduced-mul second third modulus)
+                  modulus))
+                :rule-classes ,theorem-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,mul-right-distributive-source
+                          ,@functional-substitution)
+                         (a first) (b second) (c third))))
+                 ,@theorem-hints))))))
+
 ; The coefficient-field embedding is intentionally its own tiny generator.
 ; Its expansion is one ordinary DEFUN, not a general algebra-instance layer.
 (defmacro def-const-instance (const field-fix field-zero)
