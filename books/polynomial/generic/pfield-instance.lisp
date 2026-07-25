@@ -1130,6 +1130,49 @@
                                            gfield::f7-fix gfield::f7-zero)
                            (pfield::add pfield::neg)))))
 
+; The opposite orientation follows without commutativity: apply the preceding
+; rule to NEG VALUE, simplify the resulting double negation, and transport the
+; fixed second operand through the public F7 addition boundary.
+(defthm gfield::f7-add-inverse-left
+  (equal (gfield::f7-add (gfield::f7-neg value) value)
+         (gfield::f7-zero))
+  :hints (("Goal"
+           :use ((:instance f7-add-inverse-right-for-subtraction
+                            (x (gfield::f7-neg value)))
+                 (:instance gfield::f7-double-negation-from-generic-kernel
+                            (x value)))
+           :in-theory
+           (disable gfield::f7-add gfield::f7-neg gfield::f7-fix
+                    pfield::add pfield::neg))))
+
+(local
+ (defthm f7-add-inverse-left-regressions
+   (and
+    (equal (gfield::f7-add (gfield::f7-neg (gfield::f7-zero))
+                           (gfield::f7-zero))
+           (gfield::f7-zero))
+    (equal (gfield::f7-add (gfield::f7-neg (gfield::f7-one))
+                           (gfield::f7-one))
+           (gfield::f7-zero))
+    (equal (gfield::f7-add (gfield::f7-neg 4) 4) (gfield::f7-zero))
+    (equal (gfield::f7-add (gfield::f7-neg -8) -8) (gfield::f7-zero))
+    (equal (gfield::f7-add (gfield::f7-neg 15) 15) (gfield::f7-zero))
+    (equal (gfield::f7-add (gfield::f7-neg 1/2) 1/2) (gfield::f7-zero))
+    (equal (gfield::f7-add (gfield::f7-neg 'arbitrary) 'arbitrary)
+           (gfield::f7-zero))
+    (equal (gfield::f7-add (gfield::f7-neg nil) nil) (gfield::f7-zero))
+    (equal (gfield::f7-add (gfield::f7-neg '(object . tail))
+                           '(object . tail))
+           (gfield::f7-zero))
+    (equal (gfield::f7-add (gfield::f7-neg (gfield::f7-fix 10))
+                           (gfield::f7-fix 10))
+           (gfield::f7-zero)))
+   :rule-classes nil
+   :hints (("Goal"
+            :in-theory
+            (disable gfield::f7-add gfield::f7-neg gfield::f7-fix
+                     pfield::add pfield::neg)))))
+
 (defthm f7-len-of-trim-strict-when-last-zero
   (implies (and (f7-coefficient-list-p x)
                 (consp x)
