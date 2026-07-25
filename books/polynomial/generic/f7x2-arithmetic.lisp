@@ -1743,6 +1743,54 @@
    :rule-classes nil
    :hints (("Goal" :in-theory (enable f7x2-add-cancel-left)))))
 
+; Right cancellation is only the public left-cancellation theorem after two
+; explicit operand exchanges.  Keep commutativity disabled so that no
+; permutative rewriting is left to theory search.
+(defthm f7x2-add-cancel-right
+  (equal (equal (f7x2-add first common)
+                (f7x2-add second common))
+         (equal (f7x2-fix first)
+                (f7x2-fix second)))
+  :hints
+  (("Goal"
+    :use ((:instance f7x2-add-commutative
+                     (first first) (second common))
+          (:instance f7x2-add-commutative
+                     (first second) (second common))
+          (:instance f7x2-add-cancel-left
+                     (common common) (first first) (second second)))
+    :in-theory
+    (disable f7x2-add-cancel-left f7x2-add-commutative
+             f7x2-add f7x2-fix
+             gfield::f7-add gfield::f7-fix
+             f7-poly-add f7-raw-add f7-poly-neg f7-raw-neg
+             f7-poly-sub f7-poly-mul f7-raw-mul f7-raw-scale
+             f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+             f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+             f7-poly-division-step f7-poly-division-step-core))))
+
+(local
+ (defthm f7x2-add-cancel-right-regressions
+   (and
+    ; Equal canonical operands.
+    (equal (equal (f7x2-add '(2 3) '(4 5))
+                  (f7x2-add '(2 3) '(4 5)))
+           (equal (f7x2-fix '(2 3)) (f7x2-fix '(2 3))))
+    ; Unequal canonical operands.
+    (equal (equal (f7x2-add '(1 2) '(3 4))
+                  (f7x2-add '(5 6) '(3 4)))
+           (equal (f7x2-fix '(1 2)) (f7x2-fix '(5 6))))
+    ; Malformed and noncanonical operands.
+    (equal (equal (f7x2-add '(bad 9 . tail) '(8 -3 0))
+                  (f7x2-add #\A '(8 -3 0)))
+           (equal (f7x2-fix '(bad 9 . tail)) (f7x2-fix #\A)))
+    ; The raw operands differ, but their fixed representatives are equal.
+    (equal (equal (f7x2-add '(3 4 0) '(1 2))
+                  (f7x2-add '(3 4) '(1 2)))
+           (equal (f7x2-fix '(3 4 0)) (f7x2-fix '(3 4)))))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (enable f7x2-add-cancel-right)))))
+
 (local
  (defthm f7x2-add-associative-regressions
    (and
