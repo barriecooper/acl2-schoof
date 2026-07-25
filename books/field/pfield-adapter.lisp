@@ -212,6 +212,55 @@
               (pfield-element-p (pfield-fix y))
               (equal (pfield-fix x) (pfield-fix y)))))
 
+(local
+ (defthm pfield-add-left-cancel-from-generic-kernel
+   (equal (equal (pfield-add common first)
+                 (pfield-add common second))
+          (equal (pfield-fix first)
+                 (pfield-fix second)))
+   :hints
+   (("Goal" :by (:functional-instance
+                  field-add-left-cancel
+                  (field-element-p pfield-element-p)
+                  (field-fix pfield-fix)
+                  (field-zero pfield-zero)
+                  (field-one pfield-one)
+                  (field-add pfield-add)
+                  (field-mul pfield-mul)
+                  (field-neg pfield-neg)
+                  (field-inv pfield-inv))
+     :do-not '(preprocess)
+     :in-theory '(pfield-element-p-of-pfield-fix
+                  pfield-fix-idempotent
+                  pfield-element-p-of-pfield-zero
+                  pfield-element-p-of-pfield-one
+                  pfield-zero-not-equal-pfield-one
+                  pfield-fix-of-zero pfield-fix-of-one
+                  pfield-element-p-of-pfield-add
+                  pfield-element-p-of-pfield-mul
+                  pfield-element-p-of-pfield-neg
+                  pfield-element-p-of-pfield-inv
+                  pfield-fix-of-pfield-add pfield-fix-of-pfield-mul
+                  pfield-fix-of-pfield-neg pfield-fix-of-pfield-inv
+                  pfield-add-of-fixes pfield-mul-of-fixes
+                  pfield-neg-of-fix pfield-inv-of-fix
+                  pfield-add-zero-left pfield-add-inverse-left
+                  pfield-mul-one-left pfield-inv-of-zero))
+    ("Subgoal 14" :by pfield-mul-fix-right)
+    ("Subgoal 13" :by pfield-mul-commutative)
+    ("Subgoal 12" :by pfield-add-fix-right)
+    ("Subgoal 11" :by pfield-add-commutative)
+    ("Subgoal 10" :by pfield-mul-left-distributive)
+    ("Subgoal 9" :by pfield-mul-fix-left)
+    ("Subgoal 8" :by booleanp-of-pfield-element-p)
+    ("Subgoal 7" :by pfield-mul-associative)
+    ("Subgoal 6" :by pfield-add-fix-left)
+    ("Subgoal 5" :by pfield-add-associative)
+    ("Subgoal 4" :by pfield-mul-inverse-left)
+    ("Subgoal 3" :by pfield-fix-when-pfield-element-p)
+    ("Subgoal 2" :by pfield-mul-fixed-congruence)
+    ("Subgoal 1" :by pfield-add-fixed-congruence))))
+
 ; A nontrivial theorem transported from the generic kernel through the
 ; fixed-arity wrappers.
 (defthm pfield-double-negation-from-generic-kernel
@@ -441,6 +490,72 @@
        (equal (f7-add 'arbitrary (f7-fix 15))
               (f7-add 'arbitrary 15)))
   :rule-classes nil)
+
+; Concrete cancellation is transported directly from the generic field
+; interface.  Its total statement compares canonical representatives: distinct
+; arbitrary ACL2 objects that F7-FIX identifies are intentionally not equated.
+(defthm f7-add-cancel-left
+  (equal (equal (f7-add common first)
+                (f7-add common second))
+         (equal (f7-fix first)
+                (f7-fix second)))
+  :hints
+  (("Goal"
+    :by (:functional-instance
+         pfield-add-left-cancel-from-generic-kernel
+         (pfield-modulus (lambda () 7))
+         (pfield-element-p f7-element-p)
+         (pfield-fix f7-fix)
+         (pfield-zero f7-zero)
+         (pfield-one f7-one)
+         (pfield-add f7-add)
+         (pfield-mul f7-mul)
+         (pfield-neg f7-neg)
+         (pfield-inv f7-inv))
+    :in-theory (enable dm::primep))))
+
+(local
+ (defthm f7-add-cancel-left-regressions
+   (and
+    (equal (equal (f7-add 0 0) (f7-add 0 0))
+           (equal (f7-fix 0) (f7-fix 0)))
+    (equal (equal (f7-add 1 1) (f7-add 1 2))
+           (equal (f7-fix 1) (f7-fix 2)))
+    (equal (equal (f7-add 3 4) (f7-add 3 4))
+           (equal (f7-fix 4) (f7-fix 4)))
+    (equal (equal (f7-add 6 1) (f7-add 6 5))
+           (equal (f7-fix 1) (f7-fix 5)))
+    (equal (equal (f7-add -8 -1) (f7-add -8 6))
+           (equal (f7-fix -1) (f7-fix 6)))
+    (equal (equal (f7-add 15 22) (f7-add 15 1))
+           (equal (f7-fix 22) (f7-fix 1)))
+    (equal (equal (f7-add 1/2 3/2) (f7-add 1/2 3/2))
+           (equal (f7-fix 3/2) (f7-fix 3/2)))
+    (equal (equal (f7-add 'common 'first) (f7-add 'common nil))
+           (equal (f7-fix 'first) (f7-fix nil)))
+    (equal (equal (f7-add #\A #\B) (f7-add #\A "value"))
+           (equal (f7-fix #\B) (f7-fix "value")))
+    (equal (equal (f7-add "common" '(1 2))
+                  (f7-add "common" '(1 2)))
+           (equal (f7-fix '(1 2)) (f7-fix '(1 2))))
+    (equal (equal (f7-add '(bad common) '(proper list))
+                  (f7-add '(bad common) '(another list)))
+           (equal (f7-fix '(proper list))
+                  (f7-fix '(another list))))
+    (equal (equal (f7-add '(bad . common) '(1 . tail))
+                  (f7-add '(bad . common) '(2 . tail)))
+           (equal (f7-fix '(1 . tail)) (f7-fix '(2 . tail))))
+    (equal (equal (f7-add (f7-fix -9) (f7-fix 10))
+                  (f7-add (f7-fix -9) (f7-fix 3)))
+           (equal (f7-fix (f7-fix 10)) (f7-fix (f7-fix 3))))
+    (equal (equal (f7-add 'malformed -1) (f7-add 'malformed 6))
+           (equal (f7-fix -1) (f7-fix 6)))
+    ; Raw cancellation would be false here: -1 and 6 are distinct ACL2
+    ; objects, but both have the same fixed F7 representative.
+    (and (not (equal -1 6))
+         (equal (equal (f7-add 2 -1) (f7-add 2 6))
+                (equal (f7-fix -1) (f7-fix 6)))))
+   :rule-classes nil))
 
 (encapsulate
  ()
