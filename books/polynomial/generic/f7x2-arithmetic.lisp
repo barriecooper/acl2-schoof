@@ -1189,6 +1189,59 @@
            :in-theory (disable f7x2-neg f7x2-fix
                                f7x2-linear-coefficient gfield::f7-neg))))
 
+; Double negation is reconstructed solely from the public coefficient
+; interface.  In particular, the carrier and polynomial implementations stay
+; closed: each coefficient calculation is the concrete F7 equation -(-a) =
+; fix(a), and the projection-of-fix rules reconcile the right-hand side.
+(defthm f7x2-double-negation
+  (equal (f7x2-neg (f7x2-neg value))
+         (f7x2-fix value))
+  :hints
+  (("Goal"
+    :use ((:instance f7x2-coefficient-extensionality
+                     (first (f7x2-neg (f7x2-neg value)))
+                     (second (f7x2-fix value)))
+          (:instance gfield::f7-double-negation-from-generic-kernel
+                     (x (f7x2-constant-coefficient value)))
+          (:instance gfield::f7-double-negation-from-generic-kernel
+                     (x (f7x2-linear-coefficient value))))
+    :in-theory
+    (disable f7x2-neg f7x2-fix
+             gfield::f7-neg gfield::f7-fix
+             f7-poly-add f7-raw-add f7-poly-neg f7-raw-neg
+             f7-poly-sub f7-poly-mul f7-raw-mul f7-raw-scale
+             f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+             f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+             f7-poly-division-step f7-poly-division-step-core))))
+
+(local
+ (defthm f7x2-double-negation-regressions
+   (and
+    (equal (f7x2-neg (f7x2-neg (f7x2-zero)))
+           (f7x2-fix (f7x2-zero)))
+    (equal (f7x2-neg (f7x2-neg (f7x2-one)))
+           (f7x2-fix (f7x2-one)))
+    (equal (f7x2-neg (f7x2-neg '(3))) (f7x2-fix '(3)))
+    (equal (f7x2-neg (f7x2-neg '(1 2))) (f7x2-fix '(1 2)))
+    (equal (f7x2-neg (f7x2-neg nil)) (f7x2-fix nil))
+    (equal (f7x2-neg (f7x2-neg '(1 2 0))) (f7x2-fix '(1 2 0)))
+    (equal (f7x2-neg (f7x2-neg '(1 2 3 4))) (f7x2-fix '(1 2 3 4)))
+    (equal (f7x2-neg (f7x2-neg '(-1 9))) (f7x2-fix '(-1 9)))
+    (equal (f7x2-neg (f7x2-neg '(1/2 -3/2)))
+           (f7x2-fix '(1/2 -3/2)))
+    (equal (f7x2-neg (f7x2-neg 'bad)) (f7x2-fix 'bad))
+    (equal (f7x2-neg (f7x2-neg #\A)) (f7x2-fix #\A))
+    (equal (f7x2-neg (f7x2-neg '(bad (also bad))))
+           (f7x2-fix '(bad (also bad))))
+    (equal (f7x2-neg (f7x2-neg '(1 2 . bad)))
+           (f7x2-fix '(1 2 . bad)))
+    (equal (f7x2-neg (f7x2-neg (f7x2-fix '(8 -1))))
+           (f7x2-fix (f7x2-fix '(8 -1))))
+    (equal (f7x2-neg (f7x2-neg '(8 -1 3)))
+           (f7x2-fix '(8 -1 3))))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (enable f7x2-double-negation)))))
+
 (local
  (defthm f7x2-constant-coefficient-of-sub-of-fixes
    (equal (f7x2-constant-coefficient
