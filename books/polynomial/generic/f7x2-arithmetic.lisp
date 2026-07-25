@@ -1619,6 +1619,130 @@
              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
              f7-poly-division-step f7-poly-division-step-core))))
 
+; Left cancellation is stated over fixed representatives because F7X2-ADD is
+; total on all ACL2 objects and deliberately identifies malformed or
+; noncanonical presentations.  The forward direction projects sum equality
+; onto the two public coefficients and uses concrete F7 cancellation; the
+; reverse direction transports equality through the public right-operand
+; fixer compatibility rule.
+(local
+ (defthm f7x2-add-equality-implies-constant-equality
+   (implies (equal (f7x2-add common first)
+                   (f7x2-add common second))
+            (equal (f7x2-constant-coefficient
+                    (f7x2-add common first))
+                   (f7x2-constant-coefficient
+                    (f7x2-add common second))))
+   :rule-classes nil
+   :hints (("Goal" :do-not '(preprocess)
+            :in-theory (disable f7x2-add f7x2-fix
+                                f7x2-add-commutative f7x2-add-associative
+                                f7x2-constant-coefficient-of-add
+                                f7x2-constant-coefficient)))))
+
+(local
+ (defthm f7x2-add-equality-implies-linear-equality
+   (implies (equal (f7x2-add common first)
+                   (f7x2-add common second))
+            (equal (f7x2-linear-coefficient
+                    (f7x2-add common first))
+                   (f7x2-linear-coefficient
+                    (f7x2-add common second))))
+   :rule-classes nil
+   :hints (("Goal" :do-not '(preprocess)
+            :in-theory (disable f7x2-add f7x2-fix
+                                f7x2-add-commutative f7x2-add-associative
+                                f7x2-linear-coefficient-of-add
+                                f7x2-linear-coefficient)))))
+
+(defthm f7x2-add-cancel-left
+  (equal (equal (f7x2-add common first)
+                (f7x2-add common second))
+         (equal (f7x2-fix first)
+                (f7x2-fix second)))
+  :hints
+  (("Goal"
+    :cases ((equal (f7x2-add common first)
+                   (f7x2-add common second)))
+    :use ((:instance f7x2-fix-coefficient-extensionality
+                     (first first) (second second))
+          (:instance f7x2-add-equality-implies-constant-equality)
+          (:instance f7x2-add-equality-implies-linear-equality)
+          (:instance gfield::f7-add-cancel-left
+                     (common (f7x2-constant-coefficient common))
+                     (first (f7x2-constant-coefficient first))
+                     (second (f7x2-constant-coefficient second)))
+          (:instance gfield::f7-add-cancel-left
+                     (common (f7x2-linear-coefficient common))
+                     (first (f7x2-linear-coefficient first))
+                     (second (f7x2-linear-coefficient second)))
+          (:instance f7-element-p-of-f7x2-constant-coefficient (x first))
+          (:instance f7-element-p-of-f7x2-constant-coefficient (x second))
+          (:instance f7-element-p-of-f7x2-linear-coefficient (x first))
+          (:instance f7-element-p-of-f7x2-linear-coefficient (x second))
+          (:instance f7x2-add-of-fix-right
+                     (first common) (second first))
+          (:instance f7x2-add-of-fix-right
+                     (first common) (second second))
+          (:instance f7x2-add-of-fixes
+                     (first common) (second first))
+          (:instance f7x2-add-of-fixes
+                     (first common) (second second)))
+    :in-theory
+    (disable f7x2-add f7x2-fix f7x2-constant-coefficient
+             f7x2-linear-coefficient f7x2-add-of-fix-left
+             f7x2-add-of-fix-right f7x2-add-commutative
+             f7x2-add-associative gfield::f7-add gfield::f7-fix
+             f7-poly-add f7-raw-add f7-poly-neg f7-raw-neg
+             f7-poly-sub f7-poly-mul f7-raw-mul f7-raw-scale
+             f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+             f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+             f7-poly-division-step f7-poly-division-step-core))))
+
+(local
+ (defthm f7x2-add-cancel-left-regressions
+   (and
+    (equal (equal (f7x2-add (f7x2-zero) (f7x2-zero))
+                         (f7x2-add (f7x2-zero) (f7x2-one)))
+           (equal (f7x2-fix (f7x2-zero)) (f7x2-fix (f7x2-one))))
+    (equal (equal (f7x2-add '(3) '(2)) (f7x2-add '(3) '(2)))
+           (equal (f7x2-fix '(2)) (f7x2-fix '(2))))
+    (equal (equal (f7x2-add '(3 4) '(1 2)) (f7x2-add '(3 4) '(5 6)))
+           (equal (f7x2-fix '(1 2)) (f7x2-fix '(5 6))))
+    ; The raw operands differ, but their fixed representatives are equal.
+    (equal (equal (f7x2-add '(1 2) '(3 4 0)) (f7x2-add '(1 2) '(3 4)))
+           (equal (f7x2-fix '(3 4 0)) (f7x2-fix '(3 4))))
+    (equal (equal (f7x2-add nil nil) (f7x2-add nil '(0)))
+           (equal (f7x2-fix nil) (f7x2-fix '(0))))
+    (equal (equal (f7x2-add '(1 2 3 4) '(-1 9))
+                  (f7x2-add '(1 2 3 4) '(6 2)))
+           (equal (f7x2-fix '(-1 9)) (f7x2-fix '(6 2))))
+    (equal (equal (f7x2-add '(1/2 -3/2) '(2/3 5/4))
+                  (f7x2-add '(1/2 -3/2) '(2/3 5/4)))
+           (equal (f7x2-fix '(2/3 5/4)) (f7x2-fix '(2/3 5/4))))
+    (equal (equal (f7x2-add 'common 'symbol) (f7x2-add 'common #\A))
+           (equal (f7x2-fix 'symbol) (f7x2-fix #\A)))
+    (equal (equal (f7x2-add "common" '(bad "value"))
+                  (f7x2-add "common" '(#\Z other)))
+           (equal (f7x2-fix '(bad "value"))
+                  (f7x2-fix '(#\Z other))))
+    (equal (equal (f7x2-add '(1 . tail) '(2 . bad))
+                  (f7x2-add '(1 . tail) '(2)))
+           (equal (f7x2-fix '(2 . bad)) (f7x2-fix '(2))))
+    (equal (equal (f7x2-add (f7x2-fix '(10 -3 8)) '(1 2))
+                  (f7x2-add (f7x2-fix '(10 -3 8)) '(8 9)))
+           (equal (f7x2-fix '(1 2)) (f7x2-fix '(8 9))))
+    (equal (equal (f7x2-add '(bad 9) '(1 2))
+                  (f7x2-add '(bad 9) '(1 2 0 0)))
+           (equal (f7x2-fix '(1 2)) (f7x2-fix '(1 2 0 0))))
+    (equal (equal (f7x2-add '(3 4) 'bad) (f7x2-add '(3 4) nil))
+           (equal (f7x2-fix 'bad) (f7x2-fix nil)))
+    (equal (equal (f7x2-add (f7x2-zero) '(2 3))
+                  (f7x2-add (f7x2-zero) (f7x2-neg '(2 3))))
+           (equal (f7x2-fix '(2 3)) (f7x2-fix (f7x2-neg '(2 3))))))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (enable f7x2-add-cancel-left)))))
+
 (local
  (defthm f7x2-add-associative-regressions
    (and
