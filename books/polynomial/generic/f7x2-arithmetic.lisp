@@ -2314,3 +2314,37 @@
   (equal (f7x2-mul '(1 1 0 . bad) '(0 1)) '(6 1))
   (equal (f7x2-mul '(0 0 0 1) '(1 1))
          (f7x2-mul (f7x2-fix '(0 0 0 1)) '(1 1)))))
+
+; Multiplication commutativity is inherited directly from the public concrete
+; polynomial theorem beneath the common fixer.  Keep every implementation
+; below that transparent arithmetic boundary closed.
+(defthm f7x2-mul-commutative
+  (equal (f7x2-mul first second)
+         (f7x2-mul second first))
+  :rule-classes ((:rewrite :loop-stopper nil))
+  :hints
+  (("Goal"
+    :use ((:instance f7-poly-mul-commutative-from-generic
+                     (x first) (y second)))
+    :in-theory
+    (e/d (f7x2-mul)
+         (f7x2-fix f7-poly-mul f7-raw-mul f7-raw-scale f7-raw-add
+          f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+          f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+          f7-poly-division-step f7-poly-division-step-core)))))
+
+(local
+ (defthm f7x2-mul-commutative-regressions
+   (and
+    (equal (f7x2-mul (f7x2-zero) (f7x2-one))
+           (f7x2-mul (f7x2-one) (f7x2-zero)))
+    (equal (f7x2-mul '(1 2) '(3 4))
+           (f7x2-mul '(3 4) '(1 2)))
+    (equal (f7x2-mul '(5 6) '(5 6))
+           (f7x2-mul '(5 6) '(5 6)))
+    (equal (f7x2-mul '(bad 9 . tail) '(8 -3 0))
+           (f7x2-mul '(8 -3 0) '(bad 9 . tail)))
+    (equal (f7x2-mul '(1 2 0) '(3 4))
+           (f7x2-mul '(3 4) '(1 2))))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (enable f7x2-mul-commutative)))))
