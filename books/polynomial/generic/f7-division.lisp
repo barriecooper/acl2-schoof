@@ -149,6 +149,14 @@
 (defthm f7-poly-remainder-is-divmod-remainder
   (equal (f7-poly-remainder f g) (mv-nth 1 (f7-poly-divmod f g)))
   :hints (("Goal" :in-theory (enable f7-poly-remainder))))
+(defthm f7-poly-remainder-of-normalize-dividend
+  (equal (f7-poly-remainder (f7-normalize f) g)
+         (f7-poly-remainder f g))
+  :hints (("Goal"
+           :in-theory (e/d (f7-poly-remainder f7-poly-divmod)
+                            (f7-poly-divmod-core
+                             f7-poly-division-step-core
+                             f7-poly-division-step)))))
 (defthm f7-poly-remainder-canonical
   (f7-canonical-polynomial-p (f7-poly-remainder f g))
   :hints (("Goal" :use f7-poly-divmod-remainder-canonical)))
