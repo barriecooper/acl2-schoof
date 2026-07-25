@@ -1263,6 +1263,143 @@
                                f7x2-sub f7x2-fix f7x2-linear-coefficient
                                gfield::f7-sub))))
 
+; Multiplication follows the same arbitrary-input path as the six formulas
+; above: reconstruct each fixed operand from its two recognized coefficients,
+; then consume the bounded convolution-and-reduction projections.
+(local
+ (defthm f7x2-constant-coefficient-of-mul-of-fixes
+   (equal
+    (f7x2-constant-coefficient
+     (f7x2-mul (f7x2-fix first) (f7x2-fix second)))
+    (gfield::f7-sub
+     (gfield::f7-mul (f7x2-constant-coefficient first)
+                     (f7x2-constant-coefficient second))
+     (gfield::f7-mul (f7x2-linear-coefficient first)
+                     (f7x2-linear-coefficient second))))
+   :hints
+   (("Goal"
+     :use ((:instance f7x2-fix-reconstruct (value first))
+           (:instance f7x2-fix-reconstruct (value second))
+           (:instance f7-element-p-of-f7x2-constant-coefficient (x first))
+           (:instance f7-element-p-of-f7x2-linear-coefficient (x first))
+           (:instance f7-element-p-of-f7x2-constant-coefficient (x second))
+           (:instance f7-element-p-of-f7x2-linear-coefficient (x second))
+           (:instance f7x2-constant-projection-of-bounded-normalized-product
+                      (a (f7x2-constant-coefficient first))
+                      (b (f7x2-linear-coefficient first))
+                      (c (f7x2-constant-coefficient second))
+                      (d (f7x2-linear-coefficient second))))
+     :in-theory
+     (e/d (f7x2-mul)
+          (f7x2-mul-of-fix-left f7x2-mul-of-fix-right
+           f7x2-constant-coefficient f7x2-linear-coefficient
+           gfield::f7-sub gfield::f7-mul gfield::f7-fix
+           gfield::f7-element-p f7-poly-mul f7-raw-mul f7-raw-scale
+           f7-raw-add f7-normalize f7-fix-coefficients
+           f7-trim-trailing-zeros f7x2-fix f7-poly-remainder
+           f7-poly-divmod f7-poly-divmod-core f7-poly-division-step
+           f7-poly-division-step-core))))))
+
+(local
+ (defthm f7x2-linear-coefficient-of-mul-of-fixes
+   (equal
+    (f7x2-linear-coefficient
+     (f7x2-mul (f7x2-fix first) (f7x2-fix second)))
+    (gfield::f7-add
+     (gfield::f7-mul (f7x2-constant-coefficient first)
+                     (f7x2-linear-coefficient second))
+     (gfield::f7-mul (f7x2-linear-coefficient first)
+                     (f7x2-constant-coefficient second))))
+   :hints
+   (("Goal"
+     :use ((:instance f7x2-fix-reconstruct (value first))
+           (:instance f7x2-fix-reconstruct (value second))
+           (:instance f7-element-p-of-f7x2-constant-coefficient (x first))
+           (:instance f7-element-p-of-f7x2-linear-coefficient (x first))
+           (:instance f7-element-p-of-f7x2-constant-coefficient (x second))
+           (:instance f7-element-p-of-f7x2-linear-coefficient (x second))
+           (:instance f7x2-linear-projection-of-bounded-normalized-product
+                      (a (f7x2-constant-coefficient first))
+                      (b (f7x2-linear-coefficient first))
+                      (c (f7x2-constant-coefficient second))
+                      (d (f7x2-linear-coefficient second))))
+     :in-theory
+     (e/d (f7x2-mul)
+          (f7x2-mul-of-fix-left f7x2-mul-of-fix-right
+           f7x2-constant-coefficient f7x2-linear-coefficient
+           gfield::f7-add gfield::f7-mul gfield::f7-fix
+           gfield::f7-element-p f7-poly-mul f7-raw-mul f7-raw-scale
+           f7-raw-add f7-normalize f7-fix-coefficients
+           f7-trim-trailing-zeros f7x2-fix f7-poly-remainder
+           f7-poly-divmod f7-poly-divmod-core f7-poly-division-step
+           f7-poly-division-step-core))))))
+
+(defthm f7x2-constant-coefficient-of-mul
+  (equal
+   (f7x2-constant-coefficient (f7x2-mul first second))
+   (gfield::f7-sub
+    (gfield::f7-mul (f7x2-constant-coefficient first)
+                    (f7x2-constant-coefficient second))
+    (gfield::f7-mul (f7x2-linear-coefficient first)
+                    (f7x2-linear-coefficient second))))
+  :hints (("Goal"
+           :use ((:instance f7x2-mul-of-fixes)
+                 (:instance f7x2-constant-coefficient-of-mul-of-fixes))
+           :in-theory
+           (disable f7x2-mul-of-fix-left f7x2-mul-of-fix-right
+                    f7x2-mul f7x2-fix f7x2-constant-coefficient
+                    f7x2-linear-coefficient gfield::f7-sub
+                    gfield::f7-mul))))
+
+(defthm f7x2-linear-coefficient-of-mul
+  (equal
+   (f7x2-linear-coefficient (f7x2-mul first second))
+   (gfield::f7-add
+    (gfield::f7-mul (f7x2-constant-coefficient first)
+                    (f7x2-linear-coefficient second))
+    (gfield::f7-mul (f7x2-linear-coefficient first)
+                    (f7x2-constant-coefficient second))))
+  :hints (("Goal"
+           :use ((:instance f7x2-mul-of-fixes)
+                 (:instance f7x2-linear-coefficient-of-mul-of-fixes))
+           :in-theory
+           (disable f7x2-mul-of-fix-left f7x2-mul-of-fix-right
+                    f7x2-mul f7x2-fix f7x2-constant-coefficient
+                    f7x2-linear-coefficient gfield::f7-add
+                    gfield::f7-mul))))
+
+(local
+ (defthm f7x2-multiplication-coefficient-formula-regressions
+   (and
+    (equal (list (f7x2-constant-coefficient (f7x2-mul '(1 2) '(3 4)))
+                 (f7x2-linear-coefficient (f7x2-mul '(1 2) '(3 4)))) '(2 3))
+    (equal (list (f7x2-constant-coefficient (f7x2-mul '(0 2) '(0 3)))
+                 (f7x2-linear-coefficient (f7x2-mul '(0 2) '(0 3)))) '(1 0))
+    (equal (list (f7x2-constant-coefficient (f7x2-mul '(3) '(0 4)))
+                 (f7x2-linear-coefficient (f7x2-mul '(3) '(0 4)))) '(0 5))
+    (equal (list (f7x2-constant-coefficient (f7x2-mul '(0 4) '(3)))
+                 (f7x2-linear-coefficient (f7x2-mul '(0 4) '(3)))) '(0 5))
+    (equal (list (f7x2-constant-coefficient (f7x2-mul nil '(3 4)))
+                 (f7x2-linear-coefficient (f7x2-mul '(3 4) nil))) '(0 0))
+    (equal (list (f7x2-constant-coefficient (f7x2-mul '(2) '(4)))
+                 (f7x2-linear-coefficient (f7x2-mul '(2) '(4)))) '(1 0))
+    (equal (list (f7x2-constant-coefficient (f7x2-mul '(0 2) '(3 4)))
+                 (f7x2-linear-coefficient (f7x2-mul '(0 2) '(3 4)))) '(6 6))
+    (equal (list (f7x2-constant-coefficient
+                  (f7x2-mul '(1 2 0 7) '(3 4 0)))
+                 (f7x2-linear-coefficient
+                  (f7x2-mul '(1 2 0 7) '(3 4 0)))) '(2 3))
+    (equal (list (f7x2-constant-coefficient (f7x2-mul '(-6 9) '(10 -3)))
+                 (f7x2-linear-coefficient (f7x2-mul '(-6 9) '(10 -3)))) '(2 3))
+    (equal (list (f7x2-constant-coefficient (f7x2-mul 'bad '(3 4)))
+                 (f7x2-linear-coefficient (f7x2-mul '(3 4) '(1 . bad)))) '(0 4))
+    (equal (f7x2-constant-coefficient (f7x2-mul '(1 1) '(1 1))) 0)
+    (equal (f7x2-linear-coefficient (f7x2-mul '(1 1) '(1 6))) 0)
+    (equal (list (f7x2-constant-coefficient (f7x2-mul '(0 0) '(3 4)))
+                 (f7x2-linear-coefficient (f7x2-mul '(0 0) '(3 4)))) '(0 0)))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (disable f7x2-mul)))))
+
 (defthm f7x2-negation-and-subtraction-coefficient-formula-regressions
   (and
    (equal (f7x2-constant-coefficient (f7x2-neg value))
