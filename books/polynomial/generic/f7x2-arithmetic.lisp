@@ -1530,6 +1530,64 @@
                  (:instance f7x2-add-inverse-right))
            :in-theory (disable f7x2-sub f7x2-add f7x2-neg f7x2-fix))))
 
+; Addition commutativity is reconstructed entirely through the public
+; coefficient interface.  ACL2 treats this ordinary rewrite rule as
+; permutative, so its loop stopper exchanges operands only toward the stable
+; term order rather than repeatedly swapping them.
+(defthm f7x2-add-commutative
+  (equal (f7x2-add first second)
+         (f7x2-add second first))
+  :rule-classes ((:rewrite :loop-stopper nil))
+  :hints
+  (("Goal"
+    :use ((:instance f7x2-coefficient-extensionality
+                     (first (f7x2-add first second))
+                     (second (f7x2-add second first)))
+          (:instance f7-add-commutative-for-polynomial-structure
+                     (x (f7x2-constant-coefficient first))
+                     (y (f7x2-constant-coefficient second)))
+          (:instance f7-add-commutative-for-polynomial-structure
+                     (x (f7x2-linear-coefficient first))
+                     (y (f7x2-linear-coefficient second))))
+    :in-theory
+    (disable f7x2-add f7x2-fix
+             gfield::f7-add gfield::f7-fix
+             f7-poly-add f7-raw-add f7-poly-neg f7-raw-neg
+             f7-poly-sub f7-poly-mul f7-raw-mul f7-raw-scale
+             f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+             f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+             f7-poly-division-step f7-poly-division-step-core))))
+
+(local
+ (defthm f7x2-add-commutative-regressions
+   (and
+    (equal (f7x2-add (f7x2-zero) (f7x2-one))
+           (f7x2-add (f7x2-one) (f7x2-zero)))
+    (equal (f7x2-add '(2) '(5)) (f7x2-add '(5) '(2)))
+    (equal (f7x2-add '(3) '(1 4)) (f7x2-add '(1 4) '(3)))
+    (equal (f7x2-add '(1 2) '(3 4)) (f7x2-add '(3 4) '(1 2)))
+    (equal (f7x2-add nil '(1 2)) (f7x2-add '(1 2) nil))
+    (equal (f7x2-add '(1 2 0) '(3)) (f7x2-add '(3) '(1 2 0)))
+    (equal (f7x2-add '(1 2 3 4) '(0 5))
+           (f7x2-add '(0 5) '(1 2 3 4)))
+    (equal (f7x2-add '(-1 9) '(8 -3)) (f7x2-add '(8 -3) '(-1 9)))
+    (equal (f7x2-add '(1/2 -3/2) '(2/3 5/4))
+           (f7x2-add '(2/3 5/4) '(1/2 -3/2)))
+    (equal (f7x2-add 'bad #\A) (f7x2-add #\A 'bad))
+    (equal (f7x2-add '(bad (also bad)) '(1 2))
+           (f7x2-add '(1 2) '(bad (also bad))))
+    (equal (f7x2-add '(1 2 . bad) '(3 4))
+           (f7x2-add '(3 4) '(1 2 . bad)))
+    (equal (f7x2-add (f7x2-fix '(10 -3 8)) (f7x2-fix '(1 9)))
+           (f7x2-add (f7x2-fix '(1 9)) (f7x2-fix '(10 -3 8))))
+    (equal (f7x2-add '(10 -3 8) '(1 2))
+           (f7x2-add '(1 2) '(10 -3 8)))
+    (equal (f7x2-add 'bad '(1 2)) (f7x2-add '(1 2) 'bad))
+    (equal (f7x2-add '(1 2) '(bad 9)) (f7x2-add '(bad 9) '(1 2)))
+    (equal (f7x2-add '(3 4) '(3 4)) (f7x2-add '(3 4) '(3 4))))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (enable f7x2-add-commutative)))))
+
 (defthm f7x2-mul-one-left
   (equal (f7x2-mul (f7x2-one) value)
          (f7x2-fix value))
