@@ -361,6 +361,97 @@
                              (value (f7x2-fix value))))
             :in-theory (disable f7x2-fix f7-normalize)))))
 
+; Bounded coefficientwise addition for the reconstructed representatives used
+; by the coefficient interface.  Keeping this whole-value calculation
+; separate prevents the rewriter from expanding recursive addition while it
+; is also transporting arbitrary operands through F7X2-FIX.
+(defthm f7-poly-add-of-normalized-two-coefficients
+  (implies (and (gfield::f7-element-p a)
+                (gfield::f7-element-p b)
+                (gfield::f7-element-p c)
+                (gfield::f7-element-p d))
+           (equal (f7-poly-add (f7-normalize (list a b))
+                               (f7-normalize (list c d)))
+                  (f7-normalize
+                   (list (gfield::f7-add a c)
+                         (gfield::f7-add b d)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :cases ((equal b 0) (equal d 0))
+           :in-theory
+           (e/d (f7-poly-add f7-raw-add f7-normalize
+                             f7-fix-coefficients f7-trim-trailing-zeros)
+                (f7-poly-divmod f7-poly-divmod-core
+                                f7-poly-division-step
+                                f7-poly-division-step-core
+                                f7-poly-remainder)))))
+
+(defthm f7-constant-projection-of-add-of-normalized-two-coefficients
+  (implies (and (gfield::f7-element-p a)
+                (gfield::f7-element-p b)
+                (gfield::f7-element-p c)
+                (gfield::f7-element-p d))
+           (equal
+            (gfield::f7-fix
+             (car (f7-poly-add (f7-normalize (list a b))
+                               (f7-normalize (list c d)))))
+            (gfield::f7-add a c)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-poly-add-of-normalized-two-coefficients)
+                 (:instance f7-element-p-of-f7-add-for-raw-shape
+                            (x a) (y c)))
+           :in-theory
+           (e/d (f7-normalize f7-fix-coefficients
+                              f7-trim-trailing-zeros)
+                (f7-poly-add f7-raw-add gfield::f7-add
+                             gfield::f7-fix)))))
+
+(defthm f7-linear-projection-of-add-of-normalized-two-coefficients
+  (implies (and (gfield::f7-element-p a)
+                (gfield::f7-element-p b)
+                (gfield::f7-element-p c)
+                (gfield::f7-element-p d))
+           (equal
+            (gfield::f7-fix
+             (cadr (f7-poly-add (f7-normalize (list a b))
+                                (f7-normalize (list c d)))))
+            (gfield::f7-add b d)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-poly-add-of-normalized-two-coefficients)
+                 (:instance f7-element-p-of-f7-add-for-raw-shape
+                            (x b) (y d)))
+           :in-theory
+           (e/d (f7-normalize f7-fix-coefficients
+                              f7-trim-trailing-zeros)
+                (f7-poly-add f7-raw-add gfield::f7-add
+                             gfield::f7-fix)))))
+
+(defthm f7-bounded-normalized-addition-regressions
+  (and
+   (equal (f7-poly-add (f7-normalize '(1 2))
+                       (f7-normalize '(3 4)))
+          '(4 6))
+   (equal (f7-poly-add (f7-normalize '(1 2))
+                       (f7-normalize '(3 5)))
+          '(4))
+   (equal (f7-poly-add (f7-normalize '(1 2))
+                       (f7-normalize '(6 3)))
+          '(0 5))
+   (equal (f7-poly-add (f7-normalize '(1 2))
+                       (f7-normalize '(6 5)))
+          nil)
+   (equal (f7-poly-add (f7-normalize '(1 0))
+                       (f7-normalize '(2 3)))
+          '(3 3))
+   (equal (f7-poly-add nil (f7-normalize '(2 3)))
+          '(2 3))
+   (equal (f7-poly-add (f7-normalize '(1 0))
+                       (f7-normalize '(3 4)))
+          '(4 4)))
+  :rule-classes nil)
+
 
 (assert-event
  (and
