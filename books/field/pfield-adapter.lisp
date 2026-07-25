@@ -442,6 +442,78 @@
               (f7-add 'arbitrary 15)))
   :rule-classes nil)
 
+(encapsulate
+ ()
+ (local
+  (defthm pfield-mul-zero-left-for-f7-interface
+    (equal (pfield-mul (pfield-zero) x) (pfield-zero))
+    :hints (("Goal" :by (:functional-instance field-mul-zero-left
+                         (field-element-p pfield-element-p)
+                         (field-fix pfield-fix)
+                         (field-zero pfield-zero)
+                         (field-one pfield-one)
+                         (field-add pfield-add)
+                         (field-mul pfield-mul)
+                         (field-neg pfield-neg)
+                         (field-inv pfield-inv))))))
+
+ (defthm f7-mul-zero-left
+   (equal (f7-mul (f7-zero) value) (f7-zero))
+   :hints (("Goal" :by (:functional-instance
+                        pfield-mul-zero-left-for-f7-interface
+                        (pfield-modulus (lambda () 7))
+                        (pfield-element-p f7-element-p)
+                        (pfield-fix f7-fix)
+                        (pfield-zero f7-zero)
+                        (pfield-one f7-one)
+                        (pfield-add f7-add)
+                        (pfield-mul f7-mul)
+                        (pfield-neg f7-neg)
+                        (pfield-inv f7-inv))
+            :in-theory (enable dm::primep))))
+
+ (local
+  (defthm pfield-mul-zero-right-for-f7-interface
+    (equal (pfield-mul x (pfield-zero)) (pfield-zero))
+    :hints (("Goal" :by (:functional-instance field-mul-zero-right
+                         (field-element-p pfield-element-p)
+                         (field-fix pfield-fix)
+                         (field-zero pfield-zero)
+                         (field-one pfield-one)
+                         (field-add pfield-add)
+                         (field-mul pfield-mul)
+                         (field-neg pfield-neg)
+                         (field-inv pfield-inv))))))
+
+ (defthm f7-mul-zero-right
+   (equal (f7-mul value (f7-zero)) (f7-zero))
+   :hints (("Goal" :by (:functional-instance
+                        pfield-mul-zero-right-for-f7-interface
+                        (pfield-modulus (lambda () 7))
+                        (pfield-element-p f7-element-p)
+                        (pfield-fix f7-fix)
+                        (pfield-zero f7-zero)
+                        (pfield-one f7-one)
+                        (pfield-add f7-add)
+                        (pfield-mul f7-mul)
+                        (pfield-neg f7-neg)
+                        (pfield-inv f7-inv))
+            :in-theory (enable dm::primep))))
+
+(defthm f7-mul-zero-regressions
+  (and (equal (f7-mul (f7-zero) (f7-zero)) (f7-zero))
+       (equal (f7-mul (f7-one) (f7-zero)) (f7-zero))
+       (equal (f7-mul (f7-zero) 6) (f7-zero))
+       (equal (f7-mul -8 (f7-zero)) (f7-zero))
+       (equal (f7-mul (f7-zero) 15) (f7-zero))
+       (equal (f7-mul 1/2 (f7-zero)) (f7-zero))
+       (equal (f7-mul (f7-zero) 'arbitrary) (f7-zero))
+       (equal (f7-mul '(arbitrary . object) (f7-zero)) (f7-zero))
+       (equal (f7-mul (f7-zero) nil) (f7-zero))
+       (equal (f7-mul (f7-fix -8) (f7-zero)) (f7-zero)))
+  :rule-classes nil)
+)
+
 (defthm f7-mul-one-left
   (equal (f7-mul (f7-one) x) (f7-fix x)))
 
