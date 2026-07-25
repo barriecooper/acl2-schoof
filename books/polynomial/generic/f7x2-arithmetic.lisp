@@ -831,6 +831,289 @@
   :rule-classes nil
   :hints (("Goal" :in-theory (disable f7x2-add))))
 
+; Local adapters connect the bounded fixed-CAR/CADR projections to the
+; public projections without exposing reduction or recursive arithmetic.
+(local
+ (defthm f7x2-constant-projection-of-bounded-neg
+   (implies (and (gfield::f7-element-p a) (gfield::f7-element-p b))
+            (equal (f7x2-constant-coefficient
+                    (f7-poly-neg (f7-normalize (list a b))))
+                   (gfield::f7-neg a)))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-poly-neg-of-normalized-two-coefficients)
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation (x a))
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation (x b))
+                  (:instance f7x2-element-p-of-normalized-two-coefficients
+                             (a (gfield::f7-neg a)) (b (gfield::f7-neg b)))
+                  (:instance f7-constant-projection-of-neg-of-normalized-two-coefficients))
+            :in-theory
+            (e/d (f7x2-constant-coefficient)
+                 (f7x2-constant-coefficient-of-fix gfield::f7-neg
+                  gfield::f7-fix gfield::f7-element-p f7-poly-neg f7-raw-neg
+                  f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+                  f7x2-fix f7-poly-remainder f7-poly-divmod
+                  f7-poly-divmod-core f7-poly-division-step
+                  f7-poly-division-step-core))))))
+
+(local
+ (defthm f7x2-linear-projection-of-bounded-neg
+   (implies (and (gfield::f7-element-p a) (gfield::f7-element-p b))
+            (equal (f7x2-linear-coefficient
+                    (f7-poly-neg (f7-normalize (list a b))))
+                   (gfield::f7-neg b)))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-poly-neg-of-normalized-two-coefficients)
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation (x a))
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation (x b))
+                  (:instance f7x2-element-p-of-normalized-two-coefficients
+                             (a (gfield::f7-neg a)) (b (gfield::f7-neg b)))
+                  (:instance f7-linear-projection-of-neg-of-normalized-two-coefficients))
+            :in-theory
+            (e/d (f7x2-linear-coefficient)
+                 (f7x2-linear-coefficient-of-fix gfield::f7-neg
+                  gfield::f7-fix gfield::f7-element-p f7-poly-neg f7-raw-neg
+                  f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+                  f7x2-fix f7-poly-remainder f7-poly-divmod
+                  f7-poly-divmod-core f7-poly-division-step
+                  f7-poly-division-step-core))))))
+
+(local
+ (defthm f7x2-constant-projection-of-bounded-sub
+   (implies (and (gfield::f7-element-p a) (gfield::f7-element-p b)
+                 (gfield::f7-element-p c) (gfield::f7-element-p d))
+            (equal (f7x2-constant-coefficient
+                    (f7-poly-sub (f7-normalize (list a b))
+                                 (f7-normalize (list c d))))
+                   (gfield::f7-sub a c)))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-poly-sub-of-normalized-two-coefficients)
+                  (:instance f7-element-p-of-f7-add-for-raw-shape
+                             (x a) (y (gfield::f7-neg c)))
+                  (:instance f7-element-p-of-f7-add-for-raw-shape
+                             (x b) (y (gfield::f7-neg d)))
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation (x c))
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation (x d))
+                  (:instance f7x2-element-p-of-normalized-two-coefficients
+                             (a (gfield::f7-sub a c))
+                             (b (gfield::f7-sub b d)))
+                  (:instance f7-constant-projection-of-sub-of-normalized-two-coefficients))
+            :in-theory
+            (e/d (f7x2-constant-coefficient gfield::f7-sub)
+                 (f7x2-constant-coefficient-of-fix gfield::f7-add
+                  gfield::f7-neg gfield::f7-fix gfield::f7-element-p
+                  f7-poly-sub f7-poly-neg f7-raw-neg f7-poly-add f7-raw-add
+                  f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+                  f7x2-fix f7-poly-remainder f7-poly-divmod
+                  f7-poly-divmod-core f7-poly-division-step
+                  f7-poly-division-step-core))))))
+
+(local
+ (defthm f7x2-linear-projection-of-bounded-sub
+   (implies (and (gfield::f7-element-p a) (gfield::f7-element-p b)
+                 (gfield::f7-element-p c) (gfield::f7-element-p d))
+            (equal (f7x2-linear-coefficient
+                    (f7-poly-sub (f7-normalize (list a b))
+                                 (f7-normalize (list c d))))
+                   (gfield::f7-sub b d)))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-poly-sub-of-normalized-two-coefficients)
+                  (:instance f7-element-p-of-f7-add-for-raw-shape
+                             (x a) (y (gfield::f7-neg c)))
+                  (:instance f7-element-p-of-f7-add-for-raw-shape
+                             (x b) (y (gfield::f7-neg d)))
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation (x c))
+                  (:instance f7-element-p-of-f7-neg-for-bounded-negation (x d))
+                  (:instance f7x2-element-p-of-normalized-two-coefficients
+                             (a (gfield::f7-sub a c))
+                             (b (gfield::f7-sub b d)))
+                  (:instance f7-linear-projection-of-sub-of-normalized-two-coefficients))
+            :in-theory
+            (e/d (f7x2-linear-coefficient gfield::f7-sub)
+                 (f7x2-linear-coefficient-of-fix gfield::f7-add
+                  gfield::f7-neg gfield::f7-fix gfield::f7-element-p
+                  f7-poly-sub f7-poly-neg f7-raw-neg f7-poly-add f7-raw-add
+                  f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+                  f7x2-fix f7-poly-remainder f7-poly-divmod
+                  f7-poly-divmod-core f7-poly-division-step
+                  f7-poly-division-step-core))))))
+
+(local
+ (defthm f7x2-constant-coefficient-of-neg-of-fix
+   (equal (f7x2-constant-coefficient (f7x2-neg (f7x2-fix value)))
+          (gfield::f7-neg (f7x2-constant-coefficient value)))
+   :hints (("Goal"
+            :use ((:instance f7x2-fix-reconstruct)
+                  (:instance f7-element-p-of-f7x2-constant-coefficient (x value))
+                  (:instance f7-element-p-of-f7x2-linear-coefficient (x value))
+                  (:instance f7x2-constant-projection-of-bounded-neg
+                             (a (f7x2-constant-coefficient value))
+                             (b (f7x2-linear-coefficient value))))
+            :in-theory (e/d (f7x2-neg)
+                            (f7x2-neg-of-fix f7x2-constant-coefficient f7x2-linear-coefficient
+                             gfield::f7-neg gfield::f7-fix gfield::f7-element-p
+                             f7-poly-neg f7-raw-neg f7-normalize
+                             f7-fix-coefficients f7-trim-trailing-zeros
+                             f7x2-fix f7-poly-remainder f7-poly-divmod
+                             f7-poly-divmod-core f7-poly-division-step
+                             f7-poly-division-step-core))))))
+(local
+ (defthm f7x2-linear-coefficient-of-neg-of-fix
+   (equal (f7x2-linear-coefficient (f7x2-neg (f7x2-fix value)))
+          (gfield::f7-neg (f7x2-linear-coefficient value)))
+   :hints (("Goal"
+            :use ((:instance f7x2-fix-reconstruct)
+                  (:instance f7-element-p-of-f7x2-constant-coefficient (x value))
+                  (:instance f7-element-p-of-f7x2-linear-coefficient (x value))
+                  (:instance f7x2-linear-projection-of-bounded-neg
+                             (a (f7x2-constant-coefficient value))
+                             (b (f7x2-linear-coefficient value))))
+            :in-theory (e/d (f7x2-neg)
+                            (f7x2-neg-of-fix f7x2-constant-coefficient f7x2-linear-coefficient
+                             gfield::f7-neg gfield::f7-fix gfield::f7-element-p
+                             f7-poly-neg f7-raw-neg f7-normalize
+                             f7-fix-coefficients f7-trim-trailing-zeros
+                             f7x2-fix f7-poly-remainder f7-poly-divmod
+                             f7-poly-divmod-core f7-poly-division-step
+                             f7-poly-division-step-core))))))
+
+(defthm f7x2-constant-coefficient-of-neg
+  (equal (f7x2-constant-coefficient (f7x2-neg value))
+         (gfield::f7-neg (f7x2-constant-coefficient value)))
+  :hints (("Goal" :use ((:instance f7x2-neg-of-fix)
+                         (:instance f7x2-constant-coefficient-of-neg-of-fix))
+           :in-theory (disable f7x2-neg f7x2-fix
+                               f7x2-constant-coefficient gfield::f7-neg))))
+(defthm f7x2-linear-coefficient-of-neg
+  (equal (f7x2-linear-coefficient (f7x2-neg value))
+         (gfield::f7-neg (f7x2-linear-coefficient value)))
+  :hints (("Goal" :use ((:instance f7x2-neg-of-fix)
+                         (:instance f7x2-linear-coefficient-of-neg-of-fix))
+           :in-theory (disable f7x2-neg f7x2-fix
+                               f7x2-linear-coefficient gfield::f7-neg))))
+
+(local
+ (defthm f7x2-constant-coefficient-of-sub-of-fixes
+   (equal (f7x2-constant-coefficient
+           (f7x2-sub (f7x2-fix first) (f7x2-fix second)))
+          (gfield::f7-sub (f7x2-constant-coefficient first)
+                          (f7x2-constant-coefficient second)))
+   :hints (("Goal"
+            :use ((:instance f7x2-fix-reconstruct (value first))
+                  (:instance f7x2-fix-reconstruct (value second))
+                  (:instance f7-element-p-of-f7x2-constant-coefficient (x first))
+                  (:instance f7-element-p-of-f7x2-linear-coefficient (x first))
+                  (:instance f7-element-p-of-f7x2-constant-coefficient (x second))
+                  (:instance f7-element-p-of-f7x2-linear-coefficient (x second))
+                  (:instance f7x2-constant-projection-of-bounded-sub
+                             (a (f7x2-constant-coefficient first))
+                             (b (f7x2-linear-coefficient first))
+                             (c (f7x2-constant-coefficient second))
+                             (d (f7x2-linear-coefficient second))))
+            :in-theory (e/d (f7x2-sub)
+                            (f7x2-sub-of-fix-left f7x2-sub-of-fix-right
+                             f7x2-constant-coefficient f7x2-linear-coefficient
+                             gfield::f7-sub gfield::f7-fix gfield::f7-element-p
+                             f7-poly-sub f7-poly-neg f7-raw-neg f7-poly-add
+                             f7-raw-add f7-normalize f7-fix-coefficients
+                             f7-trim-trailing-zeros f7x2-fix f7-poly-remainder
+                             f7-poly-divmod f7-poly-divmod-core
+                             f7-poly-division-step f7-poly-division-step-core))))))
+(local
+ (defthm f7x2-linear-coefficient-of-sub-of-fixes
+   (equal (f7x2-linear-coefficient
+           (f7x2-sub (f7x2-fix first) (f7x2-fix second)))
+          (gfield::f7-sub (f7x2-linear-coefficient first)
+                          (f7x2-linear-coefficient second)))
+   :hints (("Goal"
+            :use ((:instance f7x2-fix-reconstruct (value first))
+                  (:instance f7x2-fix-reconstruct (value second))
+                  (:instance f7-element-p-of-f7x2-constant-coefficient (x first))
+                  (:instance f7-element-p-of-f7x2-linear-coefficient (x first))
+                  (:instance f7-element-p-of-f7x2-constant-coefficient (x second))
+                  (:instance f7-element-p-of-f7x2-linear-coefficient (x second))
+                  (:instance f7x2-linear-projection-of-bounded-sub
+                             (a (f7x2-constant-coefficient first))
+                             (b (f7x2-linear-coefficient first))
+                             (c (f7x2-constant-coefficient second))
+                             (d (f7x2-linear-coefficient second))))
+            :in-theory (e/d (f7x2-sub)
+                            (f7x2-sub-of-fix-left f7x2-sub-of-fix-right
+                             f7x2-constant-coefficient f7x2-linear-coefficient
+                             gfield::f7-sub gfield::f7-fix gfield::f7-element-p
+                             f7-poly-sub f7-poly-neg f7-raw-neg f7-poly-add
+                             f7-raw-add f7-normalize f7-fix-coefficients
+                             f7-trim-trailing-zeros f7x2-fix f7-poly-remainder
+                             f7-poly-divmod f7-poly-divmod-core
+                             f7-poly-division-step f7-poly-division-step-core))))))
+
+(defthm f7x2-constant-coefficient-of-sub
+  (equal (f7x2-constant-coefficient (f7x2-sub first second))
+         (gfield::f7-sub (f7x2-constant-coefficient first)
+                         (f7x2-constant-coefficient second)))
+  :hints (("Goal" :use ((:instance f7x2-sub-of-fixes)
+                         (:instance f7x2-constant-coefficient-of-sub-of-fixes))
+           :in-theory (disable f7x2-sub-of-fix-left f7x2-sub-of-fix-right
+                               f7x2-sub f7x2-fix f7x2-constant-coefficient
+                               gfield::f7-sub))))
+(defthm f7x2-linear-coefficient-of-sub
+  (equal (f7x2-linear-coefficient (f7x2-sub first second))
+         (gfield::f7-sub (f7x2-linear-coefficient first)
+                         (f7x2-linear-coefficient second)))
+  :hints (("Goal" :use ((:instance f7x2-sub-of-fixes)
+                         (:instance f7x2-linear-coefficient-of-sub-of-fixes))
+           :in-theory (disable f7x2-sub-of-fix-left f7x2-sub-of-fix-right
+                               f7x2-sub f7x2-fix f7x2-linear-coefficient
+                               gfield::f7-sub))))
+
+(defthm f7x2-negation-and-subtraction-coefficient-formula-regressions
+  (and
+   (equal (f7x2-constant-coefficient (f7x2-neg value))
+          (gfield::f7-neg (f7x2-constant-coefficient value)))
+   (equal (f7x2-linear-coefficient (f7x2-neg value))
+          (gfield::f7-neg (f7x2-linear-coefficient value)))
+   (equal (list (f7x2-constant-coefficient (f7x2-neg '(1 2)))
+                (f7x2-linear-coefficient (f7x2-neg '(1 2)))) '(6 5))
+   (equal (list (f7x2-constant-coefficient (f7x2-neg '(3)))
+                (f7x2-linear-coefficient (f7x2-neg '(3)))) '(4 0))
+   (equal (list (f7x2-constant-coefficient (f7x2-neg nil))
+                (f7x2-linear-coefficient (f7x2-neg nil))) '(0 0))
+   (equal (list (f7x2-constant-coefficient (f7x2-neg '(0 2)))
+                (f7x2-linear-coefficient (f7x2-neg '(0 2)))) '(0 5))
+   (equal (list (f7x2-constant-coefficient (f7x2-neg '(1 2 3)))
+                (f7x2-linear-coefficient (f7x2-neg '(1 2 3)))) '(2 5))
+   (equal (list (f7x2-constant-coefficient (f7x2-neg '(-1 9 bad)))
+                (f7x2-linear-coefficient (f7x2-neg '(-1 9 bad)))) '(1 5))
+   (equal (f7x2-constant-coefficient (f7x2-sub first second))
+          (gfield::f7-sub (f7x2-constant-coefficient first)
+                          (f7x2-constant-coefficient second)))
+   (equal (f7x2-linear-coefficient (f7x2-sub first second))
+          (gfield::f7-sub (f7x2-linear-coefficient first)
+                          (f7x2-linear-coefficient second)))
+   (equal (list (f7x2-constant-coefficient (f7x2-sub '(1 2) '(3 4)))
+                (f7x2-linear-coefficient (f7x2-sub '(1 2) '(3 4)))) '(5 5))
+   (equal (list (f7x2-constant-coefficient (f7x2-sub '(1 2) '(1 2)))
+                (f7x2-linear-coefficient (f7x2-sub '(1 2) '(1 2)))) '(0 0))
+   (equal (list (f7x2-constant-coefficient (f7x2-sub '(1 2) '(3 2)))
+                (f7x2-linear-coefficient (f7x2-sub '(1 2) '(3 2)))) '(5 0))
+   (equal (list (f7x2-constant-coefficient (f7x2-sub '(1 2) '(1 4)))
+                (f7x2-linear-coefficient (f7x2-sub '(1 2) '(1 4)))) '(0 5))
+   (equal (list (f7x2-constant-coefficient (f7x2-sub '(1) '(3 4)))
+                (f7x2-linear-coefficient (f7x2-sub '(1) '(3 4)))) '(5 3))
+   (equal (list (f7x2-constant-coefficient (f7x2-sub '(1 2) '(3)))
+                (f7x2-linear-coefficient (f7x2-sub '(1 2) '(3)))) '(5 2))
+   (equal (list (f7x2-constant-coefficient (f7x2-sub nil '(3 4)))
+                (f7x2-linear-coefficient (f7x2-sub nil '(3 4)))) '(4 3))
+   (equal (list (f7x2-constant-coefficient (f7x2-sub '(1 2) nil))
+                (f7x2-linear-coefficient (f7x2-sub '(1 2) nil))) '(1 2))
+   (equal (list (f7x2-constant-coefficient (f7x2-sub '(1 2 3) '(-1 9)))
+                (f7x2-linear-coefficient (f7x2-sub '(1 2 3) '(-1 9)))) '(6 0)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (disable f7x2-neg f7x2-sub))))
+
 (defthm f7-bounded-normalized-addition-regressions
   (and
    (equal (f7-poly-add (f7-normalize '(1 2))
