@@ -145,6 +145,10 @@ guard verification remains separate execution assurance. Concrete F7 GCD,
 F7 polynomial modular inverse, quotient/extension fields, curves, and Schoof remain open.
 # F7X2 canonical representative fixer
 
+# F7X2 transparent reduced arithmetic
+
+`F7X2-ADD`, `F7X2-NEG`, `F7X2-SUB`, and `F7X2-MUL` are ordinary transparent DEFUNs.  Each calls the corresponding existing concrete F7 polynomial operation and immediately post-processes through `F7X2-FIX`, so total ACL2-object semantics inherit atomic and malformed-tail handling, dotted-list truncation, F7 coefficient fixing, trailing-zero normalization, arbitrary-degree reduction modulo `(1 0 1)`, and canonical equality through the fixer.  Raw noncanonical inputs are accepted by the executable functions, but they are not carrier elements unless recognized by `F7X2-ELEMENT-P` or replaced by their fixed representatives.  No MBE, DEFEXEC, attachment, raw Lisp, inverse operation, field law package, or GFIELD instance is added.
+
 `F7X2-FIX` is a transparent, nonrecursive composition of the existing concrete
 `F7-POLY-REMAINDER` with the fixed modulus `(1 0 1)`.  Its logical and
 executable definitions are identical; no `MBE`, attachment, or alternate
