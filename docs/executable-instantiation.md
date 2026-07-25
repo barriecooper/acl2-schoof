@@ -29,6 +29,15 @@ weight, obvious expansions, ordinary guard verification, and straightforward
 debugging.  Its explicit operation arguments also scale to multiplication and
 extension-field instances without committing this project to a framework.
 
+The same policy now covers the deliberately narrow
+`def-reduced-ring-instance` macro.  Its first invocation regenerates the five
+existing variable-modulus F7 reduced-operation DEFUNs, explicitly verifies
+their unchanged guards, and selects only the public F7 right-distributivity
+instance.  The caller supplies every public name, the complete functional
+substitution, the generic source theorem, its rule classes, and narrow common
+and theorem-specific hints.  There is no compulsory all-theorems mode; the
+remaining F7 reduced-ring laws and every fixed-modulus/F7X2 bridge remain open.
+
 ## Logical and executable boundary
 
 The GFIELD-based `fix-coefficients`, `trim-trailing-zeros`, `normalize`, and

@@ -465,8 +465,15 @@ return bounded canonical representatives. The certified interface includes
 normalization and reduction fixed points, all-operand normalization invariance,
 and representative invariance using the existing remainder arithmetic laws.
 The F7 specializations exercise reducible and irreducible-looking moduli without
-making irreducibility or field claims. These are representative operations
-only until `generic/reduced-ring.lisp`, which now certifies the complete
+making irreducibility or field claims. These representative operations are now
+emitted by the transparent project-local `def-reduced-ring-instance` generator
+with their original names, bodies, total guards, and arbitrary-input semantics
+unchanged.  Its expansion contains only ordinary DEFUN, VERIFY-GUARDS, and
+selected DEFTHM events.  The first and currently only public symbolic F7
+ring-law instance is `F7-POLY-REDUCED-MUL-RIGHT-DISTRIBUTIVE`, transported
+directly from the generic theorem by the explicit F7 functional substitution.
+The remaining F7 theorem suite and all F7X2 bridges remain open.  These are
+representative operations only until `generic/reduced-ring.lisp`, which now certifies the complete
 literal-equality commutative-ring interface and modulus-dependent
 `POLY-REDUCED-ONE`. Identity conclusions return the canonical remainder for
 arbitrary representations, with focused fixed-representative corollaries.
