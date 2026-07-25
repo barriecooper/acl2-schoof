@@ -2348,3 +2348,50 @@
            (f7x2-mul '(3 4) '(1 2))))
    :rule-classes nil
    :hints (("Goal" :in-theory (enable f7x2-mul-commutative)))))
+
+; Multiplication associativity crosses only the public operand-fixer boundary.
+; Selective expansion exposes each inner result as a fixed concrete polynomial
+; product; the one-sided compatibility rules remove those fixers before the
+; remaining outer calls are compared by concrete polynomial associativity.
+(defthm f7x2-mul-associative
+  (equal (f7x2-mul (f7x2-mul first second) third)
+         (f7x2-mul first (f7x2-mul second third)))
+  :hints
+  (("Goal"
+    :use ((:instance f7x2-mul-of-fix-left
+                     (first (f7-poly-mul first second))
+                     (second third))
+          (:instance f7x2-mul-of-fix-right
+                     (first first)
+                     (second (f7-poly-mul second third)))
+          (:instance f7-poly-mul-associative-from-generic
+                     (x first) (y second) (z third)))
+    :expand ((f7x2-mul first second)
+             (f7x2-mul second third)
+             (f7x2-mul (f7-poly-mul first second) third)
+             (f7x2-mul first (f7-poly-mul second third)))
+    :in-theory
+    (disable f7x2-fix f7x2-mul f7x2-mul-commutative
+             f7-poly-mul-associate-right-for-power
+             f7-poly-mul f7-raw-mul f7-raw-scale f7-raw-add
+             f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+             f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+             f7-poly-division-step f7-poly-division-step-core
+             gfield::f7-fix gfield::f7-add gfield::f7-mul))))
+
+(local
+ (defthm f7x2-mul-associative-regressions
+   (and
+    (equal (f7x2-mul (f7x2-mul (f7x2-zero) (f7x2-one)) '(3 4))
+           (f7x2-mul (f7x2-zero) (f7x2-mul (f7x2-one) '(3 4))))
+    (equal (f7x2-mul (f7x2-mul '(1 2) '(3 4)) '(5 6))
+           (f7x2-mul '(1 2) (f7x2-mul '(3 4) '(5 6))))
+    (equal (f7x2-mul (f7x2-mul '(bad 9 . tail) '(8 -3 0)) '(1 . bad))
+           (f7x2-mul '(bad 9 . tail) (f7x2-mul '(8 -3 0) '(1 . bad))))
+    (equal (f7x2-mul (f7x2-mul (f7x2-fix '(10 -3 8)) '(1 2 0)) '(3 4))
+           (f7x2-mul (f7x2-fix '(10 -3 8))
+                     (f7x2-mul '(1 2 0) '(3 4))))
+    (equal (f7x2-mul (f7x2-mul '(1 2 0) '(3 4)) '(5 6))
+           (f7x2-mul '(1 2) (f7x2-mul '(3 4) '(5 6)))))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (enable f7x2-mul-associative)))))
