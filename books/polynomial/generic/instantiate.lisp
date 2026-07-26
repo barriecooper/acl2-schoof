@@ -112,7 +112,9 @@
                reduced-sub-zero-right-name reduced-sub-zero-right-source
                reduced-sub-zero-right-rule-classes reduced-sub-zero-right-hints
                reduced-sub-zero-left-name reduced-sub-zero-left-source
-               reduced-sub-zero-left-rule-classes reduced-sub-zero-left-hints)
+               reduced-sub-zero-left-rule-classes reduced-sub-zero-left-hints
+               reduced-sub-as-add-neg-name reduced-sub-as-add-neg-source
+               reduced-sub-as-add-neg-rule-classes reduced-sub-as-add-neg-hints)
   `(progn
      (defun ,reduced-add (left right modulus)
        (,remainder (,poly-add left right) modulus))
@@ -287,6 +289,21 @@
                           ,@functional-substitution))))
                  ,@theorem-hints
                  ,@reduced-sub-zero-left-hints))))
+     ,@(and reduced-sub-as-add-neg-name
+            `((defthm ,reduced-sub-as-add-neg-name
+                (equal (,reduced-sub a b modulus)
+                       (,reduced-add
+                        a (,reduced-neg b modulus) modulus))
+                :rule-classes ,reduced-sub-as-add-neg-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,reduced-sub-as-add-neg-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@reduced-sub-as-add-neg-hints))))
      ,@(and mul-right-distributive-name
             `((defthm ,mul-right-distributive-name
                 (equal
