@@ -483,10 +483,12 @@ identity laws, and the two additive-inverse laws do not constitute the complete
 additive interface.  The five public
 `F7-CANONICAL-POLYNOMIAL-P-OF-POLY-REDUCED-{ADD,NEG,SUB,MUL,ONE}` rules certify
 unconditional canonical-predicate output for every generated reduced-ring
-operation.  Normalization fixed points, remainder stability, fixer/remainder
-compatibility, representative independence, congruence, degree-bound
-specializations, remaining ring laws, exponentiation, inversion, and field
-promotion remain open.  These are
+operation.  The corresponding normalization rules and
+`F7-POLY-REMAINDER-OF-POLY-REDUCED-{ADD,NEG,SUB,MUL,ONE}` rules certify
+unconditional normalization and remainder fixed points for all five operations,
+including every total modulus case.  Fixer/remainder compatibility,
+representative independence, congruence, degree-bound specializations, remaining
+ring laws, exponentiation, inversion, and field promotion remain open.  These are
 representative operations only until `generic/reduced-ring.lisp`, which now certifies the complete
 literal-equality commutative-ring interface and modulus-dependent
 `POLY-REDUCED-ONE`. Identity conclusions return the canonical remainder for
