@@ -213,6 +213,25 @@
   :hints (("Goal" :in-theory (enable f7x2-constant-coefficient
                                      f7x2-one gfield::f7-one))))
 
+(defthm f7x2-zero-not-equal-f7x2-one
+  (not (equal (f7x2-zero)
+              (f7x2-one)))
+  :hints (("Goal"
+           :use ((:instance f7x2-constant-coefficient-of-zero)
+                 (:instance f7x2-constant-coefficient-of-one)
+                 (:instance gfield::f7-zero-not-equal-f7-one))
+           :in-theory nil)))
+
+(local
+ (defthm f7x2-zero-not-equal-f7x2-one-regression
+   (and (not (equal (f7x2-zero) (f7x2-one)))
+        (not (equal (f7x2-one) (f7x2-zero))))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7x2-zero-not-equal-f7x2-one))
+            :in-theory (disable f7x2-zero-not-equal-f7x2-one
+                                f7x2-zero f7x2-one)))))
+
 (defthm f7x2-linear-coefficient-of-one
   (equal (f7x2-linear-coefficient (f7x2-one))
          (gfield::f7-zero))
