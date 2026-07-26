@@ -98,7 +98,11 @@
                add-zero-left-name add-zero-left-source
                add-zero-left-rule-classes add-zero-left-hints
                add-zero-right-name add-zero-right-source
-               add-zero-right-rule-classes add-zero-right-hints)
+               add-zero-right-rule-classes add-zero-right-hints
+               add-inverse-left-name add-inverse-left-source
+               add-inverse-left-rule-classes add-inverse-left-hints
+               add-inverse-right-name add-inverse-right-source
+               add-inverse-right-rule-classes add-inverse-right-hints)
   `(progn
      (defun ,reduced-add (left right modulus)
        (,remainder (,poly-add left right) modulus))
@@ -174,6 +178,36 @@
                          (a first))))
                  ,@theorem-hints
                  ,@add-zero-right-hints))))
+     ,@(and add-inverse-left-name
+            `((defthm ,add-inverse-left-name
+                (equal
+                 (,reduced-add (,reduced-neg a modulus) a modulus)
+                 nil)
+                :rule-classes ,add-inverse-left-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,add-inverse-left-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@add-inverse-left-hints))))
+     ,@(and add-inverse-right-name
+            `((defthm ,add-inverse-right-name
+                (equal
+                 (,reduced-add a (,reduced-neg a modulus) modulus)
+                 nil)
+                :rule-classes ,add-inverse-right-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,add-inverse-right-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@add-inverse-right-hints))))
      ,@(and mul-right-distributive-name
             `((defthm ,mul-right-distributive-name
                 (equal

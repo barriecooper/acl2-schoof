@@ -473,12 +473,14 @@ independently selected DEFTHM events.  The public symbolic F7 ring-law instances
 are `F7-POLY-REDUCED-ADD-COMMUTATIVE`,
 `F7-POLY-REDUCED-ADD-ASSOCIATIVE`,
 `F7-POLY-REDUCED-ADD-ZERO-LEFT`,
-`F7-POLY-REDUCED-ADD-ZERO-RIGHT`, and
+`F7-POLY-REDUCED-ADD-ZERO-RIGHT`,
+`F7-POLY-REDUCED-ADD-INVERSE-LEFT`,
+`F7-POLY-REDUCED-ADD-INVERSE-RIGHT`, and
 `F7-POLY-REDUCED-MUL-RIGHT-DISTRIBUTIVE`, each transported directly from its
 generic theorem by the explicit F7 functional substitution.  The remaining F7
-theorem suite remains open; addition commutativity, associativity, and the two
-identity laws do not constitute the complete additive interface.  Additive
-inverse, negation, subtraction, canonicality, and general fixer compatibility,
+theorem suite remains open; addition commutativity, associativity, the two
+identity laws, and the two additive-inverse laws do not constitute the complete
+additive interface.  General negation, subtraction, canonicality, and general fixer compatibility,
 along with the remaining ring and field work, remain open.  These are
 representative operations only until `generic/reduced-ring.lisp`, which now certifies the complete
 literal-equality commutative-ring interface and modulus-dependent
