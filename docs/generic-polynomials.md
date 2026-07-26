@@ -296,6 +296,11 @@ is ordinary structural equality after reduction; `POLY-CONGRUENT-P` names the
 separate quotient equivalence. Neither reduction nor congruence makes a field
 claim.
 
+Generic remainder is invariant under prior coefficient fixing of either its
+dividend or its modulus.  Both rewrite laws are unconditional over the complete
+total ACL2 input domain, including `nil`, atoms, improper and malformed lists,
+normalized-zero and constant moduli, and positive-degree polynomials.
+
 The same generic reduction book now defines `POLY-CONGRUENT-P` as structural
 equality of canonical `POLY-REMAINDER` results.  The relation is certified as
 reflexive, symmetric, and transitive and is invariant under normalizing either
