@@ -1,5 +1,9 @@
 # Arbitrary finite-field architecture
 
+> **Historical design record.** Status and “next” sequences in this audit describe
+> the revision at which it was written. Current status is maintained only in
+> `obligations.md`; current sequencing is in `proof-plan.md`.
+
 ## Decision and scope
 
 This audit is based on repository commit `e245553` and ACL2 8.6 / Community

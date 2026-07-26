@@ -1,5 +1,9 @@
 # F7 polynomial GCD to extension-field reconnaissance
 
+> **Historical design record.** Status and “next” sequences in this audit describe
+> the revision at which it was written. Current status is maintained only in
+> `obligations.md`; current sequencing is in `proof-plan.md`.
+
 ## July 2026 modulus reconnaissance update
 
 The preferred first candidate remains the constant-first polynomial `(1 0 1)`,
