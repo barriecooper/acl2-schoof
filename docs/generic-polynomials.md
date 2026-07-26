@@ -469,10 +469,13 @@ making irreducibility or field claims. These representative operations are now
 emitted by the transparent project-local `def-reduced-ring-instance` generator
 with their original names, bodies, total guards, and arbitrary-input semantics
 unchanged.  Its expansion contains only ordinary DEFUN, VERIFY-GUARDS, and
-selected DEFTHM events.  The first and currently only public symbolic F7
-ring-law instance is `F7-POLY-REDUCED-MUL-RIGHT-DISTRIBUTIVE`, transported
-directly from the generic theorem by the explicit F7 functional substitution.
-The remaining F7 theorem suite and all F7X2 bridges remain open.  These are
+independently selected DEFTHM events.  The public symbolic F7 ring-law instances
+are `F7-POLY-REDUCED-ADD-COMMUTATIVE`,
+`F7-POLY-REDUCED-ADD-ASSOCIATIVE`, and
+`F7-POLY-REDUCED-MUL-RIGHT-DISTRIBUTIVE`, each transported directly from its
+generic theorem by the explicit F7 functional substitution.  The remaining F7
+theorem suite remains open; these two structural addition laws do not constitute
+the complete additive interface.  These are
 representative operations only until `generic/reduced-ring.lisp`, which now certifies the complete
 literal-equality commutative-ring interface and modulus-dependent
 `POLY-REDUCED-ONE`. Identity conclusions return the canonical remainder for

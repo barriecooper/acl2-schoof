@@ -79,18 +79,22 @@
      (defun ,poly-mul (x y)
        (,normalize (,raw-mul (,normalize x) (,normalize y))))))
 
-; A deliberately narrow first generator for concrete reduced-ring instances.
-; Every public name and every functional substitution is supplied by the
-; caller.  A NIL theorem name selects definitions and guard verification only;
-; the sole theorem selector currently supported is the right-distributive law.
-; The expansion contains only ordinary DEFUN, VERIFY-GUARDS, and (when
-; selected) DEFTHM events.
+; A deliberately narrow generator for concrete reduced-ring instances.  Every
+; public name, generic source, rule class, and functional substitution is
+; supplied by the caller.  Each supported theorem has an independent selector;
+; a NIL theorem name omits just that theorem.  The expansion contains only
+; ordinary DEFUN, VERIFY-GUARDS, and (when selected) DEFTHM events.
 (defmacro def-reduced-ring-instance
   (reduced-add reduced-neg reduced-sub reduced-mul reduced-one
                poly-add poly-neg poly-sub poly-mul polynomial-one remainder
                mul-right-distributive-name mul-right-distributive-source
                functional-substitution common-goal-hints theorem-hints
-               theorem-rule-classes)
+               theorem-rule-classes
+               &optional
+               add-commutative-name add-commutative-source
+               add-commutative-rule-classes add-commutative-hints
+               add-associative-name add-associative-source
+               add-associative-rule-classes add-associative-hints)
   `(progn
      (defun ,reduced-add (left right modulus)
        (,remainder (,poly-add left right) modulus))
@@ -107,6 +111,35 @@
      (verify-guards ,reduced-sub)
      (verify-guards ,reduced-mul)
      (verify-guards ,reduced-one)
+     ,@(and add-commutative-name
+            `((defthm ,add-commutative-name
+                (equal (,reduced-add a b modulus)
+                       (,reduced-add b a modulus))
+                :rule-classes ,add-commutative-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,add-commutative-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@add-commutative-hints))))
+     ,@(and add-associative-name
+            `((defthm ,add-associative-name
+                (equal
+                 (,reduced-add (,reduced-add a b modulus) c modulus)
+                 (,reduced-add a (,reduced-add b c modulus) modulus))
+                :rule-classes ,add-associative-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,add-associative-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@add-associative-hints))))
      ,@(and mul-right-distributive-name
             `((defthm ,mul-right-distributive-name
                 (equal

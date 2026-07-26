@@ -2,6 +2,12 @@
 (include-book "f7x2-representation")
 (include-book "f7-reduced-arithmetic")
 
+; The presentation book controls its existing proofs through its dedicated
+; F7X2 rules.  Keep the newly exported variable-modulus structural rules local
+; to explicit uses here so they do not add a second preprocessing route.
+(local (in-theory (disable f7-poly-reduced-add-commutative
+                           f7-poly-reduced-add-associative)))
+
 ; Transparent carrier arithmetic: each operation is the existing concrete F7
 ; polynomial operation followed by the sole F7X2 fixer/remainder boundary.
 (defun f7x2-add (first second)
