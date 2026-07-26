@@ -40,15 +40,23 @@ associativity, the two addition identity laws, the two additive-inverse laws, th
 identities, a public subtraction-as-addition-plus-negation semantic bridge, and
 right distributivity, the five independent normalization fixed points, and the five independent
 remainder-stability rules for reduced addition, negation, subtraction,
-multiplication, and one.  The bridge is deliberately `:rule-classes nil`: general
+multiplication, and one, the four operand-by-remainder independence theorems,
+and four independent fixed-modulus pairwise-congruence theorems for addition,
+negation, subtraction, and multiplication.  The congruence interface is
+`F7-POLY-REDUCED-{ADD,NEG,SUB,MUL}-RESPECTS-POLY-CONGRUENT-P`; each theorem
+concludes literal equality of reduced outputs from the corresponding
+`F7-POLY-CONGRUENT-P` hypotheses.  The complete F7 functional substitution has
+43 pairs, including the explicit `POLY-CONGRUENT-P` mapping.  The subtraction
+bridge and the congruence theorems are deliberately `:rule-classes nil`: general
 subtraction remains the preferred visible form, the three identities remain the
 active simplifiers, and this matches the existing F7X2 presentation policy.  For
 every supported selection the
 caller supplies the public name, generic source, and rule classes, together with
 the complete common functional substitution and narrow common and
 theorem-specific hints.  There is no compulsory all-theorems mode; the rest of
-the F7 reduced-ring laws remain open, including general negation compatibility, general fixer/remainder compatibility,
-representative independence, congruence, and the remaining ring and field laws.
+the F7 reduced-ring laws remain open, including general fixer/remainder
+compatibility, modulus-representative independence, degree-bound
+specializations, and the remaining ring and field laws.
 The public F7 remainder-stability interface is
 `F7-POLY-REMAINDER-OF-POLY-REDUCED-{ADD,NEG,SUB,MUL,ONE}`; all five
 rules are unconditional over arbitrary operands and total modulus cases.  These selected laws do not constitute a complete additive interface.
