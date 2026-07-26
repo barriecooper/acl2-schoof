@@ -17,6 +17,62 @@
   (and (< 0 (f7-poly-degree poly))
        (not (f7-poly-reducible-p poly))))
 
+(defthm f7-poly-irreducible-p-definition
+  (equal
+   (f7-poly-irreducible-p poly)
+   (and (< 0 (f7-poly-degree poly))
+        (not (f7-poly-reducible-p poly))))
+  :rule-classes nil
+  :hints (("Goal"
+           :in-theory
+           (union-theories (theory 'minimal-theory)
+                           '(f7-poly-irreducible-p)))))
+
+(defthm f7-poly-irreducible-p-implies-positive-degree
+  (implies
+   (f7-poly-irreducible-p poly)
+   (< 0 (f7-poly-degree poly)))
+  :rule-classes (:forward-chaining)
+  :hints (("Goal"
+           :use ((:instance f7-poly-irreducible-p-definition))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm f7-poly-irreducible-p-factor-characterization
+  (implies
+   (and
+    (f7-poly-irreducible-p poly)
+    (equal
+     (f7-poly-mul left right)
+     (f7-normalize poly)))
+   (or (f7-poly-unit-p left)
+       (f7-poly-unit-p right)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance f7-poly-irreducible-p-definition)
+                 (:instance f7-poly-reducible-p-suff
+                            (poly poly) (left left) (right right)))
+           :in-theory (theory 'minimal-theory))))
+
+(local
+ (defthm f7-poly-irreducibility-semantic-interface-regression
+   (implies
+    (and
+     (f7-poly-irreducible-p poly)
+     (equal (f7-poly-mul left right)
+            (f7-normalize poly)))
+    (and (< 0 (f7-poly-degree poly))
+         (or (f7-poly-unit-p left)
+             (f7-poly-unit-p right))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-irreducible-p-definition)
+           (:instance f7-poly-irreducible-p-implies-positive-degree)
+           (:instance f7-poly-irreducible-p-factor-characterization)
+           (:instance f7-poly-reducible-p-suff
+                      (poly poly) (left left) (right right)))
+     :in-theory (theory 'minimal-theory)))))
+
 (defun-sk f7-poly-has-root-p (poly)
   (exists (root)
           (and (gfield::f7-element-p root)
