@@ -30,13 +30,14 @@ debugging.  Its explicit operation arguments also scale to multiplication and
 extension-field instances without committing this project to a framework.
 
 The same policy now covers the deliberately narrow
-`def-reduced-ring-instance` macro.  Its first invocation regenerates the five
-existing variable-modulus F7 reduced-operation DEFUNs, explicitly verifies
-their unchanged guards, and selects only the public F7 right-distributivity
-instance.  The caller supplies every public name, the complete functional
-substitution, the generic source theorem, its rule classes, and narrow common
-and theorem-specific hints.  There is no compulsory all-theorems mode; the
-remaining F7 reduced-ring laws and every fixed-modulus/F7X2 bridge remain open.
+`def-reduced-ring-instance` macro.  Its F7 invocation regenerates the five
+existing variable-modulus reduced-operation DEFUNs, explicitly verifies their
+unchanged guards, and independently selects addition commutativity, addition
+associativity, and right distributivity.  For every supported selection the
+caller supplies the public name, generic source, and rule classes, together with
+the complete common functional substitution and narrow common and
+theorem-specific hints.  There is no compulsory all-theorems mode; the rest of
+the F7 reduced-ring laws remain open.
 
 ## Logical and executable boundary
 

@@ -86,7 +86,54 @@
    :use ((:instance f7-canonical-polynomial-p-implies-last-nonzero
                     (p xs))))
   ("Subgoal 8.2.1'" :in-theory (enable mod)))
- (:rewrite))
+ (:rewrite)
+ f7-poly-reduced-add-commutative
+ poly-reduced-add-commutative
+ ((:rewrite :loop-stopper nil))
+ nil
+ f7-poly-reduced-add-associative
+ poly-reduced-add-associative
+ (:rewrite)
+ nil)
+
+(local
+ (defthm f7-poly-reduced-add-structural-law-regressions
+   (and
+    ; Canonical representatives.
+    (equal (f7-poly-reduced-add '(1 2) '(3 4) '(1 0 1))
+           (f7-poly-reduced-add '(3 4) '(1 2) '(1 0 1)))
+    (equal (f7-poly-reduced-add
+            (f7-poly-reduced-add '(1 2) '(3 4) '(1 0 1)) '(5 6) '(1 0 1))
+           (f7-poly-reduced-add
+            '(1 2) (f7-poly-reduced-add '(3 4) '(5 6) '(1 0 1)) '(1 0 1)))
+    ; Malformed operands and modulus, and a degenerate constant modulus.
+    (equal (f7-poly-reduced-add 'bad '(8 -3 . tail) 'bad-modulus)
+           (f7-poly-reduced-add '(8 -3 . tail) 'bad 'bad-modulus))
+    (equal (f7-poly-reduced-add
+            (f7-poly-reduced-add '(1 . bad) '(8 -3 0) '(3)) 'bad '(3))
+           (f7-poly-reduced-add
+            '(1 . bad) (f7-poly-reduced-add '(8 -3 0) 'bad '(3)) '(3)))
+    ; Unequal raw representatives with equal remainders.
+    (equal (f7-poly-reduced-add '(8 -1 0 0) '(3) '(1 0 1))
+           (f7-poly-reduced-add '(3) '(1 6) '(1 0 1)))
+    (equal (f7-poly-reduced-add
+            (f7-poly-reduced-add '(8 -1 0 0) '(3) '(1 0 1)) '(2) '(1 0 1))
+           (f7-poly-reduced-add
+            '(1 6) (f7-poly-reduced-add '(3) '(2) '(1 0 1)) '(1 0 1))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-reduced-add-commutative
+                      (a '(8 -1 0 0)) (b '(3)) (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-add-associative
+                      (a '(1 6)) (b '(3)) (c '(2))
+                      (modulus '(1 0 1))))
+     :in-theory
+     (disable f7-poly-reduced-add f7-poly-add f7-raw-add
+              f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              gfield::f7-fix gfield::f7-add)))))
 
 ; Concrete execution spelling of the generic quotient-equality boundary.
 (defun f7-poly-congruent-p (left right modulus)
