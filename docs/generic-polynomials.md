@@ -658,6 +658,16 @@ divisor of an irreducible polynomial is either a degree-zero unit or scalar
 associate in the focused, operational sense that the irreducible polynomial
 divides it; no general associates predicate is introduced.
 
+The concrete F7 predicate boundary exports the same three focused logical
+views without making the quantified reducibility predicate executable:
+`F7-POLY-IRREDUCIBLE-P-DEFINITION` is a non-rewriting equation,
+`F7-POLY-IRREDUCIBLE-P-IMPLIES-POSITIVE-DEGREE` is a forward-chaining
+consequence, and `F7-POLY-IRREDUCIBLE-P-FACTOR-CHARACTERIZATION` excludes a
+factorization into two nonunits.  These events do not yet provide the F7
+divisor alternative, the F7 irreducibility-to-monic-GCD-one bridge, concrete
+modular-inverse correctness, F7X2 inversion correctness, or a quotient-field
+construction.
+
 Applying that alternative to the existing monic GCD proves that it is
 `POLYNOMIAL-ONE` unless the irreducible modulus divides the first input.  In
 particular, a nonzero representative fixed by `POLY-REMAINDER` cannot be so
