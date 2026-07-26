@@ -110,6 +110,14 @@
  f7-poly-reduced-add-inverse-right
  poly-reduced-add-inverse-right
  (:rewrite)
+ nil
+ f7-poly-reduced-neg-double
+ poly-reduced-neg-double
+ (:rewrite)
+ (("Goal" :in-theory (enable f7-poly-reduced-neg)))
+ f7-poly-reduced-neg-zero
+ poly-reduced-neg-zero
+ (:rewrite)
  nil)
 
 (local
@@ -233,6 +241,51 @@
               f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
               f7-poly-division-step f7-poly-division-step-core
               gfield::f7-fix gfield::f7-add gfield::f7-neg)))))
+
+(local
+ (defthm f7-poly-reduced-neg-law-regressions
+   (and
+    ; Zero, canonical nonzero values, and a genuine polynomial.
+    (equal (f7-poly-reduced-neg nil '(1 0 1)) nil)
+    (equal (f7-poly-reduced-neg
+            (f7-poly-reduced-neg '(3 4) '(1 0 1)) '(1 0 1))
+           (f7-poly-remainder '(3 4) '(1 0 1)))
+    (equal (f7-poly-reduced-neg
+            (f7-poly-reduced-neg '(1 2 3) '(1 0 0 1)) '(1 0 0 1))
+           (f7-poly-remainder '(1 2 3) '(1 0 0 1)))
+    ; Malformed, noncanonical, and coefficient-fixing operands.
+    (equal (f7-poly-reduced-neg
+            (f7-poly-reduced-neg 'malformed '(1 0 1)) '(1 0 1))
+           (f7-poly-remainder 'malformed '(1 0 1)))
+    (equal (f7-poly-reduced-neg
+            (f7-poly-reduced-neg '(8 -1 0 0) '(1 0 1)) '(1 0 1))
+           (f7-poly-remainder '(8 -1 0 0) '(1 0 1)))
+    ; Malformed, zero, and constant moduli.
+    (equal (f7-poly-reduced-neg nil 'bad-modulus) nil)
+    (equal (f7-poly-reduced-neg
+            (f7-poly-reduced-neg '(8 -1 . tail) nil) nil)
+           (f7-poly-remainder '(8 -1 . tail) nil))
+    (equal (f7-poly-reduced-neg
+            (f7-poly-reduced-neg '(1 2) '(3)) '(3))
+           (f7-poly-remainder '(1 2) '(3)))
+    ; Unequal raw representatives with the same established remainder.
+    (equal (f7-poly-reduced-neg
+            (f7-poly-reduced-neg '(8 -1 0 0) '(1 0 1)) '(1 0 1))
+           (f7-poly-remainder '(1 6) '(1 0 1))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-reduced-neg-double
+                      (a '(8 -1 0 0)) (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-neg-zero
+                      (modulus 'bad-modulus)))
+     :in-theory
+     (disable f7-poly-reduced-neg f7-poly-neg f7-raw-neg
+              f7-poly-add f7-raw-add
+              f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              gfield::f7-fix gfield::f7-neg gfield::f7-add)))))
 
 ; Concrete execution spelling of the generic quotient-equality boundary.
 (defun f7-poly-congruent-p (left right modulus)
