@@ -48,6 +48,105 @@
            :in-theory (e/d (poly-remainder poly-divmod)
                            (poly-divmod-core normalize)))))
 
+(defthm poly-remainder-of-fix-coefficients-dividend
+  (equal (poly-remainder (fix-coefficients dividend) modulus)
+         (poly-remainder dividend modulus))
+  :hints
+  (("Goal"
+    :use ((:instance normalize-of-fix-coefficients (xs dividend))
+          (:instance poly-remainder-of-normalize-dividend
+                     (dividend (fix-coefficients dividend)))
+          (:instance poly-remainder-of-normalize-dividend))
+    :in-theory
+    (disable normalize-of-fix-coefficients
+             poly-remainder-of-normalize-dividend
+             poly-remainder poly-divmod poly-divmod-core
+             poly-division-step poly-division-step-core
+             normalize fix-coefficients trim-trailing-zeros))))
+
+(defthm poly-remainder-of-fix-coefficients-modulus
+  (equal (poly-remainder dividend (fix-coefficients modulus))
+         (poly-remainder dividend modulus))
+  :hints
+  (("Goal"
+    :use ((:instance normalize-of-fix-coefficients (xs modulus))
+          (:instance poly-remainder-of-normalize-modulus
+                     (modulus (fix-coefficients modulus)))
+          (:instance poly-remainder-of-normalize-modulus))
+    :in-theory
+    (disable normalize-of-fix-coefficients
+             poly-remainder-of-normalize-modulus
+             poly-remainder poly-divmod poly-divmod-core
+             poly-division-step poly-division-step-core
+             normalize fix-coefficients trim-trailing-zeros))))
+
+(local
+ (defthm poly-remainder-of-fix-coefficients-regressions
+   (and
+    (equal (poly-remainder (fix-coefficients nil) modulus)
+           (poly-remainder nil modulus))
+    (equal (poly-remainder (fix-coefficients 'bad-dividend) modulus)
+           (poly-remainder 'bad-dividend modulus))
+    (equal (poly-remainder (fix-coefficients '(bad coefficient)) modulus)
+           (poly-remainder '(bad coefficient) modulus))
+    (equal (poly-remainder (fix-coefficients '(bad . tail)) modulus)
+           (poly-remainder '(bad . tail) modulus))
+    (equal (poly-remainder dividend (fix-coefficients nil))
+           (poly-remainder dividend nil))
+    (equal (poly-remainder dividend (fix-coefficients 'bad-modulus))
+           (poly-remainder dividend 'bad-modulus))
+    (equal (poly-remainder dividend (fix-coefficients '(bad . tail)))
+           (poly-remainder dividend '(bad . tail)))
+    (equal (poly-remainder dividend
+                           (fix-coefficients
+                            (list (gfield::field-zero))))
+           (poly-remainder dividend (list (gfield::field-zero))))
+    (equal (poly-remainder dividend
+                           (fix-coefficients
+                            (monomial (gfield::field-one) 1)))
+           (poly-remainder dividend
+                           (monomial (gfield::field-one) 1)))
+    (equal (poly-remainder (fix-coefficients '(bad . dividend-tail))
+                           (fix-coefficients '(bad . modulus-tail)))
+           (poly-remainder '(bad . dividend-tail)
+                           '(bad . modulus-tail))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance poly-remainder-of-fix-coefficients-dividend
+                 (dividend nil))
+      (:instance poly-remainder-of-fix-coefficients-dividend
+                 (dividend 'bad-dividend))
+      (:instance poly-remainder-of-fix-coefficients-dividend
+                 (dividend '(bad coefficient)))
+      (:instance poly-remainder-of-fix-coefficients-dividend
+                 (dividend '(bad . tail)))
+      (:instance poly-remainder-of-fix-coefficients-modulus
+                 (modulus nil))
+      (:instance poly-remainder-of-fix-coefficients-modulus
+                 (modulus 'bad-modulus))
+      (:instance poly-remainder-of-fix-coefficients-modulus
+                 (modulus '(bad . tail)))
+      (:instance poly-remainder-of-fix-coefficients-modulus
+                 (modulus (list (gfield::field-zero))))
+      (:instance poly-remainder-of-fix-coefficients-modulus
+                 (modulus (monomial (gfield::field-one) 1)))
+      (:instance poly-remainder-of-fix-coefficients-dividend
+                 (dividend '(bad . dividend-tail))
+                 (modulus (fix-coefficients '(bad . modulus-tail))))
+      (:instance poly-remainder-of-fix-coefficients-modulus
+                 (dividend '(bad . dividend-tail))
+                 (modulus '(bad . modulus-tail))))
+     :in-theory
+     (disable poly-remainder-of-fix-coefficients-dividend
+              poly-remainder-of-fix-coefficients-modulus
+              poly-remainder poly-divmod poly-divmod-core
+              poly-division-step poly-division-step-core
+              normalize fix-coefficients trim-trailing-zeros
+              raw-add poly-add raw-neg poly-neg poly-sub
+              raw-scale poly-scale raw-mul poly-mul)))))
+
 (defthm poly-remainder-zero-modulus
   (equal (poly-remainder dividend nil) (normalize dividend))
   :hints (("Goal"
