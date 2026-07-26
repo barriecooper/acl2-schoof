@@ -9,7 +9,7 @@
  f7-poly-reduced-add f7-poly-reduced-neg f7-poly-reduced-sub
  f7-poly-reduced-mul f7-poly-reduced-one
  f7-poly-add f7-poly-neg f7-poly-sub f7-poly-mul f7-polynomial-one
- f7-poly-remainder
+ f7-poly-remainder f7-canonical-polynomial-p
  f7-poly-reduced-mul-right-distributive
  poly-reduced-mul-right-distributive
  ((gfield::field-element-p gfield::f7-element-p)
@@ -134,7 +134,90 @@
  f7-poly-reduced-sub-as-add-neg
  poly-reduced-sub-as-add-neg
  nil
+ nil
+ f7-canonical-polynomial-p-of-poly-reduced-add
+ canonical-polynomial-p-of-poly-reduced-add
+ (:rewrite)
+ nil
+ f7-canonical-polynomial-p-of-poly-reduced-neg
+ canonical-polynomial-p-of-poly-reduced-neg
+ (:rewrite)
+ nil
+ f7-canonical-polynomial-p-of-poly-reduced-sub
+ canonical-polynomial-p-of-poly-reduced-sub
+ (:rewrite)
+ nil
+ f7-canonical-polynomial-p-of-poly-reduced-mul
+ canonical-polynomial-p-of-poly-reduced-mul
+ (:rewrite)
  nil)
+
+; Canonical output is the common structural boundary of all four reduced
+; arithmetic operations.  These examples use only explicit instances of the
+; generated rules while every arithmetic and reduction implementation stays
+; closed.
+(local
+ (defthm f7-poly-reduced-canonicality-regressions
+   (and
+    ; Canonical zero, constant, and nonconstant operands at positive degree.
+    (f7-canonical-polynomial-p
+     (f7-poly-reduced-add nil '(3) '(1 0 1)))
+    (f7-canonical-polynomial-p
+     (f7-poly-reduced-add '(1 2) '(3 4) '(1 0 1)))
+    ; Noncanonical, malformed, and coefficient-fixing inputs and moduli.
+    (f7-canonical-polynomial-p
+     (f7-poly-reduced-add '(8 -1 0 0) 'bad 'zero-modulus))
+    (f7-canonical-polynomial-p
+     (f7-poly-reduced-neg '(1 2 3 4) nil))
+    (f7-canonical-polynomial-p
+     (f7-poly-reduced-neg '(1 2 . bad) '(0 . bad)))
+    (f7-canonical-polynomial-p
+     (f7-poly-reduced-sub '(8 -1 0 0) '(1 2 . bad) '(1)))
+    (f7-canonical-polynomial-p
+     (f7-poly-reduced-sub 'bad '(3) '(3)))
+    ; A genuine higher-degree product and total improper-modulus behavior.
+    (f7-canonical-polynomial-p
+     (f7-poly-reduced-mul '(1 1 1) '(1 1 1) '(1 0 1)))
+    (f7-canonical-polynomial-p
+     (f7-poly-reduced-mul '(8 -1 0) '(3) '(1 0 1 . bad))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance f7-canonical-polynomial-p-of-poly-reduced-add
+                 (left nil) (right '(3)) (modulus '(1 0 1)))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-add
+                 (left '(1 2)) (right '(3 4)) (modulus '(1 0 1)))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-add
+                 (left '(8 -1 0 0)) (right 'bad)
+                 (modulus 'zero-modulus))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-neg
+                 (polynomial '(1 2 3 4)) (modulus nil))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-neg
+                 (polynomial '(1 2 . bad)) (modulus '(0 . bad)))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-sub
+                 (left '(8 -1 0 0)) (right '(1 2 . bad))
+                 (modulus '(1)))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-sub
+                 (left 'bad) (right '(3)) (modulus '(3)))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-mul
+                 (left '(1 1 1)) (right '(1 1 1))
+                 (modulus '(1 0 1)))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-mul
+                 (left '(8 -1 0)) (right '(3))
+                 (modulus '(1 0 1 . bad))))
+     :in-theory
+     (disable f7-canonical-polynomial-p
+              f7-poly-reduced-add f7-poly-reduced-neg
+              f7-poly-reduced-sub f7-poly-reduced-mul
+              f7-poly-add f7-poly-neg f7-poly-sub f7-poly-mul
+              f7-raw-add f7-raw-neg f7-raw-scale f7-raw-mul
+              f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              f7-poly-division-step-term f7-poly-division-step-next
+              gfield::f7-fix gfield::f7-add gfield::f7-neg
+              gfield::f7-mul)))))
 
 (local
  (defthm f7-poly-reduced-sub-identity-regressions
