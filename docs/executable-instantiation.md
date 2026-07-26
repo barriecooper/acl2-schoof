@@ -34,14 +34,18 @@ The same policy now covers the deliberately narrow
 existing variable-modulus reduced-operation DEFUNs, explicitly verifies their
 unchanged guards, and independently selects addition commutativity, addition
 associativity, the two addition identity laws, the two additive-inverse laws, the two core reduced-negation laws
-(double negation and negation of zero), and right distributivity.  For
+(double negation and negation of zero), the three non-expansive subtraction
+identities, a public subtraction-as-addition-plus-negation semantic bridge, and
+right distributivity.  The bridge is deliberately `:rule-classes nil`: general
+subtraction remains the preferred visible form, the three identities remain the
+active simplifiers, and this matches the existing F7X2 presentation policy.  For
 every supported selection the
 caller supplies the public name, generic source, and rule classes, together with
 the complete common functional substitution and narrow common and
 theorem-specific hints.  There is no compulsory all-theorems mode; the rest of
 the F7 reduced-ring laws remain open, including general negation compatibility,
-subtraction, canonicality, general fixer compatibility, and the remaining ring and field
-laws.  These selected laws do not constitute a complete additive interface.
+subtraction canonicality, general fixer/remainder compatibility,
+representative independence, congruence, and the remaining ring and field laws.  These selected laws do not constitute a complete additive interface.
 
 ## Logical and executable boundary
 

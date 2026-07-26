@@ -130,6 +130,10 @@
  f7-poly-reduced-sub-zero-left
  poly-reduced-sub-zero-left
  (:rewrite)
+ nil
+ f7-poly-reduced-sub-as-add-neg
+ poly-reduced-sub-as-add-neg
+ nil
  nil)
 
 (local
@@ -186,6 +190,57 @@
      :in-theory
      (disable f7-poly-reduced-sub f7-poly-sub f7-poly-add f7-raw-add
               f7-poly-neg f7-raw-neg f7-poly-reduced-neg
+              f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              gfield::f7-add gfield::f7-neg gfield::f7-fix)))))
+
+; This semantic bridge is deliberately absent from the rewrite theory.  These
+; examples use an explicit instance while every arithmetic implementation body
+; stays closed, so general reduced-subtraction terms retain their public form.
+(local
+ (defthm f7-poly-reduced-sub-as-add-neg-regressions
+   (and
+    (equal (f7-poly-reduced-sub '(1 2) '(3 4) '(1 0 1))
+           (f7-poly-reduced-add
+            '(1 2) (f7-poly-reduced-neg '(3 4) '(1 0 1)) '(1 0 1)))
+    (equal (f7-poly-reduced-sub nil '(3 4) '(1 0 1))
+           (f7-poly-reduced-add
+            nil (f7-poly-reduced-neg '(3 4) '(1 0 1)) '(1 0 1)))
+    (equal (f7-poly-reduced-sub '(1 2 3 4) nil '(1 0 0 1))
+           (f7-poly-reduced-add
+            '(1 2 3 4) (f7-poly-reduced-neg nil '(1 0 0 1)) '(1 0 0 1)))
+    (equal (f7-poly-reduced-sub '(8 -1 0 0) '(1 2 . bad) '(1 0 1))
+           (f7-poly-reduced-add
+            '(8 -1 0 0)
+            (f7-poly-reduced-neg '(1 2 . bad) '(1 0 1)) '(1 0 1)))
+    (equal (f7-poly-reduced-sub 'bad '(8 -1 . tail) 'bad-modulus)
+           (f7-poly-reduced-add
+            'bad (f7-poly-reduced-neg '(8 -1 . tail) 'bad-modulus)
+            'bad-modulus))
+    (equal (f7-poly-reduced-sub '(8 -1 0 0) '(3) '(1 0 1))
+           (f7-poly-reduced-add
+            '(1 6) (f7-poly-reduced-neg '(3) '(1 0 1)) '(1 0 1))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-reduced-sub-as-add-neg
+                      (a '(1 2)) (b '(3 4)) (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-sub-as-add-neg
+                      (a nil) (b '(3 4)) (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-sub-as-add-neg
+                      (a '(1 2 3 4)) (b nil) (modulus '(1 0 0 1)))
+           (:instance f7-poly-reduced-sub-as-add-neg
+                      (a '(8 -1 0 0)) (b '(1 2 . bad))
+                      (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-sub-as-add-neg
+                      (a 'bad) (b '(8 -1 . tail))
+                      (modulus 'bad-modulus))
+           (:instance f7-poly-reduced-sub-as-add-neg
+                      (a '(8 -1 0 0)) (b '(3)) (modulus '(1 0 1))))
+     :in-theory
+     (disable f7-poly-reduced-sub f7-poly-reduced-add f7-poly-reduced-neg
+              f7-poly-sub f7-poly-add f7-raw-add f7-poly-neg f7-raw-neg
               f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
               f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
               f7-poly-division-step f7-poly-division-step-core
