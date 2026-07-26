@@ -150,10 +150,46 @@
  f7-canonical-polynomial-p-of-poly-reduced-mul
  canonical-polynomial-p-of-poly-reduced-mul
  (:rewrite)
+ nil
+ f7-canonical-polynomial-p-of-poly-reduced-one
+ canonical-polynomial-p-of-poly-reduced-one
+ (:rewrite)
  nil)
 
-; Canonical output is the common structural boundary of all four reduced
-; arithmetic operations.  These examples use only explicit instances of the
+(local
+ (defthm f7-poly-reduced-one-canonicality-regressions
+   (and
+    (f7-canonical-polynomial-p (f7-poly-reduced-one '(1 0 1)))
+    (f7-canonical-polynomial-p (f7-poly-reduced-one nil))
+    (f7-canonical-polynomial-p (f7-poly-reduced-one '(0)))
+    (f7-canonical-polynomial-p (f7-poly-reduced-one '(1)))
+    (f7-canonical-polynomial-p (f7-poly-reduced-one '(3)))
+    (f7-canonical-polynomial-p (f7-poly-reduced-one 'bad))
+    (f7-canonical-polynomial-p (f7-poly-reduced-one '(1 0 . bad))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance f7-canonical-polynomial-p-of-poly-reduced-one
+                 (modulus '(1 0 1)))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-one (modulus nil))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-one (modulus '(0)))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-one (modulus '(1)))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-one (modulus '(3)))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-one (modulus 'bad))
+      (:instance f7-canonical-polynomial-p-of-poly-reduced-one
+                 (modulus '(1 0 . bad))))
+     :in-theory
+     (disable f7-poly-reduced-one f7-canonical-polynomial-p
+              f7-polynomial-one f7-normalize f7-fix-coefficients
+              f7-trim-trailing-zeros f7-poly-remainder f7-poly-divmod
+              f7-poly-divmod-core f7-poly-division-step
+              f7-poly-division-step-core f7-poly-division-step-term
+              f7-poly-division-step-next gfield::f7-fix gfield::f7-add
+              gfield::f7-neg gfield::f7-mul)))))
+
+; Canonical output is the common structural boundary of all five reduced-ring
+; operations.  These examples use only explicit instances of the
 ; generated rules while every arithmetic and reduction implementation stays
 ; closed.
 (local

@@ -123,7 +123,9 @@
                reduced-sub-canonical-name reduced-sub-canonical-source
                reduced-sub-canonical-rule-classes reduced-sub-canonical-hints
                reduced-mul-canonical-name reduced-mul-canonical-source
-               reduced-mul-canonical-rule-classes reduced-mul-canonical-hints)
+               reduced-mul-canonical-rule-classes reduced-mul-canonical-hints
+               reduced-one-canonical-name reduced-one-canonical-source
+               reduced-one-canonical-rule-classes reduced-one-canonical-hints)
   `(progn
      (defun ,reduced-add (left right modulus)
        (,remainder (,poly-add left right) modulus))
@@ -387,7 +389,21 @@
                           ,reduced-mul-canonical-source
                           ,@functional-substitution))))
                  ,@theorem-hints
-                 ,@reduced-mul-canonical-hints))))))
+                 ,@reduced-mul-canonical-hints))))
+     ,@(and reduced-one-canonical-name
+            `((defthm ,reduced-one-canonical-name
+                (,canonical-polynomial-p
+                 (,reduced-one modulus))
+                :rule-classes ,reduced-one-canonical-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,reduced-one-canonical-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@reduced-one-canonical-hints))))))
 
 ; The coefficient-field embedding is intentionally its own tiny generator.
 ; Its expansion is one ordinary DEFUN, not a general algebra-instance layer.
