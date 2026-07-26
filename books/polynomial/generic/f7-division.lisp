@@ -157,6 +157,200 @@
                             (f7-poly-divmod-core
                              f7-poly-division-step-core
                              f7-poly-division-step)))))
+
+(defthm f7-poly-remainder-of-fix-coefficients-dividend
+  (equal (f7-poly-remainder (f7-fix-coefficients dividend) modulus)
+         (f7-poly-remainder dividend modulus))
+  :hints
+  (("Goal"
+    :by (:functional-instance
+         poly-remainder-of-fix-coefficients-dividend
+         (gfield::field-element-p gfield::f7-element-p)
+         (gfield::field-fix gfield::f7-fix)
+         (gfield::field-zero gfield::f7-zero)
+         (gfield::field-one gfield::f7-one)
+         (gfield::field-add gfield::f7-add)
+         (gfield::field-mul gfield::f7-mul)
+         (gfield::field-neg gfield::f7-neg)
+         (gfield::field-inv gfield::f7-inv)
+         (gfield::field-div gfield::f7-div)
+         (fix-coefficients f7-fix-coefficients)
+         (trim-trailing-zeros f7-trim-trailing-zeros)
+         (normalize f7-normalize)
+         (coefficient-list-p f7-coefficient-list-p)
+         (polynomial-p f7-polynomial-p)
+         (canonical-polynomial-p f7-canonical-polynomial-p)
+         (raw-add f7-raw-add) (poly-add f7-poly-add)
+         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg)
+         (poly-sub f7-poly-sub)
+         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+         (zero-prefix f7-zero-prefix)
+         (poly-shift f7-poly-shift) (monomial f7-monomial)
+         (poly-degree f7-poly-degree)
+         (poly-leading-coefficient f7-poly-leading-coefficient)
+         (poly-division-step-core f7-poly-division-step-core)
+         (poly-division-step f7-poly-division-step)
+         (poly-division-step-term f7-poly-division-step-term)
+         (poly-division-step-next f7-poly-division-step-next)
+         (poly-divmod-core f7-poly-divmod-core)
+         (poly-divmod f7-poly-divmod)
+         (poly-remainder f7-poly-remainder))
+    :in-theory
+    (disable poly-remainder f7-poly-remainder
+             poly-divmod f7-poly-divmod
+             poly-divmod-core f7-poly-divmod-core
+             poly-division-step f7-poly-division-step
+             poly-division-step-core f7-poly-division-step-core
+             poly-division-step-term f7-poly-division-step-term
+             poly-division-step-next f7-poly-division-step-next
+             normalize f7-normalize
+             fix-coefficients f7-fix-coefficients
+             trim-trailing-zeros f7-trim-trailing-zeros
+             raw-add f7-raw-add poly-add f7-poly-add
+             raw-neg f7-raw-neg poly-neg f7-poly-neg
+             poly-sub f7-poly-sub
+             raw-scale f7-raw-scale poly-scale f7-poly-scale
+             raw-mul f7-raw-mul poly-mul f7-poly-mul))))
+
+(defthm f7-poly-remainder-of-fix-coefficients-modulus
+  (equal (f7-poly-remainder dividend (f7-fix-coefficients modulus))
+         (f7-poly-remainder dividend modulus))
+  :hints
+  (("Goal"
+    :by (:functional-instance
+         poly-remainder-of-fix-coefficients-modulus
+         (gfield::field-element-p gfield::f7-element-p)
+         (gfield::field-fix gfield::f7-fix)
+         (gfield::field-zero gfield::f7-zero)
+         (gfield::field-one gfield::f7-one)
+         (gfield::field-add gfield::f7-add)
+         (gfield::field-mul gfield::f7-mul)
+         (gfield::field-neg gfield::f7-neg)
+         (gfield::field-inv gfield::f7-inv)
+         (gfield::field-div gfield::f7-div)
+         (fix-coefficients f7-fix-coefficients)
+         (trim-trailing-zeros f7-trim-trailing-zeros)
+         (normalize f7-normalize)
+         (coefficient-list-p f7-coefficient-list-p)
+         (polynomial-p f7-polynomial-p)
+         (canonical-polynomial-p f7-canonical-polynomial-p)
+         (raw-add f7-raw-add) (poly-add f7-poly-add)
+         (raw-neg f7-raw-neg) (poly-neg f7-poly-neg)
+         (poly-sub f7-poly-sub)
+         (raw-scale f7-raw-scale) (poly-scale f7-poly-scale)
+         (raw-mul f7-raw-mul) (poly-mul f7-poly-mul)
+         (zero-prefix f7-zero-prefix)
+         (poly-shift f7-poly-shift) (monomial f7-monomial)
+         (poly-degree f7-poly-degree)
+         (poly-leading-coefficient f7-poly-leading-coefficient)
+         (poly-division-step-core f7-poly-division-step-core)
+         (poly-division-step f7-poly-division-step)
+         (poly-division-step-term f7-poly-division-step-term)
+         (poly-division-step-next f7-poly-division-step-next)
+         (poly-divmod-core f7-poly-divmod-core)
+         (poly-divmod f7-poly-divmod)
+         (poly-remainder f7-poly-remainder))
+    :in-theory
+    (disable poly-remainder f7-poly-remainder
+             poly-divmod f7-poly-divmod
+             poly-divmod-core f7-poly-divmod-core
+             poly-division-step f7-poly-division-step
+             poly-division-step-core f7-poly-division-step-core
+             poly-division-step-term f7-poly-division-step-term
+             poly-division-step-next f7-poly-division-step-next
+             normalize f7-normalize
+             fix-coefficients f7-fix-coefficients
+             trim-trailing-zeros f7-trim-trailing-zeros
+             raw-add f7-raw-add poly-add f7-poly-add
+             raw-neg f7-raw-neg poly-neg f7-poly-neg
+             poly-sub f7-poly-sub
+             raw-scale f7-raw-scale poly-scale f7-poly-scale
+             raw-mul f7-raw-mul poly-mul f7-poly-mul))))
+
+(local
+ (defthm f7-poly-remainder-of-fix-coefficients-regressions
+   (and
+    (equal (f7-poly-remainder (f7-fix-coefficients nil) modulus)
+           (f7-poly-remainder nil modulus))
+    (equal (f7-poly-remainder (f7-fix-coefficients 'bad-dividend) '(1 0 1))
+           (f7-poly-remainder 'bad-dividend '(1 0 1)))
+    (equal (f7-poly-remainder
+            (f7-fix-coefficients '(8 -1 14 -8 0 0)) '(1 0 1))
+           (f7-poly-remainder '(8 -1 14 -8 0 0) '(1 0 1)))
+    (equal (f7-poly-remainder
+            (f7-fix-coefficients '(8 -1 . bad-tail)) modulus)
+           (f7-poly-remainder '(8 -1 . bad-tail) modulus))
+    (equal (f7-poly-remainder dividend (f7-fix-coefficients nil))
+           (f7-poly-remainder dividend nil))
+    (equal (f7-poly-remainder dividend
+                              (f7-fix-coefficients 'bad-modulus))
+           (f7-poly-remainder dividend 'bad-modulus))
+    (equal (f7-poly-remainder dividend (f7-fix-coefficients '(3)))
+           (f7-poly-remainder dividend '(3)))
+    (equal (f7-poly-remainder dividend
+                              (f7-fix-coefficients '(7 14 0 . tail)))
+           (f7-poly-remainder dividend '(7 14 0 . tail)))
+    (equal (f7-poly-remainder dividend
+                              (f7-fix-coefficients '(8 -1 14 -8 0)))
+           (f7-poly-remainder dividend '(8 -1 14 -8 0)))
+    (equal
+     (f7-poly-remainder
+      (f7-fix-coefficients '(8 -1 14 -8 . dividend-tail))
+      (f7-fix-coefficients '(7 14 0 . modulus-tail)))
+     (f7-poly-remainder '(8 -1 14 -8 . dividend-tail)
+                        '(7 14 0 . modulus-tail))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance f7-poly-remainder-of-fix-coefficients-dividend
+                 (dividend nil))
+      (:instance f7-poly-remainder-of-fix-coefficients-dividend
+                 (dividend 'bad-dividend) (modulus '(1 0 1)))
+      (:instance f7-poly-remainder-of-fix-coefficients-dividend
+                 (dividend '(8 -1 14 -8 0 0)) (modulus '(1 0 1)))
+      (:instance f7-poly-remainder-of-fix-coefficients-dividend
+                 (dividend '(8 -1 . bad-tail)))
+      (:instance f7-poly-remainder-of-fix-coefficients-modulus
+                 (modulus nil))
+      (:instance f7-poly-remainder-of-fix-coefficients-modulus
+                 (modulus 'bad-modulus))
+      (:instance f7-poly-remainder-of-fix-coefficients-modulus
+                 (modulus '(3)))
+      (:instance f7-poly-remainder-of-fix-coefficients-modulus
+                 (modulus '(7 14 0 . tail)))
+      (:instance f7-poly-remainder-of-fix-coefficients-modulus
+                 (modulus '(8 -1 14 -8 0)))
+      (:instance f7-poly-remainder-of-fix-coefficients-dividend
+                 (dividend '(8 -1 14 -8 . dividend-tail))
+                 (modulus
+                  (f7-fix-coefficients '(7 14 0 . modulus-tail))))
+      (:instance f7-poly-remainder-of-fix-coefficients-modulus
+                 (dividend '(8 -1 14 -8 . dividend-tail))
+                 (modulus '(7 14 0 . modulus-tail))))
+     :in-theory
+     (disable f7-poly-remainder-of-fix-coefficients-dividend
+              f7-poly-remainder-of-fix-coefficients-modulus
+              poly-remainder f7-poly-remainder
+              poly-divmod f7-poly-divmod
+              poly-divmod-core f7-poly-divmod-core
+              poly-division-step f7-poly-division-step
+              poly-division-step-core f7-poly-division-step-core
+              poly-division-step-term f7-poly-division-step-term
+              poly-division-step-next f7-poly-division-step-next
+              normalize f7-normalize
+              fix-coefficients f7-fix-coefficients
+              trim-trailing-zeros f7-trim-trailing-zeros
+              gfield::f7-fix gfield::f7-add gfield::f7-mul
+              gfield::f7-neg gfield::f7-inv gfield::f7-div
+              raw-add f7-raw-add poly-add f7-poly-add
+              raw-neg f7-raw-neg poly-neg f7-poly-neg
+              poly-sub f7-poly-sub
+              raw-scale f7-raw-scale poly-scale f7-poly-scale
+              raw-mul f7-raw-mul poly-mul f7-poly-mul
+              poly-congruent-p)))))
+
 (defthm f7-poly-remainder-canonical
   (f7-canonical-polynomial-p (f7-poly-remainder f g))
   :hints (("Goal" :use f7-poly-divmod-remainder-canonical)))
