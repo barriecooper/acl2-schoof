@@ -174,6 +174,26 @@
  f7-normalize-of-poly-reduced-one
  normalize-of-poly-reduced-one
  (:rewrite)
+ nil
+ f7-poly-remainder-of-poly-reduced-add
+ poly-remainder-of-poly-reduced-add
+ (:rewrite)
+ nil
+ f7-poly-remainder-of-poly-reduced-neg
+ poly-remainder-of-poly-reduced-neg
+ (:rewrite)
+ nil
+ f7-poly-remainder-of-poly-reduced-sub
+ poly-remainder-of-poly-reduced-sub
+ (:rewrite)
+ nil
+ f7-poly-remainder-of-poly-reduced-mul
+ poly-remainder-of-poly-reduced-mul
+ (:rewrite)
+ nil
+ f7-poly-remainder-of-poly-reduced-one
+ poly-remainder-of-poly-reduced-one
+ (:rewrite)
  nil)
 
 (local
@@ -379,6 +399,150 @@
               f7-polynomial-one gfield::f7-fix gfield::f7-add
               gfield::f7-neg gfield::f7-mul
               f7-normalize-of-poly-reduced-one)))))
+
+; Remainder stability is exercised only through explicit instances of the five
+; generated public rules.  The rules themselves and the full concrete
+; implementation are disabled so these checks cannot fall back to rewriting or
+; execution.
+(local
+ (defthm f7-poly-reduced-remainder-stability-regressions
+   (and
+    (equal
+     (f7-poly-remainder
+      (f7-poly-reduced-add nil '(3) '(1 0 1)) '(1 0 1))
+     (f7-poly-reduced-add nil '(3) '(1 0 1)))
+    (equal
+     (f7-poly-remainder
+      (f7-poly-reduced-add '(1 2 0 0) '(8 -1 . bad) 'bad-modulus)
+      'bad-modulus)
+     (f7-poly-reduced-add '(1 2 0 0) '(8 -1 . bad) 'bad-modulus))
+    (equal
+     (f7-poly-remainder
+      (f7-poly-reduced-neg '(1 2 3 4) nil) nil)
+     (f7-poly-reduced-neg '(1 2 3 4) nil))
+    (equal
+     (f7-poly-remainder
+      (f7-poly-reduced-neg '(8 -1 0 . bad) '(0)) '(0))
+     (f7-poly-reduced-neg '(8 -1 0 . bad) '(0)))
+    (equal
+     (f7-poly-remainder
+      (f7-poly-reduced-sub '(1 2 3 4) '(3 0 0) '(1)) '(1))
+     (f7-poly-reduced-sub '(1 2 3 4) '(3 0 0) '(1)))
+    (equal
+     (f7-poly-remainder
+      (f7-poly-reduced-sub 'bad '(8 -1 . bad) '(3)) '(3))
+     (f7-poly-reduced-sub 'bad '(8 -1 . bad) '(3)))
+    ; Squaring a degree-two polynomial before reducing modulo degree two is a
+    ; genuine multiplication-reduction case.
+    (equal
+     (f7-poly-remainder
+      (f7-poly-reduced-mul '(1 1 1) '(1 1 1) '(1 0 1)) '(1 0 1))
+     (f7-poly-reduced-mul '(1 1 1) '(1 1 1) '(1 0 1)))
+    (equal
+     (f7-poly-remainder
+      (f7-poly-reduced-mul '(8 -1 0) '(3 . bad) '(1 0 1 . bad))
+      '(1 0 1 . bad))
+     (f7-poly-reduced-mul '(8 -1 0) '(3 . bad) '(1 0 1 . bad))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance f7-poly-remainder-of-poly-reduced-add
+                 (left nil) (right '(3)) (modulus '(1 0 1)))
+      (:instance f7-poly-remainder-of-poly-reduced-add
+                 (left '(1 2 0 0)) (right '(8 -1 . bad))
+                 (modulus 'bad-modulus))
+      (:instance f7-poly-remainder-of-poly-reduced-neg
+                 (polynomial '(1 2 3 4)) (modulus nil))
+      (:instance f7-poly-remainder-of-poly-reduced-neg
+                 (polynomial '(8 -1 0 . bad)) (modulus '(0)))
+      (:instance f7-poly-remainder-of-poly-reduced-sub
+                 (left '(1 2 3 4)) (right '(3 0 0)) (modulus '(1)))
+      (:instance f7-poly-remainder-of-poly-reduced-sub
+                 (left 'bad) (right '(8 -1 . bad)) (modulus '(3)))
+      (:instance f7-poly-remainder-of-poly-reduced-mul
+                 (left '(1 1 1)) (right '(1 1 1)) (modulus '(1 0 1)))
+      (:instance f7-poly-remainder-of-poly-reduced-mul
+                 (left '(8 -1 0)) (right '(3 . bad))
+                 (modulus '(1 0 1 . bad))))
+     :in-theory
+     (disable f7-poly-remainder-of-poly-reduced-add
+              f7-poly-remainder-of-poly-reduced-neg
+              f7-poly-remainder-of-poly-reduced-sub
+              f7-poly-remainder-of-poly-reduced-mul
+              f7-poly-remainder-of-poly-reduced-one
+              f7-canonical-polynomial-p-of-poly-reduced-add
+              f7-canonical-polynomial-p-of-poly-reduced-neg
+              f7-canonical-polynomial-p-of-poly-reduced-sub
+              f7-canonical-polynomial-p-of-poly-reduced-mul
+              f7-normalize-of-poly-reduced-add
+              f7-normalize-of-poly-reduced-neg
+              f7-normalize-of-poly-reduced-sub
+              f7-normalize-of-poly-reduced-mul
+              f7-poly-reduced-add f7-poly-reduced-neg
+              f7-poly-reduced-sub f7-poly-reduced-mul
+              f7-poly-add f7-poly-neg f7-poly-sub f7-poly-mul
+              f7-raw-add f7-raw-neg f7-raw-scale f7-raw-mul
+              f7-normalize f7-canonical-polynomial-p
+              f7-fix-coefficients f7-trim-trailing-zeros
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              f7-poly-division-step-term f7-poly-division-step-next
+              f7-polynomial-one gfield::f7-fix gfield::f7-add
+              gfield::f7-neg gfield::f7-mul)))))
+
+(local
+ (defthm f7-poly-reduced-one-remainder-stability-regressions
+   (and
+    (equal (f7-poly-remainder (f7-poly-reduced-one '(1 0 1)) '(1 0 1))
+           (f7-poly-reduced-one '(1 0 1)))
+    (equal (f7-poly-remainder (f7-poly-reduced-one nil) nil)
+           (f7-poly-reduced-one nil))
+    (equal (f7-poly-remainder (f7-poly-reduced-one '(0)) '(0))
+           (f7-poly-reduced-one '(0)))
+    (equal (f7-poly-remainder (f7-poly-reduced-one '(1)) '(1))
+           (f7-poly-reduced-one '(1)))
+    (equal (f7-poly-remainder (f7-poly-reduced-one '(3)) '(3))
+           (f7-poly-reduced-one '(3)))
+    (equal (f7-poly-remainder (f7-poly-reduced-one 'bad) 'bad)
+           (f7-poly-reduced-one 'bad))
+    (equal
+     (f7-poly-remainder
+      (f7-poly-reduced-one '(1 0 . bad)) '(1 0 . bad))
+     (f7-poly-reduced-one '(1 0 . bad))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance f7-poly-remainder-of-poly-reduced-one
+                 (modulus '(1 0 1)))
+      (:instance f7-poly-remainder-of-poly-reduced-one (modulus nil))
+      (:instance f7-poly-remainder-of-poly-reduced-one (modulus '(0)))
+      (:instance f7-poly-remainder-of-poly-reduced-one (modulus '(1)))
+      (:instance f7-poly-remainder-of-poly-reduced-one (modulus '(3)))
+      (:instance f7-poly-remainder-of-poly-reduced-one (modulus 'bad))
+      (:instance f7-poly-remainder-of-poly-reduced-one
+                 (modulus '(1 0 . bad))))
+     :in-theory
+     (disable f7-poly-remainder-of-poly-reduced-add
+              f7-poly-remainder-of-poly-reduced-neg
+              f7-poly-remainder-of-poly-reduced-sub
+              f7-poly-remainder-of-poly-reduced-mul
+              f7-poly-remainder-of-poly-reduced-one
+              f7-canonical-polynomial-p-of-poly-reduced-one
+              f7-normalize-of-poly-reduced-one
+              f7-poly-reduced-add f7-poly-reduced-neg
+              f7-poly-reduced-sub f7-poly-reduced-mul
+              f7-poly-reduced-one
+              f7-poly-add f7-poly-neg f7-poly-sub f7-poly-mul
+              f7-raw-add f7-raw-neg f7-raw-scale f7-raw-mul
+              f7-normalize f7-canonical-polynomial-p
+              f7-fix-coefficients f7-trim-trailing-zeros
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              f7-poly-division-step-term f7-poly-division-step-next
+              f7-polynomial-one gfield::f7-fix gfield::f7-add
+              gfield::f7-neg gfield::f7-mul)))))
 
 (local
  (defthm f7-poly-reduced-sub-identity-regressions

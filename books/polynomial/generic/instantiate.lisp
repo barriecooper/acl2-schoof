@@ -136,7 +136,17 @@
                reduced-mul-normalize-name reduced-mul-normalize-source
                reduced-mul-normalize-rule-classes reduced-mul-normalize-hints
                reduced-one-normalize-name reduced-one-normalize-source
-               reduced-one-normalize-rule-classes reduced-one-normalize-hints)
+               reduced-one-normalize-rule-classes reduced-one-normalize-hints
+               reduced-add-remainder-name reduced-add-remainder-source
+               reduced-add-remainder-rule-classes reduced-add-remainder-hints
+               reduced-neg-remainder-name reduced-neg-remainder-source
+               reduced-neg-remainder-rule-classes reduced-neg-remainder-hints
+               reduced-sub-remainder-name reduced-sub-remainder-source
+               reduced-sub-remainder-rule-classes reduced-sub-remainder-hints
+               reduced-mul-remainder-name reduced-mul-remainder-source
+               reduced-mul-remainder-rule-classes reduced-mul-remainder-hints
+               reduced-one-remainder-name reduced-one-remainder-source
+               reduced-one-remainder-rule-classes reduced-one-remainder-hints)
   `(progn
      (defun ,reduced-add (left right modulus)
        (,remainder (,poly-add left right) modulus))
@@ -469,7 +479,66 @@
                                 (:functional-instance
                                  ,reduced-one-normalize-source
                                  ,@functional-substitution))))
-                        ,@theorem-hints ,@reduced-one-normalize-hints))))))
+                        ,@theorem-hints ,@reduced-one-normalize-hints))))
+     ,@(and reduced-add-remainder-name
+            `((defthm ,reduced-add-remainder-name
+                (equal (,remainder
+                        (,reduced-add left right modulus) modulus)
+                       (,reduced-add left right modulus))
+                :rule-classes ,reduced-add-remainder-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-add-remainder-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints ,@reduced-add-remainder-hints))))
+     ,@(and reduced-neg-remainder-name
+            `((defthm ,reduced-neg-remainder-name
+                (equal (,remainder
+                        (,reduced-neg polynomial modulus) modulus)
+                       (,reduced-neg polynomial modulus))
+                :rule-classes ,reduced-neg-remainder-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-neg-remainder-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints ,@reduced-neg-remainder-hints))))
+     ,@(and reduced-sub-remainder-name
+            `((defthm ,reduced-sub-remainder-name
+                (equal (,remainder
+                        (,reduced-sub left right modulus) modulus)
+                       (,reduced-sub left right modulus))
+                :rule-classes ,reduced-sub-remainder-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-sub-remainder-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints ,@reduced-sub-remainder-hints))))
+     ,@(and reduced-mul-remainder-name
+            `((defthm ,reduced-mul-remainder-name
+                (equal (,remainder
+                        (,reduced-mul left right modulus) modulus)
+                       (,reduced-mul left right modulus))
+                :rule-classes ,reduced-mul-remainder-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-mul-remainder-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints ,@reduced-mul-remainder-hints))))
+     ,@(and reduced-one-remainder-name
+            `((defthm ,reduced-one-remainder-name
+                (equal (,remainder (,reduced-one modulus) modulus)
+                       (,reduced-one modulus))
+                :rule-classes ,reduced-one-remainder-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-one-remainder-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints ,@reduced-one-remainder-hints))))))
 
 ; The coefficient-field embedding is intentionally its own tiny generator.
 ; Its expansion is one ordinary DEFUN, not a general algebra-instance layer.
