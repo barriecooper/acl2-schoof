@@ -411,6 +411,21 @@
 (defun f7-fix (x) (pfield::fep-fix x 7))
 (defun f7-zero () 0)
 (defun f7-one () 1)
+
+(defthm f7-zero-not-equal-f7-one
+  (not (equal (f7-zero) (f7-one)))
+  :hints (("Goal" :in-theory (enable f7-zero f7-one))))
+
+(local
+ (defthm f7-zero-not-equal-f7-one-regression
+   (and (not (equal (f7-zero) (f7-one)))
+        (not (equal (f7-one) (f7-zero))))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance f7-zero-not-equal-f7-one))
+            :in-theory (disable f7-zero-not-equal-f7-one
+                                f7-zero f7-one)))))
+
 (defun f7-add (x y) (pfield::add (f7-fix x) (f7-fix y) 7))
 (defun f7-mul (x y) (pfield::mul (f7-fix x) (f7-fix y) 7))
 (defun f7-neg (x) (pfield::neg (f7-fix x) 7))
