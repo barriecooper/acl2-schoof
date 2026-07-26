@@ -194,6 +194,22 @@
  f7-poly-remainder-of-poly-reduced-one
  poly-remainder-of-poly-reduced-one
  (:rewrite)
+ nil
+ f7-poly-reduced-add-of-remainders
+ poly-reduced-add-of-remainders
+ nil
+ nil
+ f7-poly-reduced-neg-of-remainder
+ poly-reduced-neg-of-remainder
+ nil
+ nil
+ f7-poly-reduced-sub-of-remainders
+ poly-reduced-sub-of-remainders
+ nil
+ nil
+ f7-poly-reduced-mul-of-remainders
+ poly-reduced-mul-of-remainders
+ nil
  nil)
 
 (local
@@ -543,6 +559,88 @@
               f7-poly-division-step-term f7-poly-division-step-next
               f7-polynomial-one gfield::f7-fix gfield::f7-add
               gfield::f7-neg gfield::f7-mul)))))
+
+(local
+ (defthm f7-poly-reduced-representative-independence-regressions
+   (and
+    (equal
+     (f7-poly-reduced-add
+      (f7-poly-remainder nil '(1 0 1))
+      (f7-poly-remainder '(8 -1 0 0) '(1 0 1)) '(1 0 1))
+     (f7-poly-reduced-add nil '(8 -1 0 0) '(1 0 1)))
+    (equal
+     (f7-poly-reduced-add
+      (f7-poly-remainder 'bad 'bad-modulus)
+      (f7-poly-remainder '(3 . tail) 'bad-modulus) 'bad-modulus)
+     (f7-poly-reduced-add 'bad '(3 . tail) 'bad-modulus))
+    (equal
+     (f7-poly-reduced-neg
+      (f7-poly-remainder '(8 -1 0 . tail) nil) nil)
+     (f7-poly-reduced-neg '(8 -1 0 . tail) nil))
+    (equal
+     (f7-poly-reduced-neg
+      (f7-poly-remainder 'bad '(0)) '(0))
+     (f7-poly-reduced-neg 'bad '(0)))
+    (equal
+     (f7-poly-reduced-sub
+      (f7-poly-remainder '(1 2 0 0) '(3))
+      (f7-poly-remainder '(8 -1 . tail) '(3)) '(3))
+     (f7-poly-reduced-sub '(1 2 0 0) '(8 -1 . tail) '(3)))
+    (equal
+     (f7-poly-reduced-sub
+      (f7-poly-remainder 'left '(1 0 1 . tail))
+      (f7-poly-remainder '(3 4 5) '(1 0 1 . tail))
+      '(1 0 1 . tail))
+     (f7-poly-reduced-sub 'left '(3 4 5) '(1 0 1 . tail)))
+    ; Both degree-two operands require genuine reduction modulo degree two.
+    (equal
+     (f7-poly-reduced-mul
+      (f7-poly-remainder '(1 1 1) '(1 0 1))
+      (f7-poly-remainder '(1 2 1) '(1 0 1)) '(1 0 1))
+     (f7-poly-reduced-mul '(1 1 1) '(1 2 1) '(1 0 1)))
+    (equal
+     (f7-poly-reduced-mul
+      (f7-poly-remainder '(8 -1 0) 'atomic-modulus)
+      (f7-poly-remainder '(3 . tail) 'atomic-modulus) 'atomic-modulus)
+     (f7-poly-reduced-mul '(8 -1 0) '(3 . tail) 'atomic-modulus)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance f7-poly-reduced-add-of-remainders
+                 (left nil) (right '(8 -1 0 0)) (modulus '(1 0 1)))
+      (:instance f7-poly-reduced-add-of-remainders
+                 (left 'bad) (right '(3 . tail)) (modulus 'bad-modulus))
+      (:instance f7-poly-reduced-neg-of-remainder
+                 (polynomial '(8 -1 0 . tail)) (modulus nil))
+      (:instance f7-poly-reduced-neg-of-remainder
+                 (polynomial 'bad) (modulus '(0)))
+      (:instance f7-poly-reduced-sub-of-remainders
+                 (left '(1 2 0 0)) (right '(8 -1 . tail)) (modulus '(3)))
+      (:instance f7-poly-reduced-sub-of-remainders
+                 (left 'left) (right '(3 4 5))
+                 (modulus '(1 0 1 . tail)))
+      (:instance f7-poly-reduced-mul-of-remainders
+                 (left '(1 1 1)) (right '(1 2 1)) (modulus '(1 0 1)))
+      (:instance f7-poly-reduced-mul-of-remainders
+                 (left '(8 -1 0)) (right '(3 . tail))
+                 (modulus 'atomic-modulus)))
+     :in-theory
+     (disable f7-poly-remainder-of-poly-reduced-add
+              f7-poly-remainder-of-poly-reduced-neg
+              f7-poly-remainder-of-poly-reduced-sub
+              f7-poly-remainder-of-poly-reduced-mul
+              f7-poly-reduced-add f7-poly-reduced-neg
+              f7-poly-reduced-sub f7-poly-reduced-mul
+              f7-poly-add f7-poly-neg f7-poly-sub f7-poly-mul
+              f7-raw-add f7-raw-neg f7-raw-scale f7-raw-mul
+              f7-normalize f7-canonical-polynomial-p
+              f7-fix-coefficients f7-trim-trailing-zeros
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              f7-poly-division-step-term f7-poly-division-step-next
+              gfield::f7-fix gfield::f7-add gfield::f7-neg
+              gfield::f7-mul)))))
 
 (local
  (defthm f7-poly-reduced-sub-identity-regressions

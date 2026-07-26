@@ -486,9 +486,17 @@ unconditional canonical-predicate output for every generated reduced-ring
 operation.  The corresponding normalization rules and
 `F7-POLY-REMAINDER-OF-POLY-REDUCED-{ADD,NEG,SUB,MUL,ONE}` rules certify
 unconditional normalization and remainder fixed points for all five operations,
-including every total modulus case.  Fixer/remainder compatibility,
-representative independence, congruence, degree-bound specializations, remaining
-ring laws, exponentiation, inversion, and field promotion remain open.  These are
+including every total modulus case.  The non-rewriting
+`F7-POLY-REDUCED-ADD-OF-REMAINDERS`,
+`F7-POLY-REDUCED-NEG-OF-REMAINDER`,
+`F7-POLY-REDUCED-SUB-OF-REMAINDERS`, and
+`F7-POLY-REDUCED-MUL-OF-REMAINDERS` theorems state that, for one fixed modulus,
+simultaneously replacing every arithmetic operand by its F7 remainder leaves
+the literal reduced output unchanged.  They are available only by explicit use
+or through deliberately derived rules.  Fixer/remainder compatibility, full
+equal-remainder congruence, modulus-representative independence, degree-bound
+specializations, remaining ring laws, exponentiation, inversion, and field
+promotion remain open.  These are
 representative operations only until `generic/reduced-ring.lisp`, which now certifies the complete
 literal-equality commutative-ring interface and modulus-dependent
 `POLY-REDUCED-ONE`. Identity conclusions return the canonical remainder for
