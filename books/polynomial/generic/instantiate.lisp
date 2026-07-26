@@ -87,6 +87,7 @@
 (defmacro def-reduced-ring-instance
   (reduced-add reduced-neg reduced-sub reduced-mul reduced-one
                poly-add poly-neg poly-sub poly-mul polynomial-one remainder
+               canonical-polynomial-p
                mul-right-distributive-name mul-right-distributive-source
                functional-substitution common-goal-hints theorem-hints
                theorem-rule-classes
@@ -114,7 +115,15 @@
                reduced-sub-zero-left-name reduced-sub-zero-left-source
                reduced-sub-zero-left-rule-classes reduced-sub-zero-left-hints
                reduced-sub-as-add-neg-name reduced-sub-as-add-neg-source
-               reduced-sub-as-add-neg-rule-classes reduced-sub-as-add-neg-hints)
+               reduced-sub-as-add-neg-rule-classes reduced-sub-as-add-neg-hints
+               reduced-add-canonical-name reduced-add-canonical-source
+               reduced-add-canonical-rule-classes reduced-add-canonical-hints
+               reduced-neg-canonical-name reduced-neg-canonical-source
+               reduced-neg-canonical-rule-classes reduced-neg-canonical-hints
+               reduced-sub-canonical-name reduced-sub-canonical-source
+               reduced-sub-canonical-rule-classes reduced-sub-canonical-hints
+               reduced-mul-canonical-name reduced-mul-canonical-source
+               reduced-mul-canonical-rule-classes reduced-mul-canonical-hints)
   `(progn
      (defun ,reduced-add (left right modulus)
        (,remainder (,poly-add left right) modulus))
@@ -322,7 +331,63 @@
                           ,mul-right-distributive-source
                           ,@functional-substitution)
                          (a first) (b second) (c third))))
-                 ,@theorem-hints))))))
+                 ,@theorem-hints))))
+     ,@(and reduced-add-canonical-name
+            `((defthm ,reduced-add-canonical-name
+                (,canonical-polynomial-p
+                 (,reduced-add left right modulus))
+                :rule-classes ,reduced-add-canonical-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,reduced-add-canonical-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@reduced-add-canonical-hints))))
+     ,@(and reduced-neg-canonical-name
+            `((defthm ,reduced-neg-canonical-name
+                (,canonical-polynomial-p
+                 (,reduced-neg polynomial modulus))
+                :rule-classes ,reduced-neg-canonical-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,reduced-neg-canonical-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@reduced-neg-canonical-hints))))
+     ,@(and reduced-sub-canonical-name
+            `((defthm ,reduced-sub-canonical-name
+                (,canonical-polynomial-p
+                 (,reduced-sub left right modulus))
+                :rule-classes ,reduced-sub-canonical-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,reduced-sub-canonical-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@reduced-sub-canonical-hints))))
+     ,@(and reduced-mul-canonical-name
+            `((defthm ,reduced-mul-canonical-name
+                (,canonical-polynomial-p
+                 (,reduced-mul left right modulus))
+                :rule-classes ,reduced-mul-canonical-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,reduced-mul-canonical-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@reduced-mul-canonical-hints))))))
 
 ; The coefficient-field embedding is intentionally its own tiny generator.
 ; Its expansion is one ordinary DEFUN, not a general algebra-instance layer.
