@@ -106,7 +106,13 @@
                reduced-neg-double-name reduced-neg-double-source
                reduced-neg-double-rule-classes reduced-neg-double-hints
                reduced-neg-zero-name reduced-neg-zero-source
-               reduced-neg-zero-rule-classes reduced-neg-zero-hints)
+               reduced-neg-zero-rule-classes reduced-neg-zero-hints
+               reduced-sub-self-name reduced-sub-self-source
+               reduced-sub-self-rule-classes reduced-sub-self-hints
+               reduced-sub-zero-right-name reduced-sub-zero-right-source
+               reduced-sub-zero-right-rule-classes reduced-sub-zero-right-hints
+               reduced-sub-zero-left-name reduced-sub-zero-left-source
+               reduced-sub-zero-left-rule-classes reduced-sub-zero-left-hints)
   `(progn
      (defun ,reduced-add (left right modulus)
        (,remainder (,poly-add left right) modulus))
@@ -240,6 +246,47 @@
                           ,@functional-substitution))))
                  ,@theorem-hints
                  ,@reduced-neg-zero-hints))))
+     ,@(and reduced-sub-self-name
+            `((defthm ,reduced-sub-self-name
+                (equal (,reduced-sub a a modulus) nil)
+                :rule-classes ,reduced-sub-self-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,reduced-sub-self-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@reduced-sub-self-hints))))
+     ,@(and reduced-sub-zero-right-name
+            `((defthm ,reduced-sub-zero-right-name
+                (equal (,reduced-sub a nil modulus)
+                       (,remainder a modulus))
+                :rule-classes ,reduced-sub-zero-right-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,reduced-sub-zero-right-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@reduced-sub-zero-right-hints))))
+     ,@(and reduced-sub-zero-left-name
+            `((defthm ,reduced-sub-zero-left-name
+                (equal (,reduced-sub nil a modulus)
+                       (,reduced-neg a modulus))
+                :rule-classes ,reduced-sub-zero-left-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,reduced-sub-zero-left-source
+                          ,@functional-substitution))))
+                 ,@theorem-hints
+                 ,@reduced-sub-zero-left-hints))))
      ,@(and mul-right-distributive-name
             `((defthm ,mul-right-distributive-name
                 (equal

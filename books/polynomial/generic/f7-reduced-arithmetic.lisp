@@ -118,7 +118,78 @@
  f7-poly-reduced-neg-zero
  poly-reduced-neg-zero
  (:rewrite)
+ nil
+ f7-poly-reduced-sub-self
+ poly-reduced-sub-self
+ (:rewrite)
+ nil
+ f7-poly-reduced-sub-zero-right
+ poly-reduced-sub-zero-right
+ (:rewrite)
+ nil
+ f7-poly-reduced-sub-zero-left
+ poly-reduced-sub-zero-left
+ (:rewrite)
  nil)
+
+(local
+ (defthm f7-poly-reduced-sub-identity-regressions
+   (and
+    ; Self-subtraction covers zero, a genuine higher-degree polynomial, and
+    ; equal malformed operands.
+    (equal (f7-poly-reduced-sub nil nil '(1 0 1)) nil)
+    (equal (f7-poly-reduced-sub '(1 2 3 4) '(1 2 3 4) '(1 0 1)) nil)
+    (equal (f7-poly-reduced-sub '(1 2 . bad) '(1 2 . bad) 'bad-modulus) nil)
+    ; Subtraction of zero returns the exact remainder representative, not the
+    ; arbitrary raw operand.  These cases exercise fixing, trailing zeros,
+    ; atoms, improper lists, and total modulus behavior.
+    (equal (f7-poly-reduced-sub '(8 -1 0 0) nil '(1 0 1))
+           (f7-poly-remainder '(8 -1 0 0) '(1 0 1)))
+    (equal (f7-poly-reduced-sub '(1 6) nil '(1 0 1))
+           (f7-poly-remainder '(1 6) '(1 0 1)))
+    (equal (f7-poly-reduced-sub 'malformed nil nil)
+           (f7-poly-remainder 'malformed nil))
+    (equal (f7-poly-reduced-sub '(1 2 . bad) nil '(1))
+           (f7-poly-remainder '(1 2 . bad) '(1)))
+    (equal (f7-poly-reduced-sub '(8 9) nil '(3))
+           (f7-poly-remainder '(8 9) '(3)))
+    ; The preceding first two right-zero cases are unequal raw representatives
+    ; with the same remainder.  Zero-left contracts to reduced negation for
+    ; canonical and noncanonical presentations, including a malformed modulus.
+    (equal (f7-poly-reduced-sub nil '(3 4) '(1 0 1))
+           (f7-poly-reduced-neg '(3 4) '(1 0 1)))
+    (equal (f7-poly-reduced-sub nil '(8 -1 0 0) 'bad-modulus)
+           (f7-poly-reduced-neg '(8 -1 0 0) 'bad-modulus)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-reduced-sub-self
+                      (a nil) (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-sub-self
+                      (a '(1 2 3 4)) (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-sub-self
+                      (a '(1 2 . bad)) (modulus 'bad-modulus))
+           (:instance f7-poly-reduced-sub-zero-right
+                      (a '(8 -1 0 0)) (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-sub-zero-right
+                      (a '(1 6)) (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-sub-zero-right
+                      (a 'malformed) (modulus nil))
+           (:instance f7-poly-reduced-sub-zero-right
+                      (a '(1 2 . bad)) (modulus '(1)))
+           (:instance f7-poly-reduced-sub-zero-right
+                      (a '(8 9)) (modulus '(3)))
+           (:instance f7-poly-reduced-sub-zero-left
+                      (a '(3 4)) (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-sub-zero-left
+                      (a '(8 -1 0 0)) (modulus 'bad-modulus)))
+     :in-theory
+     (disable f7-poly-reduced-sub f7-poly-sub f7-poly-add f7-raw-add
+              f7-poly-neg f7-raw-neg f7-poly-reduced-neg
+              f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              gfield::f7-add gfield::f7-neg gfield::f7-fix)))))
 
 (local
  (defthm f7-poly-reduced-add-zero-law-regressions
