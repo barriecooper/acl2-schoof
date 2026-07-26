@@ -33,11 +33,14 @@ The same policy now covers the deliberately narrow
 `def-reduced-ring-instance` macro.  Its F7 invocation regenerates the five
 existing variable-modulus reduced-operation DEFUNs, explicitly verifies their
 unchanged guards, and independently selects addition commutativity, addition
-associativity, and right distributivity.  For every supported selection the
+associativity, the two addition identity laws, and right distributivity.  For
+every supported selection the
 caller supplies the public name, generic source, and rule classes, together with
 the complete common functional substitution and narrow common and
 theorem-specific hints.  There is no compulsory all-theorems mode; the rest of
-the F7 reduced-ring laws remain open.
+the F7 reduced-ring laws remain open, including additive inverse, negation,
+subtraction, canonicality, general fixer compatibility, and the remaining ring
+and field laws.
 
 ## Logical and executable boundary
 

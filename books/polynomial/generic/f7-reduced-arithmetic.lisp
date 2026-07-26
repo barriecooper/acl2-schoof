@@ -94,7 +94,52 @@
  f7-poly-reduced-add-associative
  poly-reduced-add-associative
  (:rewrite)
+ nil
+ f7-poly-reduced-add-zero-left
+ poly-reduced-add-zero-left
+ (:rewrite)
+ nil
+ f7-poly-reduced-add-zero-right
+ poly-reduced-add-zero-right
+ (:rewrite)
  nil)
+
+(local
+ (defthm f7-poly-reduced-add-zero-law-regressions
+   (and
+    ; Canonical zero and nonzero representatives.
+    (equal (f7-poly-reduced-add nil nil '(1 0 1))
+           (f7-poly-remainder nil '(1 0 1)))
+    (equal (f7-poly-reduced-add '(3 4) nil '(1 0 1))
+           (f7-poly-remainder '(3 4) '(1 0 1)))
+    ; Malformed and noncanonical operands, including values requiring fixing.
+    (equal (f7-poly-reduced-add nil 'malformed '(1 0 1))
+           (f7-poly-remainder 'malformed '(1 0 1)))
+    (equal (f7-poly-reduced-add '(8 -1 0 0) nil '(1 0 1))
+           (f7-poly-remainder '(8 -1 0 0) '(1 0 1)))
+    ; Malformed, zero, and nonzero constant moduli.
+    (equal (f7-poly-reduced-add nil '(8 -1 . tail) 'bad-modulus)
+           (f7-poly-remainder '(8 -1 . tail) 'bad-modulus))
+    (equal (f7-poly-reduced-add '(8 -1 . tail) nil nil)
+           (f7-poly-remainder '(8 -1 . tail) nil))
+    (equal (f7-poly-reduced-add nil '(8 -1 . tail) '(3))
+           (f7-poly-remainder '(8 -1 . tail) '(3)))
+    ; Unequal raw representatives with the same established remainder.
+    (equal (f7-poly-reduced-add nil '(8 -1 0 0) '(1 0 1))
+           (f7-poly-reduced-add '(1 6) nil '(1 0 1))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-reduced-add-zero-left
+                      (first '(8 -1 0 0)) (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-add-zero-right
+                      (first '(1 6)) (modulus '(1 0 1))))
+     :in-theory
+     (disable f7-poly-reduced-add f7-poly-add f7-raw-add
+              f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              gfield::f7-fix gfield::f7-add)))))
 
 (local
  (defthm f7-poly-reduced-add-structural-law-regressions

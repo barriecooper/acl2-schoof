@@ -94,7 +94,11 @@
                add-commutative-name add-commutative-source
                add-commutative-rule-classes add-commutative-hints
                add-associative-name add-associative-source
-               add-associative-rule-classes add-associative-hints)
+               add-associative-rule-classes add-associative-hints
+               add-zero-left-name add-zero-left-source
+               add-zero-left-rule-classes add-zero-left-hints
+               add-zero-right-name add-zero-right-source
+               add-zero-right-rule-classes add-zero-right-hints)
   `(progn
      (defun ,reduced-add (left right modulus)
        (,remainder (,poly-add left right) modulus))
@@ -140,6 +144,36 @@
                           ,@functional-substitution))))
                  ,@theorem-hints
                  ,@add-associative-hints))))
+     ,@(and add-zero-left-name
+            `((defthm ,add-zero-left-name
+                (equal (,reduced-add nil first modulus)
+                       (,remainder first modulus))
+                :rule-classes ,add-zero-left-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,add-zero-left-source
+                          ,@functional-substitution)
+                         (a first))))
+                 ,@theorem-hints
+                 ,@add-zero-left-hints))))
+     ,@(and add-zero-right-name
+            `((defthm ,add-zero-right-name
+                (equal (,reduced-add first nil modulus)
+                       (,remainder first modulus))
+                :rule-classes ,add-zero-right-rule-classes
+                :hints
+                (("Goal"
+                  ,@common-goal-hints
+                  :use ((:instance
+                         (:functional-instance
+                          ,add-zero-right-source
+                          ,@functional-substitution)
+                         (a first))))
+                 ,@theorem-hints
+                 ,@add-zero-right-hints))))
      ,@(and mul-right-distributive-name
             `((defthm ,mul-right-distributive-name
                 (equal
