@@ -13,11 +13,13 @@ irreducible-modulus inverse laws. The concrete F7 stack carries those
 algorithms through guard-verified modular inverse with exact execution
 regressions, and `x^2+1` is certified irreducible over F7.
 
-F7X2 currently supplies canonical representatives and transparent
-addition/negation/subtraction/multiplication. Its certified laws include
+F7X2 currently supplies canonical representatives, transparent
+addition/negation/subtraction/multiplication, and a total executable inverse
+candidate with an explicit zero branch. Its certified laws include
 zero/one distinctness, the additive group laws and cancellation,
 multiplicative identities and zero, associativity and commutativity of
-multiplication, and distributivity. This is not yet a field interface.
+multiplication, and distributivity. Universal inverse laws and field packaging
+remain open; this is not yet a field interface.
 
 ## Near-term shared algebra
 
