@@ -89,6 +89,7 @@
                poly-add poly-neg poly-sub poly-mul polynomial-one remainder
                normalize
                canonical-polynomial-p
+               poly-congruent-p
                mul-right-distributive-name mul-right-distributive-source
                functional-substitution common-goal-hints theorem-hints
                theorem-rule-classes
@@ -158,7 +159,23 @@
                reduced-sub-of-remainders-hints
                reduced-mul-of-remainders-name reduced-mul-of-remainders-source
                reduced-mul-of-remainders-rule-classes
-               reduced-mul-of-remainders-hints)
+               reduced-mul-of-remainders-hints
+               reduced-add-respects-congruence-name
+               reduced-add-respects-congruence-source
+               reduced-add-respects-congruence-rule-classes
+               reduced-add-respects-congruence-hints
+               reduced-neg-respects-congruence-name
+               reduced-neg-respects-congruence-source
+               reduced-neg-respects-congruence-rule-classes
+               reduced-neg-respects-congruence-hints
+               reduced-sub-respects-congruence-name
+               reduced-sub-respects-congruence-source
+               reduced-sub-respects-congruence-rule-classes
+               reduced-sub-respects-congruence-hints
+               reduced-mul-respects-congruence-name
+               reduced-mul-respects-congruence-source
+               reduced-mul-respects-congruence-rule-classes
+               reduced-mul-respects-congruence-hints)
   `(progn
      (defun ,reduced-add (left right modulus)
        (,remainder (,poly-add left right) modulus))
@@ -601,7 +618,65 @@
                                 (:functional-instance
                                  ,reduced-mul-of-remainders-source
                                  ,@functional-substitution))))
-                        ,@theorem-hints ,@reduced-mul-of-remainders-hints))))))
+                        ,@theorem-hints ,@reduced-mul-of-remainders-hints))))
+     ,@(and reduced-add-respects-congruence-name
+            `((defthm ,reduced-add-respects-congruence-name
+                (implies
+                 (and (,poly-congruent-p left-a left-b modulus)
+                      (,poly-congruent-p right-a right-b modulus))
+                 (equal (,reduced-add left-a right-a modulus)
+                        (,reduced-add left-b right-b modulus)))
+                :rule-classes ,reduced-add-respects-congruence-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-add-respects-congruence-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints
+                        ,@reduced-add-respects-congruence-hints))))
+     ,@(and reduced-neg-respects-congruence-name
+            `((defthm ,reduced-neg-respects-congruence-name
+                (implies (,poly-congruent-p left right modulus)
+                         (equal (,reduced-neg left modulus)
+                                (,reduced-neg right modulus)))
+                :rule-classes ,reduced-neg-respects-congruence-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-neg-respects-congruence-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints
+                        ,@reduced-neg-respects-congruence-hints))))
+     ,@(and reduced-sub-respects-congruence-name
+            `((defthm ,reduced-sub-respects-congruence-name
+                (implies
+                 (and (,poly-congruent-p left-a left-b modulus)
+                      (,poly-congruent-p right-a right-b modulus))
+                 (equal (,reduced-sub left-a right-a modulus)
+                        (,reduced-sub left-b right-b modulus)))
+                :rule-classes ,reduced-sub-respects-congruence-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-sub-respects-congruence-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints
+                        ,@reduced-sub-respects-congruence-hints))))
+     ,@(and reduced-mul-respects-congruence-name
+            `((defthm ,reduced-mul-respects-congruence-name
+                (implies
+                 (and (,poly-congruent-p left-a left-b modulus)
+                      (,poly-congruent-p right-a right-b modulus))
+                 (equal (,reduced-mul left-a right-a modulus)
+                        (,reduced-mul left-b right-b modulus)))
+                :rule-classes ,reduced-mul-respects-congruence-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-mul-respects-congruence-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints
+                        ,@reduced-mul-respects-congruence-hints))))))
 
 ; The coefficient-field embedding is intentionally its own tiny generator.
 ; Its expansion is one ordinary DEFUN, not a general algebra-instance layer.

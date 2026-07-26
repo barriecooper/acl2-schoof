@@ -2,14 +2,39 @@
 (include-book "f7-division")
 (include-book "reduced-ring")
 
+; Concrete execution spelling of the generic quotient-equality boundary.  These
+; unchanged executable events precede the generator so its theorem statements
+; can name the predicate explicitly.
+(defun f7-poly-congruent-p (left right modulus)
+  (equal (f7-poly-remainder left modulus)
+         (f7-poly-remainder right modulus)))
+
+(verify-guards f7-poly-congruent-p)
+
 ; Concrete execution witnesses use the same transparent operation/remainder
 ; chain as the generic boundary.  They do not introduce a concrete quotient
 ; object or duplicate the generic structural proofs.
+(local (in-theory (disable f7-poly-congruent-p)))
+(local
+ (defthm f7-poly-congruent-p-definition-for-reduced-ring-instantiation
+   (equal (f7-poly-congruent-p left right modulus)
+          (equal (f7-poly-remainder left modulus)
+                 (f7-poly-remainder right modulus)))
+   :hints
+   (("Goal"
+     :in-theory
+     (e/d (f7-poly-congruent-p)
+          (f7-poly-remainder f7-poly-remainder-is-divmod-remainder
+           f7-poly-divmod f7-poly-divmod-core
+           f7-poly-division-step f7-poly-division-step-core
+           f7-poly-division-step-term f7-poly-division-step-next))))))
+
 (def-reduced-ring-instance
  f7-poly-reduced-add f7-poly-reduced-neg f7-poly-reduced-sub
  f7-poly-reduced-mul f7-poly-reduced-one
  f7-poly-add f7-poly-neg f7-poly-sub f7-poly-mul f7-polynomial-one
  f7-poly-remainder f7-normalize f7-canonical-polynomial-p
+ f7-poly-congruent-p
  f7-poly-reduced-mul-right-distributive
  poly-reduced-mul-right-distributive
  ((gfield::field-element-p gfield::f7-element-p)
@@ -53,7 +78,8 @@
   (poly-reduced-sub f7-poly-reduced-sub)
   (poly-reduced-mul f7-poly-reduced-mul)
   (polynomial-one f7-polynomial-one)
-  (poly-reduced-one f7-poly-reduced-one))
+  (poly-reduced-one f7-poly-reduced-one)
+  (poly-congruent-p f7-poly-congruent-p))
  (:in-theory (enable f7-poly-reduced-add f7-poly-reduced-mul))
  (("Subgoal 29.2" :use gfield::f7-mul-inverse-right)
   ("Subgoal 26.9"
@@ -210,7 +236,188 @@
  f7-poly-reduced-mul-of-remainders
  poly-reduced-mul-of-remainders
  nil
+ nil
+ f7-poly-reduced-add-respects-poly-congruent-p
+ poly-reduced-add-respects-poly-congruent-p
+ nil
+ nil
+ f7-poly-reduced-neg-respects-poly-congruent-p
+ poly-reduced-neg-respects-poly-congruent-p
+ nil
+ nil
+ f7-poly-reduced-sub-respects-poly-congruent-p
+ poly-reduced-sub-respects-poly-congruent-p
+ nil
+ nil
+ f7-poly-reduced-mul-respects-poly-congruent-p
+ poly-reduced-mul-respects-poly-congruent-p
+ nil
  nil)
+
+(local
+ (in-theory
+  (e/d (f7-poly-congruent-p)
+       (f7-poly-congruent-p-definition-for-reduced-ring-instantiation))))
+
+; These symbolic regressions use only explicit instances of the non-rewriting
+; public congruence theorems.  Since those theorems have no runes, they cannot
+; participate through the ambient theory and are intentionally not disabled.
+(local
+ (defthm f7-poly-reduced-add-congruence-regressions
+   (and
+    (implies
+     (and (f7-poly-congruent-p '(8 -1 0 0) '(1 6) '(1 0 1))
+          (f7-poly-congruent-p '(3 4 5) '(3 4 5 0) '(1 0 1)))
+     (equal (f7-poly-reduced-add '(8 -1 0 0) '(3 4 5) '(1 0 1))
+            (f7-poly-reduced-add '(1 6) '(3 4 5 0) '(1 0 1))))
+    (implies
+     (and (f7-poly-congruent-p 'left-atom '(0) nil)
+          (f7-poly-congruent-p '(8 . bad-tail) 'right-atom nil))
+     (equal (f7-poly-reduced-add 'left-atom '(8 . bad-tail) nil)
+            (f7-poly-reduced-add '(0) 'right-atom nil)))
+    (implies
+     (and (f7-poly-congruent-p '(1) '(1 0) '(0))
+          (f7-poly-congruent-p '(2 3) '(9 -4 0) '(0)))
+     (equal (f7-poly-reduced-add '(1) '(2 3) '(0))
+            (f7-poly-reduced-add '(1 0) '(9 -4 0) '(0)))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-reduced-add-respects-poly-congruent-p
+                      (left-a '(8 -1 0 0)) (left-b '(1 6))
+                      (right-a '(3 4 5)) (right-b '(3 4 5 0))
+                      (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-add-respects-poly-congruent-p
+                      (left-a 'left-atom) (left-b '(0))
+                      (right-a '(8 . bad-tail)) (right-b 'right-atom)
+                      (modulus nil))
+           (:instance f7-poly-reduced-add-respects-poly-congruent-p
+                      (left-a '(1)) (left-b '(1 0))
+                      (right-a '(2 3)) (right-b '(9 -4 0))
+                      (modulus '(0))))
+     :in-theory
+     (disable f7-poly-congruent-p
+              f7-poly-reduced-add f7-poly-reduced-neg
+              f7-poly-reduced-sub f7-poly-reduced-mul
+              f7-poly-add f7-raw-add f7-poly-neg f7-raw-neg f7-poly-sub
+              f7-poly-mul f7-raw-mul f7-poly-scale f7-raw-scale
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              f7-poly-division-step-term f7-poly-division-step-next
+              f7-normalize f7-canonical-polynomial-p
+              f7-fix-coefficients f7-trim-trailing-zeros
+              gfield::f7-fix gfield::f7-add gfield::f7-neg
+              gfield::f7-mul gfield::f7-div gfield::f7-inv)))))
+
+(local
+ (defthm f7-poly-reduced-neg-congruence-regressions
+   (and
+    (implies (f7-poly-congruent-p '(8 -1 0 0) '(1 6) '(1))
+             (equal (f7-poly-reduced-neg '(8 -1 0 0) '(1))
+                    (f7-poly-reduced-neg '(1 6) '(1))))
+    (implies (f7-poly-congruent-p '(1 2 . tail) 'atom '(3))
+             (equal (f7-poly-reduced-neg '(1 2 . tail) '(3))
+                    (f7-poly-reduced-neg 'atom '(3)))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-reduced-neg-respects-poly-congruent-p
+                      (left '(8 -1 0 0)) (right '(1 6)) (modulus '(1)))
+           (:instance f7-poly-reduced-neg-respects-poly-congruent-p
+                      (left '(1 2 . tail)) (right 'atom) (modulus '(3))))
+     :in-theory
+     (disable f7-poly-congruent-p
+              f7-poly-reduced-add f7-poly-reduced-neg
+              f7-poly-reduced-sub f7-poly-reduced-mul
+              f7-poly-add f7-raw-add f7-poly-neg f7-raw-neg f7-poly-sub
+              f7-poly-mul f7-raw-mul f7-poly-scale f7-raw-scale
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              f7-poly-division-step-term f7-poly-division-step-next
+              f7-normalize f7-canonical-polynomial-p
+              f7-fix-coefficients f7-trim-trailing-zeros
+              gfield::f7-fix gfield::f7-add gfield::f7-neg
+              gfield::f7-mul gfield::f7-div gfield::f7-inv)))))
+
+(local
+ (defthm f7-poly-reduced-sub-congruence-regressions
+   (and
+    (implies
+     (and (f7-poly-congruent-p '(1 2 0) '(1 2) 'atomic-modulus)
+          (f7-poly-congruent-p '(8 . bad) 'right-atom 'atomic-modulus))
+     (equal
+      (f7-poly-reduced-sub '(1 2 0) '(8 . bad) 'atomic-modulus)
+      (f7-poly-reduced-sub '(1 2) 'right-atom 'atomic-modulus)))
+    (implies
+     (and (f7-poly-congruent-p '(1 2 3) '(8 2 3 0) '(1 0 . bad))
+          (f7-poly-congruent-p 'left-atom '(0 . tail) '(1 0 . bad)))
+     (equal
+      (f7-poly-reduced-sub '(1 2 3) 'left-atom '(1 0 . bad))
+      (f7-poly-reduced-sub '(8 2 3 0) '(0 . tail) '(1 0 . bad)))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-reduced-sub-respects-poly-congruent-p
+                      (left-a '(1 2 0)) (left-b '(1 2))
+                      (right-a '(8 . bad)) (right-b 'right-atom)
+                      (modulus 'atomic-modulus))
+           (:instance f7-poly-reduced-sub-respects-poly-congruent-p
+                      (left-a '(1 2 3)) (left-b '(8 2 3 0))
+                      (right-a 'left-atom) (right-b '(0 . tail))
+                      (modulus '(1 0 . bad))))
+     :in-theory
+     (disable f7-poly-congruent-p
+              f7-poly-reduced-add f7-poly-reduced-neg
+              f7-poly-reduced-sub f7-poly-reduced-mul
+              f7-poly-add f7-raw-add f7-poly-neg f7-raw-neg f7-poly-sub
+              f7-poly-mul f7-raw-mul f7-poly-scale f7-raw-scale
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              f7-poly-division-step-term f7-poly-division-step-next
+              f7-normalize f7-canonical-polynomial-p
+              f7-fix-coefficients f7-trim-trailing-zeros
+              gfield::f7-fix gfield::f7-add gfield::f7-neg
+              gfield::f7-mul gfield::f7-div gfield::f7-inv)))))
+
+(local
+ (defthm f7-poly-reduced-mul-congruence-regressions
+   (and
+    (implies
+     (and (f7-poly-congruent-p '(1 1 1 0) '(1 1 1) '(1 0 1))
+          (f7-poly-congruent-p '(8 -1 2) '(1 6 2 0) '(1 0 1)))
+     (equal
+      (f7-poly-reduced-mul '(1 1 1 0) '(8 -1 2) '(1 0 1))
+      (f7-poly-reduced-mul '(1 1 1) '(1 6 2 0) '(1 0 1))))
+    (implies
+     (and (f7-poly-congruent-p 'left-atom '(8 . tail) '(bad modulus))
+          (f7-poly-congruent-p '(1 2 . bad) 'right-atom '(bad modulus)))
+     (equal
+      (f7-poly-reduced-mul 'left-atom '(1 2 . bad) '(bad modulus))
+      (f7-poly-reduced-mul '(8 . tail) 'right-atom '(bad modulus)))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-reduced-mul-respects-poly-congruent-p
+                      (left-a '(1 1 1 0)) (left-b '(1 1 1))
+                      (right-a '(8 -1 2)) (right-b '(1 6 2 0))
+                      (modulus '(1 0 1)))
+           (:instance f7-poly-reduced-mul-respects-poly-congruent-p
+                      (left-a 'left-atom) (left-b '(8 . tail))
+                      (right-a '(1 2 . bad)) (right-b 'right-atom)
+                      (modulus '(bad modulus))))
+     :in-theory
+     (disable f7-poly-congruent-p
+              f7-poly-reduced-add f7-poly-reduced-neg
+              f7-poly-reduced-sub f7-poly-reduced-mul
+              f7-poly-add f7-raw-add f7-poly-neg f7-raw-neg f7-poly-sub
+              f7-poly-mul f7-raw-mul f7-poly-scale f7-raw-scale
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              f7-poly-division-step-term f7-poly-division-step-next
+              f7-normalize f7-canonical-polynomial-p
+              f7-fix-coefficients f7-trim-trailing-zeros
+              gfield::f7-fix gfield::f7-add gfield::f7-neg
+              gfield::f7-mul gfield::f7-div gfield::f7-inv)))))
 
 (local
  (defthm f7-poly-reduced-one-canonicality-regressions
@@ -918,13 +1125,6 @@
               f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
               f7-poly-division-step f7-poly-division-step-core
               gfield::f7-fix gfield::f7-neg gfield::f7-add)))))
-
-; Concrete execution spelling of the generic quotient-equality boundary.
-(defun f7-poly-congruent-p (left right modulus)
-  (equal (f7-poly-remainder left modulus)
-         (f7-poly-remainder right modulus)))
-
-(verify-guards f7-poly-congruent-p)
 
 (defthm f7-poly-congruent-p-exact-regressions
   (and
