@@ -9,7 +9,7 @@
  f7-poly-reduced-add f7-poly-reduced-neg f7-poly-reduced-sub
  f7-poly-reduced-mul f7-poly-reduced-one
  f7-poly-add f7-poly-neg f7-poly-sub f7-poly-mul f7-polynomial-one
- f7-poly-remainder f7-canonical-polynomial-p
+ f7-poly-remainder f7-normalize f7-canonical-polynomial-p
  f7-poly-reduced-mul-right-distributive
  poly-reduced-mul-right-distributive
  ((gfield::field-element-p gfield::f7-element-p)
@@ -154,6 +154,26 @@
  f7-canonical-polynomial-p-of-poly-reduced-one
  canonical-polynomial-p-of-poly-reduced-one
  (:rewrite)
+ nil
+ f7-normalize-of-poly-reduced-add
+ normalize-of-poly-reduced-add
+ (:rewrite)
+ nil
+ f7-normalize-of-poly-reduced-neg
+ normalize-of-poly-reduced-neg
+ (:rewrite)
+ nil
+ f7-normalize-of-poly-reduced-sub
+ normalize-of-poly-reduced-sub
+ (:rewrite)
+ nil
+ f7-normalize-of-poly-reduced-mul
+ normalize-of-poly-reduced-mul
+ (:rewrite)
+ nil
+ f7-normalize-of-poly-reduced-one
+ normalize-of-poly-reduced-one
+ (:rewrite)
  nil)
 
 (local
@@ -254,6 +274,111 @@
               f7-poly-division-step-term f7-poly-division-step-next
               gfield::f7-fix gfield::f7-add gfield::f7-neg
               gfield::f7-mul)))))
+
+(local
+ (defthm f7-poly-reduced-normalization-regressions
+   (and
+    (equal (f7-normalize (f7-poly-reduced-add nil '(3) '(1 0 1)))
+           (f7-poly-reduced-add nil '(3) '(1 0 1)))
+    (equal (f7-normalize
+            (f7-poly-reduced-add '(1 2) '(8 -1 0 0) 'bad-modulus))
+           (f7-poly-reduced-add '(1 2) '(8 -1 0 0) 'bad-modulus))
+    (equal (f7-normalize
+            (f7-poly-reduced-neg '(1 2 3 4) nil))
+           (f7-poly-reduced-neg '(1 2 3 4) nil))
+    (equal (f7-normalize
+            (f7-poly-reduced-neg '(1 2 . bad) '(0 . bad)))
+           (f7-poly-reduced-neg '(1 2 . bad) '(0 . bad)))
+    (equal (f7-normalize
+            (f7-poly-reduced-sub '(8 -1 0 0) '(1 2 . bad) '(1)))
+           (f7-poly-reduced-sub '(8 -1 0 0) '(1 2 . bad) '(1)))
+    (equal (f7-normalize (f7-poly-reduced-sub 'bad '(3) '(3)))
+           (f7-poly-reduced-sub 'bad '(3) '(3)))
+    (equal (f7-normalize
+            (f7-poly-reduced-mul '(1 1 1) '(1 1 1) '(1 0 1)))
+           (f7-poly-reduced-mul '(1 1 1) '(1 1 1) '(1 0 1)))
+    (equal (f7-normalize
+            (f7-poly-reduced-mul '(8 -1 0) '(3) '(1 0 1 . bad)))
+           (f7-poly-reduced-mul '(8 -1 0) '(3) '(1 0 1 . bad))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance f7-normalize-of-poly-reduced-add
+                 (left nil) (right '(3)) (modulus '(1 0 1)))
+      (:instance f7-normalize-of-poly-reduced-add
+                 (left '(1 2)) (right '(8 -1 0 0))
+                 (modulus 'bad-modulus))
+      (:instance f7-normalize-of-poly-reduced-neg
+                 (polynomial '(1 2 3 4)) (modulus nil))
+      (:instance f7-normalize-of-poly-reduced-neg
+                 (polynomial '(1 2 . bad)) (modulus '(0 . bad)))
+      (:instance f7-normalize-of-poly-reduced-sub
+                 (left '(8 -1 0 0)) (right '(1 2 . bad)) (modulus '(1)))
+      (:instance f7-normalize-of-poly-reduced-sub
+                 (left 'bad) (right '(3)) (modulus '(3)))
+      (:instance f7-normalize-of-poly-reduced-mul
+                 (left '(1 1 1)) (right '(1 1 1)) (modulus '(1 0 1)))
+      (:instance f7-normalize-of-poly-reduced-mul
+                 (left '(8 -1 0)) (right '(3))
+                 (modulus '(1 0 1 . bad))))
+     :in-theory
+     (disable f7-normalize f7-canonical-polynomial-p
+              f7-poly-reduced-add f7-poly-reduced-neg
+              f7-poly-reduced-sub f7-poly-reduced-mul
+              f7-poly-add f7-poly-neg f7-poly-sub f7-poly-mul
+              f7-raw-add f7-raw-neg f7-raw-scale f7-raw-mul
+              f7-fix-coefficients f7-trim-trailing-zeros
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              f7-poly-division-step-term f7-poly-division-step-next
+              f7-polynomial-one gfield::f7-fix gfield::f7-add
+              gfield::f7-neg gfield::f7-mul
+              f7-normalize-of-poly-reduced-add
+              f7-normalize-of-poly-reduced-neg
+              f7-normalize-of-poly-reduced-sub
+              f7-normalize-of-poly-reduced-mul)))))
+
+(local
+ (defthm f7-poly-reduced-one-normalization-regressions
+   (and
+    (equal (f7-normalize (f7-poly-reduced-one '(1 0 1)))
+           (f7-poly-reduced-one '(1 0 1)))
+    (equal (f7-normalize (f7-poly-reduced-one nil))
+           (f7-poly-reduced-one nil))
+    (equal (f7-normalize (f7-poly-reduced-one '(0)))
+           (f7-poly-reduced-one '(0)))
+    (equal (f7-normalize (f7-poly-reduced-one '(1)))
+           (f7-poly-reduced-one '(1)))
+    (equal (f7-normalize (f7-poly-reduced-one '(3)))
+           (f7-poly-reduced-one '(3)))
+    (equal (f7-normalize (f7-poly-reduced-one 'bad))
+           (f7-poly-reduced-one 'bad))
+    (equal (f7-normalize (f7-poly-reduced-one '(1 0 . bad)))
+           (f7-poly-reduced-one '(1 0 . bad))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance f7-normalize-of-poly-reduced-one (modulus '(1 0 1)))
+      (:instance f7-normalize-of-poly-reduced-one (modulus nil))
+      (:instance f7-normalize-of-poly-reduced-one (modulus '(0)))
+      (:instance f7-normalize-of-poly-reduced-one (modulus '(1)))
+      (:instance f7-normalize-of-poly-reduced-one (modulus '(3)))
+      (:instance f7-normalize-of-poly-reduced-one (modulus 'bad))
+      (:instance f7-normalize-of-poly-reduced-one
+                 (modulus '(1 0 . bad))))
+     :in-theory
+     (disable f7-normalize f7-canonical-polynomial-p f7-poly-reduced-one
+              f7-poly-add f7-poly-neg f7-poly-sub f7-poly-mul
+              f7-raw-add f7-raw-neg f7-raw-scale f7-raw-mul
+              f7-fix-coefficients f7-trim-trailing-zeros
+              f7-poly-remainder f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              f7-poly-division-step-term f7-poly-division-step-next
+              f7-polynomial-one gfield::f7-fix gfield::f7-add
+              gfield::f7-neg gfield::f7-mul
+              f7-normalize-of-poly-reduced-one)))))
 
 (local
  (defthm f7-poly-reduced-sub-identity-regressions
