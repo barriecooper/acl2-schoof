@@ -394,6 +394,111 @@
   (implies (equal (f7-normalize g) nil)
            (equal (f7-poly-divmod f g) (mv nil (f7-normalize f))))
   :hints (("Goal" :in-theory (enable f7-poly-divmod f7-poly-divmod-core))))
+
+; These two remainder facts are shallow projections of the existing public
+; divmod semantics.  Neither proof opens a concrete executable definition.
+(defthm f7-poly-remainder-zero-normalized-modulus
+  (implies
+   (equal (f7-normalize modulus) nil)
+   (equal
+    (f7-poly-remainder dividend modulus)
+    (f7-normalize dividend)))
+  :hints
+  (("Goal"
+    :use ((:instance f7-poly-divmod-zero-normalized-divisor
+                     (f dividend) (g modulus))
+          (:instance f7-poly-remainder-is-divmod-remainder
+                     (f dividend) (g modulus)))
+    :in-theory (theory 'minimal-theory))))
+
+(defthm f7-poly-remainder-strict-degree-bound
+  (implies
+   (consp (f7-normalize modulus))
+   (or (equal (f7-poly-remainder dividend modulus) nil)
+       (< (f7-poly-degree (f7-poly-remainder dividend modulus))
+          (f7-poly-degree (f7-normalize modulus)))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance f7-poly-divmod-final-remainder-degree-bound
+                     (f dividend) (g modulus))
+          (:instance f7-poly-remainder-is-divmod-remainder
+                     (f dividend) (g modulus)))
+    :in-theory (theory 'minimal-theory))))
+
+; The lower-degree branch inspects only the top-level divmod control.  The
+; strict inequality makes the recursive division branch inactive, so no
+; division-step or polynomial arithmetic implementation is exposed.
+(defthm f7-poly-remainder-canonical-lower-degree
+  (implies
+   (and (f7-canonical-polynomial-p dividend)
+        (consp (f7-normalize modulus))
+        (< (f7-poly-degree dividend)
+           (f7-poly-degree (f7-normalize modulus))))
+   (equal
+    (f7-poly-remainder dividend modulus)
+    dividend))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance f7-poly-remainder-is-divmod-remainder
+                     (f dividend) (g modulus))
+          (:instance f7-normalize-when-canonical
+                     (xs dividend))
+          (:instance f7-canonical-polynomial-p-of-normalize
+                     (xs modulus)))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '((:definition f7-poly-divmod)
+       (:definition f7-poly-divmod-core)
+       (:rewrite cdr-cons)
+       (:executable-counterpart zp))))))
+
+; Focused closed-theory consumers keep the three independent public contracts
+; honest without suggesting an algebraic composition that is not yet needed.
+(local
+ (defthm f7-remainder-zero-modulus-semantic-consumer
+   (implies
+    (equal (f7-normalize modulus) nil)
+    (equal
+     (f7-poly-remainder dividend modulus)
+     (f7-normalize dividend)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-remainder-zero-normalized-modulus))
+     :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm f7-remainder-degree-bound-semantic-consumer
+   (implies
+    (consp (f7-normalize modulus))
+    (or (equal (f7-poly-remainder dividend modulus) nil)
+        (< (f7-poly-degree (f7-poly-remainder dividend modulus))
+           (f7-poly-degree (f7-normalize modulus)))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-remainder-strict-degree-bound))
+     :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm f7-remainder-lower-degree-no-op-semantic-consumer
+   (implies
+    (and (f7-canonical-polynomial-p dividend)
+         (consp (f7-normalize modulus))
+         (< (f7-poly-degree dividend)
+            (f7-poly-degree (f7-normalize modulus))))
+    (equal
+     (f7-poly-remainder dividend modulus)
+     dividend))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-remainder-canonical-lower-degree))
+     :in-theory (theory 'minimal-theory)))))
+
 (defthm f7-poly-divmod-nonzero-constant-regression
   (equal (f7-poly-divmod '(1 2 3) '(2)) (mv '(4 1 5) nil)))
 (defthm f7-poly-divmod-zero-normalized-regression

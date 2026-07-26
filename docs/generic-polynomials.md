@@ -261,6 +261,21 @@ logical/executable boundary.
 
 `books/polynomial/generic/division.lisp` certifies `POLY-DIVMOD-CORE` and the total `(mv q r)` public `POLY-DIVMOD`.  Canonical remainder length is the measure, the one-step decrease theorem supplies termination, and an accumulator invariant supplies normalized reconstruction without evaluation extensionality.  The final remainder is zero or strictly below the normalized nonzero divisor.  Guards are verified separately.  The separately certified F7 book now instantiates this recursion with ordinary definitions and verified guards. Concrete PFIELD division, F7 uniqueness, gcd, and extended gcd remain open.
 
+The concrete F7 remainder projection now also exports the normalized-zero
+modulus fallback, the strict degree bound for a nonempty normalized modulus,
+and the canonical lower-degree no-op property.  The first two are shallow
+projections of the public F7 divmod result.  The lower-degree theorem inspects
+only the top-level divmod control to show that its recursive branch is
+inactive; its public statement does not expose division recursion or
+polynomial arithmetic.  Focused local symbolic consumers check each contract
+independently with every executable definition closed.
+
+This concrete foundation does not yet establish F7 remainder idempotence,
+divisibility iff zero remainder, nonzero reduced-representative
+nondivisibility, divisibility witnesses or transitivity, unit/associate
+reasoning, the F7 irreducibility-to-monic-GCD-one theorem, modular-inverse
+correctness under irreducibility, or F7X2 correctness.
+
 ## Generic modular reduction (certified)
 
 `books/polynomial/generic/reduction.lisp` defines `POLY-REMAINDER` as the
