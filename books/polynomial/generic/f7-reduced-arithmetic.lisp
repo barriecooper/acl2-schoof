@@ -254,6 +254,91 @@
  nil
  nil)
 
+; Public semantic equations for the generated reduced multiplicative
+; operations.  Each proof exposes only its own shallow wrapper.
+(defthm f7-poly-reduced-mul-definition
+  (equal
+   (f7-poly-reduced-mul left right modulus)
+   (f7-poly-remainder (f7-poly-mul left right) modulus))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :do-not '(preprocess)
+    :in-theory
+    (e/d (f7-poly-reduced-mul)
+         (f7-poly-mul f7-poly-remainder f7-poly-divmod
+          f7-poly-remainder-is-divmod-remainder
+          f7-poly-divmod-core f7-poly-division-step
+          f7-poly-division-step-core f7-normalize f7-fix-coefficients
+          f7-trim-trailing-zeros f7-raw-mul f7-raw-scale f7-raw-add)))))
+
+(defthm f7-poly-reduced-one-definition
+  (equal
+   (f7-poly-reduced-one modulus)
+   (f7-poly-remainder (f7-polynomial-one) modulus))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :do-not '(preprocess)
+    :in-theory
+    (e/d (f7-poly-reduced-one)
+         (f7-polynomial-one (:executable-counterpart f7-polynomial-one)
+          f7-poly-remainder f7-poly-divmod
+          f7-poly-remainder-is-divmod-remainder
+          f7-poly-divmod-core f7-poly-division-step
+          f7-poly-division-step-core f7-normalize f7-fix-coefficients
+          f7-trim-trailing-zeros f7-raw-add)))))
+
+(defthm f7-poly-reduced-mul-commutative
+  (equal
+   (f7-poly-reduced-mul left right modulus)
+   (f7-poly-reduced-mul right left modulus))
+  :hints
+  (("Goal"
+    :use ((:instance f7-poly-reduced-mul-definition)
+          (:instance f7-poly-reduced-mul-definition
+                     (left right) (right left))
+          (:instance f7-poly-mul-commutative-from-generic
+                     (x left) (y right)))
+    :in-theory
+    (disable f7-poly-reduced-mul f7-poly-mul f7-poly-remainder
+             f7-poly-remainder-is-divmod-remainder
+             f7-poly-divmod f7-poly-divmod-core
+             f7-poly-division-step f7-poly-division-step-core
+             f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+             f7-raw-mul f7-raw-scale f7-raw-add))))
+
+; Explicit consumers keep every implementation opaque.  The first operand is
+; deliberately noncanonical, while RIGHT and MODULUS remain symbolic.
+(local
+ (defthm f7-poly-reduced-multiplicative-interface-regressions
+   (and
+    (equal
+     (f7-poly-reduced-mul '(8 1 0) right modulus)
+     (f7-poly-remainder (f7-poly-mul '(8 1 0) right) modulus))
+    (equal
+     (f7-poly-reduced-one modulus)
+     (f7-poly-remainder (f7-polynomial-one) modulus))
+    (equal
+     (f7-poly-reduced-mul '(8 1 0) right modulus)
+     (f7-poly-reduced-mul right '(8 1 0) modulus)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-reduced-mul-definition
+                      (left '(8 1 0)))
+           (:instance f7-poly-reduced-one-definition)
+           (:instance f7-poly-reduced-mul-commutative
+                      (left '(8 1 0))))
+     :in-theory
+     (disable f7-poly-reduced-mul-commutative
+              f7-poly-reduced-mul f7-poly-reduced-one
+              f7-polynomial-one f7-poly-mul f7-poly-remainder
+              f7-poly-divmod f7-poly-divmod-core
+              f7-poly-division-step f7-poly-division-step-core
+              f7-normalize f7-fix-coefficients f7-trim-trailing-zeros
+              f7-raw-mul f7-raw-scale f7-raw-add f7-raw-neg)))))
+
 (local
  (in-theory
   (e/d (f7-poly-congruent-p)

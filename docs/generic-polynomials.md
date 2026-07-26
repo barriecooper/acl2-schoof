@@ -486,7 +486,12 @@ are `F7-POLY-REDUCED-ADD-COMMUTATIVE`,
 generic theorem by the explicit F7 functional substitution.  The remaining F7
 theorem suite remains open; addition commutativity, associativity, the two
 identity laws, and the two additive-inverse laws do not constitute the complete
-additive interface.  The five public
+additive interface.  The non-rewriting
+`F7-POLY-REDUCED-MUL-DEFINITION` and
+`F7-POLY-REDUCED-ONE-DEFINITION` equations expose only the concrete
+remainder-level meaning of the generated multiplicative operations, while the
+permutative `F7-POLY-REDUCED-MUL-COMMUTATIVE` rule supplies their unconditional
+total-semantics symmetry.  The five public
 `F7-CANONICAL-POLYNOMIAL-P-OF-POLY-REDUCED-{ADD,NEG,SUB,MUL,ONE}` rules certify
 unconditional canonical-predicate output for every generated reduced-ring
 operation.  The corresponding normalization rules and
