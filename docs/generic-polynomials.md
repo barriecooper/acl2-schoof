@@ -480,12 +480,13 @@ are `F7-POLY-REDUCED-ADD-COMMUTATIVE`,
 generic theorem by the explicit F7 functional substitution.  The remaining F7
 theorem suite remains open; addition commutativity, associativity, the two
 identity laws, and the two additive-inverse laws do not constitute the complete
-additive interface.  The four public
-`F7-CANONICAL-POLYNOMIAL-P-OF-POLY-REDUCED-{ADD,NEG,SUB,MUL}` rules certify
-unconditional canonical-predicate output for the generated reduced arithmetic
-operations.  General negation, subtraction, normalization and remainder fixed
-points, reduced-one canonicality, and general fixer compatibility, along with
-the remaining ring and field work, remain open.  These are
+additive interface.  The five public
+`F7-CANONICAL-POLYNOMIAL-P-OF-POLY-REDUCED-{ADD,NEG,SUB,MUL,ONE}` rules certify
+unconditional canonical-predicate output for every generated reduced-ring
+operation.  Normalization fixed points, remainder stability, fixer/remainder
+compatibility, representative independence, congruence, degree-bound
+specializations, remaining ring laws, exponentiation, inversion, and field
+promotion remain open.  These are
 representative operations only until `generic/reduced-ring.lisp`, which now certifies the complete
 literal-equality commutative-ring interface and modulus-dependent
 `POLY-REDUCED-ONE`. Identity conclusions return the canonical remainder for
