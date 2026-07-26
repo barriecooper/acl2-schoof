@@ -28,13 +28,14 @@ criterion and concrete enumeration establish that `x^2+1` is irreducible over
 F7.
 
 The presentation-specific F7X2 layer fixes arbitrary ACL2 objects to canonical
-representatives modulo `x^2+1` and transparently implements reduced addition,
-negation, subtraction, and multiplication. Its certified laws currently cover
-zero/one distinctness, additive identities/inverses/associativity/commutativity
-and cancellation, multiplicative zero/identity/associativity/commutativity, and
-both distributive laws. It is not yet a field or a GFIELD instance; inversion,
-remaining field packaging, finite enumeration/cardinality, and Frobenius remain
-open.
+representatives modulo `x^2+1`, transparently implements reduced addition,
+negation, subtraction, and multiplication, and provides a total executable
+inverse candidate with an explicit zero branch. Its certified laws currently
+cover zero/one distinctness, additive identities/inverses/associativity/
+commutativity and cancellation, multiplicative zero/identity/associativity/
+commutativity, and both distributive laws. It is not yet a field or a GFIELD
+instance; universal inverse laws, remaining field packaging, finite
+enumeration/cardinality, and Frobenius remain open.
 
 ## Quotient architecture
 
