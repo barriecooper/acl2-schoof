@@ -41,6 +41,35 @@
   (equal (fix-coefficients (fix-coefficients xs))
          (fix-coefficients xs)))
 
+(defthm normalize-of-fix-coefficients
+  (equal (normalize (fix-coefficients xs))
+         (normalize xs))
+  :hints (("Goal" :in-theory (enable normalize))))
+
+(local
+ (defthm normalize-of-fix-coefficients-regressions
+   (and (equal (normalize (fix-coefficients nil))
+               (normalize nil))
+        (equal (normalize (fix-coefficients 'atom))
+               (normalize 'atom))
+        (equal (normalize (fix-coefficients '(x)))
+               (normalize '(x)))
+        (equal (normalize (fix-coefficients '(x y z)))
+               (normalize '(x y z)))
+        (equal (normalize (fix-coefficients '(x y . tail)))
+               (normalize '(x y . tail))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance normalize-of-fix-coefficients (xs nil))
+           (:instance normalize-of-fix-coefficients (xs 'atom))
+           (:instance normalize-of-fix-coefficients (xs '(x)))
+           (:instance normalize-of-fix-coefficients (xs '(x y z)))
+           (:instance normalize-of-fix-coefficients (xs '(x y . tail))))
+     :in-theory (disable normalize-of-fix-coefficients
+                         normalize fix-coefficients
+                         trim-trailing-zeros)))))
+
 (defthm coefficient-list-p-of-trim-trailing-zeros
   (implies (coefficient-list-p xs)
            (coefficient-list-p (trim-trailing-zeros xs))))

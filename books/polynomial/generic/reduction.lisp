@@ -198,6 +198,7 @@
                             (p (poly-sub x y))))
            :in-theory (e/d (poly-sub-of-canonical-operands poly-add poly-neg)
                            (poly-sub raw-add raw-neg
+                            normalize-of-fix-coefficients
                             normalize canonical-polynomial-p poly-degree)))))
 
 (defthm poly-add-left-cancel-canonical

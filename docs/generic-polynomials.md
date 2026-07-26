@@ -28,10 +28,11 @@ are not part of logical correctness.
 
 The certified structural results cover properness and identity of fixing,
 trimming closure and its nonzero-last property, canonical normalization,
-identity on canonical inputs, idempotence, the nil/nonzero conventions, and
-non-increasing length.  Evaluation is field-valued and is invariant under point
-fixing, coefficient fixing, trimming, and normalization; constant and zero
-point formulas are also proved.
+invariance of normalization under prior coefficient fixing, identity on
+canonical inputs, idempotence, the nil/nonzero conventions, and non-increasing
+length.  Evaluation is field-valued and is invariant under point fixing,
+coefficient fixing, trimming, and normalization; constant and zero point
+formulas are also proved.
 
 `RAW-ADD` adds coefficients and fixes an unequal-length remainder; `RAW-NEG`
 negates coefficients.  Atomic tails stop either recursion, so malformed inputs
