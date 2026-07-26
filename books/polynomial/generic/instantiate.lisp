@@ -87,6 +87,7 @@
 (defmacro def-reduced-ring-instance
   (reduced-add reduced-neg reduced-sub reduced-mul reduced-one
                poly-add poly-neg poly-sub poly-mul polynomial-one remainder
+               normalize
                canonical-polynomial-p
                mul-right-distributive-name mul-right-distributive-source
                functional-substitution common-goal-hints theorem-hints
@@ -125,7 +126,17 @@
                reduced-mul-canonical-name reduced-mul-canonical-source
                reduced-mul-canonical-rule-classes reduced-mul-canonical-hints
                reduced-one-canonical-name reduced-one-canonical-source
-               reduced-one-canonical-rule-classes reduced-one-canonical-hints)
+               reduced-one-canonical-rule-classes reduced-one-canonical-hints
+               reduced-add-normalize-name reduced-add-normalize-source
+               reduced-add-normalize-rule-classes reduced-add-normalize-hints
+               reduced-neg-normalize-name reduced-neg-normalize-source
+               reduced-neg-normalize-rule-classes reduced-neg-normalize-hints
+               reduced-sub-normalize-name reduced-sub-normalize-source
+               reduced-sub-normalize-rule-classes reduced-sub-normalize-hints
+               reduced-mul-normalize-name reduced-mul-normalize-source
+               reduced-mul-normalize-rule-classes reduced-mul-normalize-hints
+               reduced-one-normalize-name reduced-one-normalize-source
+               reduced-one-normalize-rule-classes reduced-one-normalize-hints)
   `(progn
      (defun ,reduced-add (left right modulus)
        (,remainder (,poly-add left right) modulus))
@@ -403,7 +414,62 @@
                           ,reduced-one-canonical-source
                           ,@functional-substitution))))
                  ,@theorem-hints
-                 ,@reduced-one-canonical-hints))))))
+                 ,@reduced-one-canonical-hints))))
+     ,@(and reduced-add-normalize-name
+            `((defthm ,reduced-add-normalize-name
+                (equal (,normalize (,reduced-add left right modulus))
+                       (,reduced-add left right modulus))
+                :rule-classes ,reduced-add-normalize-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-add-normalize-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints ,@reduced-add-normalize-hints))))
+     ,@(and reduced-neg-normalize-name
+            `((defthm ,reduced-neg-normalize-name
+                (equal (,normalize (,reduced-neg polynomial modulus))
+                       (,reduced-neg polynomial modulus))
+                :rule-classes ,reduced-neg-normalize-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-neg-normalize-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints ,@reduced-neg-normalize-hints))))
+     ,@(and reduced-sub-normalize-name
+            `((defthm ,reduced-sub-normalize-name
+                (equal (,normalize (,reduced-sub left right modulus))
+                       (,reduced-sub left right modulus))
+                :rule-classes ,reduced-sub-normalize-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-sub-normalize-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints ,@reduced-sub-normalize-hints))))
+     ,@(and reduced-mul-normalize-name
+            `((defthm ,reduced-mul-normalize-name
+                (equal (,normalize (,reduced-mul left right modulus))
+                       (,reduced-mul left right modulus))
+                :rule-classes ,reduced-mul-normalize-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-mul-normalize-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints ,@reduced-mul-normalize-hints))))
+     ,@(and reduced-one-normalize-name
+            `((defthm ,reduced-one-normalize-name
+                (equal (,normalize (,reduced-one modulus))
+                       (,reduced-one modulus))
+                :rule-classes ,reduced-one-normalize-rule-classes
+                :hints (("Goal" ,@common-goal-hints
+                         :use ((:instance
+                                (:functional-instance
+                                 ,reduced-one-normalize-source
+                                 ,@functional-substitution))))
+                        ,@theorem-hints ,@reduced-one-normalize-hints))))))
 
 ; The coefficient-field embedding is intentionally its own tiny generator.
 ; Its expansion is one ordinary DEFUN, not a general algebra-instance layer.
