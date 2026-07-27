@@ -455,8 +455,24 @@
        (:rewrite cdr-cons)
        (:executable-counterpart zp))))))
 
-; Focused closed-theory consumers keep the three independent public contracts
-; honest without suggesting an algebraic composition that is not yet needed.
+; Focused closed-theory consumers keep the independent public contracts honest
+; without suggesting an algebraic composition that is not yet needed.
+(local
+ (defthm f7-normalize-nil-divmod-core-semantic-consumer
+   (equal
+    (f7-poly-divmod-core
+     nil
+     (f7-normalize nil)
+     (f7-normalize modulus))
+    (f7-poly-divmod-core
+     nil
+     nil
+     (f7-normalize modulus)))
+   :hints
+   (("Goal"
+     :use ((:instance f7-normalize-nil))
+     :in-theory (theory 'minimal-theory)))))
+
 (local
  (defthm f7-remainder-zero-modulus-semantic-consumer
    (implies

@@ -884,6 +884,17 @@
            (equal (f7-normalize xs) xs))
   :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p))))
 
+(defthm f7-normalize-nil
+  (equal (f7-normalize nil) nil)
+  :hints
+  (("Goal"
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '((:definition f7-normalize)
+       (:definition f7-fix-coefficients)
+       (:definition f7-trim-trailing-zeros))))))
+
 (defthm f7-natp-of-poly-degree-when-canonical-nonzero
   (implies
    (and (f7-canonical-polynomial-p p)
