@@ -25,6 +25,12 @@ satisfying the unconditional fixed-representative equation `x^q=x`. F7 and a
 regression-local modulus-11 power validate that interface. The exponent is not
 yet certified as a field cardinality.
 
+The generic field prerequisites now certify directly that two and three
+copies of the fixed field one are nonzero.  This is the characteristic-not-2-or-3
+boundary required by the initial short-Weierstrass scope.  F7 and a
+regression-local modulus-11 client validate functional-instance transport; no
+mathematical characteristic value or leastness theorem is claimed.
+
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,
 raw and monic XGCD, and modular inverse, with exact execution regressions. The

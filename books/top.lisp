@@ -6,6 +6,8 @@
 (include-book "field/pfield-adapter")
 (include-book "field/frobenius-exponent")
 (include-book "field/power-correspondence-regression")
+(include-book "field/characteristic-exclusions")
+(include-book "field/characteristic-exclusions-regression")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")

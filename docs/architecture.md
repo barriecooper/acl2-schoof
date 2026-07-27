@@ -22,6 +22,14 @@ and a regression-local modulus-11 power are mechanics clients. This certificate
 does not identify q with cardinality and supplies no enumeration,
 characteristic, prime-power, or extension-degree metadata.
 
+A separate additive-only constrained interface defines total natural repeated
+addition and directly certifies that two and three copies of field one are
+nonzero.  These independent facts, rather than a nonminimal annihilator, form
+the characteristic-not-2-or-3 boundary needed by the initial short-Weierstrass
+scope.  No mathematical characteristic value, leastness, primality,
+cardinality, enumeration, prime-power, or extension-degree metadata is
+certified.  F7 and a regression-local modulus-11 client validate transport.
+
 The generic polynomial layer is certified through arithmetic, evaluation,
 degree, recursive division, canonical remainder and congruence, reduced
 representative operations, GCD, XGCD, modular inverse, logical irreducibility,
