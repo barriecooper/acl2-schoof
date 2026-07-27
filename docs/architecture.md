@@ -143,6 +143,18 @@ certified mathematics. Detailed status is maintained only in
 
 ## Affine exceptional-case classification
 
+The semantic curve client of the structural classifier proves one public,
+non-rewriting theorem: two inputs satisfying the same constrained
+`short-weierstrass-affine-point-p` equation cannot be `:same-x-other`. No
+explicit equal-x hypothesis is needed because the classifier characterization
+supplies it. Equal x makes the common curve right-hand sides identical, hence
+the y squares equal; generic equal-squares theory then gives equal or opposite
+y. No nonsingularity or characteristic restriction is used. The alternatives
+may overlap for self-inverse y, and an identical self-inverse pair remains
+`:opposite-y` by priority. Off-curve and malformed inputs retain fixing
+semantics, classifier symmetry remains deferred, and no slope, division,
+addition, doubling, scalar multiplication, or group law is added.
+
 Before any slope or addition operation, the affine-coordinate layer classifies
 two arbitrary objects after applying `affine-coordinates-fix` to both. The
 canonical keyword result is selected by distinct x first, then opposite y,

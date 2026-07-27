@@ -116,7 +116,9 @@ non-opposite coordinates, and the remaining same-x case, in that order. The
 remaining case is intentionally retained for arbitrary and off-curve inputs.
 Slopes and addition remain open.
 
-The generic algebra needed to refine the remaining case is complete: equal
-field squares imply equality of fixed representatives or the classifier's
-exact reverse-oriented negation equation. The curve-level theorem excluding
-`:same-x-other` for genuine same-curve points remains a separate client.
+The generic algebra and curve client needed to refine the remaining case are
+complete: equal curve right-hand sides give equal y squares, and equal field
+squares give equal or opposite fixed y representatives. Thus `:same-x-other`
+is excluded for genuine same-curve points without an explicit equal-x
+hypothesis. A small denominator-nonzero boundary for `:distinct-x` is the next
+candidate prerequisite before slopes.

@@ -154,13 +154,14 @@ four cases, fixing, malformed fallback, off-curve pairs, and swapped examples.
 No affine equivalence was added; fixing compatibility and canonical equality
 are sufficient.
 
-Open: exclude `:same-x-other` for two genuine points on the same curve. The
-generic field layer now proves that equality of squares implies equality of
-fixed representatives or equality up to field negation. Its public
-non-rewriting zero-product theorem follows from inverse-based multiplication
-cancellation; difference-of-squares and zero-factor translation lemmas remain
-local. Focused F11 checks cover canonical, noncanonical, opposite, zero, and
-unequal-square inputs. The curve corollary remains deferred. Generic classifier
-symmetry is also deferred: `field-neg-of-neg` exists, but the
+Closed: `affine-pair-classify-not-same-x-other-for-curve-points` excludes
+`:same-x-other` for two genuine affine points satisfying the same constrained
+short-Weierstrass equation, without an explicit equal-x, nonsingularity, or
+characteristic hypothesis. Two proof-local lemmas derive equal y squares and
+then equal-or-opposite y. F11 regressions cover equal, inverse, reversed,
+distinct-x, noncanonical inverse, off-curve fallback, and self-inverse branch
+priority. The alternatives may overlap; malformed behavior remains inherited
+from affine fixing, and `:same-x-other` remains reachable off curve. Generic
+classifier symmetry is still deferred: `field-neg-of-neg` exists, but the
 kernel lacks a fixing-respecting negation congruence/nonzero-preservation rule
 that makes the reverse opposite-y test a stable small proof.

@@ -55,6 +55,9 @@ malformed inputs through affine fixing, and defines no slope or addition.
 The generic field layer also certifies that equal squares have equal fixed
 representatives or fixed representatives related by `FIELD-NEG`. The proof has
 no characteristic restriction and remains valid in characteristic two.
+The generic curve layer uses that result to exclude `:same-x-other` for two
+affine points satisfying the same constrained short-Weierstrass equation; the
+total classifier remains unchanged and retains that result off curve.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,
