@@ -125,5 +125,7 @@ the classifier characterization and a generic additive zero-difference theorem
 show that `x_second - x_first` is nonzero for arbitrary fixed-coordinate
 inputs, without curve membership. The chosen orientation anticipates
 `(y_second - y_first)/(x_second - x_first)`. A distinct-x secant-slope
-boundary is next; no slope, inverse, division-bearing curve formula, or
-addition is defined yet.
+boundary is next.  Its concrete prerequisite is complete: the named F11
+runtime has total fixed-input inverse and numerator-first division, including
+the established inverse-of-zero convention.  No slope, division-bearing curve
+formula, or addition is defined yet.
