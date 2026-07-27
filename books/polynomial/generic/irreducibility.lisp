@@ -79,6 +79,96 @@
            :use ((:instance poly-degree-equal-minus-one (p poly)))
            :in-theory (enable poly-irreducible-p))))
 
+(defthm poly-unit-p-of-normalize
+  (equal (poly-unit-p (normalize poly))
+         (poly-unit-p poly)))
+
+; These facts keep the degree-one argument below at the public normalization
+; boundary.  They are local because no independent client currently needs a
+; second public spelling of polynomial nonzero-product cancellation.
+(local
+ (defthm consp-of-normalize-left-when-poly-mul-nonzero
+   (implies (consp (poly-mul left right))
+            (consp (normalize left)))
+   :rule-classes nil
+   :hints (("Goal"
+            :cases ((consp (normalize left)))
+            :use ((:instance poly-mul-normalize-left (x left) (y right)))
+            :in-theory (disable poly-mul-normalize-left poly-mul normalize)))))
+
+(local
+ (defthm consp-of-normalize-right-when-poly-mul-nonzero
+   (implies (consp (poly-mul left right))
+            (consp (normalize right)))
+   :rule-classes nil
+   :hints (("Goal"
+            :cases ((consp (normalize right)))
+            :use ((:instance poly-mul-normalize-right (x left) (y right)))
+            :in-theory (disable poly-mul-normalize-right poly-mul normalize)))))
+
+(local
+ (defthm normalized-nonunit-factor-of-nonzero-product-has-positive-degree
+   (implies (and (canonical-polynomial-p factor)
+                 (consp (poly-mul factor other))
+                 (not (poly-unit-p factor)))
+            (< 0 (poly-degree factor)))
+   :rule-classes nil
+   :hints (("Goal" :in-theory (enable poly-unit-p)))))
+
+(defthm canonical-degree-one-poly-irreducible
+  (implies
+   (and (canonical-polynomial-p poly)
+        (equal (poly-degree poly) 1))
+   (poly-irreducible-p poly))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :cases ((poly-reducible-p poly))
+    :in-theory (enable poly-irreducible-p))
+   ("Subgoal 1"
+    :use
+    ((:instance poly-reducible-p (poly poly))
+     (:instance poly-mul-normalize-left
+                (x (mv-nth 0 (poly-reducible-p-witness poly)))
+                (y (normalize
+                    (mv-nth 1 (poly-reducible-p-witness poly)))))
+     (:instance poly-mul-normalize-right
+                (x (mv-nth 0 (poly-reducible-p-witness poly)))
+                (y (mv-nth 1 (poly-reducible-p-witness poly))))
+     (:instance poly-unit-p-of-normalize
+                (poly (mv-nth 0 (poly-reducible-p-witness poly))))
+     (:instance poly-unit-p-of-normalize
+                (poly (mv-nth 1 (poly-reducible-p-witness poly))))
+     (:instance consp-of-normalize-left-when-poly-mul-nonzero
+                (left (mv-nth 0 (poly-reducible-p-witness poly)))
+                (right (mv-nth 1 (poly-reducible-p-witness poly))))
+     (:instance consp-of-normalize-right-when-poly-mul-nonzero
+                (left (mv-nth 0 (poly-reducible-p-witness poly)))
+                (right (mv-nth 1 (poly-reducible-p-witness poly))))
+     (:instance poly-mul-commutative
+                (x (normalize
+                    (mv-nth 0 (poly-reducible-p-witness poly))))
+                (y (normalize
+                    (mv-nth 1 (poly-reducible-p-witness poly)))))
+     (:instance normalized-nonunit-factor-of-nonzero-product-has-positive-degree
+                (factor (normalize
+                         (mv-nth 0 (poly-reducible-p-witness poly))))
+                (other (normalize
+                        (mv-nth 1 (poly-reducible-p-witness poly)))))
+     (:instance normalized-nonunit-factor-of-nonzero-product-has-positive-degree
+                (factor (normalize
+                         (mv-nth 1 (poly-reducible-p-witness poly))))
+                (other (normalize
+                        (mv-nth 0 (poly-reducible-p-witness poly)))))
+     (:instance poly-degree-of-poly-mul
+                (f (normalize
+                    (mv-nth 0 (poly-reducible-p-witness poly))))
+                (g (normalize
+                    (mv-nth 1 (poly-reducible-p-witness poly))))))
+    :in-theory
+    (disable poly-reducible-p poly-unit-p poly-degree poly-mul normalize
+             poly-mul-normalize-left poly-mul-normalize-right))))
+
 (defthm poly-irreducible-p-factor-characterization
   (implies (and (poly-irreducible-p poly)
                 (equal (poly-mul left right) (normalize poly)))
@@ -89,10 +179,6 @@
            :use ((:instance poly-reducible-p-suff
                             (poly poly) (left left) (right right)))
            :in-theory (enable poly-irreducible-p))))
-
-(defthm poly-unit-p-of-normalize
-  (equal (poly-unit-p (normalize poly))
-         (poly-unit-p poly)))
 
 (defthm poly-unit-p-of-const
   (equal (poly-unit-p (const scalar))
