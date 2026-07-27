@@ -133,6 +133,10 @@ concrete substitution, including total equal-x and malformed semantics.  The
 distinct-x output-x boundary is now complete: the transparent total operation
 uses direct slope self-multiplication and left-associated subtraction, with
 field closure, fixed-result, verified guards, and focused F11 execution.  No
-classifier hypothesis is needed for closure or execution.  The next narrow
-boundary is only `y3 = slope * (x_first - x3) - y_first`; it must reuse both
-certified formulas and stop before constructing an output coordinate or point.
+classifier hypothesis is needed for closure or execution.  The distinct-x
+output-y boundary is also complete: its parallel bindings reuse the certified
+slope and output-x, and it computes exactly
+`slope * (x_first - x3) - y_first`, with closure, fixing, verified guards, and
+focused F11 execution.  The next narrow boundary is only a canonical affine
+coordinate constructor assembling the two certified scalar outputs; it must
+stop before tagged-point construction, addition, or curve closure.
