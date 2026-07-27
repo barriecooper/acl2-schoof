@@ -39,6 +39,14 @@ depends on the existing characteristic-not-2-or-3 book.  The F11 golden values
 `a=1`, `b=6` validate the concrete boundary.  This is not a point
 representation, group law, formal discriminant theory, or smoothness theorem.
 
+The named F11 coefficient runtime also includes transparent total `f11-inv`
+and `f11-div`.  Inversion fixes once, returns zero when the fixed input is zero,
+and otherwise calls the existing PFIELD inverse at modulus 11; its certified
+left-inverse law has the generic fixed-input nonzero hypothesis.  Division is
+exactly numerator times inverse of denominator.  Closure, fixing compatibility,
+guards, and concrete canonical/noncanonical executions are certified without a
+new generic axiom or logical/executable split.
+
 Finite affine coordinates use the transparent proper list `(x y)`, with both
 entries passed through the field fixer.  Atoms, dotted pairs, and proper lists
 whose length is not two all denote canonical `(0 0)`; entries in an exact
