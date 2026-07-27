@@ -4,6 +4,7 @@
 (include-book "field/kernel")
 (include-book "field/examples/f2")
 (include-book "field/pfield-adapter")
+(include-book "field/frobenius-exponent")
 (include-book "field/power-correspondence-regression")
 
 (include-book "polynomial/generic/f7-division")

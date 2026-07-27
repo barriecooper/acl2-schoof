@@ -63,6 +63,10 @@ public powers retain their existing `MBE` logical-specification/fast-accumulator
 execution boundary unchanged; the theorem adds no executable branch.  F7 and a
 regression-local modulus-11 instance certify that clients can map the public
 power without mapping either recursive specifications or fast accumulators.
+`books/field/frobenius-exponent.lisp` adds only a logical constrained
+positive-exponent/fixed-point certificate over that comparison function. It
+adds no executable branch and changes no generated implementation, guard, or
+MBE boundary. F7 and the regression-local modulus-11 power instantiate it.
 
 ## Named generated polynomial-power expansions
 

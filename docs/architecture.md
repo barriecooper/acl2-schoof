@@ -15,6 +15,13 @@ not an implementation prerequisite for Schoof.
 
 ## Certified layers
 
+The generated public field-power correspondence is certified, and a separate
+minimal constrained interface supplies a positive Frobenius exponent with the
+unconditional public-power equation `x^q=x` under total fixing semantics. F7
+and a regression-local modulus-11 power are mechanics clients. This certificate
+does not identify q with cardinality and supplies no enumeration,
+characteristic, prime-power, or extension-degree metadata.
+
 The generic polynomial layer is certified through arithmetic, evaluation,
 degree, recursive division, canonical remainder and congruence, reduced
 representative operations, GCD, XGCD, modular inverse, logical irreducibility,
