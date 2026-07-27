@@ -72,7 +72,9 @@ hypothesis; F11 checks canonical, noncanonical, malformed, and equal-x total
 executions.  The following transparent total boundary,
 `affine-distinct-x-output-y`, reuses both certified scalar operations and
 computes `slope*(x_first-x3)-y_first`; it too is field-valued and fixed without
-a classifier hypothesis.  Focused F11 executions include every intermediate,
+a classifier hypothesis.  Its non-rewriting rearrangement theorem proves the
+unconditional total identity `y3+y_first = slope*(x_first-x3)`. Focused F11
+executions include every intermediate,
 noncanonical and malformed fixing, and equal-x total programming semantics.
 `affine-distinct-x-output` now assembles those closed scalar dependencies, in
 x-then-y order, with `affine-coordinates-make`. Its parallel bindings and the
@@ -81,7 +83,8 @@ x/y projection equations, and fixer stability on all ACL2 inputs. The F11
 substitution reuses the named F11 scalar outputs and checks `(0 0)`, `(9 5)`,
 `(6 10)`, noncanonical `(0 0)`, malformed-input `(1 9)`, and equal-x total
 programming result `(7 7)`. Canonical representation is not curve membership;
-no output point, classifier dispatch, curve closure, or addition is defined.
+the rearrangement identity does not prove curve closure. No output point,
+classifier dispatch, curve closure, or addition is defined.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,

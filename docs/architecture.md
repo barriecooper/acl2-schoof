@@ -74,9 +74,12 @@ The ordered inner subtraction and final use of the first point's y-coordinate
 are explicit.  Total fixed accessors and field operations give guard-`T`,
 field-element, and fixed-result semantics on arbitrary inputs, so no classifier
 or nonzero test is present.  No classifier restatement theorem is published,
-and the additive rearrangement is deferred until a substantive coordinate
-client needs it.  The named F11 operation is direct substitution into this same
-body; it is execution evidence rather than another mathematical theory.
+and the non-rewriting rearrangement theorem proves the total,
+unconditional identity `y3+y_first = slope*(x_first-x3)` directly from the
+transparent definition and generic field addition laws. It introduces no
+executable boundary and makes no curve-closure claim. The named F11 operation
+is direct substitution into this same body; it is execution evidence rather
+than another mathematical theory.
 
 `affine-distinct-x-output(first, second)` is the transparent, total coordinate
 assembly boundary. A parallel `LET` independently calls the certified output-x
