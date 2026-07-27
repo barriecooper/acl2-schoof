@@ -192,3 +192,14 @@ fixing, trailing zeroes, the modulus, and `x^3 = 6x`.  These checks establish
 the intended execution path; the certified fixed-point, normalization, and
 degree theorems establish the representation invariant.  No complexity claim
 is made beyond reuse of the existing division runtime.
+
+## Affine-pair classifier
+
+`affine-pair-classify` and the focused `f11-affine-pair-classify` client are
+ordinary transparent, total `DEFUN`s with verified guards. They fix both affine
+inputs and perform canonical equality and the existing field negation only.
+They introduce no `MBE`, `DEFEXEC`, attachment, raw Lisp, fast path, or
+logical/executable split; therefore this is not a new split execution boundary.
+Concrete F11 assertions are execution regressions, while the generic
+characterization, result-recognition, fixing, exhaustiveness, and disjointness
+theorems provide the logical evidence.

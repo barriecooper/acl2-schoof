@@ -142,3 +142,22 @@ correctness, guard verification, and exact regression evidence.
 | PERF-DIVISION-POLYNOMIAL-ELL | Measure division-polynomial construction and reduction as `ell` grows. | Open | Time and space scaling by `ell`, with the tested representation recorded. |
 | PERF-INCREMENTAL-CRT | Implement and measure bounded incremental CRT rather than only batch reconstruction. | Open | Residue-count/bit-size sweeps and reconstruction cross-checks. |
 | PERF-END-TO-END-ENUMERATION | Compare end-to-end Schoof counts with direct point enumeration on small fields. | Open | Matching exact counts plus reproducible timing and resource measurements for both methods. |
+
+## Affine exceptional-case classification
+
+The transparent `affine-pair-classify` boundary is certified total after fixing
+both inputs. Its four literal results are exhaustive and its single-valued
+result makes them pairwise disjoint: `:distinct-x`, `:opposite-y`,
+`:same-point-non-opposite`, and `:same-x-other`. Opposite y has priority over
+same coordinates, including identical `y=0` inputs. F11 regressions cover all
+four cases, fixing, malformed fallback, off-curve pairs, and swapped examples.
+No affine equivalence was added; fixing compatibility and canonical equality
+are sufficient.
+
+Open: exclude `:same-x-other` for two genuine points on the same curve. The
+current generic field kernel has no theorem that equality of squares implies
+equality up to field negation (nor the directly supporting zero-product and
+factorization bridge), so this PR does not assume the result. Generic
+classifier symmetry is also deferred: `field-neg-of-neg` exists, but the
+kernel lacks a fixing-respecting negation congruence/nonzero-preservation rule
+that makes the reverse opposite-y test a stable small proof.

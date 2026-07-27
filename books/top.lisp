@@ -16,6 +16,8 @@
 (include-book "curve/f11-points")
 (include-book "curve/point-negation")
 (include-book "curve/f11-point-negation")
+(include-book "curve/affine-pair-classification")
+(include-book "curve/f11-affine-pair-classification")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")
