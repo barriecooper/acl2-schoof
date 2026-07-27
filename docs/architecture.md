@@ -47,6 +47,15 @@ exactly numerator times inverse of denominator.  Closure, fixing compatibility,
 guards, and concrete canonical/noncanonical executions are certified without a
 new generic axiom or logical/executable split.
 
+The first classifier-selected generic affine formula is the ordinary DEFUN
+`affine-distinct-x-slope(first, second)`.  It is exactly the total `FIELD-DIV`
+of `y_second-y_first` by `x_second-x_first`; total accessors supply `(0,0)` for
+malformed coordinates and no nonzero guard or classifier branch is embedded in
+the definition.  `:distinct-x` supplies the predecessor's exact nonzero
+denominator only to the certified, non-rewriting reconstruction theorem.  The
+corresponding F11 book substitutes the existing named F11 operations into the
+same body for execution regressions; it is not a parallel slope theory.
+
 Finite affine coordinates use the transparent proper list `(x y)`, with both
 entries passed through the field fixer.  Atoms, dotted pairs, and proper lists
 whose length is not two all denote canonical `(0 0)`; entries in an exact

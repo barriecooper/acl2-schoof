@@ -253,6 +253,23 @@
 (defthm field-div-by-one
   (equal (field-div x (field-one)) (field-fix x)))
 
+(defthm field-div-mul-denominator
+  (implies (not (equal (field-fix denominator) (field-zero)))
+           (equal (field-mul (field-div numerator denominator)
+                             denominator)
+                  (field-fix numerator)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance field-mul-inverse-left (x denominator))
+                 (:instance field-mul-associative
+                            (x numerator)
+                            (y (field-inv denominator))
+                            (z denominator)))
+           :in-theory (enable field-div))))
+
+(verify-guards field-sub)
+(verify-guards field-div)
+
 (defthm field-pow-correct
   (equal (field-pow x n) (field-pow-spec (field-fix x) (nfix n)))
   :rule-classes nil

@@ -59,12 +59,13 @@ The generic curve layer uses that result to exclude `:same-x-other` for two
 affine points satisfying the same constrained short-Weierstrass equation; the
 total classifier remains unchanged and retains that result off curve.
 Classification as `:distinct-x` now also certifies, without curve membership,
-that the ordered difference `x_second - x_first` is nonzero. This is the
-denominator precondition for a later conventional secant quotient.  The named
-F11 runtime now supplies transparent total inverse and numerator-first division
-with inverse-of-zero equal to zero, closing the concrete execution prerequisite
-for that quotient; no slope, division-bearing curve formula, or addition
-operation is defined yet.
+that the ordered difference `x_second - x_first` is nonzero.  The transparent
+total `affine-distinct-x-slope` is the conventional ordered quotient
+`(y_second-y_first)/(x_second-x_first)`, and its non-rewriting reconstruction
+theorem multiplies the slope by that denominator on the right.  F11 executions
+cover canonical, noncanonical, malformed, and equal-x inputs; equal-x division
+by zero returns zero by total programming semantics and is not a secant claim.
+No output coordinate, point construction, or addition operation is defined.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,
