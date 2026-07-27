@@ -130,5 +130,9 @@ formula divides `y_second-y_first` by `x_second-x_first` without a classifier
 test or nonzero guard; `:distinct-x` is used only by the non-rewriting
 right-denominator reconstruction theorem.  F11 exercises the generic formula's
 concrete substitution, including total equal-x and malformed semantics.  The
-next narrow boundary is only `x3 = slope^2 - x_first - x_second`; it must stop
-before `y3` or an output point.
+distinct-x output-x boundary is now complete: the transparent total operation
+uses direct slope self-multiplication and left-associated subtraction, with
+field closure, fixed-result, verified guards, and focused F11 execution.  No
+classifier hypothesis is needed for closure or execution.  The next narrow
+boundary is only `y3 = slope * (x_first - x3) - y_first`; it must reuse both
+certified formulas and stop before constructing an output coordinate or point.

@@ -65,7 +65,12 @@ total `affine-distinct-x-slope` is the conventional ordered quotient
 theorem multiplies the slope by that denominator on the right.  F11 executions
 cover canonical, noncanonical, malformed, and equal-x inputs; equal-x division
 by zero returns zero by total programming semantics and is not a secant claim.
-No output coordinate, point construction, or addition operation is defined.
+The next transparent total boundary, `affine-distinct-x-output-x`, squares that
+slope by direct self-multiplication and computes the left-associated formula
+`(slope^2-x_first)-x_second`.  It is field-valued and fixed without a classifier
+hypothesis; F11 checks canonical, noncanonical, malformed, and equal-x total
+executions.  No y-coordinate, output coordinate pair, point construction, or
+addition operation is defined.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,
