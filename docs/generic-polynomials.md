@@ -267,8 +267,18 @@ literal zero-input fixed point used by the unconditional
 top-level no-step core branch and uses that normalization fact explicitly;
 normalization implementation remains closed when the divmod theorem is
 proved and consumed.  The contract covers every modulus, including malformed
-inputs through public normalization, but does not establish an F7 remainder
-zero-dividend theorem.
+inputs through public normalization.  The ordinary rewrite
+`F7-POLY-REMAINDER-ZERO-DIVIDEND` projects its remainder component directly,
+unconditionally reducing `(F7-POLY-REMAINDER NIL MODULUS)` to `NIL` for the
+same total range of moduli.  This adds no division algorithm reasoning: its
+closed-theory consumer leaves normalization, divmod-core, division-step, and
+arithmetic closed.
+
+This narrow projection does not establish
+`F7-CANONICAL-POLYNOMIAL-ATOM-IS-NIL`, remainder idempotence, the divisibility
+equation, reduced nondivisibility, divisibility witnesses or transitivity,
+units or associates, irreducibility-to-monic-GCD-one, modular-inverse
+correctness, or F7X2 correctness.
 
 The concrete F7 remainder projection now also exports the normalized-zero
 modulus fallback, the strict degree bound for a nonempty normalized modulus,
