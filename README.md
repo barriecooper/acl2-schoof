@@ -19,6 +19,12 @@ classes modulo an irreducible polynomial. The reusable
 nullary irreducible modulus as transparent total field operations on canonical
 remainder representatives.
 
+The public generated field-power correspondence is complete, and the generic
+field layer now has a minimal certificate for a positive Frobenius exponent
+satisfying the unconditional fixed-representative equation `x^q=x`. F7 and a
+regression-local modulus-11 power validate that interface. The exponent is not
+yet certified as a field cardinality.
+
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,
 raw and monic XGCD, and modular inverse, with exact execution regressions. The

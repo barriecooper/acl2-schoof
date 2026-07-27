@@ -31,13 +31,15 @@ open; this is not yet a public field interface.
 
 ## Near-term shared algebra
 
-1. Complete the generated public field-power correspondence prerequisite so
-   later finite-field certificates do not expose recursive specifications or
-   fast accumulators.  The proof-only F7X2 compatibility review is complete;
-   ordinary theorem promotion and formal packaging remain separate decisions.
-2. Instantiate generic outer polynomials over a concrete field client and
-   add the finite-field metadata and Frobenius interfaces needed by both
-   downstream tracks.
+1. The generated public field-power correspondence and the first narrow
+   finite-field certificate are complete: a positive Frobenius exponent whose
+   public q-power fixes every field representative. F7 and regression-local
+   modulus 11 validate the interface; it does not certify cardinality,
+   characteristic, prime-power metadata, or completeness of finite-field data.
+2. Add the smallest remaining field certificate required by the first
+   executable Schoof path: characteristic metadata with its repeated-addition
+   law and exclusions of characteristics two and three. Enumeration/cardinality
+   and prime-power metadata remain separate open interfaces.
 3. Develop short-Weierstrass curve coordinates and group operations for
    characteristic greater than three. Characteristics two and three are out of
    the initial scope.
