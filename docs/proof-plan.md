@@ -36,10 +36,11 @@ open; this is not yet a public field interface.
    public q-power fixes every field representative. F7 and regression-local
    modulus 11 validate the interface; it does not certify cardinality,
    characteristic, prime-power metadata, or completeness of finite-field data.
-2. Add the smallest remaining field certificate required by the first
-   executable Schoof path: characteristic metadata with its repeated-addition
-   law and exclusions of characteristics two and three. Enumeration/cardinality
-   and prime-power metadata remain separate open interfaces.
+2. The characteristic-not-2-or-3 prerequisite is complete: two and three
+   copies of fixed field one are certified nonzero through total natural
+   repeated addition.  No characteristic value or leastness theorem is
+   introduced.  Enumeration/cardinality and prime-power metadata remain
+   separate open interfaces.
 3. Develop short-Weierstrass curve coordinates and group operations for
    characteristic greater than three. Characteristics two and three are out of
    the initial scope.
