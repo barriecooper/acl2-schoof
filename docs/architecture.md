@@ -132,3 +132,15 @@ practical execution evidence are separate claims. Compiled benchmarks and
 allocation/normalization measurements are future acceptance evidence, not
 certified mathematics. Detailed status is maintained only in
 `obligations.md`, and the current sequence is in `proof-plan.md`.
+
+## Affine exceptional-case classification
+
+Before any slope or addition operation, the affine-coordinate layer classifies
+two arbitrary objects after applying `affine-coordinates-fix` to both. The
+canonical keyword result is selected by distinct x first, then opposite y,
+then equal y, with `:same-x-other` as the total fallback. Thus an identical
+pair satisfying `y=-y` is deliberately `:opposite-y`, not
+`:same-point-non-opposite`. This structural boundary is independent of curve
+coefficients and membership; malformed inputs inherit the existing `(0 0)`
+fallback. No fixing-induced equivalence, infinity dispatcher, slope, division,
+or addition boundary is introduced.

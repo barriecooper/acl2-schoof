@@ -45,6 +45,13 @@ fixing.  It preserves representation and curve membership, and double negation
 returns the fixed input (literally the input when canonical).  No group
 operation or general discriminant/smoothness theory is present.
 
+The affine representation layer also provides a transparent total classifier
+for two fixed coordinate pairs. It returns exactly one of `:distinct-x`,
+`:opposite-y`, `:same-point-non-opposite`, and `:same-x-other`; opposite y is
+tested before coordinate equality so an identical self-inverse pair enters the
+opposite-y case. The classifier is structural, includes off-curve and
+malformed inputs through affine fixing, and defines no slope or addition.
+
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,
 raw and monic XGCD, and modular inverse, with exact execution regressions. The

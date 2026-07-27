@@ -107,3 +107,11 @@ Older audit and reconnaissance documents preserve design evidence and the
 sequence appropriate at the revision when they were written. Their “next PR”
 or proposed-sequence sections are historical unless restated above. They do
 not override this plan or the status ledger.
+
+## Next affine boundary
+
+The affine exceptional-case classifier is complete as a four-way structural
+boundary. After affine fixing it distinguishes distinct x, opposite y, equal
+non-opposite coordinates, and the remaining same-x case, in that order. The
+remaining case is intentionally retained for arbitrary and off-curve inputs.
+Slopes and addition remain open.
