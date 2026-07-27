@@ -261,6 +261,13 @@ logical/executable boundary.
 
 `books/polynomial/generic/division.lisp` certifies `POLY-DIVMOD-CORE` and the total `(mv q r)` public `POLY-DIVMOD`.  Canonical remainder length is the measure, the one-step decrease theorem supplies termination, and an accumulator invariant supplies normalized reconstruction without evaluation extensionality.  The final remainder is zero or strictly below the normalized nonzero divisor.  Guards are verified separately.  The separately certified F7 book now instantiates this recursion with ordinary definitions and verified guards. Concrete PFIELD division, F7 uniqueness, gcd, and extended gcd remain open.
 
+The concrete F7 normalization interface exports `F7-NORMALIZE-NIL`, the
+literal zero-input fixed point needed before a future zero-dividend divmod
+contract can enter the no-step core branch.  Its certification opens only the
+three normalization-owned definitions, while a downstream symbolic consumer
+uses the theorem with normalization and divmod core closed.  This contract
+does not yet establish F7 divmod or remainder zero-dividend semantics.
+
 The concrete F7 remainder projection now also exports the normalized-zero
 modulus fallback, the strict degree bound for a nonempty normalized modulus,
 and the canonical lower-degree no-op property.  The first two are shallow
@@ -270,8 +277,9 @@ inactive; its public statement does not expose division recursion or
 polynomial arithmetic.  Focused local symbolic consumers check each contract
 independently with every executable definition closed.
 
-This concrete foundation does not yet establish F7 remainder idempotence,
-divisibility iff zero remainder, nonzero reduced-representative
+This concrete foundation does not yet establish F7 divmod or remainder
+zero-dividend semantics, canonical-polynomial atom/NIL reasoning, remainder
+idempotence, divisibility iff zero remainder, nonzero reduced-representative
 nondivisibility, divisibility witnesses or transitivity, unit/associate
 reasoning, the F7 irreducibility-to-monic-GCD-one theorem, modular-inverse
 correctness under irreducibility, or F7X2 correctness.
