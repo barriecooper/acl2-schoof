@@ -39,8 +39,11 @@ finite-affine boundary uses canonical two-item lists, maps malformed outer
 values to the zero-coordinate pair, and recognizes equation satisfaction
 without manufacturing an on-curve point.  Full points now use the distinct
 tagged value `(:infinity)` or `(:affine (x y))`, reusing affine fixing and
-separating structural recognition from curve membership.  No group operation
-or general discriminant/smoothness theory is present.
+separating structural recognition from curve membership.  Full-point negation
+now transparently maps infinity to itself and `(x,y)` to `(x,-y)` after point
+fixing.  It preserves representation and curve membership, and double negation
+returns the fixed input (literally the input when canonical).  No group
+operation or general discriminant/smoothness theory is present.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,
