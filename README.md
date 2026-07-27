@@ -37,9 +37,10 @@ equation, and assumes the standard nonzero `4*a^3 + 27*b^2` expression.  The
 existing F11 golden coefficients validate the executable boundary.  A separate
 finite-affine boundary uses canonical two-item lists, maps malformed outer
 values to the zero-coordinate pair, and recognizes equation satisfaction
-without manufacturing an on-curve point.  No point at infinity, full point
-representation, group operation, or general discriminant/smoothness theory is
-present.
+without manufacturing an on-curve point.  Full points now use the distinct
+tagged value `(:infinity)` or `(:affine (x y))`, reusing affine fixing and
+separating structural recognition from curve membership.  No group operation
+or general discriminant/smoothness theory is present.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,

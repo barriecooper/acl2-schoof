@@ -51,8 +51,12 @@ open; this is not yet a public field interface.
    two-item lists contain field-fixed coordinates; malformed outer objects
    denote the zero-coordinate pair; and the affine recognizer applies the
    existing equation to the fixed accessors.  Fixing establishes representation
-   only, not curve membership.  A future full point type may tag infinity
-   separately from this affine representation.
+   only, not curve membership.
+5. The minimal full-point representation is complete: `(:infinity)` is the
+   unique infinity value and `(:affine coordinates)` reuses fixed affine
+   coordinates.  Malformed outer values fix to infinity; off-curve affine
+   values stay affine and fail only the separate curve-membership predicate.
+   No curve operation or group law is included.
 
 General polynomial quotients used for Schoof coordinates are distinct from
 irreducible quotients promoted to coefficient fields: their moduli need not be
