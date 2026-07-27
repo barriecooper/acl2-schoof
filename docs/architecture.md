@@ -56,6 +56,16 @@ denominator only to the certified, non-rewriting reconstruction theorem.  The
 corresponding F11 book substitutes the existing named F11 operations into the
 same body for execution regressions; it is not a parallel slope theory.
 
+`affine-distinct-x-output-x(first, second)` is the next ordinary transparent
+DEFUN.  A local `slope` binding reuses that certified operation, direct
+`FIELD-MUL` self-multiplication represents its square, and two `FIELD-SUB`
+calls implement `(slope^2-x_first)-x_second` in that order.  Total fixed
+accessors make the result total, field-valued, and fixed with no classifier
+test, nonzero guard, or curve hypothesis.  Consequently no decorative
+`:distinct-x` theorem is published.  Its named F11 operation is the established
+direct substitution of concrete operations into the same body, not a parallel
+mathematical theory.
+
 Finite affine coordinates use the transparent proper list `(x y)`, with both
 entries passed through the field fixer.  Atoms, dotted pairs, and proper lists
 whose length is not two all denote canonical `(0 0)`; entries in an exact
