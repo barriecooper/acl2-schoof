@@ -25,5 +25,11 @@ exhaustively enumerates all 121 canonical affine pairs. It also computes
 `4(1)^3 + 27(6)^2 != 0` in F11 as a focused nonsingularity check, not a generic
 discriminant theorem.
 
+The generic short-Weierstrass boundary now reuses the same coefficients in
+`books/curve/f11-short-weierstrass.lisp`.  Its total coordinate predicate also
+checks a listed point, a nonpoint, fixed noncanonical integers, and malformed
+objects.  This validation adds neither a packaged point type nor group
+operations.
+
 Generic polynomial degree and leading coefficient remain the next
 mathematical milestone.

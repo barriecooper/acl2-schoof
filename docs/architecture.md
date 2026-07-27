@@ -30,6 +30,15 @@ scope.  No mathematical characteristic value, leastness, primality,
 cardinality, enumeration, prime-power, or extension-degree metadata is
 certified.  F7 and a regression-local modulus-11 client validate transport.
 
+The generic curve layer begins with only two constrained nullary short-
+Weierstrass coefficients.  Coefficients and arbitrary coordinates are fixed at
+every use by the existing GFIELD fixer; the transparent right-hand side and
+coordinate predicate therefore have total canonical semantics.  The layer
+adopts nonzeroness of `4*a^3 + 27*b^2` as its non-rewriting certificate and
+depends on the existing characteristic-not-2-or-3 book.  The F11 golden values
+`a=1`, `b=6` validate the concrete boundary.  This is not a point
+representation, group law, formal discriminant theory, or smoothness theorem.
+
 The generic polynomial layer is certified through arithmetic, evaluation,
 degree, recursive division, canonical remainder and congruence, reduced
 representative operations, GCD, XGCD, modular inverse, logical irreducibility,

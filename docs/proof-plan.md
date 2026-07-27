@@ -41,9 +41,12 @@ open; this is not yet a public field interface.
    repeated addition.  No characteristic value or leastness theorem is
    introduced.  Enumeration/cardinality and prime-power metadata remain
    separate open interfaces.
-3. Develop short-Weierstrass curve coordinates and group operations for
-   characteristic greater than three. Characteristics two and three are out of
-   the initial scope.
+3. The minimal short-Weierstrass parameter boundary is complete: two fixed-at-
+   use coefficients, the total affine coordinate equation, and the adopted
+   nonzero `4*a^3 + 27*b^2` certificate.  F11 validates the golden coefficients
+   and total execution.  A separate point representation and all group
+   operations remain open; characteristics two and three remain excluded by
+   the preceding certified facts.
 
 General polynomial quotients used for Schoof coordinates are distinct from
 irreducible quotients promoted to coefficient fields: their moduli need not be
