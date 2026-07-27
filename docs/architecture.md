@@ -40,8 +40,12 @@ inverse candidate with an explicit zero branch. Its certified laws currently
 cover zero/one distinctness, additive identities/inverses/associativity/
 commutativity and cancellation, multiplicative zero/identity/associativity/
 commutativity, and both distributive laws. It is not yet a field or a GFIELD
-instance; universal inverse laws, remaining field packaging, finite
-enumeration/cardinality, and Frobenius remain open.
+instance. A proof-only simultaneous functional-instantiation regression now
+certifies that the nine unchanged F7X2 definitions satisfy the reusable
+fixed-modulus-field interface, including its nonzero inverse law. The ordinary
+public F7X2 inverse theorem surface, replacement of bespoke proof bodies, formal
+GFIELD client packaging, finite enumeration/cardinality, and Frobenius remain
+open.
 
 ## Quotient architecture
 
@@ -53,8 +57,10 @@ Two quotient uses must remain distinct:
 
 The reusable fixed-modulus field handles the first use and has an F7
 simultaneous-functional-instantiation regression. That regression is not a
-public concrete F7 quotient API. F7X2 remains a presentation-specific proving
-ground and has not been migrated to the generic interface. The construction
+public concrete F7 quotient API. A separate F7X2 regression certifies the
+existing presentation's simultaneous compatibility without changing its
+execution, public definitions, or proof provenance. F7X2 has not been migrated
+to the generic interface. The construction
 does not apply to the possibly reducible coordinate-ring moduli in the second
 use.
 

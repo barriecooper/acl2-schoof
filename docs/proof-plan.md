@@ -15,20 +15,26 @@ regressions, and `x^2+1` is certified irreducible over F7. A reusable
 fixed-modulus field interface now packages canonical remainder representatives
 and the complete GFIELD-shaped contract over a constrained nullary irreducible
 modulus; an F7 regression simultaneously instantiates the coefficient field,
-polynomial stack, modulus, and wrappers.
+polynomial stack, modulus, and wrappers. A proof-only F7X2 regression also
+simultaneously maps that complete stack and all nine existing F7X2 definitions
+to the generic interface without changing their execution or public API.
 
 F7X2 currently supplies canonical representatives, transparent
 addition/negation/subtraction/multiplication, and a total executable inverse
 candidate with an explicit zero branch. Its certified laws include
 zero/one distinctness, the additive group laws and cancellation,
 multiplicative identities and zero, associativity and commutativity of
-multiplication, and distributivity. Universal inverse laws and field packaging
-remain open; this is not yet a field interface.
+multiplication, and distributivity. The generic nonzero inverse law is certified
+for the unchanged operations under a regression-prefixed compatibility theorem,
+but ordinary public F7X2 inverse theorems and formal field packaging remain
+open; this is not yet a public field interface.
 
 ## Near-term shared algebra
 
-1. Review whether F7X2 should migrate to the certified reusable fixed-modulus
-   field interface; do not treat the F7 regression book as a public F7 API.
+1. Review the proof-only F7X2 compatibility evidence before deciding whether to
+   replace bespoke proof bodies, export generic-derived inverse theorems under
+   ordinary F7X2 names, or add formal GFIELD client packaging; do not treat
+   either regression book as a public F7 API.
 2. Instantiate generic outer polynomials over a resulting concrete field client and
    add the finite-field metadata and Frobenius interfaces needed by both
    downstream tracks.
