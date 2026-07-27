@@ -11,7 +11,11 @@ division, reduced representative arithmetic, GCD, XGCD, modular inverse,
 logical irreducibility, the irreducibility-to-monic-GCD-one bridge, and
 irreducible-modulus inverse laws. The concrete F7 stack carries those
 algorithms through guard-verified modular inverse with exact execution
-regressions, and `x^2+1` is certified irreducible over F7.
+regressions, and `x^2+1` is certified irreducible over F7. A reusable
+fixed-modulus field interface now packages canonical remainder representatives
+and the complete GFIELD-shaped contract over a constrained nullary irreducible
+modulus; an F7 regression simultaneously instantiates the coefficient field,
+polynomial stack, modulus, and wrappers.
 
 F7X2 currently supplies canonical representatives, transparent
 addition/negation/subtraction/multiplication, and a total executable inverse
@@ -23,18 +27,12 @@ remain open; this is not yet a field interface.
 
 ## Near-term shared algebra
 
-1. Complete the minimal F7X2 field interface without treating isolated
-   characteristic lemmas as an automatic next step. Keep logical field laws,
-   executable operations, verified guards, and exact execution regressions
-   explicit and separate.
-2. **Architecture pause:** once that minimal interface certifies, extract or
-   design a reusable construction for quotients by certified irreducible
-   polynomials. F7X2 is a proving ground, not the final constructor, and no
-   general quotient-field constructor exists yet.
-3. Instantiate generic outer polynomials over the resulting field interface and
+1. Review whether F7X2 should migrate to the certified reusable fixed-modulus
+   field interface; do not treat the F7 regression book as a public F7 API.
+2. Instantiate generic outer polynomials over a resulting concrete field client and
    add the finite-field metadata and Frobenius interfaces needed by both
    downstream tracks.
-4. Develop short-Weierstrass curve coordinates and group operations for
+3. Develop short-Weierstrass curve coordinates and group operations for
    characteristic greater than three. Characteristics two and three are out of
    the initial scope.
 
