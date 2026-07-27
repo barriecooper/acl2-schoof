@@ -52,6 +52,10 @@ tested before coordinate equality so an identical self-inverse pair enters the
 opposite-y case. The classifier is structural, includes off-curve and
 malformed inputs through affine fixing, and defines no slope or addition.
 
+The generic field layer also certifies that equal squares have equal fixed
+representatives or fixed representatives related by `FIELD-NEG`. The proof has
+no characteristic restriction and remains valid in characteristic two.
+
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,
 raw and monic XGCD, and modular inverse, with exact execution regressions. The
