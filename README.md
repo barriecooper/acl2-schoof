@@ -74,8 +74,14 @@ executions.  The following transparent total boundary,
 computes `slope*(x_first-x3)-y_first`; it too is field-valued and fixed without
 a classifier hypothesis.  Focused F11 executions include every intermediate,
 noncanonical and malformed fixing, and equal-x total programming semantics.
-No output coordinate pair, point construction, or addition operation is
-defined.
+`affine-distinct-x-output` now assembles those closed scalar dependencies, in
+x-then-y order, with `affine-coordinates-make`. Its parallel bindings and the
+existing scalar fixed-result theorems yield a canonical proper two-list, public
+x/y projection equations, and fixer stability on all ACL2 inputs. The F11
+substitution reuses the named F11 scalar outputs and checks `(0 0)`, `(9 5)`,
+`(6 10)`, noncanonical `(0 0)`, malformed-input `(1 9)`, and equal-x total
+programming result `(7 7)`. Canonical representation is not curve membership;
+no output point, classifier dispatch, curve closure, or addition is defined.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,

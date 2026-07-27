@@ -137,6 +137,11 @@ classifier hypothesis is needed for closure or execution.  The distinct-x
 output-y boundary is also complete: its parallel bindings reuse the certified
 slope and output-x, and it computes exactly
 `slope * (x_first - x3) - y_first`, with closure, fixing, verified guards, and
-focused F11 execution.  The next narrow boundary is only a canonical affine
-coordinate constructor assembling the two certified scalar outputs; it must
-stop before tagged-point construction, addition, or curve closure.
+focused F11 execution.  The canonical coordinate-assembly boundary is now also
+complete: `affine-distinct-x-output` uses a parallel `LET` and the established
+`affine-coordinates-make` constructor to assemble x3 then y3. Recognition, both
+accessor equations, fixer stability, guard verification, and focused F11
+execution require no classifier hypothesis. This proves canonical representation
+only. The next narrow obligation is the deferred substantive output-y
+rearrangement identity needed before curve closure; tagged points and addition
+remain later.
