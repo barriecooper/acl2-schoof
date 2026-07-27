@@ -58,6 +58,15 @@ affine equation.  Off-curve affine branches therefore remain affine.  F11
 validates both branches and malformed behavior.  No curve operation, group
 law, Frobenius, or counting machinery is added.
 
+Point negation is defined directly at the full-point layer, without a public
+affine helper.  It applies `curve-point-fix`, leaves infinity unchanged, and
+maps affine `(x,y)` to `(x,-y)` with existing field negation.  Noncanonical
+coordinates are fixed and malformed points retain the infinity fallback.
+Certification gives structural closure, double negation equal to the fixed
+input, literal involution for canonical inputs, and curve-membership closure
+from `(-y)^2=y^2`.  It adds no addition, doubling, scalar multiplication, group
+law, Frobenius, enumeration, counting, Hasse, or Schoof machinery.
+
 The generic polynomial layer is certified through arithmetic, evaluation,
 degree, recursive division, canonical remainder and congruence, reduced
 representative operations, GCD, XGCD, modular inverse, logical irreducibility,

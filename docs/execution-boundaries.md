@@ -57,6 +57,15 @@ shape, not benchmark measurements.
 | Generated PFIELD/F7 polynomial powers | `pfield-poly-pow-spec`; `f7-poly-pow-spec` | `pfield-poly-pow-fast` / `f7-poly-pow-fast`, selected by the corresponding public MBE wrapper | `pfield-poly-pow-fast-accumulator-invariant`, `pfield-poly-pow-fast-correct`; `f7-poly-pow-fast-accumulator-invariant`, `f7-poly-pow-fast-correct` | Both dependency chains, fast auxiliaries, and public wrappers explicitly verified | `tests/generic-polynomial.lisp` (concrete F7 only) | 4 — PFIELD constrained adapter and F7 named concrete runtime; closed |
 | PFIELD root counting | Imported root predicate/count specification | Executable finite enumeration in the certified PFIELD book | Conversion theorems and `hs-pfield-polynomial-num-roots-upper-bound` | Dependency-book status; no project MBE boundary | Root-count bridge tests | 4 — executable enumeration with certified semantic bridge |
 
+## Full-point negation
+
+`curve-point-neg` and its F11 client are ordinary transparent, guard-verified
+definitions, not a logical/executable split.  Infinity is fixed, affine y uses
+existing field negation, and arbitrary inputs use the existing point fixer.
+F11 regressions cover canonical, noncanonical, off-curve, infinity, and
+malformed inputs; generic certified theorems separately establish structural
+and curve-membership closure and involution modulo fixing.
+
 ## Generated field-power correspondence
 
 `books/field/power-correspondence.lisp` adds a logical comparison boundary for

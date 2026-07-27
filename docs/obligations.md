@@ -93,6 +93,19 @@ Allowed statuses are **Proved**, **Open**, and **Postponed**. No row marked open
 
 The 2006 FUNPOL quotient/remainder books do not provide a small functional-instance bridge to the explicit-modulus HS/PFIELD interface. GPOLY is now the authoritative layer for new polynomial algebra, and its generic division, reconstruction, and remainder-degree bound are certified. The older HS/PFIELD polynomial layer is retained as a legacy/root-count bridge unless an explicit bridge requires it; new gcd, derivative, modular-reduction, quotient-ring, and extension-field work must not be independently duplicated in both stacks.
 
+## Full curve-point negation (complete)
+
+Transparent total `curve-point-neg` fixes its input, maps infinity to infinity,
+and maps affine `(x,y)` to `(x,-y)`.  It returns a canonical representation;
+double negation is `curve-point-fix`, with literal involution for recognized
+representations; and it preserves actual curve membership via the local
+identity `(-y)^2=y^2`.  No affine helper was introduced because there is one
+clear full-point use.  Fixing-induced point equivalence remains deferred: fixer
+equations suffice.  Canonical off-curve affine values remain structural and are
+not claimed to become curve points.  No addition, doubling, scalar
+multiplication, group law, Frobenius, enumeration, counting, Hasse, or Schoof
+machinery was added.
+
 ## Concrete F7 GCD instantiation audit (monic wrapper complete)
 
 The July 2026 audit confirmed that the retained F7 Euclidean recursion uses the

@@ -57,6 +57,10 @@ open; this is not yet a public field interface.
    coordinates.  Malformed outer values fix to infinity; off-curve affine
    values stay affine and fail only the separate curve-membership predicate.
    No curve operation or group law is included.
+6. Full-point negation is complete.  It fixes infinity, negates only the fixed
+   affine y-coordinate, preserves representation and curve membership by
+   `(-y)^2=y^2`, and is involutive modulo point fixing.  No affine helper or
+   fixing-induced point equivalence was needed.
 
 General polynomial quotients used for Schoof coordinates are distinct from
 irreducible quotients promoted to coefficient fields: their moduli need not be

@@ -14,6 +14,8 @@
 (include-book "curve/f11-affine-coordinates")
 (include-book "curve/points")
 (include-book "curve/f11-points")
+(include-book "curve/point-negation")
+(include-book "curve/f11-point-negation")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")
