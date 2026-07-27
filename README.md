@@ -31,8 +31,10 @@ canonical representative fixer, transparent guard-verified addition,
 negation, subtraction, and multiplication, coefficient formulas, distinct
 zero and one, additive laws and cancellation, multiplicative identities and
 zero laws, multiplication associativity and commutativity, and both
-distributive laws. It is **not yet** a certified field: inversion, the remaining
-field interface, enumeration/cardinality, and Frobenius are open. F7X2 is not
+distributive laws. A regression-prefixed theorem certifies its unchanged
+nonzero inverse through the generic fixed-modulus interface, but ordinary
+public inverse theorem promotion, formal GFIELD packaging,
+enumeration/cardinality, and Frobenius remain open. F7X2 is not
 the reusable field constructor: the generic fixed-modulus field is now that
 certified boundary. F7X2 migration and its remaining field-specific work remain
 separate.

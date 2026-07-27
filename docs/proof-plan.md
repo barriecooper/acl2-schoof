@@ -31,11 +31,11 @@ open; this is not yet a public field interface.
 
 ## Near-term shared algebra
 
-1. Review the proof-only F7X2 compatibility evidence before deciding whether to
-   replace bespoke proof bodies, export generic-derived inverse theorems under
-   ordinary F7X2 names, or add formal GFIELD client packaging; do not treat
-   either regression book as a public F7 API.
-2. Instantiate generic outer polynomials over a resulting concrete field client and
+1. Complete the generated public field-power correspondence prerequisite so
+   later finite-field certificates do not expose recursive specifications or
+   fast accumulators.  The proof-only F7X2 compatibility review is complete;
+   ordinary theorem promotion and formal packaging remain separate decisions.
+2. Instantiate generic outer polynomials over a concrete field client and
    add the finite-field metadata and Frobenius interfaces needed by both
    downstream tracks.
 3. Develop short-Weierstrass curve coordinates and group operations for
