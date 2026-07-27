@@ -203,3 +203,7 @@ logical/executable split; therefore this is not a new split execution boundary.
 Concrete F11 assertions are execution regressions, while the generic
 characterization, result-recognition, fixing, exhaustiveness, and disjointness
 theorems provide the logical evidence.
+
+The curve-classification client adds only a non-rewriting semantic theorem and
+focused assertions. It changes no function, guard, classifier branch, or
+logical/executable split; off-curve `:same-x-other` execution remains available.
