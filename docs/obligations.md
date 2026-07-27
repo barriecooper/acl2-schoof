@@ -165,3 +165,15 @@ from affine fixing, and `:same-x-other` remains reachable off curve. Generic
 classifier symmetry is still deferred: `field-neg-of-neg` exists, but the
 kernel lacks a fixing-respecting negation congruence/nonzero-preservation rule
 that makes the reverse opposite-y test a stable small proof.
+
+Closed: `affine-pair-classify-distinct-x-implies-x-difference-nonzero` proves
+that structural `:distinct-x` classification makes the ordered difference
+`x_second - x_first` unequal to `field-zero`, with no curve-membership
+hypothesis. The reusable non-rewriting field boundary
+`field-sub-equal-zero-implies-fixed-equal` states the correct arbitrary-input
+semantics in terms of fixed representatives and follows only from subtraction
+as addition of a negation plus additive-inverse uniqueness. F11 executions
+cover both orders of `(2,4)` and `(3,5)`, distinct and equal noncanonical x
+representatives, equal x, and an off-curve distinct-x pair. Malformed behavior
+remains inherited from affine fixing, classifier symmetry remains deferred,
+and no slope, inverse use, division-bearing curve formula, or addition is added.

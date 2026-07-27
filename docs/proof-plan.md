@@ -120,5 +120,10 @@ The generic algebra and curve client needed to refine the remaining case are
 complete: equal curve right-hand sides give equal y squares, and equal field
 squares give equal or opposite fixed y representatives. Thus `:same-x-other`
 is excluded for genuine same-curve points without an explicit equal-x
-hypothesis. A small denominator-nonzero boundary for `:distinct-x` is the next
-candidate prerequisite before slopes.
+hypothesis. The denominator-nonzero boundary for `:distinct-x` is complete:
+the classifier characterization and a generic additive zero-difference theorem
+show that `x_second - x_first` is nonzero for arbitrary fixed-coordinate
+inputs, without curve membership. The chosen orientation anticipates
+`(y_second - y_first)/(x_second - x_first)`. A distinct-x secant-slope
+boundary is next; no slope, inverse, division-bearing curve formula, or
+addition is defined yet.

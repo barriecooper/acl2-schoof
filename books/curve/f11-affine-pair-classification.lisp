@@ -36,4 +36,45 @@
 (assert-event (affine-pair-classification-result-p
                (f11-affine-pair-classify '(2 4) '(2 5))))
 
+; Focused execution checks for the generic distinct-x denominator boundary.
+; F11 subtraction is expressed by its existing addition and negation API.
+(assert-event
+ (and (equal (f11-affine-pair-classify '(2 4) '(3 5)) :distinct-x)
+      (not (equal (f11-add (f11-affine-coordinates-x '(3 5))
+                           (f11-neg (f11-affine-coordinates-x '(2 4))))
+                  (f11-zero)))
+      (equal (f11-add (f11-affine-coordinates-x '(3 5))
+                      (f11-neg (f11-affine-coordinates-x '(2 4))))
+             1)))
+(assert-event
+ (and (equal (f11-affine-pair-classify '(3 5) '(2 4)) :distinct-x)
+      (not (equal (f11-add (f11-affine-coordinates-x '(2 4))
+                           (f11-neg (f11-affine-coordinates-x '(3 5))))
+                  (f11-zero)))
+      (equal (f11-add (f11-affine-coordinates-x '(2 4))
+                      (f11-neg (f11-affine-coordinates-x '(3 5))))
+             10)))
+(assert-event
+ (and (equal (f11-affine-pair-classify '(13 15) '(14 16)) :distinct-x)
+      (equal (f11-add (f11-affine-coordinates-x '(14 16))
+                      (f11-neg (f11-affine-coordinates-x '(13 15))))
+             1)))
+(assert-event
+ (and (not (equal (f11-affine-pair-classify '(2 4) '(2 7)) :distinct-x))
+      (equal (f11-add (f11-affine-coordinates-x '(2 7))
+                      (f11-neg (f11-affine-coordinates-x '(2 4))))
+             (f11-zero))))
+(assert-event
+ (and (not (equal (f11-affine-pair-classify '(2 4) '(13 7)) :distinct-x))
+      (equal (f11-add (f11-affine-coordinates-x '(13 7))
+                      (f11-neg (f11-affine-coordinates-x '(2 4))))
+             (f11-zero))))
+(assert-event
+ (and (not (f11-short-weierstrass-affine-point-p '(1 1)))
+      (not (f11-short-weierstrass-affine-point-p '(4 1)))
+      (equal (f11-affine-pair-classify '(1 1) '(4 1)) :distinct-x)
+      (not (equal (f11-add (f11-affine-coordinates-x '(4 1))
+                           (f11-neg (f11-affine-coordinates-x '(1 1))))
+                  (f11-zero)))))
+
 (verify-guards f11-affine-pair-classify)
