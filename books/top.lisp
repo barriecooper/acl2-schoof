@@ -12,6 +12,8 @@
 (include-book "curve/f11-short-weierstrass")
 (include-book "curve/affine-coordinates")
 (include-book "curve/f11-affine-coordinates")
+(include-book "curve/points")
+(include-book "curve/f11-points")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")

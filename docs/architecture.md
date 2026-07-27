@@ -45,9 +45,18 @@ whose length is not two all denote canonical `(0 0)`; entries in an exact
 two-list are independently field-fixed.  Fixing is total and idempotent but
 says nothing about curve membership.  The separate recognizer is exactly the
 existing short-Weierstrass equation on the fixed accessors.  F11 validates
-`(2,4)`, `(2,5)`, and noncanonical `(13,15)`.  A later full point type may tag
-infinity separately; no infinity tag, curve operation, group law, Frobenius,
-or counting machinery is added here.
+`(2,4)`, `(2,5)`, and noncanonical `(13,15)`.
+
+Full points are exactly canonical `(:infinity)` or `(:affine coordinates)`
+proper lists, with the existing canonical affine payload.  Exact affine outer
+shapes fix their two-coordinate payload; malformed payloads, unknown tags,
+atoms, wrong-length lists, and dotted values fix to `(:infinity)`.  The total
+affine accessor returns `(0 0)` outside an affine branch, without claiming it
+is on the curve.  Structural fixed-point recognition is separate from
+mathematical recognition, which accepts infinity unconditionally or tests the
+affine equation.  Off-curve affine branches therefore remain affine.  F11
+validates both branches and malformed behavior.  No curve operation, group
+law, Frobenius, or counting machinery is added.
 
 The generic polynomial layer is certified through arithmetic, evaluation,
 degree, recursive division, canonical remainder and congruence, reduced
