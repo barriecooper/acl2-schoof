@@ -81,6 +81,30 @@
   (equal (poly-remainder (poly-reduced-mul left right modulus) modulus)
          (poly-reduced-mul left right modulus)))
 
+; Carrier closure is intentionally stated beside the operations it concerns.
+; Each fact is only the public remainder fixed-point theorem viewed through
+; POLY-REDUCED-P; no arithmetic or division definition is reopened.
+(defthm poly-reduced-p-of-poly-reduced-add
+  (poly-reduced-p (poly-reduced-add left right modulus) modulus)
+  :hints (("Goal" :use ((:instance poly-reduced-p-definition)
+                 (:instance poly-remainder-of-poly-reduced-add))
+           :in-theory (disable poly-reduced-p poly-remainder))))
+(defthm poly-reduced-p-of-poly-reduced-neg
+  (poly-reduced-p (poly-reduced-neg polynomial modulus) modulus)
+  :hints (("Goal" :use ((:instance poly-reduced-p-definition)
+                 (:instance poly-remainder-of-poly-reduced-neg))
+           :in-theory (disable poly-reduced-p poly-remainder))))
+(defthm poly-reduced-p-of-poly-reduced-sub
+  (poly-reduced-p (poly-reduced-sub left right modulus) modulus)
+  :hints (("Goal" :use ((:instance poly-reduced-p-definition)
+                 (:instance poly-remainder-of-poly-reduced-sub))
+           :in-theory (disable poly-reduced-p poly-remainder))))
+(defthm poly-reduced-p-of-poly-reduced-mul
+  (poly-reduced-p (poly-reduced-mul left right modulus) modulus)
+  :hints (("Goal" :use ((:instance poly-reduced-p-definition)
+                 (:instance poly-remainder-of-poly-reduced-mul))
+           :in-theory (disable poly-reduced-p poly-remainder))))
+
 (defthm poly-reduced-add-of-normalize
   (equal (poly-reduced-add (normalize left) (normalize right)
                            (normalize modulus))

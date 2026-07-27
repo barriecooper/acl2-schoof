@@ -25,6 +25,22 @@
   (equal (poly-remainder (poly-reduced-one modulus) modulus)
          (poly-reduced-one modulus)))
 
+; NIL is the existing reduced zero.  Reduced one is defined through the same
+; remainder fixer, so both carrier facts are unconditional even for the total
+; zero- and constant-modulus cases.
+(defthm poly-reduced-p-of-nil
+  (poly-reduced-p nil modulus)
+  :hints (("Goal" :use ((:instance poly-reduced-p-definition (polynomial nil))
+                 (:instance poly-remainder-zero-dividend))
+           :in-theory (disable poly-reduced-p poly-remainder))))
+
+(defthm poly-reduced-p-of-poly-reduced-one
+  (poly-reduced-p (poly-reduced-one modulus) modulus)
+  :hints (("Goal" :use ((:instance poly-reduced-p-definition
+                            (polynomial (poly-reduced-one modulus)))
+                 (:instance poly-remainder-of-poly-reduced-one))
+           :in-theory (disable poly-reduced-p poly-remainder))))
+
 (defthm poly-reduced-one-zero-modulus
   (equal (poly-reduced-one nil) (polynomial-one))
   :hints (("Goal"
