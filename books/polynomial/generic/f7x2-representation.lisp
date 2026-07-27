@@ -63,15 +63,6 @@
                                f7-poly-divmod-core
                                f7-canonical-polynomial-p)))))
 
-(local
- (defthm f7x2-canonical-not-consp-is-nil
-   (implies (and (f7-canonical-polynomial-p x) (not (consp x)))
-            (equal x nil))
-   :rule-classes nil
-   :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p
-                                       f7-normalize f7-fix-coefficients
-                                       f7-trim-trailing-zeros)))))
-
 (local (defthm f7x2-modulus-normalized
          (equal (f7-normalize '(1 0 1)) '(1 0 1))))
 (local (defthm f7x2-modulus-degree
@@ -83,17 +74,21 @@
            (f7-poly-remainder dividend '(1 0 1)) '(1 0 1))
           (f7-poly-remainder dividend '(1 0 1)))
    :hints (("Goal"
-            :use ((:instance f7x2-remainder-strict-degree-bound
+            :use ((:instance f7x2-modulus-normalized)
+                  (:instance f7x2-modulus-degree)
+                  (:instance f7x2-remainder-strict-degree-bound
                              (modulus '(1 0 1)))
                   (:instance f7-poly-remainder-canonical
                              (f dividend) (g '(1 0 1)))
-                  (:instance f7x2-canonical-not-consp-is-nil
-                             (x (f7-poly-remainder dividend '(1 0 1))))
+                  (:instance f7-poly-remainder-zero-dividend
+                             (modulus '(1 0 1)))
+                  (:instance f7-canonical-polynomial-atom-is-nil
+                             (polynomial
+                              (f7-poly-remainder dividend '(1 0 1))))
                   (:instance f7x2-remainder-canonical-lower-degree
                              (dividend (f7-poly-remainder dividend '(1 0 1)))
                              (modulus '(1 0 1))))
-            :in-theory (disable f7-poly-remainder f7-poly-degree f7-normalize
-                                f7-canonical-polynomial-p)))))
+            :in-theory (theory 'minimal-theory)))))
 
 (defthm f7x2-fix-idempotent
   (equal (f7x2-fix (f7x2-fix x)) (f7x2-fix x))

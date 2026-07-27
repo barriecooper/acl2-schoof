@@ -274,8 +274,19 @@ same total range of moduli.  This adds no division algorithm reasoning: its
 closed-theory consumer leaves normalization, divmod-core, division-step, and
 arithmetic closed.
 
+The F7 normalization/representation interface also exports the non-rewriting
+`F7-CANONICAL-POLYNOMIAL-ATOM-IS-NIL` structural contract: under the canonical
+dense representation, the only atomic polynomial is literal `NIL`.  The
+existing F7X2 fixed-modulus remainder-idempotence proof consumes this theorem
+explicitly instead of duplicating its normalization proof.  This is the
+immediate representation prerequisite for a future unconditional F7 remainder
+idempotence theorem; it does not itself establish that theorem or any new
+remainder or divmod behavior, degree bound, reducedness, divisibility,
+congruence, unit/associate, irreducibility, GCD/XGCD, inverse, or F7X2
+arithmetic/correctness result.
+
 This narrow projection does not establish
-`F7-CANONICAL-POLYNOMIAL-ATOM-IS-NIL`, remainder idempotence, the divisibility
+remainder idempotence, the divisibility
 equation, reduced nondivisibility, divisibility witnesses or transitivity,
 units or associates, irreducibility-to-monic-GCD-one, modular-inverse
 correctness, or F7X2 correctness.
@@ -289,10 +300,9 @@ inactive; its public statement does not expose division recursion or
 polynomial arithmetic.  Focused local symbolic consumers check each contract
 independently with every executable definition closed.
 
-This concrete foundation establishes F7 divmod zero-dividend semantics, but
-does not establish `F7-CANONICAL-POLYNOMIAL-ATOM-IS-NIL`,
-`F7-POLY-REMAINDER-ZERO-DIVIDEND`, remainder idempotence, the divisibility
-equation, reduced nondivisibility, divisibility witnesses or transitivity,
+This concrete foundation establishes F7 divmod zero-dividend and
+zero-dividend remainder semantics, but does not establish remainder idempotence, the
+divisibility equation, reduced nondivisibility, divisibility witnesses or transitivity,
 units or associates, irreducibility-to-monic-GCD-one, modular-inverse
 correctness, or F7X2 correctness.
 

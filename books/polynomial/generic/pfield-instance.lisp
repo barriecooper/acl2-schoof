@@ -884,6 +884,24 @@
            (equal (f7-normalize xs) xs))
   :hints (("Goal" :in-theory (enable f7-canonical-polynomial-p))))
 
+; The canonical dense representation has no non-NIL atomic polynomial.  Keep
+; this structural elimination fact explicit instead of adding an ambient rule.
+(defthm f7-canonical-polynomial-atom-is-nil
+  (implies
+   (and (f7-canonical-polynomial-p polynomial)
+        (not (consp polynomial)))
+   (equal polynomial nil))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '((:definition f7-canonical-polynomial-p)
+       (:definition f7-normalize)
+       (:definition f7-fix-coefficients)
+       (:definition f7-trim-trailing-zeros))))))
+
 (defthm f7-normalize-nil
   (equal (f7-normalize nil) nil)
   :hints
