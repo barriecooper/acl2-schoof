@@ -66,6 +66,18 @@ test, nonzero guard, or curve hypothesis.  Consequently no decorative
 direct substitution of concrete operations into the same body, not a parallel
 mathematical theory.
 
+`affine-distinct-x-output-y(first, second)` is likewise an ordinary transparent
+DEFUN.  One parallel `LET` independently binds the certified slope and output-x
+operations, then computes exactly
+`FIELD-SUB(FIELD-MUL(slope, FIELD-SUB(x_first, output-x)), y_first)`.
+The ordered inner subtraction and final use of the first point's y-coordinate
+are explicit.  Total fixed accessors and field operations give guard-`T`,
+field-element, and fixed-result semantics on arbitrary inputs, so no classifier
+or nonzero test is present.  No classifier restatement theorem is published,
+and the additive rearrangement is deferred until a substantive coordinate
+client needs it.  The named F11 operation is direct substitution into this same
+body; it is execution evidence rather than another mathematical theory.
+
 Finite affine coordinates use the transparent proper list `(x y)`, with both
 entries passed through the field fixer.  Atoms, dotted pairs, and proper lists
 whose length is not two all denote canonical `(0 0)`; entries in an exact
