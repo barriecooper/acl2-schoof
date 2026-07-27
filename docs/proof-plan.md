@@ -47,6 +47,12 @@ open; this is not yet a public field interface.
    and total execution.  A separate point representation and all group
    operations remain open; characteristics two and three remain excluded by
    the preceding certified facts.
+4. The finite affine-coordinate boundary is complete: canonical proper
+   two-item lists contain field-fixed coordinates; malformed outer objects
+   denote the zero-coordinate pair; and the affine recognizer applies the
+   existing equation to the fixed accessors.  Fixing establishes representation
+   only, not curve membership.  A future full point type may tag infinity
+   separately from this affine representation.
 
 General polynomial quotients used for Schoof coordinates are distinct from
 irreducible quotients promoted to coefficient fields: their moduli need not be

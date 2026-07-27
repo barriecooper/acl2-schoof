@@ -10,6 +10,8 @@
 (include-book "field/characteristic-exclusions-regression")
 (include-book "curve/short-weierstrass")
 (include-book "curve/f11-short-weierstrass")
+(include-book "curve/affine-coordinates")
+(include-book "curve/f11-affine-coordinates")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")
