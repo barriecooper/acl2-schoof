@@ -277,16 +277,15 @@ arithmetic closed.
 The F7 normalization/representation interface also exports the non-rewriting
 `F7-CANONICAL-POLYNOMIAL-ATOM-IS-NIL` structural contract: under the canonical
 dense representation, the only atomic polynomial is literal `NIL`.  The
-existing F7X2 fixed-modulus remainder-idempotence proof consumes this theorem
-explicitly instead of duplicating its normalization proof.  This is the
-immediate representation prerequisite for a future unconditional F7 remainder
-idempotence theorem; it does not itself establish that theorem or any new
+existing F7X2 fixed-modulus remainder-idempotence proof and the public
+variable-modulus F7 remainder-idempotence proof consume this theorem explicitly
+instead of duplicating its normalization proof.  It is the representation
+bridge used by that new public theorem; by itself it establishes no new
 remainder or divmod behavior, degree bound, reducedness, divisibility,
 congruence, unit/associate, irreducibility, GCD/XGCD, inverse, or F7X2
 arithmetic/correctness result.
 
-This narrow projection does not establish
-remainder idempotence, the divisibility
+This narrow projection does not by itself establish the divisibility
 equation, reduced nondivisibility, divisibility witnesses or transitivity,
 units or associates, irreducibility-to-monic-GCD-one, modular-inverse
 correctness, or F7X2 correctness.
@@ -300,11 +299,20 @@ inactive; its public statement does not expose division recursion or
 polynomial arithmetic.  Focused local symbolic consumers check each contract
 independently with every executable definition closed.
 
-This concrete foundation establishes F7 divmod zero-dividend and
-zero-dividend remainder semantics, but does not establish remainder idempotence, the
-divisibility equation, reduced nondivisibility, divisibility witnesses or transitivity,
-units or associates, irreducibility-to-monic-GCD-one, modular-inverse
-correctness, or F7X2 correctness.
+This concrete foundation now also establishes unconditional public F7 remainder
+idempotence for every dividend and modulus, including zero-normalizing,
+nonzero-constant, positive-degree, malformed, canonical, and noncanonical
+inputs.  Its bounded semantic proof uses the existing public canonicality,
+strict degree-bound, zero-dividend, canonical lower-degree, normalized-zero
+modulus, and canonical-atom representation contracts.  Both that proof and its
+focused symbolic consumer keep normalization, canonicality, remainder/divmod,
+division-step, degree, and arithmetic implementations closed.  This is stability
+of the public remainder operation, not quotient/remainder reconstruction or
+uniqueness.  It does not establish the quotient/remainder divisibility equation,
+reduced nondivisibility, general quotient/remainder uniqueness, divisibility
+witnesses or transitivity, congruence infrastructure, units or associates,
+irreducibility-to-monic-GCD-one, modular-inverse correctness, or new F7X2
+correctness.
 
 ## Generic modular reduction (certified)
 
