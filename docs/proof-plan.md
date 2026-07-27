@@ -115,3 +115,8 @@ boundary. After affine fixing it distinguishes distinct x, opposite y, equal
 non-opposite coordinates, and the remaining same-x case, in that order. The
 remaining case is intentionally retained for arbitrary and off-curve inputs.
 Slopes and addition remain open.
+
+The generic algebra needed to refine the remaining case is complete: equal
+field squares imply equality of fixed representatives or the classifier's
+exact reverse-oriented negation equation. The curve-level theorem excluding
+`:same-x-other` for genuine same-curve points remains a separate client.

@@ -155,9 +155,12 @@ No affine equivalence was added; fixing compatibility and canonical equality
 are sufficient.
 
 Open: exclude `:same-x-other` for two genuine points on the same curve. The
-current generic field kernel has no theorem that equality of squares implies
-equality up to field negation (nor the directly supporting zero-product and
-factorization bridge), so this PR does not assume the result. Generic
-classifier symmetry is also deferred: `field-neg-of-neg` exists, but the
+generic field layer now proves that equality of squares implies equality of
+fixed representatives or equality up to field negation. Its public
+non-rewriting zero-product theorem follows from inverse-based multiplication
+cancellation; difference-of-squares and zero-factor translation lemmas remain
+local. Focused F11 checks cover canonical, noncanonical, opposite, zero, and
+unequal-square inputs. The curve corollary remains deferred. Generic classifier
+symmetry is also deferred: `field-neg-of-neg` exists, but the
 kernel lacks a fixing-respecting negation congruence/nonzero-preservation rule
 that makes the reverse opposite-y test a stable small proof.

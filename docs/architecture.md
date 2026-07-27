@@ -67,6 +67,14 @@ input, literal involution for canonical inputs, and curve-membership closure
 from `(-y)^2=y^2`.  It adds no addition, doubling, scalar multiplication, group
 law, Frobenius, enumeration, counting, Hasse, or Schoof machinery.
 
+The generic field layer exposes the non-rewriting
+`FIELD-EQUAL-SQUARES-IMPLIES-EQUAL-OR-NEG` theorem under total fixing semantics.
+Its non-rewriting zero-product support follows from the existing inverse and
+multiplication-cancellation laws. Local difference-of-squares and zero-factor
+translation lemmas avoid broad public algebra rewrites. No characteristic
+assumption is used, and neither `FIELD-EQUIV`, field operations, nor execution
+boundaries change.
+
 The generic polynomial layer is certified through arithmetic, evaluation,
 degree, recursive division, canonical remainder and congruence, reduced
 representative operations, GCD, XGCD, modular inverse, logical irreducibility,

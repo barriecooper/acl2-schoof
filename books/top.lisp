@@ -2,6 +2,8 @@
 (include-book "polynomial/degree")
 (include-book "polynomial/pfield-bridge")
 (include-book "field/kernel")
+(include-book "field/equal-squares")
+(include-book "field/f11-equal-squares")
 (include-book "field/examples/f2")
 (include-book "field/pfield-adapter")
 (include-book "field/frobenius-exponent")
