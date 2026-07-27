@@ -785,6 +785,70 @@
          (declare (ignore q))
          r))))
 
+; A bounded theorem generator for the public DIVMOD contract.  The prefix
+; determines all five public event names.  Splitting the functional
+; substitution by layer makes an invocation auditable while the generated
+; functional instance receives their concatenation.  Concrete fields may
+; append narrowly targeted residual-goal hints without changing this body.
+; A second coefficient field is therefore another invocation with a new
+; prefix, operation symbols, substitutions, and obligations--not a new case
+; in this generator.
+(defmacro def-divmod-public-interface-instance
+  (prefix canonical-polynomial-p normalize poly-add poly-mul poly-degree
+          poly-divmod field-substitution polynomial-substitution
+          division-substitution obligation-hints)
+  (let ((interface-name
+         (acl2::packn (list prefix '-public-interface-from-generic)))
+        (quotient-canonical-name
+         (acl2::packn (list prefix '-quotient-canonical)))
+        (remainder-canonical-name
+         (acl2::packn (list prefix '-remainder-canonical)))
+        (reconstruction-name (acl2::packn (list prefix '-reconstruction)))
+        (degree-bound-name
+         (acl2::packn (list prefix '-final-remainder-degree-bound)))
+        (functional-substitution
+         (append field-substitution polynomial-substitution
+                 division-substitution)))
+    `(progn
+       (defthm ,interface-name
+         (and (,canonical-polynomial-p (mv-nth 0 (,poly-divmod f g)))
+              (,canonical-polynomial-p (mv-nth 1 (,poly-divmod f g)))
+              (equal (,poly-add
+                      (,poly-mul (mv-nth 0 (,poly-divmod f g))
+                                 (,normalize g))
+                      (mv-nth 1 (,poly-divmod f g)))
+                     (,normalize f))
+              (implies (consp (,normalize g))
+                       (or (equal (mv-nth 1 (,poly-divmod f g)) nil)
+                           (< (,poly-degree (mv-nth 1 (,poly-divmod f g)))
+                              (,poly-degree (,normalize g))))))
+         :rule-classes nil
+         :hints
+         (("Goal"
+           :by (:functional-instance poly-divmod-public-interface
+                                     ,@functional-substitution))
+          ,@obligation-hints))
+       (defthm ,quotient-canonical-name
+         (,canonical-polynomial-p (mv-nth 0 (,poly-divmod f g)))
+         :hints (("Goal" :use ,interface-name)))
+       (defthm ,remainder-canonical-name
+         (,canonical-polynomial-p (mv-nth 1 (,poly-divmod f g)))
+         :hints (("Goal" :use ,interface-name)))
+       (defthm ,reconstruction-name
+         (equal (,poly-add
+                 (,poly-mul (mv-nth 0 (,poly-divmod f g)) (,normalize g))
+                 (mv-nth 1 (,poly-divmod f g)))
+                (,normalize f))
+         :rule-classes nil
+         :hints (("Goal" :use ,interface-name)))
+       (defthm ,degree-bound-name
+         (implies (consp (,normalize g))
+                  (or (equal (mv-nth 1 (,poly-divmod f g)) nil)
+                      (< (,poly-degree (mv-nth 1 (,poly-divmod f g)))
+                         (,poly-degree (,normalize g)))))
+         :rule-classes nil
+         :hints (("Goal" :use ,interface-name))))))
+
 ; Divisibility and Euclidean gcd are kept in two small generators so the raw
 ; recursion and its monic post-processing remain separately inspectable.
 (defmacro def-divisibility-instance (divides common-divisor remainder)
