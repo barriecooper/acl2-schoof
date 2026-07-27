@@ -27,4 +27,6 @@
 (include-book "polynomial/generic/modular-inverse")
 (include-book "polynomial/generic/irreducible-modular-inverse")
 (include-book "polynomial/generic/f7-irreducible-modular-inverse")
+(include-book "polynomial/generic/fixed-modulus-field")
+(include-book "polynomial/generic/fixed-modulus-field-f7-regression")
 (include-book "curve/f11-golden")

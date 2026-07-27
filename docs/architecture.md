@@ -21,6 +21,12 @@ representative operations, GCD, XGCD, modular inverse, logical irreducibility,
 the irreducibility-to-monic-GCD-one bridge, and two-sided reduced inverse laws
 under irreducibility and a nonzero representative.
 
+`generic/fixed-modulus-field.lisp` promotes those results to a reusable field
+interface over one constrained nullary irreducible modulus. Its carrier is
+literal remainder fixedness, its operations return canonical remainder
+representatives, and inverse fixes arbitrary input before its explicit zero
+branch. The definitions are ordinary transparent total wrappers.
+
 Named F7 polynomial definitions specialize recursive division, raw and monic
 GCD, raw and monic XGCD, and modular inverse. They have verified guards,
 semantic theorems, and focused exact executions. The generic quadratic root
@@ -45,11 +51,12 @@ Two quotient uses must remain distinct:
 * General polynomial quotients provide Schoof coordinate rings; their moduli
   need not be irreducible and the rings need not be fields.
 
-F7X2 is a proving ground for the first use, not the intended final general
-architecture. No reusable quotient-field constructor is currently certified.
-After the minimal F7X2 field interface is complete, development must pause to
-extract or design the reusable irreducible-quotient-field pattern before
-multiplying presentation-specific instances.
+The reusable fixed-modulus field handles the first use and has an F7
+simultaneous-functional-instantiation regression. That regression is not a
+public concrete F7 quotient API. F7X2 remains a presentation-specific proving
+ground and has not been migrated to the generic interface. The construction
+does not apply to the possibly reducible coordinate-ring moduli in the second
+use.
 
 ## Downstream tracks
 

@@ -14,12 +14,17 @@ leading-coefficient theory, recursive quotient/remainder, modular reduction
 and congruence, reduced representative operations, Euclidean GCD, XGCD,
 modular inverse, a logical irreducibility predicate, the
 irreducibility-to-monic-GCD-one bridge, and two-sided inverse laws for nonzero
-classes modulo an irreducible polynomial.
+classes modulo an irreducible polynomial. The reusable
+`FIXED-MODULUS-FIELD-*` interface packages that stack over a constrained
+nullary irreducible modulus as transparent total field operations on canonical
+remainder representatives.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,
 raw and monic XGCD, and modular inverse, with exact execution regressions. The
-polynomial `x^2+1` is certified irreducible over F7.
+polynomial `x^2+1` is certified irreducible over F7. A dedicated F7 regression
+book checks simultaneous functional instantiation and total boundary behavior;
+it does not introduce a public F7 quotient-field API.
 
 F7X2 is the current concrete proving ground for `F7[x]/(x^2+1)`. It has a
 canonical representative fixer, transparent guard-verified addition,
@@ -28,9 +33,9 @@ zero and one, additive laws and cancellation, multiplicative identities and
 zero laws, multiplication associativity and commutativity, and both
 distributive laws. It is **not yet** a certified field: inversion, the remaining
 field interface, enumeration/cardinality, and Frobenius are open. F7X2 is not
-the intended final general architecture; after its minimal field interface is
-complete, development must pause to extract or design a reusable
-irreducible-quotient-field pattern.
+the reusable field constructor: the generic fixed-modulus field is now that
+certified boundary. F7X2 migration and its remaining field-specific work remain
+separate.
 
 `docs/obligations.md` is the sole detailed status ledger. In particular, an
 executable definition, verified guards, an exact execution regression, and a

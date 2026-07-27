@@ -567,8 +567,9 @@ literal-equality commutative-ring interface and modulus-dependent
 arbitrary representations, with focused fixed-representative corollaries.
 Zero modulus gives normalized polynomial arithmetic; polynomial one and every
 normalized nonzero constant give the trivial ring; positive-degree moduli are
-covered regardless of reducibility. Irreducibility, unit characterization,
-field promotion remains open. The runtime supports both
+covered regardless of reducibility. Unit characterization at arbitrary
+reducible moduli remains open; irreducible fixed-modulus field promotion is
+certified by `generic/fixed-modulus-field.lisp`. The runtime supports both
 reducible Schoof coordinate quotients and moduli later proved irreducible.
 
 `POLY-CONGRUENT-P` remains the only generic quotient-equality relation.  Its
@@ -626,9 +627,10 @@ retains the same uniform body as `F7-POLY-MONIC-EXTENDED-EUCLIDEAN-GCD`: one
 raw call followed only by leading coefficient/inverse, monic normalization, and
 scaling of both coefficients.  Its guards, exact projection, unconditional
 Bézout identity, structural interface, and total executions are certified.
-Polynomial modular inversion, reduction modulo a defining polynomial, quotient
-fields, extension fields, uniqueness, and general associate/unit theory remain
-open.
+Polynomial modular inversion and reduction modulo a defining polynomial are
+certified below. Fixed irreducible moduli are now packaged by the generic
+fixed-modulus field interface; concrete extension clients, uniqueness, and
+general associate/unit theory remain open.
 
 ## Monic XGCD reduction bridge (certified)
 
@@ -681,9 +683,9 @@ This proves that the existing computation is an inverse whenever its certified
 monic GCD is one.  It neither proves the converse characterization of units nor
 that every nonzero representative is invertible.  Reducible quotient rings can
 still have nonzero nonunits and zero divisors; irreducibility remains the later
-hypothesis for field promotion.  Irreducibility implying monic gcd one,
-quotient-field laws, concrete polynomial-field instances, and extension fields
-remain open.
+hypothesis for field promotion. The later irreducibility bridge and
+fixed-modulus field package discharge that promotion; concrete extension
+clients remain open.
 
 
 ## Concrete F7 modular inverse (certified)
@@ -727,5 +729,25 @@ particular, a nonzero representative fixed by `POLY-REMAINDER` cannot be so
 divisible (idempotence would make its remainder simultaneously itself and
 zero), and therefore has monic GCD one.  This is a logical bridge only: the
 existing modular inverse remains the transparent XGCD-derived computation,
-and no quotient field, concrete `F7[x]/(x^2+1)` interface, or new executable
-boundary is added.
+and no concrete `F7[x]/(x^2+1)` interface is added.
+
+## Generic fixed-modulus field (certified)
+
+`generic/fixed-modulus-field.lisp` constrains one nullary modulus with the sole
+mathematical assumption `POLY-IRREDUCIBLE-P`. Its local degree-one monomial is
+only the encapsulation witness, not a public degree restriction. The nine
+ordinary guard-`T` `FIXED-MODULUS-FIELD-*` wrappers use remainder fixed points
+as elements, `nil` as zero, the existing reduced operations, and the existing
+XGCD-derived modular inverse. Inverse fixes arbitrary input first, returns
+quotient zero when that fixed value is zero, and otherwise applies
+`POLY-MODULAR-INVERSE` to the fixed representative.
+
+The complete GFIELD-shaped contract is certified for arbitrary ACL2 objects:
+fixer and closure laws, zero/one separation, additive and multiplicative laws,
+distributivity, inverse closure/fixing, inverse of zero, and the nonzero inverse
+law. `generic/fixed-modulus-field-f7-regression.lisp` simultaneously
+functionally instantiates the coefficient operations, polynomial stack,
+modulus, and wrappers, and records focused canonical, noncanonical, atomic, and
+improper-list executions. It is regression evidence, not a public F7 quotient
+field. Finiteness, cardinality, characteristic inheritance, Frobenius, and a
+general interface for reducible quotient rings are not claimed.
