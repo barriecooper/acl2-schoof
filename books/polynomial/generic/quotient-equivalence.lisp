@@ -22,6 +22,21 @@
                   (equal left right)))
   :hints (("Goal" :use ((:instance poly-congruent-p-iff-equal-remainders)))))
 
+(defthm poly-reduced-p-poly-congruent-p-iff-equal
+  (implies (and (poly-reduced-p left modulus)
+                (poly-reduced-p right modulus))
+           (equal (poly-congruent-p left right modulus)
+                  (equal left right)))
+  :hints
+  (("Goal"
+    :use ((:instance poly-reduced-p-definition
+                     (polynomial left))
+          (:instance poly-reduced-p-definition
+                     (polynomial right))
+          (:instance remainder-fixed-poly-congruent-p-iff-equal))
+    :in-theory (disable poly-reduced-p poly-remainder
+                        poly-congruent-p))))
+
 (defthm poly-congruent-p-polynomial-one-modulus
   (poly-congruent-p left right (polynomial-one))
   :hints (("Goal"

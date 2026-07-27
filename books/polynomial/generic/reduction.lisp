@@ -611,6 +611,56 @@
 
 (verify-guards poly-remainder)
 
+; This is the generic carrier recognizer for canonical quotient
+; representatives.  A later fixed-modulus interface can specialize this
+; binary predicate to a unary recognizer while retaining POLY-REMAINDER as its
+; fixer.
+(defund poly-reduced-p (polynomial modulus)
+  (declare (xargs :guard t))
+  (equal (poly-remainder polynomial modulus)
+         polynomial))
+
+(defthm poly-reduced-p-definition
+  (equal (poly-reduced-p polynomial modulus)
+         (equal (poly-remainder polynomial modulus)
+                polynomial))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable poly-reduced-p))))
+
+(defthm poly-reduced-p-of-poly-remainder
+  (poly-reduced-p (poly-remainder polynomial modulus) modulus)
+  :hints
+  (("Goal"
+    :use ((:instance poly-reduced-p-definition
+                     (polynomial (poly-remainder polynomial modulus)))
+          (:instance poly-remainder-idempotent
+                     (dividend polynomial)))
+    :in-theory (disable poly-reduced-p poly-remainder))))
+
+(defthm poly-reduced-p-iff-canonical-and-degree-bounded
+  (implies
+   (consp (normalize modulus))
+   (equal
+    (poly-reduced-p polynomial modulus)
+    (and (canonical-polynomial-p polynomial)
+         (or (equal polynomial nil)
+             (< (poly-degree polynomial)
+                (poly-degree (normalize modulus)))))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance poly-reduced-p-definition)
+          (:instance poly-remainder-canonical
+                     (dividend polynomial))
+          (:instance poly-remainder-strict-degree-bound
+                     (dividend polynomial))
+          (:instance poly-remainder-canonical-lower-degree
+                     (dividend polynomial)))
+    :in-theory (disable poly-reduced-p poly-remainder normalize
+                        canonical-polynomial-p poly-degree))))
+
+(verify-guards poly-reduced-p)
+
 ; Generic congruence is structural equality of the two canonical remainder
 ; representatives.  It has no nonzero-modulus precondition.
 (defun poly-congruent-p (left right modulus)
