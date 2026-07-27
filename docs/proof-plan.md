@@ -124,8 +124,11 @@ hypothesis. The denominator-nonzero boundary for `:distinct-x` is complete:
 the classifier characterization and a generic additive zero-difference theorem
 show that `x_second - x_first` is nonzero for arbitrary fixed-coordinate
 inputs, without curve membership. The chosen orientation anticipates
-`(y_second - y_first)/(x_second - x_first)`. A distinct-x secant-slope
-boundary is next.  Its concrete prerequisite is complete: the named F11
-runtime has total fixed-input inverse and numerator-first division, including
-the established inverse-of-zero convention.  No slope, division-bearing curve
-formula, or addition is defined yet.
+`(y_second - y_first)/(x_second - x_first)`. The distinct-x secant-slope
+boundary is now complete.  The transparent total
+formula divides `y_second-y_first` by `x_second-x_first` without a classifier
+test or nonzero guard; `:distinct-x` is used only by the non-rewriting
+right-denominator reconstruction theorem.  F11 exercises the generic formula's
+concrete substitution, including total equal-x and malformed semantics.  The
+next narrow boundary is only `x3 = slope^2 - x_first - x_second`; it must stop
+before `y3` or an output point.

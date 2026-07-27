@@ -20,6 +20,8 @@
 (include-book "curve/f11-point-negation")
 (include-book "curve/affine-pair-classification")
 (include-book "curve/f11-affine-pair-classification")
+(include-book "curve/affine-distinct-x-slope")
+(include-book "curve/f11-affine-distinct-x-slope")
 (include-book "curve/affine-pair-curve-classification")
 (include-book "curve/f11-affine-pair-curve-classification")
 
