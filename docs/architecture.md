@@ -39,6 +39,16 @@ depends on the existing characteristic-not-2-or-3 book.  The F11 golden values
 `a=1`, `b=6` validate the concrete boundary.  This is not a point
 representation, group law, formal discriminant theory, or smoothness theorem.
 
+Finite affine coordinates use the transparent proper list `(x y)`, with both
+entries passed through the field fixer.  Atoms, dotted pairs, and proper lists
+whose length is not two all denote canonical `(0 0)`; entries in an exact
+two-list are independently field-fixed.  Fixing is total and idempotent but
+says nothing about curve membership.  The separate recognizer is exactly the
+existing short-Weierstrass equation on the fixed accessors.  F11 validates
+`(2,4)`, `(2,5)`, and noncanonical `(13,15)`.  A later full point type may tag
+infinity separately; no infinity tag, curve operation, group law, Frobenius,
+or counting machinery is added here.
+
 The generic polynomial layer is certified through arithmetic, evaluation,
 degree, recursive division, canonical remainder and congruence, reduced
 representative operations, GCD, XGCD, modular inverse, logical irreducibility,

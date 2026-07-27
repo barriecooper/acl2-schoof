@@ -34,7 +34,10 @@ mathematical characteristic value or leastness theorem is claimed.
 The first generic curve boundary now fixes two constrained coefficients at
 every use, defines the total short-Weierstrass right-hand side and coordinate
 equation, and assumes the standard nonzero `4*a^3 + 27*b^2` expression.  The
-existing F11 golden coefficients validate the executable boundary.  No point
+existing F11 golden coefficients validate the executable boundary.  A separate
+finite-affine boundary uses canonical two-item lists, maps malformed outer
+values to the zero-coordinate pair, and recognizes equation satisfaction
+without manufacturing an on-curve point.  No point at infinity, full point
 representation, group operation, or general discriminant/smoothness theory is
 present.
 
