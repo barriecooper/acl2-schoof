@@ -31,6 +31,13 @@ boundary required by the initial short-Weierstrass scope.  F7 and a
 regression-local modulus-11 client validate functional-instance transport; no
 mathematical characteristic value or leastness theorem is claimed.
 
+The first generic curve boundary now fixes two constrained coefficients at
+every use, defines the total short-Weierstrass right-hand side and coordinate
+equation, and assumes the standard nonzero `4*a^3 + 27*b^2` expression.  The
+existing F11 golden coefficients validate the executable boundary.  No point
+representation, group operation, or general discriminant/smoothness theory is
+present.
+
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,
 raw and monic XGCD, and modular inverse, with exact execution regressions. The
