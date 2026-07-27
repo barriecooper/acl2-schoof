@@ -410,6 +410,20 @@
      '((:definition f7-poly-divmod)
        (:definition f7-poly-divmod-core))))))
 
+; The public remainder wrapper is exactly the second projection of divmod.
+; Consume the total zero-dividend divmod contract without reopening division.
+(defthm f7-poly-remainder-zero-dividend
+  (equal (f7-poly-remainder nil modulus)
+         nil)
+  :hints
+  (("Goal"
+    :use ((:instance f7-poly-divmod-zero-dividend
+                     (modulus modulus)))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '((:definition f7-poly-remainder))))))
+
 ; These two remainder facts are shallow projections of the existing public
 ; divmod semantics.  Neither proof opens a concrete executable definition.
 (defthm f7-poly-remainder-zero-normalized-modulus
@@ -496,6 +510,17 @@
    :hints
    (("Goal"
      :use ((:instance f7-poly-divmod-zero-dividend
+                      (modulus modulus)))
+     :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm f7-poly-remainder-zero-dividend-semantic-consumer
+   (equal
+    (cons (f7-poly-remainder nil modulus) marker)
+    (cons nil marker))
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-remainder-zero-dividend
                       (modulus modulus)))
      :in-theory (theory 'minimal-theory)))))
 
