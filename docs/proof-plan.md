@@ -142,6 +142,8 @@ complete: `affine-distinct-x-output` uses a parallel `LET` and the established
 `affine-coordinates-make` constructor to assemble x3 then y3. Recognition, both
 accessor equations, fixer stability, guard verification, and focused F11
 execution require no classifier hypothesis. This proves canonical representation
-only. The next narrow obligation is the deferred substantive output-y
-rearrangement identity needed before curve closure; tagged points and addition
-remain later.
+only. The output-y rearrangement identity is now complete: the defining formula
+and generic additive cancellation prove, unconditionally and totally, that
+`y3+y_first = slope*(x_first-x3)`. It adds no executable boundary and does not
+prove curve closure. Full distinct-x curve closure is the next dependency
+boundary; tagged-point construction and addition dispatch remain later.

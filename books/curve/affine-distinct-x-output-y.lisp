@@ -41,4 +41,27 @@
      (theory 'minimal-theory)
      '(field-fix-when-field-element-p)))))
 
+(defthm affine-distinct-x-output-y-rearrangement
+  (equal
+   (field-add
+    (affine-distinct-x-output-y first second)
+    (affine-coordinates-y first))
+   (field-mul
+    (affine-distinct-x-slope first second)
+    (field-sub
+     (affine-coordinates-x first)
+     (affine-distinct-x-output-x first second))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(affine-distinct-x-output-y
+       field-sub
+       field-add-associative
+       field-add-inverse-left
+       field-add-zero-right
+       field-fix-of-mul)))))
+
 (verify-guards affine-distinct-x-output-y)
