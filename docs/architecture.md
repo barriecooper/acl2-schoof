@@ -78,6 +78,16 @@ and the additive rearrangement is deferred until a substantive coordinate
 client needs it.  The named F11 operation is direct substitution into this same
 body; it is execution evidence rather than another mathematical theory.
 
+`affine-distinct-x-output(first, second)` is the transparent, total coordinate
+assembly boundary. A parallel `LET` independently calls the certified output-x
+and output-y operations, in that order, and passes them to the existing
+`affine-coordinates-make`; it repeats no scalar arithmetic or redundant fixing.
+Scalar fixed-result laws give recognizer closure, exact x/y accessor rules, and
+affine-fixer stability without classifier, nonzero, or curve hypotheses. The
+direct F11 substitution calls the existing F11 scalar outputs and constructor,
+not a competing mathematical implementation. Equal-x and malformed executions
+are programming semantics, not curve-membership or point-addition claims.
+
 Finite affine coordinates use the transparent proper list `(x y)`, with both
 entries passed through the field fixer.  Atoms, dotted pairs, and proper lists
 whose length is not two all denote canonical `(0 0)`; entries in an exact
