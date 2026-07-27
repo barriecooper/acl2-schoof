@@ -484,6 +484,45 @@
        (:rewrite cdr-cons)
        (:executable-counterpart zp))))))
 
+; Reapplying the public remainder operation is stable for every pair of ACL2
+; objects.  The proof composes only the public canonicality and degree
+; contracts, with explicit structural cases for the normalized modulus and
+; the canonical remainder.
+(defthm f7-poly-remainder-idempotent
+  (equal
+   (f7-poly-remainder
+    (f7-poly-remainder dividend modulus)
+    modulus)
+   (f7-poly-remainder dividend modulus))
+  :hints
+  (("Goal"
+    :cases ((consp (f7-normalize modulus))
+            (consp (f7-poly-remainder dividend modulus)))
+    :use ((:instance f7-poly-remainder-canonical
+                     (f dividend) (g modulus))
+          (:instance f7-poly-remainder-strict-degree-bound
+                     (dividend dividend) (modulus modulus))
+          (:instance f7-poly-remainder-zero-dividend
+                     (modulus modulus))
+          (:instance f7-canonical-polynomial-atom-is-nil
+                     (polynomial
+                      (f7-poly-remainder dividend modulus)))
+          (:instance f7-canonical-polynomial-p-of-normalize
+                     (xs modulus))
+          (:instance f7-canonical-polynomial-atom-is-nil
+                     (polynomial (f7-normalize modulus)))
+          (:instance f7-poly-remainder-canonical-lower-degree
+                     (dividend (f7-poly-remainder dividend modulus))
+                     (modulus modulus))
+          (:instance f7-poly-remainder-zero-normalized-modulus
+                     (dividend dividend) (modulus modulus))
+          (:instance f7-poly-remainder-zero-normalized-modulus
+                     (dividend (f7-poly-remainder dividend modulus))
+                     (modulus modulus))
+          (:instance f7-normalize-when-canonical
+                     (xs (f7-poly-remainder dividend modulus))))
+    :in-theory (theory 'minimal-theory))))
+
 ; Focused closed-theory consumers keep the independent public contracts honest
 ; without suggesting an algebraic composition that is not yet needed.
 (local
@@ -565,6 +604,25 @@
    (("Goal"
      :use ((:instance f7-poly-remainder-canonical-lower-degree))
      :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm f7-poly-remainder-idempotent-semantic-consumer
+   (equal
+    (cons
+     (f7-poly-remainder
+      (f7-poly-remainder dividend modulus)
+      modulus)
+     marker)
+    (cons
+     (f7-poly-remainder dividend modulus)
+     marker))
+   :hints
+   (("Goal"
+     :in-theory (theory 'minimal-theory)
+     :use
+     ((:instance f7-poly-remainder-idempotent
+                 (dividend dividend)
+                 (modulus modulus)))))))
 
 (defthm f7-poly-divmod-nonzero-constant-regression
   (equal (f7-poly-divmod '(1 2 3) '(2)) (mv '(4 1 5) nil)))
