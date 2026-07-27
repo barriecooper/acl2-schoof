@@ -395,6 +395,21 @@
            (equal (f7-poly-divmod f g) (mv nil (f7-normalize f))))
   :hints (("Goal" :in-theory (enable f7-poly-divmod f7-poly-divmod-core))))
 
+; The literal zero dividend enters the top-level no-step branch for every
+; normalized modulus.  Keep the normalization implementation closed and use
+; its public zero-input contract explicitly.
+(defthm f7-poly-divmod-zero-dividend
+  (equal (f7-poly-divmod nil modulus)
+         (mv nil nil))
+  :hints
+  (("Goal"
+    :use ((:instance f7-normalize-nil))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '((:definition f7-poly-divmod)
+       (:definition f7-poly-divmod-core))))))
+
 ; These two remainder facts are shallow projections of the existing public
 ; divmod semantics.  Neither proof opens a concrete executable definition.
 (defthm f7-poly-remainder-zero-normalized-modulus
@@ -471,6 +486,17 @@
    :hints
    (("Goal"
      :use ((:instance f7-normalize-nil))
+     :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm f7-poly-divmod-zero-dividend-semantic-consumer
+   (equal
+    (cons (f7-poly-divmod nil modulus) marker)
+    (cons (mv nil nil) marker))
+   :hints
+   (("Goal"
+     :use ((:instance f7-poly-divmod-zero-dividend
+                      (modulus modulus)))
      :in-theory (theory 'minimal-theory)))))
 
 (local
