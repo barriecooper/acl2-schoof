@@ -155,6 +155,18 @@ may overlap for self-inverse y, and an identical self-inverse pair remains
 semantics, classifier symmetry remains deferred, and no slope, division,
 addition, doubling, scalar multiplication, or group law is added.
 
+The structural classifier also exports the non-rewriting theorem
+`affine-pair-classify-distinct-x-implies-x-difference-nonzero`. It chooses
+`x_second - x_first`, matching the conventional ordered future secant quotient,
+and needs no curve-membership hypothesis. The non-rewriting generic field
+theorem `field-sub-equal-zero-implies-fixed-equal` supplies the additive
+contrapositive: zero subtraction equates fixed representatives, not arbitrary
+raw ACL2 objects. Fixed accessors therefore cover noncanonical entries, while
+malformed outer inputs retain the affine fixer's `(0 0)` fallback. Focused F11
+executions cover both pair orders, distinct and equal fixed representatives,
+noncanonical inputs, and off-curve inputs. No inverse is used and no slope or
+addition operation is introduced.
+
 Before any slope or addition operation, the affine-coordinate layer classifies
 two arbitrary objects after applying `affine-coordinates-fix` to both. The
 canonical keyword result is selected by distinct x first, then opposite y,

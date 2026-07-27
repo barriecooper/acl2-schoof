@@ -40,6 +40,29 @@
                               (affine-coordinates-x-of-fix
                                affine-coordinates-y-of-fix)))))
 
+; The orientation anticipates the conventional ordered secant quotient:
+; (y_second - y_first) / (x_second - x_first).  This theorem establishes only
+; its additive denominator precondition; it introduces no division or slope.
+(defthm affine-pair-classify-distinct-x-implies-x-difference-nonzero
+  (implies
+   (equal (affine-pair-classify first second) :distinct-x)
+   (not (equal (field-sub (affine-coordinates-x second)
+                          (affine-coordinates-x first))
+               (field-zero))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use (affine-pair-classify-distinct-x-characterization
+          (:instance field-sub-equal-zero-implies-fixed-equal
+                     (first (affine-coordinates-x second))
+                     (second (affine-coordinates-x first))))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(field-element-p-of-affine-coordinates-x
+       field-fix-when-field-element-p
+       affine-coordinates-x-of-fix)))))
+
 (defthm affine-pair-classify-opposite-y-characterization
   (equal (equal (affine-pair-classify first second) :opposite-y)
          (and (equal (affine-coordinates-x (affine-coordinates-fix first))

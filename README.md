@@ -58,6 +58,10 @@ no characteristic restriction and remains valid in characteristic two.
 The generic curve layer uses that result to exclude `:same-x-other` for two
 affine points satisfying the same constrained short-Weierstrass equation; the
 total classifier remains unchanged and retains that result off curve.
+Classification as `:distinct-x` now also certifies, without curve membership,
+that the ordered difference `x_second - x_first` is nonzero. This is the
+denominator precondition for a later conventional secant quotient; no slope,
+division-bearing curve formula, or addition operation is defined yet.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,

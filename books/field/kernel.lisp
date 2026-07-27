@@ -192,6 +192,14 @@
   (equal (field-mul x (field-zero)) (field-zero)))
 (defthm field-sub-self (equal (field-sub x x) (field-zero)))
 (defthm field-sub-zero (equal (field-sub x (field-zero)) (field-fix x)))
+(defthm field-sub-equal-zero-implies-fixed-equal
+  (implies (equal (field-sub first second) (field-zero))
+           (equal (field-fix first) (field-fix second)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance field-additive-inverse-unique
+                            (x (field-neg second)) (y first)))
+           :in-theory (enable field-sub))))
 (defthm field-mul-one-right
   (equal (field-mul x (field-one)) (field-fix x)))
 
