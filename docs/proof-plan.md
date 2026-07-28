@@ -146,6 +146,10 @@ only. Both scalar rearrangement interfaces are now complete: the transparent
 definitions and generic additive cancellation prove, unconditionally and
 totally, `x3+x_first+x_second = slope^2` and
 `y3+y_first = slope*(x_first-x3)`. They add no executable boundary, and no
-claim is made that these identities alone prove curve closure. Full distinct-x
-curve closure remains open; tagged-point construction, addition dispatch, and
-later group-law work remain deferred.
+claim is made that these identities alone prove curve closure. The generic
+distinct-x secant identity is now complete: both input curve equations, slope
+reconstruction and its classifier-supplied nonzero denominator, and both scalar
+rearrangements derive `slope*(y_first-y3) = x3^2+x3*x_first+x_first^2+a`.
+This is a proof-only curve-specific intermediate, not output curve membership.
+Full distinct-x curve closure remains open; tagged-point construction, addition
+dispatch, and later group-law work remain deferred.

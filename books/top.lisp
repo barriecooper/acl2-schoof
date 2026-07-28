@@ -28,6 +28,7 @@
 (include-book "curve/f11-affine-distinct-x-output-y")
 (include-book "curve/affine-distinct-x-output")
 (include-book "curve/f11-affine-distinct-x-output")
+(include-book "curve/affine-distinct-x-secant-identity")
 (include-book "curve/affine-pair-curve-classification")
 (include-book "curve/f11-affine-pair-curve-classification")
 
