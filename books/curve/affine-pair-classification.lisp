@@ -97,6 +97,31 @@
                               (affine-coordinates-x-of-fix
                                affine-coordinates-y-of-fix)))))
 
+; This is the exact denominator anticipated by the conventional tangent
+; quotient.  Classification supplies the non-self-inverse y fact; additive
+; inverse uniqueness turns a zero doubled y back into the excluded equality.
+(defthm affine-pair-classify-same-point-non-opposite-implies-tangent-denominator-nonzero
+  (implies
+   (equal (affine-pair-classify first second)
+          :same-point-non-opposite)
+   (not (equal (field-add (affine-coordinates-y first)
+                          (affine-coordinates-y first))
+               (field-zero))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    (affine-pair-classify-same-point-non-opposite-characterization
+     (:instance field-additive-inverse-unique
+                (x (affine-coordinates-y first))
+                (y (affine-coordinates-y first))))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(field-element-p-of-affine-coordinates-y
+       field-fix-when-field-element-p
+       affine-coordinates-y-of-fix)))))
+
 (defthm affine-pair-classify-same-x-other-characterization
   (equal (equal (affine-pair-classify first second) :same-x-other)
          (and (equal (affine-coordinates-x (affine-coordinates-fix first))

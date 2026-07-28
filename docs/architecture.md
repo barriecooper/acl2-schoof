@@ -249,6 +249,14 @@ executions cover both pair orders, distinct and equal fixed representatives,
 noncanonical inputs, and off-curve inputs. No inverse is used and no slope or
 addition operation is introduced.
 
+For `:same-point-non-opposite`, the structural classifier exports the
+non-rewriting theorem that the exact future tangent denominator
+`FIELD-ADD(y_first,y_first)` is nonzero.  The existing characterization
+supplies that fixed `y_first` is not its own negation, and generic additive-
+inverse uniqueness rules out a zero doubled value.  This uses no curve or
+characteristic hypothesis and adds no tangent formula, doubling operation,
+dispatch, closure result, or group-law claim.
+
 Before any slope or addition operation, the affine-coordinate layer classifies
 two arbitrary objects after applying `affine-coordinates-fix` to both. The
 canonical keyword result is selected by distinct x first, then opposite y,

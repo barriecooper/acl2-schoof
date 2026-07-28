@@ -187,3 +187,13 @@ cover both orders of `(2,4)` and `(3,5)`, distinct and equal noncanonical x
 representatives, equal x, and an off-curve distinct-x pair. Malformed behavior
 remains inherited from affine fixing, classifier symmetry remains deferred,
 and no slope, inverse use, division-bearing curve formula, or addition is added.
+
+Closed: `affine-pair-classify-same-point-non-opposite-implies-tangent-denominator-nonzero`
+proves from the classifier premise alone that the exact future tangent
+denominator `field-add(y_first,y_first)` is not `field-zero`.  The existing
+same-point characterization excludes self-inverse fixed y, and the existing
+generic `field-additive-inverse-unique` theorem supplies the contradiction if
+the doubled value is zero.  A focused F11 assertion checks denominator 8 for
+`(2,4)` paired with itself.  No curve-membership or characteristic hypothesis,
+new field lemma, tangent slope, doubling coordinate, dispatcher, addition,
+closure result, or group-law theorem is introduced.
