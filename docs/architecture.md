@@ -103,6 +103,14 @@ curve interface. Its difference-of-squares, difference-of-cubes, cancellation,
 and reassociation support remains local to the book. It adds no operation, F11
 mirror, executable boundary, or output curve-membership claim.
 
+The following proof-only `affine-distinct-x-closure` book combines that public
+secant identity with the output-y rearrangement, the first input curve equation,
+and the assembled output's x/y projections.  Under curve membership of both
+inputs and `:distinct-x` classification it certifies the existing untagged
+coordinate output with `short-weierstrass-affine-point-p`.  Its elementary
+field-algebra bridges remain local.  It introduces no operation, tagged point,
+F11 mirror, executable boundary, dispatch, or group-law claim.
+
 Finite affine coordinates use the transparent proper list `(x y)`, with both
 entries passed through the field fixer.  Atoms, dotted pairs, and proper lists
 whose length is not two all denote canonical `(0 0)`; entries in an exact
