@@ -210,3 +210,16 @@ the on-curve `(2,4)` example: numerator 2, denominator 8, inverse 7, slope 3,
 and product 2.  Total execution elsewhere is not geometric correctness.  No
 doubling coordinate or point, dispatcher, general addition, closure theorem,
 addition specification, or group-law theorem is introduced.
+
+Closed: `CURVE-SAME-POINT-NON-OPPOSITE-OUTPUT-X` adds only the unary transparent
+total `affine-same-point-non-opposite-output-x`.  It directly depends on the
+existing tangent-slope book and computes `m*m-(1+1)*x_first`, with field two
+formed by repeated addition and placed on the left of multiplication.  Its
+only public proof interface is unconditional field-element closure and fixer
+stability; it uses no classifier, denominator, reconstruction, curve-membership,
+or characteristic theorem.  The F11 named-operation substitution checks slope
+3, square 9, field two 2, doubled x 4, and output 5 at `(2,4)`.  Arbitrary,
+malformed, noncanonical, off-curve, wrong-branch, and zero-denominator inputs
+retain total field semantics, not geometric doubling correctness.  No output y,
+complete or tagged doubled point, dispatcher, general addition, curve closure,
+addition specification, or group-law theorem is introduced.

@@ -58,10 +58,14 @@ and generic additive-inverse uniqueness.  The transparent total unary
 `(3*x_first^2+a)/(y_first+y_first)`, with field closure and fixing everywhere
 and conditional right-denominator reconstruction under that classifier result.
 Its F11 execution checks the on-curve point `(2,4)`: numerator 2, denominator
-8, inverse 7, and slope 3.  Execution outside the selected branch is only total
-field programming semantics, not a geometric tangent claim.  No doubling
-coordinate, tagged doubled point, dispatcher, addition, closure theorem,
-addition specification, or group-law theorem is defined.
+8, inverse 7, and slope 3.  The transparent total unary
+`affine-same-point-non-opposite-output-x` reuses that slope and computes
+`m*m-(1+1)*x_first`; it is field-valued and fixed without a classifier
+hypothesis, and F11 checks slope/square/doubled-x/output values 3/9/4/5.
+Execution outside the selected branch is only total field programming
+semantics, not a geometric tangent or doubling claim.  No doubling output y,
+complete or tagged doubled point, dispatcher, general addition, closure
+theorem, addition specification, or group-law theorem is defined.
 
 The generic field layer also certifies that equal squares have equal fixed
 representatives or fixed representatives related by `FIELD-NEG`. The proof has

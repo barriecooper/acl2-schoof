@@ -261,9 +261,13 @@ fixed constrained coefficient `a`, and divides by that exact doubled-y
 denominator.  Its non-rewriting reconstruction theorem takes the classified
 pair as its sole hypothesis and consumes the public denominator theorem.
 Malformed, noncanonical, off-curve, wrong-branch, and zero-denominator inputs
-retain total field semantics; they are not geometric tangent claims.  No
-doubling coordinate, tagged doubled point, dispatch, closure result, addition
-specification, or group-law claim is added.
+retain total field semantics; they are not geometric tangent claims.  The
+parallel unary scalar boundary `affine-same-point-non-opposite-output-x` binds
+that slope once and computes the conventional `m*m-(1+1)*x_first`, using field
+subtraction and the left scalar-factor convention.  It is unconditionally
+field-valued and fixed, but execution outside the classifier branch is not a
+geometric doubling claim.  No output y, complete or tagged doubled point,
+dispatch, closure result, addition specification, or group-law claim is added.
 
 Before any slope or addition operation, the affine-coordinate layer classifies
 two arbitrary objects after applying `affine-coordinates-fix` to both. The
