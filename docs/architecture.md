@@ -111,6 +111,16 @@ coordinate output with `short-weierstrass-affine-point-p`.  Its elementary
 field-algebra bridges remain local.  It introduces no operation, tagged point,
 F11 mirror, executable boundary, dispatch, or group-law claim.
 
+`affine-distinct-x-output-point(first, second)` is the next ordinary transparent
+DEFUN.  It passes the already canonical coordinate output directly to
+`curve-point-affine-coordinates`, so arbitrary inputs always produce an affine
+tag and never infinity.  Structural recognition and coordinate projection are
+unconditional; full short-Weierstrass curve membership is a separate
+non-rewriting theorem under the two input-membership hypotheses and
+`:distinct-x`.  The proof is only the existing affine closure theorem plus the
+established affine-constructor semantic bridge.  Its named F11 substitution
+checks the tagged boundary without defining another mathematical algorithm.
+
 Finite affine coordinates use the transparent proper list `(x y)`, with both
 entries passed through the field fixer.  Atoms, dotted pairs, and proper lists
 whose length is not two all denote canonical `(0 0)`; entries in an exact

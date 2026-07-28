@@ -92,8 +92,14 @@ equations and `:distinct-x`. This proof-only intermediate introduces no new
 operation.  The generic closure theorem combines it with the output-y
 rearrangement, the first input equation, and the assembled output projections
 to certify that the existing untagged output lies on the curve.  Both inputs
-must lie on the curve and classify as `:distinct-x`.  No tagged output point,
-classifier dispatch, addition, other classifier branch, or group law is defined.
+must lie on the curve and classify as `:distinct-x`.  The transparent
+`affine-distinct-x-output-point` wrapper now passes that canonical output to the
+established affine full-point constructor.  It is always a structurally valid
+affine-tagged point, exposes the assembled coordinates through the existing
+accessor, and satisfies the full curve-point predicate under exactly those
+three closure hypotheses.  A focused F11 substitution checks the tagged
+representation and total malformed/equal-x behavior.  No classifier dispatch,
+addition, other classifier branch, or group law is defined.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,
