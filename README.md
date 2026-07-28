@@ -84,9 +84,12 @@ existing scalar fixed-result theorems yield a canonical proper two-list, public
 x/y projection equations, and fixer stability on all ACL2 inputs. The F11
 substitution reuses the named F11 scalar outputs and checks `(0 0)`, `(9 5)`,
 `(6 10)`, noncanonical `(0 0)`, malformed-input `(1 9)`, and equal-x total
-programming result `(7 7)`. Canonical representation is not curve membership;
-the two scalar rearrangement identities do not by themselves prove curve
-closure. No output point,
+programming result `(7 7)`. Canonical representation is not curve membership.
+The two scalar rearrangement identities now feed the non-rewriting generic
+`affine-distinct-x-secant-identity`, which derives
+`slope*(y_first-y3) = x3^2+x3*x_first+x_first^2+a` from both input curve
+equations and `:distinct-x`. This proof-only intermediate introduces no new
+operation and does not itself prove curve closure. No output point,
 classifier dispatch, curve closure, or addition is defined.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7

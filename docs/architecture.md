@@ -95,6 +95,14 @@ direct F11 substitution calls the existing F11 scalar outputs and constructor,
 not a competing mathematical implementation. Equal-x and malformed executions
 are programming semantics, not curve-membership or point-addition claims.
 
+The proof-only `affine-distinct-x-secant-identity` composes both input curve
+equations, the classifier-backed slope reconstruction, and both non-rewriting
+scalar rearrangements. It exposes
+`slope*(y_first-y3) = x3^2+x3*x_first+x_first^2+a` as one controlled generic
+curve interface. Its difference-of-squares, difference-of-cubes, cancellation,
+and reassociation support remains local to the book. It adds no operation, F11
+mirror, executable boundary, or output curve-membership claim.
+
 Finite affine coordinates use the transparent proper list `(x y)`, with both
 entries passed through the field fixer.  Atoms, dotted pairs, and proper lists
 whose length is not two all denote canonical `(0 0)`; entries in an exact
