@@ -68,8 +68,10 @@ by zero returns zero by total programming semantics and is not a secant claim.
 The transparent total boundary `affine-distinct-x-output-x` squares that
 slope by direct self-multiplication and computes the left-associated formula
 `(slope^2-x_first)-x_second`.  It is field-valued and fixed without a classifier
-hypothesis; F11 checks canonical, noncanonical, malformed, and equal-x total
-executions.  The following transparent total boundary,
+hypothesis. Its non-rewriting rearrangement theorem proves the unconditional
+total identity `x3+x_first+x_second = slope^2`; F11 checks canonical,
+noncanonical, malformed, and equal-x total executions. The following transparent
+total boundary,
 `affine-distinct-x-output-y`, reuses both certified scalar operations and
 computes `slope*(x_first-x3)-y_first`; it too is field-valued and fixed without
 a classifier hypothesis.  Its non-rewriting rearrangement theorem proves the
@@ -83,7 +85,8 @@ x/y projection equations, and fixer stability on all ACL2 inputs. The F11
 substitution reuses the named F11 scalar outputs and checks `(0 0)`, `(9 5)`,
 `(6 10)`, noncanonical `(0 0)`, malformed-input `(1 9)`, and equal-x total
 programming result `(7 7)`. Canonical representation is not curve membership;
-the rearrangement identity does not prove curve closure. No output point,
+the two scalar rearrangement identities do not by themselves prove curve
+closure. No output point,
 classifier dispatch, curve closure, or addition is defined.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
