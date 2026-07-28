@@ -254,8 +254,16 @@ non-rewriting theorem that the exact future tangent denominator
 `FIELD-ADD(y_first,y_first)` is nonzero.  The existing characterization
 supplies that fixed `y_first` is not its own negation, and generic additive-
 inverse uniqueness rules out a zero doubled value.  This uses no curve or
-characteristic hypothesis and adds no tangent formula, doubling operation,
-dispatch, closure result, or group-law claim.
+characteristic hypothesis.  The unary transparent total operation
+`affine-same-point-non-opposite-slope` uses the left-associated field numeral
+`((1+1)+1)`, multiplies it on the left by `x_first*x_first`, adds the explicitly
+fixed constrained coefficient `a`, and divides by that exact doubled-y
+denominator.  Its non-rewriting reconstruction theorem takes the classified
+pair as its sole hypothesis and consumes the public denominator theorem.
+Malformed, noncanonical, off-curve, wrong-branch, and zero-denominator inputs
+retain total field semantics; they are not geometric tangent claims.  No
+doubling coordinate, tagged doubled point, dispatch, closure result, addition
+specification, or group-law claim is added.
 
 Before any slope or addition operation, the affine-coordinate layer classifies
 two arbitrary objects after applying `affine-coordinates-fix` to both. The
