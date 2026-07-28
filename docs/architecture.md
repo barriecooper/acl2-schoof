@@ -62,7 +62,11 @@ DEFUN.  A local `slope` binding reuses that certified operation, direct
 calls implement `(slope^2-x_first)-x_second` in that order.  Total fixed
 accessors make the result total, field-valued, and fixed with no classifier
 test, nonzero guard, or curve hypothesis.  Consequently no decorative
-`:distinct-x` theorem is published.  Its named F11 operation is the established
+`:distinct-x` theorem is published. Its non-rewriting rearrangement theorem
+exposes the unconditional total identity `x3+x_first+x_second = slope^2`,
+with the displayed left association matching later scalar-sum consumption. It
+adds no executable boundary or curve-closure claim. Its named F11 operation is
+the established
 direct substitution of concrete operations into the same body, not a parallel
 mathematical theory.
 
