@@ -155,6 +155,10 @@ Generic distinct-x curve closure is now complete: the secant identity,
 output-y rearrangement, first input curve equation, and assembled output
 projections prove that the existing untagged coordinate output satisfies the
 affine-point predicate when both inputs are curve points classified as
-`:distinct-x`.  This proof-only result adds no executable or F11 boundary.
-Tagged output-point construction, addition dispatch, every other classifier
-case, and later group-law work remain deferred.
+`:distinct-x`.  This proof-only result adds no executable or F11 boundary.  The
+tagged distinct-x output boundary is also complete: a transparent wrapper uses
+the established affine full-point constructor, is structurally valid and
+projects to the canonical assembled output unconditionally, and satisfies the
+full curve-point predicate under exactly the same three semantic hypotheses.
+Its F11 substitution is execution evidence only.  Addition dispatch, every
+other classifier case, and later group-law work remain deferred.
