@@ -223,3 +223,22 @@ malformed, noncanonical, off-curve, wrong-branch, and zero-denominator inputs
 retain total field semantics, not geometric doubling correctness.  No output y,
 complete or tagged doubled point, dispatcher, general addition, curve closure,
 addition specification, or group-law theorem is introduced.
+
+
+Closed: `CURVE-SAME-POINT-NON-OPPOSITE-OUTPUT-Y` adds only the unary transparent
+total `affine-same-point-non-opposite-output-y`.  Its direct dependency is the
+existing output-x book, which supplies both the tangent-slope and output-x
+interfaces.  Parallel bindings reuse those operations and compute exactly
+`m*(x_first-x3)-y_first` with `FIELD-SUB` for both ordered differences.  The
+only public proof interface is unconditional field-element closure and fixer
+stability, using the two component closure theorems, fixed affine-accessor
+closure, and field multiplication/addition/negation closure through
+subtraction.  No local supporting lemma is required.  F11 checks slope/output
+x/difference/product/output y values 3/5/8/2/9 at `(2,4)`.  Output x recomputes
+the slope internally, consistently with the transparent distinct-x pipeline;
+no execution refactor or alternate path is introduced.  Arbitrary, malformed,
+noncanonical, off-curve, wrong-branch, zero-denominator, and characteristic-two
+inputs retain total field semantics, not geometric doubling correctness.  The
+two scalar outputs do not form a complete affine result.  No complete or tagged
+doubled point, dispatcher, general addition, curve closure, addition or
+doubling specification, or group-law theorem is introduced.

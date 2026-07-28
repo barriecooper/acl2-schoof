@@ -262,12 +262,19 @@ denominator.  Its non-rewriting reconstruction theorem takes the classified
 pair as its sole hypothesis and consumes the public denominator theorem.
 Malformed, noncanonical, off-curve, wrong-branch, and zero-denominator inputs
 retain total field semantics; they are not geometric tangent claims.  The
-parallel unary scalar boundary `affine-same-point-non-opposite-output-x` binds
-that slope once and computes the conventional `m*m-(1+1)*x_first`, using field
-subtraction and the left scalar-factor convention.  It is unconditionally
-field-valued and fixed, but execution outside the classifier branch is not a
-geometric doubling claim.  No output y, complete or tagged doubled point,
-dispatch, closure result, addition specification, or group-law claim is added.
+unary scalar boundary `affine-same-point-non-opposite-output-x` binds that
+slope and computes the conventional `m*m-(1+1)*x_first`, using field subtraction
+and the left scalar-factor convention.  The parallel-binding unary output-y
+boundary reuses the slope and output-x operations and spells the conventional
+formula exactly as `m*(x_first-x3)-y_first`, with `FIELD-SUB` at both ordered
+subtractions and the slope as the left multiplication operand.  No explicit
+fixes are needed because the accessors and both component operations are
+field-valued.  As in distinct-x output y, the independent composition means
+output x recomputes its slope; no performance boundary is introduced.  Both
+scalars are unconditionally field-valued and fixed, but execution outside the
+classifier branch is not a geometric doubling claim and the scalars are not a
+complete affine result.  No complete or tagged doubled point, dispatch, closure
+result, addition or doubling specification, or group-law claim is added.
 
 Before any slope or addition operation, the affine-coordinate layer classifies
 two arbitrary objects after applying `affine-coordinates-fix` to both. The
