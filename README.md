@@ -89,8 +89,11 @@ The two scalar rearrangement identities now feed the non-rewriting generic
 `affine-distinct-x-secant-identity`, which derives
 `slope*(y_first-y3) = x3^2+x3*x_first+x_first^2+a` from both input curve
 equations and `:distinct-x`. This proof-only intermediate introduces no new
-operation and does not itself prove curve closure. No output point,
-classifier dispatch, curve closure, or addition is defined.
+operation.  The generic closure theorem combines it with the output-y
+rearrangement, the first input equation, and the assembled output projections
+to certify that the existing untagged output lies on the curve.  Both inputs
+must lie on the curve and classify as `:distinct-x`.  No tagged output point,
+classifier dispatch, addition, other classifier branch, or group law is defined.
 
 Named executable prime-field instances include F2, F7, and F11. The concrete F7
 polynomial stack includes guard-verified recursive division, raw and monic GCD,

@@ -151,5 +151,10 @@ distinct-x secant identity is now complete: both input curve equations, slope
 reconstruction and its classifier-supplied nonzero denominator, and both scalar
 rearrangements derive `slope*(y_first-y3) = x3^2+x3*x_first+x_first^2+a`.
 This is a proof-only curve-specific intermediate, not output curve membership.
-Full distinct-x curve closure remains open; tagged-point construction, addition
-dispatch, and later group-law work remain deferred.
+Generic distinct-x curve closure is now complete: the secant identity,
+output-y rearrangement, first input curve equation, and assembled output
+projections prove that the existing untagged coordinate output satisfies the
+affine-point predicate when both inputs are curve points classified as
+`:distinct-x`.  This proof-only result adds no executable or F11 boundary.
+Tagged output-point construction, addition dispatch, every other classifier
+case, and later group-law work remain deferred.
