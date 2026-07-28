@@ -163,9 +163,15 @@ full curve-point predicate under exactly the same three semantic hypotheses.
 Its F11 substitution is execution evidence only.  Addition dispatch, every
 other classifier case, and later group-law work remain deferred.
 
-The denominator-nonzero prerequisite for the equal non-opposite branch is now
-also complete.  `:same-point-non-opposite` supplies the non-self-inverse fixed
-y-coordinate, and additive-inverse uniqueness proves that the exact future
-tangent denominator `y_first+y_first` is nonzero without curve-membership or
-characteristic hypotheses.  No tangent slope, doubling coordinate, dispatcher,
-general addition, closure result, or group-law theorem is yet defined.
+The denominator-nonzero prerequisite and tangent-slope scalar boundary for the
+equal non-opposite branch are now complete.  `:same-point-non-opposite`
+supplies the non-self-inverse fixed y-coordinate, and additive-inverse
+uniqueness proves that `y_first+y_first` is nonzero without curve-membership or
+characteristic hypotheses.  The unary transparent total slope computes
+`(((1+1)+1)*(x_first*x_first)+field-fix(a))/(y_first+y_first)`; its conditional
+non-rewriting theorem reconstructs that numerator by consuming the public
+denominator result and generic division reconstruction.  F11 checks the exact
+intermediates at the on-curve point `(2,4)`.  Total execution outside the
+classifier branch is not a tangent correctness claim.  No doubling coordinate,
+tagged doubled point, dispatcher, general addition, closure theorem, addition
+specification, or group-law theorem is yet defined.

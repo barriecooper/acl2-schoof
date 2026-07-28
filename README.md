@@ -51,10 +51,17 @@ for two fixed coordinate pairs. It returns exactly one of `:distinct-x`,
 tested before coordinate equality so an identical self-inverse pair enters the
 opposite-y case. The classifier is structural, includes off-curve and
 malformed inputs through affine fixing, and defines no slope or addition.
-The equal, non-opposite branch now certifies that the exact future tangent
+The equal, non-opposite branch certifies that the exact tangent
 denominator `y_first+y_first` is nonzero, using only structural classification
-and generic additive-inverse uniqueness.  No tangent slope or doubling
-operation is defined.
+and generic additive-inverse uniqueness.  The transparent total unary
+`affine-same-point-non-opposite-slope` computes exactly
+`(3*x_first^2+a)/(y_first+y_first)`, with field closure and fixing everywhere
+and conditional right-denominator reconstruction under that classifier result.
+Its F11 execution checks the on-curve point `(2,4)`: numerator 2, denominator
+8, inverse 7, and slope 3.  Execution outside the selected branch is only total
+field programming semantics, not a geometric tangent claim.  No doubling
+coordinate, tagged doubled point, dispatcher, addition, closure theorem,
+addition specification, or group-law theorem is defined.
 
 The generic field layer also certifies that equal squares have equal fixed
 representatives or fixed representatives related by `FIELD-NEG`. The proof has

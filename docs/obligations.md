@@ -194,6 +194,19 @@ denominator `field-add(y_first,y_first)` is not `field-zero`.  The existing
 same-point characterization excludes self-inverse fixed y, and the existing
 generic `field-additive-inverse-unique` theorem supplies the contradiction if
 the doubled value is zero.  A focused F11 assertion checks denominator 8 for
-`(2,4)` paired with itself.  No curve-membership or characteristic hypothesis,
-new field lemma, tangent slope, doubling coordinate, dispatcher, addition,
-closure result, or group-law theorem is introduced.
+`(2,4)` paired with itself.  No curve-membership or characteristic hypothesis
+or new field lemma is introduced.
+
+Closed: `CURVE-SAME-POINT-NON-OPPOSITE-TANGENT-SLOPE` adds the unary transparent
+total `affine-same-point-non-opposite-slope`, with exact numerator
+`((1+1)+1)*(x_first*x_first)+field-fix(a)` and exact denominator
+`y_first+y_first`.  Its direct dependencies are affine-pair classification
+(including the public tangent-denominator theorem), affine-coordinate
+accessors, the constrained coefficient interface, field closure/fixing, and
+`field-div-mul-denominator`.  Closure and fixer stability are unconditional;
+the non-rewriting numerator reconstruction theorem requires only the
+`:same-point-non-opposite` classification of `first` and `second`.  F11 checks
+the on-curve `(2,4)` example: numerator 2, denominator 8, inverse 7, slope 3,
+and product 2.  Total execution elsewhere is not geometric correctness.  No
+doubling coordinate or point, dispatcher, general addition, closure theorem,
+addition specification, or group-law theorem is introduced.
