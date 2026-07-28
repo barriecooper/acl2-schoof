@@ -174,8 +174,14 @@ denominator result and generic division reconstruction.  F11 checks the exact
 intermediates at the on-curve point `(2,4)`.  The next scalar boundary is also
 complete: unary `affine-same-point-non-opposite-output-x` reuses that slope and
 computes exactly `m*m-(1+1)*x_first`, with unconditional field closure and
-fixing and focused F11 execution yielding 5.  Total execution outside the
-classifier branch is neither tangent nor geometric doubling correctness.  No
-doubling output y, complete or tagged doubled point, dispatcher, general
-addition, closure theorem, addition specification, or group-law theorem is yet
-defined.
+fixing and focused F11 execution yielding 5.  Unary
+`affine-same-point-non-opposite-output-y` is now also complete: parallel
+bindings reuse the slope and output-x operations and compute exactly
+`m*(x_first-x3)-y_first`, with the same unconditional closure and fixing; F11
+execution yields 9.  Output x consequently recomputes the slope internally,
+matching the transparent distinct-x composition rather than introducing a
+performance refactor.  Total execution outside the classifier branch is
+neither tangent nor geometric doubling correctness, and these scalars alone
+are not an affine coordinate result.  No complete or tagged doubled point,
+dispatcher, general addition, closure theorem, addition or doubling
+specification, or group-law theorem is yet defined.

@@ -62,10 +62,16 @@ Its F11 execution checks the on-curve point `(2,4)`: numerator 2, denominator
 `affine-same-point-non-opposite-output-x` reuses that slope and computes
 `m*m-(1+1)*x_first`; it is field-valued and fixed without a classifier
 hypothesis, and F11 checks slope/square/doubled-x/output values 3/9/4/5.
-Execution outside the selected branch is only total field programming
-semantics, not a geometric tangent or doubling claim.  No doubling output y,
-complete or tagged doubled point, dispatcher, general addition, closure
-theorem, addition specification, or group-law theorem is defined.
+The corresponding transparent unary output-y scalar reuses the slope and
+output-x operations and computes exactly `m*(x_first-x3)-y_first`; it is likewise
+total, field-valued, and fixed, and F11 checks difference/product/output values
+8/2/9.  The parallel bindings preserve the established compositional style,
+although output x recomputes the slope internally.  Execution outside the
+selected branch is only total field programming semantics, not a geometric
+tangent or doubling claim.  The two scalars do not constitute a complete
+coordinate result.  No complete or tagged doubled point, dispatcher, general
+addition, closure theorem, addition or doubling specification, or group-law
+theorem is defined.
 
 The generic field layer also certifies that equal squares have equal fixed
 representatives or fixed representatives related by `FIELD-NEG`. The proof has
