@@ -22,6 +22,8 @@
 (include-book "curve/f11-affine-pair-classification")
 (include-book "curve/affine-same-point-non-opposite-slope")
 (include-book "curve/f11-affine-same-point-non-opposite-slope")
+(include-book "curve/affine-same-point-non-opposite-output-x")
+(include-book "curve/f11-affine-same-point-non-opposite-output-x")
 (include-book "curve/affine-distinct-x-slope")
 (include-book "curve/f11-affine-distinct-x-slope")
 (include-book "curve/affine-distinct-x-output-x")

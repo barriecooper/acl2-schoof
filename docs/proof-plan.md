@@ -171,7 +171,11 @@ characteristic hypotheses.  The unary transparent total slope computes
 `(((1+1)+1)*(x_first*x_first)+field-fix(a))/(y_first+y_first)`; its conditional
 non-rewriting theorem reconstructs that numerator by consuming the public
 denominator result and generic division reconstruction.  F11 checks the exact
-intermediates at the on-curve point `(2,4)`.  Total execution outside the
-classifier branch is not a tangent correctness claim.  No doubling coordinate,
-tagged doubled point, dispatcher, general addition, closure theorem, addition
-specification, or group-law theorem is yet defined.
+intermediates at the on-curve point `(2,4)`.  The next scalar boundary is also
+complete: unary `affine-same-point-non-opposite-output-x` reuses that slope and
+computes exactly `m*m-(1+1)*x_first`, with unconditional field closure and
+fixing and focused F11 execution yielding 5.  Total execution outside the
+classifier branch is neither tangent nor geometric doubling correctness.  No
+doubling output y, complete or tagged doubled point, dispatcher, general
+addition, closure theorem, addition specification, or group-law theorem is yet
+defined.
