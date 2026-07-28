@@ -270,11 +270,17 @@ formula exactly as `m*(x_first-x3)-y_first`, with `FIELD-SUB` at both ordered
 subtractions and the slope as the left multiplication operand.  No explicit
 fixes are needed because the accessors and both component operations are
 field-valued.  As in distinct-x output y, the independent composition means
-output x recomputes its slope; no performance boundary is introduced.  Both
-scalars are unconditionally field-valued and fixed, but execution outside the
-classifier branch is not a geometric doubling claim and the scalars are not a
-complete affine result.  No complete or tagged doubled point, dispatch, closure
-result, addition or doubling specification, or group-law claim is added.
+output x recomputes its slope; no performance boundary is introduced.  The
+unary coordinate constructor then independently binds those public scalar
+operations and calls `AFFINE-COORDINATES-MAKE` in x-then-y order.  This matches
+the distinct-x binding and evaluation order exactly, with unary arity as the
+only structural difference.  The scalar fixed-result theorems make explicit
+fixing unnecessary and yield unconditional recognition, exact projections,
+and affine-fixer stability.  Thus malformed, noncanonical, off-curve, and
+wrong-classifier inputs retain the component operations' total semantics and
+produce a canonical pair; neither representation nor guard verification is a
+geometric doubling claim.  No tagged doubled point, dispatch, closure result,
+addition or doubling specification, or group-law claim is added.
 
 Before any slope or addition operation, the affine-coordinate layer classifies
 two arbitrary objects after applying `affine-coordinates-fix` to both. The

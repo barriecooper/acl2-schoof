@@ -180,8 +180,10 @@ bindings reuse the slope and output-x operations and compute exactly
 `m*(x_first-x3)-y_first`, with the same unconditional closure and fixing; F11
 execution yields 9.  Output x consequently recomputes the slope internally,
 matching the transparent distinct-x composition rather than introducing a
-performance refactor.  Total execution outside the classifier branch is
-neither tangent nor geometric doubling correctness, and these scalars alone
-are not an affine coordinate result.  No complete or tagged doubled point,
-dispatcher, general addition, closure theorem, addition or doubling
-specification, or group-law theorem is yet defined.
+performance refactor.  The unary untagged coordinate constructor is also
+complete: it uses parallel x-then-y bindings of those public scalars and the
+existing affine constructor, with unconditional recognition, projection, and
+fixer stability.  F11 checks `(5 9)` at `(2,4)`.  Total execution outside the
+classifier branch is neither tangent nor geometric doubling correctness.  No
+tagged doubled point, dispatcher, general addition, closure theorem, addition
+or doubling specification, or group-law theorem is yet defined.
