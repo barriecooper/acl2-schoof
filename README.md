@@ -51,6 +51,10 @@ for two fixed coordinate pairs. It returns exactly one of `:distinct-x`,
 tested before coordinate equality so an identical self-inverse pair enters the
 opposite-y case. The classifier is structural, includes off-curve and
 malformed inputs through affine fixing, and defines no slope or addition.
+The equal, non-opposite branch now certifies that the exact future tangent
+denominator `y_first+y_first` is nonzero, using only structural classification
+and generic additive-inverse uniqueness.  No tangent slope or doubling
+operation is defined.
 
 The generic field layer also certifies that equal squares have equal fixed
 representatives or fixed representatives related by `FIELD-NEG`. The proof has

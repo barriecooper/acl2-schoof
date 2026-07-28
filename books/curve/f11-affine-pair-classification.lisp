@@ -17,6 +17,15 @@
 
 (assert-event (equal (f11-affine-pair-classify '(2 4) '(2 4))
                      :same-point-non-opposite))
+(assert-event
+ (and (equal (f11-affine-pair-classify '(2 4) '(2 4))
+             :same-point-non-opposite)
+      (not (equal (f11-add (f11-affine-coordinates-y '(2 4))
+                           (f11-affine-coordinates-y '(2 4)))
+                  (f11-zero)))
+      (equal (f11-add (f11-affine-coordinates-y '(2 4))
+                      (f11-affine-coordinates-y '(2 4)))
+             8)))
 (assert-event (equal (f11-affine-pair-classify '(2 4) '(2 7)) :opposite-y))
 (assert-event (equal (f11-affine-pair-classify '(2 7) '(2 4)) :opposite-y))
 (assert-event (and (f11-short-weierstrass-affine-point-p '(2 4))

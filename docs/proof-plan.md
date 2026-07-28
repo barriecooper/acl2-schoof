@@ -162,3 +162,10 @@ projects to the canonical assembled output unconditionally, and satisfies the
 full curve-point predicate under exactly the same three semantic hypotheses.
 Its F11 substitution is execution evidence only.  Addition dispatch, every
 other classifier case, and later group-law work remain deferred.
+
+The denominator-nonzero prerequisite for the equal non-opposite branch is now
+also complete.  `:same-point-non-opposite` supplies the non-self-inverse fixed
+y-coordinate, and additive-inverse uniqueness proves that the exact future
+tangent denominator `y_first+y_first` is nonzero without curve-membership or
+characteristic hypotheses.  No tangent slope, doubling coordinate, dispatcher,
+general addition, closure result, or group-law theorem is yet defined.
