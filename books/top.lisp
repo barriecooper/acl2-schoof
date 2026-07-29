@@ -62,6 +62,8 @@
 (include-book "curve/f11-curve-point-addition-relation")
 (include-book "curve/curve-point-addition-inverse")
 (include-book "curve/f11-curve-point-addition-inverse")
+(include-book "curve/curve-point-addition-commutativity")
+(include-book "curve/f11-curve-point-addition-commutativity")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")

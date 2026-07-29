@@ -270,3 +270,11 @@ and infinity.  Left and right identity were already unconditional dispatcher
 equations, rather than missing algebraic prerequisites.  Next, audit operand
 symmetry of the five semantic cases as the prerequisite for commutativity;
 associativity remains deliberately deferred.
+
+## Commutativity boundary (complete)
+
+Semantic operand reversal and raw executable dispatcher commutativity are now
+certified through the independent relation, soundness, fixed-output determinacy,
+and canonical outputs. Associativity is not yet ready: first audit and develop
+the reusable curve algebra needed for nested secant/tangent and exceptional-case
+interactions.
