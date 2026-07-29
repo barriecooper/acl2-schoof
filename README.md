@@ -152,6 +152,16 @@ operation.  The generic closure theorem combines it with the output-y
 rearrangement, the first input equation, and the assembled output projections
 to certify that the existing untagged output lies on the curve.  Both inputs
 must lie on the curve and classify as `:distinct-x`.  The transparent
+four-argument `affine-distinct-x-secant-relation-p` now gives this branch an
+independent affine-coordinate specification. It contains both input and output
+curve predicates, fixed-coordinate x inequality, an explicit fixed slope
+witness satisfying `m*(x_second-x_first)=y_second-y_first`, and the equations
+`x3+x_first+x_second=m*m` and `y3+y_first=m*(x_first-x3)`. It calls no
+classifier or executable operation. A non-rewriting soundness theorem proves
+that the existing slope and coordinate output satisfy it under the two input
+curve predicates and x inequality; F11 witnesses slope 1 and output `(7 2)`
+for `(2,4),(3,5)`. No uniqueness, completeness, full addition specification,
+or group law is claimed. The transparent
 `affine-distinct-x-output-point` wrapper now passes that canonical output to the
 established affine full-point constructor.  It is always a structurally valid
 affine-tagged point, exposes the assembled coordinates through the existing

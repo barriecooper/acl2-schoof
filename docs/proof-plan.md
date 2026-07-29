@@ -156,6 +156,16 @@ output-y rearrangement, first input curve equation, and assembled output
 projections prove that the existing untagged coordinate output satisfies the
 affine-point predicate when both inputs are curve points classified as
 `:distinct-x`.  This proof-only result adds no executable or F11 boundary.  The
+independent `affine-distinct-x-secant-relation-p(first,second,slope,output)` is
+now complete. It is a transparent affine-coordinate relation with an explicit
+fixed slope witness, visible input/output curve membership and fixed-coordinate
+x inequality, and the division-free slope, output-x, and output-y equations.
+It contains no classifier or executable operation and is stable under fixing
+all arguments. Its non-rewriting soundness theorem uses the existing slope and
+coordinate output under the two input curve predicates and x inequality; a
+classifier translation remains proof-local. F11 witnesses `(2,4),(3,5)`, slope
+1, and output `(7 2)`. Uniqueness and completeness are the next separate
+semantic boundary; full addition and group laws remain deferred. The
 tagged distinct-x output boundary is also complete: a transparent wrapper uses
 the established affine full-point constructor, is structurally valid and
 projects to the canonical assembled output unconditionally, and satisfies the
