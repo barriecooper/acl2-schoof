@@ -41,4 +41,27 @@
      (theory 'minimal-theory)
      '(field-fix-when-field-element-p)))))
 
+(defthm affine-same-point-non-opposite-output-y-rearrangement
+  (equal
+   (field-add
+    (affine-same-point-non-opposite-output-y first)
+    (affine-coordinates-y first))
+   (field-mul
+    (affine-same-point-non-opposite-slope first)
+    (field-sub
+     (affine-coordinates-x first)
+     (affine-same-point-non-opposite-output-x first))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(affine-same-point-non-opposite-output-y
+       field-sub
+       field-add-associative
+       field-add-inverse-left
+       field-add-zero-right
+       field-fix-of-mul)))))
+
 (verify-guards affine-same-point-non-opposite-output-y)

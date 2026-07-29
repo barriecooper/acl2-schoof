@@ -178,7 +178,11 @@ fixing and focused F11 execution yielding 5.  Unary
 `affine-same-point-non-opposite-output-y` is now also complete: parallel
 bindings reuse the slope and output-x operations and compute exactly
 `m*(x_first-x3)-y_first`, with the same unconditional closure and fixing; F11
-execution yields 9.  Output x consequently recomputes the slope internally,
+execution yields 9.  Their elementary rearrangement interface is also complete:
+the unconditional non-rewriting equations are exactly
+`x3+(1+1)*x_first = m*m` and `y3+y_first = m*(x_first-x3)`, proved from the
+transparent definitions and existing generic field laws.  They add no geometric
+or executable claim.  Output x consequently recomputes the slope internally,
 matching the transparent distinct-x composition rather than introducing a
 performance refactor.  The unary untagged coordinate constructor is also
 complete: it uses parallel x-then-y bindings of those public scalars and the

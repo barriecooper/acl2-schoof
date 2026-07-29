@@ -61,11 +61,14 @@ Its F11 execution checks the on-curve point `(2,4)`: numerator 2, denominator
 8, inverse 7, and slope 3.  The transparent total unary
 `affine-same-point-non-opposite-output-x` reuses that slope and computes
 `m*m-(1+1)*x_first`; it is field-valued and fixed without a classifier
-hypothesis, and F11 checks slope/square/doubled-x/output values 3/9/4/5.
-The corresponding transparent unary output-y scalar reuses the slope and
-output-x operations and computes exactly `m*(x_first-x3)-y_first`; it is likewise
-total, field-valued, and fixed, and F11 checks difference/product/output values
-8/2/9.  The parallel bindings preserve the established compositional style,
+hypothesis, and its non-rewriting rearrangement theorem proves the unconditional
+total identity `x3+(1+1)*x_first = m*m`. F11 checks
+slope/square/doubled-x/output values 3/9/4/5.  The corresponding transparent
+unary output-y scalar reuses the slope and output-x operations and computes
+exactly `m*(x_first-x3)-y_first`; it is likewise total, field-valued, and fixed,
+and its non-rewriting rearrangement theorem proves the unconditional total
+identity `y3+y_first = m*(x_first-x3)`. F11 checks difference/product/output
+values 8/2/9.  The parallel bindings preserve the established compositional style,
 although output x recomputes the slope internally.  The transparent unary
 `affine-same-point-non-opposite-output` assembles those scalar results in
 x-then-y order with `affine-coordinates-make`; unconditional recognition,
