@@ -256,3 +256,10 @@ unconditional representation closure, and conditional full curve-membership
 closure are certified; F11 also checks malformed-input fixer behavior.  An
 independent addition specification and all group laws remain later mathematical
 boundaries.
+
+## Next addition boundary
+
+The independent opposite-y, left-infinity, and right-infinity branch
+specifications, fixing, determinacy, executable soundness, and focused
+regressions are complete. Next establish the independent full tagged-point
+addition relation, case coverage, and soundness of the existing full dispatcher.
