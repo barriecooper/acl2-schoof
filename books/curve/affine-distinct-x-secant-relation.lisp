@@ -61,6 +61,142 @@
        affine-coordinates-y-of-fix
        field-fix-idempotent)))))
 
+; These three proof-local algebraic bridges put the kernel's left-oriented
+; cancellation interface into exactly the shapes used by the relation
+; equations.  They add no field assumptions or public field API.
+(local
+ (defthm field-mul-right-cancel-forward-local
+   (implies
+    (and (not (equal (field-fix denominator) (field-zero)))
+         (equal (field-mul left denominator)
+                (field-mul right denominator)))
+    (equal (field-fix left) (field-fix right)))
+   :hints
+   (("Goal"
+     :use ((:instance field-mul-left-cancel-forward
+                      (x denominator) (y left) (z right))
+           (:instance field-mul-commutative
+                      (x left) (y denominator))
+           (:instance field-mul-commutative
+                      (x right) (y denominator)))
+     :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm field-add-right-cancel-forward-local
+   (implies
+    (equal (field-add left common) (field-add right common))
+    (equal (field-fix left) (field-fix right)))
+   :hints
+   (("Goal"
+     :use ((:instance field-add-left-cancel-forward
+                      (x common) (y left) (z right))
+           (:instance field-add-commutative (x left) (y common))
+           (:instance field-add-commutative (x right) (y common)))
+     :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm distinct-fixed-values-imply-nonzero-difference-local
+   (implies
+    (not (equal (field-fix first) (field-fix second)))
+    (not (equal (field-sub second first) (field-zero))))
+   :hints
+   (("Goal"
+     :use ((:instance field-sub-equal-zero-implies-fixed-equal
+                      (first second) (second first)))
+     :in-theory (theory 'minimal-theory)))))
+
+(defthm affine-distinct-x-secant-relation-slope-unique
+  (implies
+   (and (affine-distinct-x-secant-relation-p
+         first second slope-a output-a)
+        (affine-distinct-x-secant-relation-p
+         first second slope-b output-b))
+   (equal (field-fix slope-a) (field-fix slope-b)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    ((:instance distinct-fixed-values-imply-nonzero-difference-local
+                (first (affine-coordinates-x first))
+                (second (affine-coordinates-x second)))
+     (:instance field-mul-right-cancel-forward-local
+                (left (field-fix slope-a))
+                (right (field-fix slope-b))
+                (denominator
+                 (field-sub (affine-coordinates-x second)
+                            (affine-coordinates-x first)))))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(affine-distinct-x-secant-relation-p
+       field-fix-when-field-element-p
+       field-element-p-of-affine-coordinates-x
+       field-sub
+       field-fix-of-add
+       field-fix-of-neg
+       field-fix-idempotent)))))
+
+(defthm affine-distinct-x-secant-relation-output-unique-at-fixed-slope
+  (implies
+   (and (affine-distinct-x-secant-relation-p
+         first second slope-a output-a)
+        (affine-distinct-x-secant-relation-p
+         first second slope-b output-b)
+        (equal (field-fix slope-a) (field-fix slope-b)))
+   (equal (affine-coordinates-fix output-a)
+          (affine-coordinates-fix output-b)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    ((:instance field-add-right-cancel-forward-local
+                (left
+                 (field-add (affine-coordinates-x output-a)
+                            (affine-coordinates-x first)))
+                (right
+                 (field-add (affine-coordinates-x output-b)
+                            (affine-coordinates-x first)))
+                (common (affine-coordinates-x second)))
+     (:instance field-add-right-cancel-forward-local
+                (left (affine-coordinates-x output-a))
+                (right (affine-coordinates-x output-b))
+                (common (affine-coordinates-x first)))
+     (:instance field-add-right-cancel-forward-local
+                (left (affine-coordinates-y output-a))
+                (right (affine-coordinates-y output-b))
+                (common (affine-coordinates-y first))))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(affine-distinct-x-secant-relation-p
+       affine-coordinates-fix
+       affine-coordinates-make
+       field-fix-when-field-element-p
+       field-element-p-of-affine-coordinates-x
+       field-element-p-of-affine-coordinates-y
+       field-fix-of-add
+       field-fix-idempotent
+       field-mul-fixed-congruence
+       field-sub
+       field-neg-of-fix)))))
+
+(defthm affine-distinct-x-secant-relation-unique
+  (implies
+   (and (affine-distinct-x-secant-relation-p
+         first second slope-a output-a)
+        (affine-distinct-x-secant-relation-p
+         first second slope-b output-b))
+   (and (equal (field-fix slope-a) (field-fix slope-b))
+        (equal (affine-coordinates-fix output-a)
+               (affine-coordinates-fix output-b))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    (affine-distinct-x-secant-relation-slope-unique
+     affine-distinct-x-secant-relation-output-unique-at-fixed-slope)
+    :in-theory (theory 'minimal-theory))))
+
 ; This bridge is proof-local: the executable reconstruction and closure
 ; theorems predate the semantic relation and select their branch through the
 ; structural classifier.  The public soundness statement below remains purely

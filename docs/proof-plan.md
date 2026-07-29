@@ -164,8 +164,16 @@ It contains no classifier or executable operation and is stable under fixing
 all arguments. Its non-rewriting soundness theorem uses the existing slope and
 coordinate output under the two input curve predicates and x inequality; a
 classifier translation remains proof-local. F11 witnesses `(2,4),(3,5)`, slope
-1, and output `(7 2)`. Uniqueness and completeness are the next separate
-semantic boundary; full addition and group laws remain deferred. The
+1, and output `(7 2)`.  Its uniqueness boundary is now complete through three
+non-rewriting theorems: fixed-slope uniqueness from two relation instances,
+fixed-output uniqueness from two instances at equal fixed slopes, and their
+combined two-hypothesis consequence.  The proof derives the nonzero x
+difference internally, cancels it on the right, cancels the two common x
+addends, uses output-x equality in the y equations, and reconstructs equality
+of affine fixers from accessor equality.  Only three small proof-local field
+bridges are added; curve membership and characteristic assumptions do no work
+in the algebra. Completeness remains a separate deferred semantic boundary;
+full addition and group laws remain deferred. The
 tagged distinct-x output boundary is also complete: a transparent wrapper uses
 the established affine full-point constructor, is structurally valid and
 projects to the canonical assembled output unconditionally, and satisfies the

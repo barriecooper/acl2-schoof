@@ -127,8 +127,25 @@ soundness theorem is non-rewriting. Soundness uses the existing slope and
 coordinate output only as witnesses under both input curve predicates and x
 inequality. A local classifier bridge is needed solely to consume the older
 reconstruction and closure theorems. F11 checks `(2,4),(3,5)`, slope 1, output
-`(7 2)`, and the complete relation. No uniqueness, completeness, full addition
-relation, or group law is introduced.
+`(7 2)`, and the complete relation.
+
+The same book exposes three non-rewriting, fixing-aware uniqueness results.
+`affine-distinct-x-secant-relation-slope-unique` takes exactly two relation
+hypotheses and equates the fixed slope witnesses.
+`affine-distinct-x-secant-relation-output-unique-at-fixed-slope` takes two
+relation hypotheses and equality of their fixed slopes and equates the fixed
+affine outputs.  `affine-distinct-x-secant-relation-unique` takes only the two
+relation hypotheses and concludes both equalities.  Proof-local right
+multiplication and right addition cancellation bridges adapt the existing
+left-oriented field interface; a proof-local subtraction bridge derives the
+nonzero x difference from distinct fixed accessors.  Two additive cancellations
+give output-x equality, output-y then follows from that equality and the y
+equations, and expansion of the affine fixer reconstructs equal canonical
+coordinates.  Input/output curve membership remains in the relation but does
+no substantive work in uniqueness.  No characteristic assumption is used.
+This is uniqueness of canonical representatives, not raw malformed objects,
+existence, or completeness, and it adds no classifier, executable-operation,
+tagged-point, dispatcher, full addition relation, or group law dependency.
 
 `affine-distinct-x-output-point(first, second)` is the next ordinary transparent
 DEFUN.  It passes the already canonical coordinate output directly to

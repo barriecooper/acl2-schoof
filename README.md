@@ -160,8 +160,18 @@ witness satisfying `m*(x_second-x_first)=y_second-y_first`, and the equations
 classifier or executable operation. A non-rewriting soundness theorem proves
 that the existing slope and coordinate output satisfy it under the two input
 curve predicates and x inequality; F11 witnesses slope 1 and output `(7 2)`
-for `(2,4),(3,5)`. No uniqueness, completeness, full addition specification,
-or group law is claimed. The transparent
+for `(2,4),(3,5)`. Three non-rewriting theorems now establish uniqueness of
+canonical representatives: the two relation instances alone determine the
+fixed slopes; two instances plus equality of their fixed slopes determine the
+fixed affine outputs; and the combined theorem derives both conclusions from
+only the two relation hypotheses.  The slope proof derives nonzeroness of
+`x_second-x_first` from the relation's x inequality and uses right
+multiplication cancellation.  Output x follows by two additive cancellations,
+output y then follows from output-x equality and its equation, and affine
+fixer equality follows from the two accessor equalities.  Curve membership is
+part of the relation's geometric domain but is not used by this uniqueness
+algebra.  This proves neither completeness nor existence beyond the existing
+soundness witness, and adds no full addition specification or group law. The transparent
 `affine-distinct-x-output-point` wrapper now passes that canonical output to the
 established affine full-point constructor.  It is always a structurally valid
 affine-tagged point, exposes the assembled coordinates through the existing
