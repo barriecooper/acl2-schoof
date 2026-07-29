@@ -20,6 +20,8 @@
 (include-book "curve/f11-point-negation")
 (include-book "curve/affine-pair-classification")
 (include-book "curve/f11-affine-pair-classification")
+(include-book "curve/affine-opposite-y-output-point")
+(include-book "curve/f11-affine-opposite-y-output-point")
 (include-book "curve/affine-same-point-non-opposite-slope")
 (include-book "curve/f11-affine-same-point-non-opposite-slope")
 (include-book "curve/affine-same-point-non-opposite-output-x")
