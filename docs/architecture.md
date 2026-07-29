@@ -147,6 +147,34 @@ This is uniqueness of canonical representatives, not raw malformed objects,
 existence, or completeness, and it adds no classifier, executable-operation,
 tagged-point, dispatcher, full addition relation, or group law dependency.
 
+`affine-doubling-relation-p(input, slope, output)` is the matching independent
+three-argument affine tangent relation.  Its conjuncts are input curve
+membership; `y != -y` on fixed accessors; the oriented equation
+`m*(y+y)=((1+1)+1)*(x*x)+field-fix(a)`; the output equations
+`x_output+(1+1)*x=m*m` and `y_output+y=m*(x-x_output)`; and output curve
+membership.  Its transparent body mentions no classifier, division, executable
+tangent slope/output, tagged point, or dispatcher, so it remains meaningful
+when implementation books are hidden.
+
+Its sole active normalization rule fixes input, slope, and output.  Malformed
+affine objects therefore denote the established fixed `(0,0)` coordinate and
+slopes denote field-fixed representatives; uniqueness concludes fixed, not raw,
+equality.  Soundness has exactly input membership and `y != -y` as hypotheses.
+A proof-local classifier bridge consumes the older tangent reconstruction and
+closure results, while unconditional rearrangements and projections establish
+the remaining equations.
+
+Soundness and all three uniqueness results have rule class `NIL`.  Slope
+uniqueness derives `y+y != 0` from `y != -y` using additive-inverse uniqueness
+and a local right-multiplication cancellation adapter.  Output uniqueness uses
+a local right-addition adapter on x and then y and reconstructs affine fixers.
+Curve membership does no substantive work in uniqueness.  Although the generic
+short-Weierstrass boundary excludes characteristics two and three, no additional
+characteristic theorem is consumed: the explicit domain condition alone makes
+the exact tangent denominator nonzero.  F11 covers `(2,4)`, slope 3, output
+`(5,9)`, the domain, and full relation.  The next boundary is an audit of the
+remaining affine inverse/infinity semantics before any full addition relation.
+
 `affine-distinct-x-output-point(first, second)` is the next ordinary transparent
 DEFUN.  It passes the already canonical coordinate output directly to
 `curve-point-affine-coordinates`, so arbitrary inputs always produce an affine

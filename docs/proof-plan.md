@@ -181,6 +181,21 @@ full curve-point predicate under exactly the same three semantic hypotheses.
 Its F11 substitution is execution evidence only.  Addition dispatch, every
 other classifier case, and later group-law work remain deferred.
 
+The independent affine doubling semantic boundary is complete.
+`affine-doubling-relation-p(input,slope,output)` transparently combines input
+and output curve membership, the mathematical domain `y != -y`, and the exact
+division-free tangent/output equations.  It is classifier-free,
+implementation-free, and stable under all argument fixers.  Under input
+membership and that domain, the existing tangent slope and unary output satisfy
+the relation through a proof-local classifier adapter.  Two-instance
+non-rewriting theorems prove fixed slope uniqueness, fixed output uniqueness,
+and their combined result.  The nonzero `y+y` denominator follows internally
+from the domain without an extra characteristic premise.  F11 checks the
+existing `(2,4)` doubling to `(5,9)` with slope 3.  No broader addition,
+completeness, inverse/infinity, or group-law work is included.  Next, audit the
+remaining affine inverse and infinity semantic cases required before a full
+tagged addition relation.
+
 The denominator-nonzero prerequisite and tangent-slope scalar boundary for the
 equal non-opposite branch are now complete.  `:same-point-non-opposite`
 supplies the non-self-inverse fixed y-coordinate, and additive-inverse
