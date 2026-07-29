@@ -298,3 +298,16 @@ fixed-output determinacy and dispatcher-soundness theorems close the full
 semantic boundary.  Both-infinity overlap is coherent; self-inverse affine
 points use opposite-y.  F11 exercises both identities, both infinity, secant,
 doubling, and opposite-y.  No executable operation or group law is added.
+
+## Full tagged addition commutativity (proved)
+
+`CURVE-POINT-ADDITION-RELATION-P-COMMUTATIVE` reverses the independent relation
+without hypotheses and is non-rewriting. Infinity branches exchange roles;
+opposite-y uses involutive negation; equal fixed inputs reuse doubling; and the
+secant proof explicitly preserves the quotient and both output equations under
+simultaneous reversal. `CURVE-POINT-PAIR-OUTPUT-POINT-COMMUTATIVE`, also
+non-rewriting, assumes exactly two full curve points and derives raw dispatcher
+equality from soundness, reversal, determinacy, and canonical dispatcher
+outputs. Malformed values retain total fixing semantics. Focused F11 checks
+cover secant, doubling, opposite-y, and infinity. Associativity, cancellation,
+and group structure remain open.
