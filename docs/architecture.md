@@ -284,7 +284,19 @@ fixing unnecessary and yield unconditional recognition, exact projections,
 and affine-fixer stability.  Thus malformed, noncanonical, off-curve, and
 wrong-classifier inputs retain the component operations' total semantics and
 produce a canonical pair; neither representation nor guard verification is a
-geometric doubling claim.  No tagged doubled point, dispatch, closure result,
+geometric doubling claim.  The proof-only closure book then consumes the tangent
+identity and input curve equation without changing this executable operation.
+
+`affine-same-point-non-opposite-output-point(first)` is the corresponding unary,
+ordinary transparent tagged boundary.  It passes the existing canonical output
+directly to `curve-point-affine-coordinates`; it does not retain `second` because
+neither construction nor execution depends on classifier selection.  Structural
+recognition and coordinate projection are unconditional.  Its separate binary
+semantic theorem retains `second` exactly where needed to select
+`:same-point-non-opposite`, and combines that premise and input membership with
+the existing untagged closure and affine-constructor membership theorem.  F11
+checks the tagged `(2,4) -> (:affine (5 9))` integration and malformed total
+execution.  No representation change, new identity, dispatch, infinity handling,
 addition or doubling specification, or group-law claim is added.
 
 Before any slope or addition operation, the affine-coordinate layer classifies

@@ -196,6 +196,10 @@ performance refactor.  The unary untagged coordinate constructor is also
 complete: it uses parallel x-then-y bindings of those public scalars and the
 existing affine constructor, with unconditional recognition, projection, and
 fixer stability.  F11 checks `(5 9)` at `(2,4)`.  Total execution outside the
-classifier branch is neither tangent nor geometric doubling correctness.  No
-tagged doubled point, dispatcher, general addition, addition or doubling
-specification, or group-law theorem is yet defined.
+classifier branch is neither tangent nor geometric doubling correctness.  The tagged same-point-non-opposite boundary is also complete: the unary
+transparent wrapper uses the established affine full-point constructor, is
+structurally valid and projects to the untagged output unconditionally, and is
+a full curve point under exactly input membership and binary classifier
+selection.  Its focused F11 substitution is execution evidence only.  No
+dispatcher, general addition, addition or doubling specification, or group-law
+theorem is yet defined.
