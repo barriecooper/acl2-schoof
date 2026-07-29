@@ -102,8 +102,14 @@ a total programming convention.  The output is always structurally tagged and
 is certified as a full curve point when both affine inputs lie on the curve,
 using the existing unreachability theorem to eliminate the fallback.  F11 covers
 all three valid branches and an off-curve fallback.  No full-point input
-dispatcher, infinity-input semantics, general addition specification, or
-group-law theorem is defined.
+dispatcher is needed by that affine-only layer.  The transparent binary
+`curve-point-pair-output-point` now supplies the next full tagged-point seam:
+it fixes both operands once, returns the other fixed operand when either is
+infinity, and delegates the affine/affine case to `affine-pair-output-point`.
+It always returns a tagged representation and preserves full curve membership
+when both inputs are full curve points.  Malformed full points consequently
+behave as infinity by the existing fixer convention.  No general addition
+specification or group-law theorem is defined.
 
 The generic field layer also certifies that equal squares have equal fixed
 representatives or fixed representatives related by `FIELD-NEG`. The proof has

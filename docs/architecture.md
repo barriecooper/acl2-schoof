@@ -329,6 +329,18 @@ F11 execution covers `(2,4)+(3,5)=(:affine (7 2))`, doubling `(2,4)` to
 `(:affine (5 9))`, the opposite pair `(2,4),(2,7)` to `(:infinity)`, and the
 off-curve `:same-x-other` fallback `(2,4),(2,5)`.
 
+`curve-point-pair-output-point(first, second)` is the ordinary transparent
+full-point composition seam.  Nested `LET*` bindings fix each operand exactly
+once.  If fixed `first` is infinity it returns fixed `second`; otherwise, if
+fixed `second` is infinity it returns fixed `first`; only the remaining
+affine/affine case extracts both fixed payloads and calls
+`affine-pair-output-point`.  Thus malformed outer values act like infinity and
+noncanonical affine payloads are canonicalized before use.  This is the
+existing fixer convention, not geometry assigned to malformed data.  The
+public branch equations, fixing congruence, structural closure, and full curve
+closure under two membership hypotheses expose the boundary without defining
+an independent elliptic-curve sum or any group law.
+
 Before any slope or addition operation, the affine-coordinate layer classifies
 two arbitrary objects after applying `affine-coordinates-fix` to both. The
 canonical keyword result is selected by distinct x first, then opposite y,
