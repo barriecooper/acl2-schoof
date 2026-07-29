@@ -12,6 +12,21 @@
       (field-add (field-one) (field-one))
       (affine-coordinates-x first)))))
 
+(local
+ (defthm field-add-inverse-middle
+   (equal (field-add x (field-add (field-neg x) y))
+          (field-fix y))
+   :hints
+   (("Goal"
+     :use ((:instance field-add-associative
+                      (x x) (y (field-neg x)) (z y)))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(field-add-inverse-right
+        field-add-zero-left
+        field-fix-idempotent))))))
+
 (defthm field-element-p-of-affine-same-point-non-opposite-output-x
   (field-element-p (affine-same-point-non-opposite-output-x first))
   :hints
@@ -38,5 +53,29 @@
     (union-theories
      (theory 'minimal-theory)
      '(field-fix-when-field-element-p)))))
+
+(defthm affine-same-point-non-opposite-output-x-rearrangement
+  (equal
+   (field-add
+    (affine-same-point-non-opposite-output-x first)
+    (field-mul
+     (field-add (field-one) (field-one))
+     (affine-coordinates-x first)))
+   (field-mul
+    (affine-same-point-non-opposite-slope first)
+    (affine-same-point-non-opposite-slope first)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(affine-same-point-non-opposite-output-x
+       field-sub
+       field-add-associative
+       field-add-commutative
+       field-add-inverse-middle
+       field-fix-of-add
+       field-fix-of-mul)))))
 
 (verify-guards affine-same-point-non-opposite-output-x)
