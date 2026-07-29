@@ -460,3 +460,16 @@ to infinity, so they may satisfy an identity clause exactly according to the
 established total semantics.  Fixing is an active congruence; coverage,
 fixed-output determinacy, and dispatcher soundness are non-rewriting theorems.
 No commutativity, associativity, or other group law is claimed.
+
+## Full-point inverse law
+
+The first algebraic consumer of the independent relation composes the existing
+`curve-point-neg` with the existing dispatcher.  Its semantic theorem places
+`point + (-point) = infinity` in the full relation under exactly full curve
+membership: infinity selects an ordered identity clause, and an affine point
+selects the opposite-y clause.  The executable theorem does not inspect the
+dispatcher.  It combines that semantic fact with dispatcher soundness and
+fixed-output determinacy, then strengthens fixed-representative equality to
+literal canonical infinity using the dispatcher's unconditional structural
+closure.  This consumes no additional characteristic assumption and adds no
+operation, representation, equivalence, commutativity, or associativity layer.

@@ -262,5 +262,11 @@ boundaries.
 The independent full tagged-point addition relation is complete, including
 fixing stability, exhaustive mathematical case coverage, fixed-output
 determinacy, full-dispatcher soundness, and focused F11 regressions.  The next
-addition boundary is the first algebraic law for this now-specified operation;
-its exact ordering should be selected before beginning group-law work.
+algebraic boundary is also complete: every full curve point added to its
+existing full-point negation produces canonical infinity.  The proof first
+establishes the independent full relation and then uses dispatcher soundness
+and fixed-output determinacy; focused F11 execution covers an affine inverse
+and infinity.  Left and right identity were already unconditional dispatcher
+equations, rather than missing algebraic prerequisites.  Next, audit operand
+symmetry of the five semantic cases as the prerequisite for commutativity;
+associativity remains deliberately deferred.
