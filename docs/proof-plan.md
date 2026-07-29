@@ -207,7 +207,14 @@ representation, infinity, and full curve-membership theorems.  Existing
 classifier characterization establishes equal fixed x and opposite fixed y;
 its priority includes identical self-inverse y.  F11 checks `(2,4),(2,7)`,
 malformed inputs fixed to the self-inverse `(0,0)` case, and total wrong-branch
-execution.  `:same-x-other` remains a total structural fallback but is excluded
-for two curve inputs, so it requires no geometric output before a dispatcher
-restricted to curve inputs.  No dispatcher, general addition, addition or
-doubling specification, or group-law theorem is yet defined.
+execution.  The affine-input dispatcher boundary is now complete.  The transparent binary
+`affine-pair-output-point` evaluates `affine-pair-classify` once and selects the
+three established tagged output operations.  Its final `:same-x-other`/catch-all
+case returns canonical infinity only as a total programming convention.  Generic
+certification gives unconditional structural recognition and full curve
+membership under exactly the two affine-input membership hypotheses; the
+existing `affine-pair-classify-not-same-x-other-for-curve-points` theorem removes
+the fallback without interpreting it geometrically.  F11 checks all three
+reachable branches and the off-curve fallback.  Next, separately audit a full
+tagged-point dispatcher and infinity-input policy; general addition semantics
+and group laws remain later mathematical boundaries.

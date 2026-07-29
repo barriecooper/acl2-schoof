@@ -94,9 +94,16 @@ The next exceptional boundary is also complete: the transparent binary
 on every input.  Its unconditional rewrite interface certifies exact infinity,
 structural recognition, the infinity predicate, and full curve membership; F11
 checks the on-curve opposite pair `(2,4),(2,7)`, malformed fixed inputs, and
-total execution outside the selected branch.  Binary arity is retained because
-`:opposite-y` is a relational pair-classifier result.  No dispatcher, general
-addition, addition or doubling specification, or group-law theorem is defined.
+total execution outside the selected branch.  Binary arity is retained because `:opposite-y` is a relational pair-classifier result.
+The new transparent binary `affine-pair-output-point` evaluates the classifier
+once and dispatches all three reachable branches to those established tagged
+operations.  Its `:same-x-other`/catch-all result is canonical infinity solely as
+a total programming convention.  The output is always structurally tagged and
+is certified as a full curve point when both affine inputs lie on the curve,
+using the existing unreachability theorem to eliminate the fallback.  F11 covers
+all three valid branches and an off-curve fallback.  No full-point input
+dispatcher, infinity-input semantics, general addition specification, or
+group-law theorem is defined.
 
 The generic field layer also certifies that equal squares have equal fixed
 representatives or fixed representatives related by `FIELD-NEG`. The proof has
