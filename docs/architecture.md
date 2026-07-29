@@ -111,6 +111,25 @@ coordinate output with `short-weierstrass-affine-point-p`.  Its elementary
 field-algebra bridges remain local.  It introduces no operation, tagged point,
 F11 mirror, executable boundary, dispatch, or group-law claim.
 
+`affine-distinct-x-secant-relation-p(first, second, slope, output)` is the first
+independent curve-operation semantic relation. It is a transparent
+four-argument predicate over affine-coordinate values. Its conjuncts require
+both inputs and the output to satisfy the short-Weierstrass affine predicate,
+require the fixed accessor x values to differ, fix the explicit slope witness,
+and state `m*(x_second-x_first)=y_second-y_first`,
+`x_output+x_first+x_second=m*m`, and
+`y_output+y_first=m*(x_first-x_output)` in the existing operand order. It
+contains no classifier, division, executable slope or output, tagged point, or
+dispatcher. Accessors and `FIELD-FIX` provide total semantics; malformed or
+off-curve values fail visible membership conjuncts rather than acquiring
+geometric fallback meaning. Fixing stability is an active equality rule; the
+soundness theorem is non-rewriting. Soundness uses the existing slope and
+coordinate output only as witnesses under both input curve predicates and x
+inequality. A local classifier bridge is needed solely to consume the older
+reconstruction and closure theorems. F11 checks `(2,4),(3,5)`, slope 1, output
+`(7 2)`, and the complete relation. No uniqueness, completeness, full addition
+relation, or group law is introduced.
+
 `affine-distinct-x-output-point(first, second)` is the next ordinary transparent
 DEFUN.  It passes the already canonical coordinate output directly to
 `curve-point-affine-coordinates`, so arbitrary inputs always produce an affine
