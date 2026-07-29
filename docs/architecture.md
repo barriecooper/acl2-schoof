@@ -21,6 +21,20 @@ clients provide executable instances and regression evidence. Concrete
 instances validate functional instantiation and execution, but generic claims
 come only from the generic certified books.
 
+### Field-only X-CERT algebra
+
+`books/field/xcert-algebra.lisp` defines explicit output-coordinate residuals
+and the field expressions `xcert-dx`, `xcert-telescope`, `xcert-remainder`,
+`xcert-h`, `xcert-s`, and `xcert-c`.  The residuals are total expressions, not
+assumed-zero hypotheses.  Certified component theorems establish the output
+telescope and remainder identities, and `xcert-composition` combines those
+components opaquely in the exact left-associated form.
+
+This layer depends only on the generic field kernel.  It does not interpret the
+residuals as curve equations, establish generator-zero consequences, or import
+curve or polynomial semantics.  Those semantic connections are a later
+architectural boundary.
+
 ### Canonical dense polynomials
 
 `GPOLY` is authoritative for new polynomial algebra. A polynomial is a dense
