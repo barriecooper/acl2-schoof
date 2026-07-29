@@ -1,475 +1,127 @@
 # Architecture
 
-## Shared kernel and scope
+This document owns the stable design of the formalization. Exact proved and
+open status belongs in the [obligation ledger](obligations.md), execution
+contracts in [execution boundaries](execution-boundaries.md), and future
+ordering in the [proof plan](proof-plan.md).
 
-The authoritative new algebra is the GFIELD/GPOLY stack: a generic field
-interface plus canonical dense polynomials and certified algorithms. HS/PFIELD
-remains a legacy/root-count bridge unless a specific theorem needs it. The
-common kernel is intended to support both a Manin-style Hasse proof and an
-executable Schoof development for short Weierstrass curves in characteristic
-greater than three.
+## Algebraic layers
 
-The two developments share finite-field, polynomial, curve, and Frobenius
-prerequisites. After that seam they are parallel tracks. Hasse completion is
-not an implementation prerequisite for Schoof.
+### Generic fields and concrete adapters
 
-## Certified layers
+`GFIELD` is the constrained equational field kernel. Every public operation has
+total ACL2 semantics through `field-fix`; field laws therefore state equality
+of fixed representatives where arbitrary ACL2 inputs are admitted. Natural
+power, generated power correspondence, characteristic exclusions, and the
+minimal Frobenius-exponent certificate extend this kernel without asserting a
+field cardinality or an executable enumeration.
 
-The generated public field-power correspondence is certified, and a separate
-minimal constrained interface supplies a positive Frobenius exponent with the
-unconditional public-power equation `x^q=x` under total fixing semantics. F7
-and a regression-local modulus-11 power are mechanics clients. This certificate
-does not identify q with cardinality and supplies no enumeration,
-characteristic, prime-power, or extension-degree metadata.
+PFIELD supplies canonical prime-field representatives. Named F2, F7, and F11
+clients provide executable instances and regression evidence. Concrete
+instances validate functional instantiation and execution, but generic claims
+come only from the generic certified books.
 
-A separate additive-only constrained interface defines total natural repeated
-addition and directly certifies that two and three copies of field one are
-nonzero.  These independent facts, rather than a nonminimal annihilator, form
-the characteristic-not-2-or-3 boundary needed by the initial short-Weierstrass
-scope.  No mathematical characteristic value, leastness, primality,
-cardinality, enumeration, prime-power, or extension-degree metadata is
-certified.  F7 and a regression-local modulus-11 client validate transport.
+### Canonical dense polynomials
 
-The generic curve layer begins with only two constrained nullary short-
-Weierstrass coefficients.  Coefficients and arbitrary coordinates are fixed at
-every use by the existing GFIELD fixer; the transparent right-hand side and
-coordinate predicate therefore have total canonical semantics.  The layer
-adopts nonzeroness of `4*a^3 + 27*b^2` as its non-rewriting certificate and
-depends on the existing characteristic-not-2-or-3 book.  The F11 golden values
-`a=1`, `b=6` validate the concrete boundary.  This is not a point
-representation, group law, formal discriminant theory, or smoothness theorem.
+`GPOLY` is authoritative for new polynomial algebra. A polynomial is a dense
+constant-first coefficient list. `normalize` fixes coefficients and removes
+trailing zeroes; `nil` is the unique canonical zero. Public arithmetic returns
+canonical polynomials, while raw helpers exist only to support definitions and
+proofs. Polynomial equality in the generic layer is literal equality of
+canonical representatives, not merely agreement under evaluation.
 
-The named F11 coefficient runtime also includes transparent total `f11-inv`
-and `f11-div`.  Inversion fixes once, returns zero when the fixed input is zero,
-and otherwise calls the existing PFIELD inverse at modulus 11; its certified
-left-inverse law has the generic fixed-input nonzero hypothesis.  Division is
-exactly numerator times inverse of denominator.  Closure, fixing compatibility,
-guards, and concrete canonical/noncanonical executions are certified without a
-new generic axiom or logical/executable split.
+The certified stack is layered: arithmetic and evaluation; degree and leading
+coefficient; division and remainder; congruence and reduced operations;
+Euclidean and extended Euclidean GCD; logical irreducibility and modular
+inverse. The HS/PFIELD polynomial layer is retained for concrete/root-count
+bridges, not as a parallel home for new algorithms.
 
-The first classifier-selected generic affine formula is the ordinary DEFUN
-`affine-distinct-x-slope(first, second)`.  It is exactly the total `FIELD-DIV`
-of `y_second-y_first` by `x_second-x_first`; total accessors supply `(0,0)` for
-malformed coordinates and no nonzero guard or classifier branch is embedded in
-the definition.  `:distinct-x` supplies the predecessor's exact nonzero
-denominator only to the certified, non-rewriting reconstruction theorem.  The
-corresponding F11 book substitutes the existing named F11 operations into the
-same body for execution regressions; it is not a parallel slope theory.
+### Fixed-modulus quotient fields
 
-`affine-distinct-x-output-x(first, second)` is the next ordinary transparent
-DEFUN.  A local `slope` binding reuses that certified operation, direct
-`FIELD-MUL` self-multiplication represents its square, and two `FIELD-SUB`
-calls implement `(slope^2-x_first)-x_second` in that order.  Total fixed
-accessors make the result total, field-valued, and fixed with no classifier
-test, nonzero guard, or curve hypothesis.  Consequently no decorative
-`:distinct-x` theorem is published. Its non-rewriting rearrangement theorem
-exposes the unconditional total identity `x3+x_first+x_second = slope^2`,
-with the displayed left association matching later scalar-sum consumption. It
-adds no executable boundary or curve-closure claim. Its named F11 operation is
-the established
-direct substitution of concrete operations into the same body, not a parallel
-mathematical theory.
+The generic fixed-modulus construction constrains a nullary, canonical,
+irreducible positive-degree modulus. Elements are canonical remainders and the
+fixer is remainder modulo that modulus. Addition, negation, subtraction, and
+multiplication use reduced operations; inverse is the total XGCD-derived
+candidate with an explicit zero case. Certified irreducibility results provide
+the nonzero inverse law.
 
-`affine-distinct-x-output-y(first, second)` is likewise an ordinary transparent
-DEFUN.  One parallel `LET` independently binds the certified slope and output-x
-operations, then computes exactly
-`FIELD-SUB(FIELD-MUL(slope, FIELD-SUB(x_first, output-x)), y_first)`.
-The ordered inner subtraction and final use of the first point's y-coordinate
-are explicit.  Total fixed accessors and field operations give guard-`T`,
-field-element, and fixed-result semantics on arbitrary inputs, so no classifier
-or nonzero test is present.  No classifier restatement theorem is published,
-and the non-rewriting rearrangement theorem proves the total,
-unconditional identity `y3+y_first = slope*(x_first-x3)` directly from the
-transparent definition and generic field addition laws. It introduces no
-executable boundary and makes no curve-closure claim. The named F11 operation
-is direct substitution into this same body; it is execution evidence rather
-than another mathematical theory.
+F7X2, representing `F7[x]/(x^2+1)`, is a concrete proving instance. It should
+not be confused with the reusable constructor or treated as an arbitrary
+finite-field package.
 
-`affine-distinct-x-output(first, second)` is the transparent, total coordinate
-assembly boundary. A parallel `LET` independently calls the certified output-x
-and output-y operations, in that order, and passes them to the existing
-`affine-coordinates-make`; it repeats no scalar arithmetic or redundant fixing.
-Scalar fixed-result laws give recognizer closure, exact x/y accessor rules, and
-affine-fixer stability without classifier, nonzero, or curve hypotheses. The
-direct F11 substitution calls the existing F11 scalar outputs and constructor,
-not a competing mathematical implementation. Equal-x and malformed executions
-are programming semantics, not curve-membership or point-addition claims.
+## Curve representations
 
-The proof-only `affine-distinct-x-secant-identity` composes both input curve
-equations, the classifier-backed slope reconstruction, and both non-rewriting
-scalar rearrangements. It exposes
-`slope*(y_first-y3) = x3^2+x3*x_first+x_first^2+a` as one controlled generic
-curve interface. Its difference-of-squares, difference-of-cubes, cancellation,
-and reassociation support remains local to the book. It adds no operation, F11
-mirror, executable boundary, or output curve-membership claim.
+The initial curve layer uses constrained short-Weierstrass coefficients and
+total field operations. It assumes the nonzero standard discriminant
+expression and the separately certified exclusions of characteristics two and
+three.
 
-The following proof-only `affine-distinct-x-closure` book combines that public
-secant identity with the output-y rearrangement, the first input curve equation,
-and the assembled output's x/y projections.  Under curve membership of both
-inputs and `:distinct-x` classification it certifies the existing untagged
-coordinate output with `short-weierstrass-affine-point-p`.  Its elementary
-field-algebra bridges remain local.  It introduces no operation, tagged point,
-F11 mirror, executable boundary, dispatch, or group-law claim.
+An **affine coordinate** is a canonical two-element list `(x y)` after field
+fixing. Structural recognition is separate from satisfaction of the curve
+equation. The affine fixer maps malformed outer values to the fixed zero pair;
+it does not manufacture an on-curve point.
 
-`affine-distinct-x-secant-relation-p(first, second, slope, output)` is the first
-independent curve-operation semantic relation. It is a transparent
-four-argument predicate over affine-coordinate values. Its conjuncts require
-both inputs and the output to satisfy the short-Weierstrass affine predicate,
-require the fixed accessor x values to differ, fix the explicit slope witness,
-and state `m*(x_second-x_first)=y_second-y_first`,
-`x_output+x_first+x_second=m*m`, and
-`y_output+y_first=m*(x_first-x_output)` in the existing operand order. It
-contains no classifier, division, executable slope or output, tagged point, or
-dispatcher. Accessors and `FIELD-FIX` provide total semantics; malformed or
-off-curve values fail visible membership conjuncts rather than acquiring
-geometric fallback meaning. Fixing stability is an active equality rule; the
-soundness theorem is non-rewriting. Soundness uses the existing slope and
-coordinate output only as witnesses under both input curve predicates and x
-inequality. A local classifier bridge is needed solely to consume the older
-reconstruction and closure theorems. F11 checks `(2,4),(3,5)`, slope 1, output
-`(7 2)`, and the complete relation.
+A **tagged curve point** is either canonical infinity `(:infinity)` or an
+affine tag `(:affine (x y))`. Structural point recognition remains separate
+from curve membership. The point fixer maps malformed tagged values to
+infinity. Consequently public operations are total, and malformed inputs have
+specified fixer-induced behavior rather than an implicit precondition.
 
-The same book exposes three non-rewriting, fixing-aware uniqueness results.
-`affine-distinct-x-secant-relation-slope-unique` takes exactly two relation
-hypotheses and equates the fixed slope witnesses.
-`affine-distinct-x-secant-relation-output-unique-at-fixed-slope` takes two
-relation hypotheses and equality of their fixed slopes and equates the fixed
-affine outputs.  `affine-distinct-x-secant-relation-unique` takes only the two
-relation hypotheses and concludes both equalities.  Proof-local right
-multiplication and right addition cancellation bridges adapt the existing
-left-oriented field interface; a proof-local subtraction bridge derives the
-nonzero x difference from distinct fixed accessors.  Two additive cancellations
-give output-x equality, output-y then follows from that equality and the y
-equations, and expansion of the affine fixer reconstructs equal canonical
-coordinates.  Input/output curve membership remains in the relation but does
-no substantive work in uniqueness.  No characteristic assumption is used.
-This is uniqueness of canonical representatives, not raw malformed objects,
-existence, or completeness, and it adds no classifier, executable-operation,
-tagged-point, dispatcher, full addition relation, or group law dependency.
+Point negation fixes its input, preserves infinity, and negates the affine
+`y` coordinate. Its involution and curve-membership results are modulo fixing;
+raw equality follows when the input is already canonical.
 
-`affine-doubling-relation-p(input, slope, output)` is the matching independent
-three-argument affine tangent relation.  Its conjuncts are input curve
-membership; `y != -y` on fixed accessors; the oriented equation
-`m*(y+y)=((1+1)+1)*(x*x)+field-fix(a)`; the output equations
-`x_output+(1+1)*x=m*m` and `y_output+y=m*(x-x_output)`; and output curve
-membership.  Its transparent body mentions no classifier, division, executable
-tangent slope/output, tagged point, or dispatcher, so it remains meaningful
-when implementation books are hidden.
+## Full tagged-point addition layers
 
-Its sole active normalization rule fixes input, slope, and output.  Malformed
-affine objects therefore denote the established fixed `(0,0)` coordinate and
-slopes denote field-fixed representatives; uniqueness concludes fixed, not raw,
-equality.  Soundness has exactly input membership and `y != -y` as hypotheses.
-A proof-local classifier bridge consumes the older tangent reconstruction and
-closure results, while unconditional rearrangements and projections establish
-the remaining equations.
+The addition development deliberately keeps execution and semantics separate.
+The following names refer to different layers and should not be conflated:
 
-Soundness and all three uniqueness results have rule class `NIL`.  Slope
-uniqueness derives `y+y != 0` from `y != -y` using additive-inverse uniqueness
-and a local right-multiplication cancellation adapter.  Output uniqueness uses
-a local right-addition adapter on x and then y and reconstructs affine fixers.
-Curve membership does no substantive work in uniqueness.  Although the generic
-short-Weierstrass boundary excludes characteristics two and three, no additional
-characteristic theorem is consumed: the explicit domain condition alone makes
-the exact tangent denominator nonzero.  F11 covers `(2,4)`, slope 3, output
-`(5,9)`, the domain, and full relation.  The next boundary is an audit of the
-remaining affine inverse/infinity semantics before any full addition relation.
+1. **Branch classifier.** `affine-pair-classify` classifies fixed affine inputs
+   as `:distinct-x`, `:opposite-y`, `:same-point-non-opposite`, or
+   `:same-x-other`. Its ordering makes identical self-inverse points select the
+   opposite-y branch. Classification is total and structural, including for
+   off-curve inputs.
+2. **Executable branch outputs.** Total slope and coordinate functions compute
+   the distinct-x and doubling formulas. Tagged wrappers produce affine points
+   or infinity. Outside a branch hypothesis, their values are programming
+   semantics and are not geometric claims.
+3. **Dispatchers.** `affine-pair-output-point` selects an affine branch;
+   `curve-point-pair-output-point` first handles infinity and then delegates the
+   affine/affine case. Both are transparent total executable operations. The
+   affine fallback to infinity is unreachable for two on-curve affine inputs.
+4. **Semantic branch relations.** Division-free relations independently state
+   the secant, doubling, opposite/inverse, and ordered infinity cases. They do
+   not call the classifier, slopes, executable outputs, or dispatcher.
+5. **Independent full addition relation.** `curve-point-addition-relation-p`
+   is the five-case semantic specification over two inputs and an output. It is
+   independent of classifier priority and executable dispatch.
 
-`affine-distinct-x-output-point(first, second)` is the next ordinary transparent
-DEFUN.  It passes the already canonical coordinate output directly to
-`curve-point-affine-coordinates`, so arbitrary inputs always produce an affine
-tag and never infinity.  Structural recognition and coordinate projection are
-unconditional; full short-Weierstrass curve membership is a separate
-non-rewriting theorem under the two input-membership hypotheses and
-`:distinct-x`.  The proof is only the existing affine closure theorem plus the
-established affine-constructor semantic bridge.  Its named F11 substitution
-checks the tagged boundary without defining another mathematical algorithm.
+Branch soundness and case coverage prove that the dispatcher satisfies the
+full relation for curve-point inputs. Fixed-output determinacy proves that two
+semantic witnesses have equal fixed outputs. These theorems are the semantic
+bridge to execution; guard verification alone is not that bridge.
 
-Finite affine coordinates use the transparent proper list `(x y)`, with both
-entries passed through the field fixer.  Atoms, dotted pairs, and proper lists
-whose length is not two all denote canonical `(0 0)`; entries in an exact
-two-list are independently field-fixed.  Fixing is total and idempotent but
-says nothing about curve membership.  The separate recognizer is exactly the
-existing short-Weierstrass equation on the fixed accessors.  F11 validates
-`(2,4)`, `(2,5)`, and noncanonical `(13,15)`.
+## Present algebraic-law layer
 
-Full points are exactly canonical `(:infinity)` or `(:affine coordinates)`
-proper lists, with the existing canonical affine payload.  Exact affine outer
-shapes fix their two-coordinate payload; malformed payloads, unknown tags,
-atoms, wrong-length lists, and dotted values fix to `(:infinity)`.  The total
-affine accessor returns `(0 0)` outside an affine branch, without claiming it
-is on the curve.  Structural fixed-point recognition is separate from
-mathematical recognition, which accepts infinity unconditionally or tests the
-affine equation.  Off-curve affine branches therefore remain affine.  F11
-validates both branches and malformed behavior.  No curve operation, group
-law, Frobenius, or counting machinery is added.
+For full tagged-point addition, the certified layer includes output closure,
+left and right infinity identity, addition of a point and its negation to
+infinity, semantic operand-reversal commutativity, and raw dispatcher
+commutativity. The raw dispatcher theorem is possible because executable
+outputs are canonical; semantic statements otherwise use fixer-level equality.
 
-Point negation is defined directly at the full-point layer, without a public
-affine helper.  It applies `curve-point-fix`, leaves infinity unchanged, and
-maps affine `(x,y)` to `(x,-y)` with existing field negation.  Noncanonical
-coordinates are fixed and malformed points retain the infinity fallback.
-Certification gives structural closure, double negation equal to the fixed
-input, literal involution for canonical inputs, and curve-membership closure
-from `(-y)^2=y^2`.  It adds no addition, doubling, scalar multiplication, group
-law, Frobenius, enumeration, counting, Hasse, or Schoof machinery.
+Associativity, cancellation, group or abelian-group packaging, and scalar
+multiplication are absent. Until associativity is certified, documentation must
+not call the dispatcher a certified group law.
 
-The generic field layer exposes the non-rewriting
-`FIELD-EQUAL-SQUARES-IMPLIES-EQUAL-OR-NEG` theorem under total fixing semantics.
-Its non-rewriting zero-product support follows from the existing inverse and
-multiplication-cancellation laws. Local difference-of-squares and zero-factor
-translation lemmas avoid broad public algebra rewrites. No characteristic
-assumption is used, and neither `FIELD-EQUIV`, field operations, nor execution
-boundaries change.
+## Design constraints for later work
 
-The generic polynomial layer is certified through arithmetic, evaluation,
-degree, recursive division, canonical remainder and congruence, reduced
-representative operations, GCD, XGCD, modular inverse, logical irreducibility,
-the irreducibility-to-monic-GCD-one bridge, and two-sided reduced inverse laws
-under irreducibility and a nonzero representative.
-
-`generic/fixed-modulus-field.lisp` promotes those results to a reusable field
-interface over one constrained nullary irreducible modulus. Its carrier is
-literal remainder fixedness, its operations return canonical remainder
-representatives, and inverse fixes arbitrary input before its explicit zero
-branch. The definitions are ordinary transparent total wrappers.
-
-Named F7 polynomial definitions specialize recursive division, raw and monic
-GCD, raw and monic XGCD, and modular inverse. They have verified guards,
-semantic theorems, and focused exact executions. The generic quadratic root
-criterion and concrete enumeration establish that `x^2+1` is irreducible over
-F7.
-
-The presentation-specific F7X2 layer fixes arbitrary ACL2 objects to canonical
-representatives modulo `x^2+1`, transparently implements reduced addition,
-negation, subtraction, and multiplication, and provides a total executable
-inverse candidate with an explicit zero branch. Its certified laws currently
-cover zero/one distinctness, additive identities/inverses/associativity/
-commutativity and cancellation, multiplicative zero/identity/associativity/
-commutativity, and both distributive laws. It is not yet a field or a GFIELD
-instance. A proof-only simultaneous functional-instantiation regression now
-certifies that the nine unchanged F7X2 definitions satisfy the reusable
-fixed-modulus-field interface, including its nonzero inverse law. The ordinary
-public F7X2 inverse theorem surface, replacement of bespoke proof bodies, formal
-GFIELD client packaging, finite enumeration/cardinality, and Frobenius remain
-open.
-
-## Quotient architecture
-
-Two quotient uses must remain distinct:
-
-* Quotients by certified irreducible polynomials provide coefficient fields.
-* General polynomial quotients provide Schoof coordinate rings; their moduli
-  need not be irreducible and the rings need not be fields.
-
-The reusable fixed-modulus field handles the first use and has an F7
-simultaneous-functional-instantiation regression. That regression is not a
-public concrete F7 quotient API. A separate F7X2 regression certifies the
-existing presentation's simultaneous compatibility without changing its
-execution, public definitions, or proof provenance. F7X2 has not been migrated
-to the generic interface. The construction
-does not apply to the possibly reducible coordinate-ring moduli in the second
-use.
-
-## Downstream tracks
-
-The Manin-style Hasse track needs rational-function and valuation machinery,
-curve endomorphisms, Frobenius degree and kernel/fibre results, separability,
-and the integer quadratic conclusion.
-
-The executable Schoof track needs quotient-coordinate arithmetic, Frobenius,
-division polynomials, trace testing, and bounded incremental CRT. A named prime
-field may support its first path; arbitrary finite-field execution is a later
-architectural phase.
-
-Logical correctness, guard verification, exact execution regressions, and
-practical execution evidence are separate claims. Compiled benchmarks and
-allocation/normalization measurements are future acceptance evidence, not
-certified mathematics. Detailed status is maintained only in
-`obligations.md`, and the current sequence is in `proof-plan.md`.
-
-## Affine exceptional-case classification
-
-The semantic curve client of the structural classifier proves one public,
-non-rewriting theorem: two inputs satisfying the same constrained
-`short-weierstrass-affine-point-p` equation cannot be `:same-x-other`. No
-explicit equal-x hypothesis is needed because the classifier characterization
-supplies it. Equal x makes the common curve right-hand sides identical, hence
-the y squares equal; generic equal-squares theory then gives equal or opposite
-y. No nonsingularity or characteristic restriction is used. The alternatives
-may overlap for self-inverse y, and an identical self-inverse pair remains
-`:opposite-y` by priority. Off-curve and malformed inputs retain fixing
-semantics, classifier symmetry remains deferred, and no slope, division,
-addition, doubling, scalar multiplication, or group law is added.
-
-The structural classifier also exports the non-rewriting theorem
-`affine-pair-classify-distinct-x-implies-x-difference-nonzero`. It chooses
-`x_second - x_first`, matching the conventional ordered future secant quotient,
-and needs no curve-membership hypothesis. The non-rewriting generic field
-theorem `field-sub-equal-zero-implies-fixed-equal` supplies the additive
-contrapositive: zero subtraction equates fixed representatives, not arbitrary
-raw ACL2 objects. Fixed accessors therefore cover noncanonical entries, while
-malformed outer inputs retain the affine fixer's `(0 0)` fallback. Focused F11
-executions cover both pair orders, distinct and equal fixed representatives,
-noncanonical inputs, and off-curve inputs. No inverse is used and no slope or
-addition operation is introduced.
-
-For `:same-point-non-opposite`, the structural classifier exports the
-non-rewriting theorem that the exact future tangent denominator
-`FIELD-ADD(y_first,y_first)` is nonzero.  The existing characterization
-supplies that fixed `y_first` is not its own negation, and generic additive-
-inverse uniqueness rules out a zero doubled value.  This uses no curve or
-characteristic hypothesis.  The unary transparent total operation
-`affine-same-point-non-opposite-slope` uses the left-associated field numeral
-`((1+1)+1)`, multiplies it on the left by `x_first*x_first`, adds the explicitly
-fixed constrained coefficient `a`, and divides by that exact doubled-y
-denominator.  Its non-rewriting reconstruction theorem takes the classified
-pair as its sole hypothesis and consumes the public denominator theorem.
-Malformed, noncanonical, off-curve, wrong-branch, and zero-denominator inputs
-retain total field semantics; they are not geometric tangent claims.  The
-unary scalar boundary `affine-same-point-non-opposite-output-x` binds that
-slope and computes the conventional `m*m-(1+1)*x_first`, using field subtraction
-and the left scalar-factor convention.  The parallel-binding unary output-y
-boundary reuses the slope and output-x operations and spells the conventional
-formula exactly as `m*(x_first-x3)-y_first`, with `FIELD-SUB` at both ordered
-subtractions and the slope as the left multiplication operand.  Matching the
-distinct-x scalar interface, non-rewriting rearrangement theorems expose the
-unconditional total equations `x3+(1+1)*x_first = m*m` and
-`y3+y_first = m*(x_first-x3)`.  The field-two factor retains the definition's
-left scalar-factor spelling, and both the inner subtraction and multiplication
-operand order are unchanged for direct use by later algebra.  No explicit fixes
-are needed because the accessors and both component operations are field-valued.
-As in distinct-x output y, the independent composition means output x
-recomputes its slope; no performance boundary is introduced.  The
-unary coordinate constructor then independently binds those public scalar
-operations and calls `AFFINE-COORDINATES-MAKE` in x-then-y order.  This matches
-the distinct-x binding and evaluation order exactly, with unary arity as the
-only structural difference.  The scalar fixed-result theorems make explicit
-fixing unnecessary and yield unconditional recognition, exact projections,
-and affine-fixer stability.  Thus malformed, noncanonical, off-curve, and
-wrong-classifier inputs retain the component operations' total semantics and
-produce a canonical pair; neither representation nor guard verification is a
-geometric doubling claim.  The proof-only closure book then consumes the tangent
-identity and input curve equation without changing this executable operation.
-
-`affine-same-point-non-opposite-output-point(first)` is the corresponding unary,
-ordinary transparent tagged boundary.  It passes the existing canonical output
-directly to `curve-point-affine-coordinates`; it does not retain `second` because
-neither construction nor execution depends on classifier selection.  Structural
-recognition and coordinate projection are unconditional.  Its separate binary
-semantic theorem retains `second` exactly where needed to select
-`:same-point-non-opposite`, and combines that premise and input membership with
-the existing untagged closure and affine-constructor membership theorem.  F11
-checks the tagged `(2,4) -> (:affine (5 9))` integration and malformed total
-execution.  No representation change, new identity, dispatch, infinity handling,
-addition or doubling specification, or group-law claim is added.
-
-`affine-opposite-y-output-point(first, second)` is the ordinary transparent
-boundary for the already characterized `:opposite-y` classifier result.  Its
-body ignores both arbitrary ACL2 inputs and returns the existing
-`curve-point-infinity`; binary arity is intentional because branch selection is
-relational and a later pair dispatcher will already hold both operands.  Exact
-equality with canonical infinity, structural recognition, the infinity
-predicate, and full short-Weierstrass membership are unconditional.  They need
-no classifier or input-membership hypotheses because infinity is already a
-valid full curve point.  The operation remains total on malformed, off-curve,
-noncanonical, and wrong-classifier inputs; only a later dispatcher will control
-selection.  F11 covers an on-curve opposite pair, the self-inverse fixed `(0,0)`
-malformed case, and a wrong-branch call.  No affine accessor theorem, slope,
-coordinate arithmetic, classifier change, representation change, dispatcher,
-or group-law specification is introduced.
-
-`affine-pair-output-point(first, second)` is the ordinary transparent affine-input
-composition seam.  A single `LET` retains one classifier evaluation.  Explicit
-branches call the existing binary distinct-x tagged output, binary opposite-y
-infinity output, and unary same-point tagged output.  The final branch returns
-canonical infinity for `:same-x-other` (and would cover an unexpected value) only
-as a total programming convention.  It assigns no geometric meaning to invalid
-inputs.  Structural recognition is unconditional.  Full curve membership needs
-exactly both affine-input membership hypotheses: branch closure handles the
-three reachable tags and the existing curve-classification theorem contradicts
-`:same-x-other`.  The definition does not accept full tagged points, so infinity
-inputs, a general addition specification, and group laws remain separate work.
-F11 execution covers `(2,4)+(3,5)=(:affine (7 2))`, doubling `(2,4)` to
-`(:affine (5 9))`, the opposite pair `(2,4),(2,7)` to `(:infinity)`, and the
-off-curve `:same-x-other` fallback `(2,4),(2,5)`.
-
-`curve-point-pair-output-point(first, second)` is the ordinary transparent
-full-point composition seam.  Nested `LET*` bindings fix each operand exactly
-once.  If fixed `first` is infinity it returns fixed `second`; otherwise, if
-fixed `second` is infinity it returns fixed `first`; only the remaining
-affine/affine case extracts both fixed payloads and calls
-`affine-pair-output-point`.  Thus malformed outer values act like infinity and
-noncanonical affine payloads are canonicalized before use.  This is the
-existing fixer convention, not geometry assigned to malformed data.  The
-public branch equations, fixing congruence, structural closure, and full curve
-closure under two membership hypotheses expose the boundary without defining
-an independent elliptic-curve sum or any group law.
-
-Before any slope or addition operation, the affine-coordinate layer classifies
-two arbitrary objects after applying `affine-coordinates-fix` to both. The
-canonical keyword result is selected by distinct x first, then opposite y,
-then equal y, with `:same-x-other` as the total fallback. Thus an identical
-pair satisfying `y=-y` is deliberately `:opposite-y`, not
-`:same-point-non-opposite`. This structural boundary is independent of curve
-coefficients and membership; malformed inputs inherit the existing `(0 0)`
-fallback. No fixing-induced equivalence, infinity dispatcher, slope, division,
-or addition boundary is introduced.
-
-## Exceptional addition relations
-
-This layer selects Scope A: the inverse output and both ordered infinity
-branches already share the full-point fixer and branch-local executable
-equations. `affine-opposite-y-infinity-relation-p(first,second,output)` contains
-both affine curve predicates, equal fixed x accessors,
-`y_second=field-neg(y_first)`, and
-`curve-point-fix(output)=curve-point-infinity`. It mentions no classifier,
-dispatcher, executable output, or point negation. Equal x plus opposite y is
-more direct than an equivalent sum-zero spelling; point negation adds an
-unnecessary tagged dependency; classifier- and executable-result definitions
-would be circular. The domain deliberately includes `first=second` when
-`y=-y`. Both memberships define the geometric domain and support soundness,
-but neither is used by determinacy.
-
-The left and right identity predicates each take `(first,second,output)`,
-require both fixed operands to be full curve points, require the appropriately
-oriented fixed operand to be infinity, and equate fixed output to the other
-fixed operand. Membership and equality after fixing give malformed outer
-values their established infinity meaning. Soundness uses the corresponding
-existing branch equation independently in each direction, never commutativity
-or whole-dispatcher expansion. Only fixing theorems rewrite; soundness and
-determinacy have rule class `NIL`. No characteristic fact is consumed. This is
-not case coverage, dispatcher correctness, full addition, or a group law.
-
-## Full tagged-point addition relation
-
-`curve-point-addition-relation-p(first,second,output)` is the independent
-three-place semantic boundary for full addition.  It fixes all tagged values,
-requires both fixed inputs to be curve points, and transparently disjoins the
-ordered infinity relations with three affine cases: the established secant
-relation at its unique field quotient, the opposite-y infinity relation, and
-the established doubling relation at its unique field quotient.  Finite
-outputs are explicitly affine-tagged.  The definition mentions neither the
-affine classifier nor either dispatcher; classifier priority is used only in
-the dispatcher-soundness proof.
-
-Both-infinity is harmless overlap between the identity clauses.  A self-inverse
-point belongs to opposite-y, while doubling explicitly excludes it.
-`:same-x-other` is absent because the existing curve-classification theorem
-proves it impossible for two affine curve points.  Malformed tagged inputs fix
-to infinity, so they may satisfy an identity clause exactly according to the
-established total semantics.  Fixing is an active congruence; coverage,
-fixed-output determinacy, and dispatcher soundness are non-rewriting theorems.
-No commutativity, associativity, or other group law is claimed.
-
-## Full-point inverse law
-
-The first algebraic consumer of the independent relation composes the existing
-`curve-point-neg` with the existing dispatcher.  Its semantic theorem places
-`point + (-point) = infinity` in the full relation under exactly full curve
-membership: infinity selects an ordered identity clause, and an affine point
-selects the opposite-y clause.  The executable theorem does not inspect the
-dispatcher.  It combines that semantic fact with dispatcher soundness and
-fixed-output determinacy, then strengthens fixed-representative equality to
-literal canonical infinity using the dispatcher's unconditional structural
-closure.  This consumes no additional characteristic assumption and adds no
-operation, representation, equivalence, commutativity, or associativity layer.
+- Preserve total fixer semantics at public ACL2 boundaries and state clearly
+  when equality is raw or modulo fixing.
+- Keep generic theorems separate from concrete F7/F11 execution regressions.
+- Do not replace an independent semantic relation with the executable
+  dispatcher or its classifier.
+- Keep guard/termination assurance separate from semantic correctness.
+- Extend `GFIELD`/`GPOLY` rather than duplicating new algebra in HS/PFIELD.
+- Treat the Hasse and Schoof developments as downstream tracks sharing the
+  field, polynomial, curve, and Frobenius foundations; neither track is a
+  prerequisite for the other after that seam.
