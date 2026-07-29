@@ -183,8 +183,12 @@ named F7/F11 operations.
 - Deriving exact `H=(p-r)(p+q)-(xa-xc)=0` remains open.  Its prospective proof
   combines those three ordered input-secant instances, closure of `AB` from the
   `(A,B)` hypotheses, and the existing output-x/output-y rearrangements.  The
-  necessary local field reassociation and cancellation bridge has not yet been
-  certified.
+  three input-secant equations and the two output-coordinate rearrangements do
+  not, by themselves, determine the ordered quotient witnesses: the proof must
+  also consume `affine-distinct-x-slope-reconstructs-y-difference` at `(A,B)`,
+  `(B,C)`, and `(AB,C)`.  Those public facts are available under the same three
+  classifier hypotheses, but the necessary local field reassociation bridge
+  combining all eight equations has not yet been certified.
 - Exact `S=(p+q)-(r+tt)=0` also remains open.  Its prospective ordered-secant
   reconstruction additionally involves `(A,BC)` and closure of `BC`; it is not
   available from output-y rearrangement alone and was not assumed from `H` or
