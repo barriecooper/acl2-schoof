@@ -60,6 +60,8 @@
 (include-book "curve/f11-exceptional-addition-relations")
 (include-book "curve/curve-point-addition-relation")
 (include-book "curve/f11-curve-point-addition-relation")
+(include-book "curve/curve-point-addition-inverse")
+(include-book "curve/f11-curve-point-addition-inverse")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")
