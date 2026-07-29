@@ -270,3 +270,18 @@ a legacy/root-count bridge unless a specific bridge requires them. New GCD,
 derivative, quotient, and extension-field work must not be duplicated across
 both stacks. A named prime field may support the first executable Schoof path;
 arbitrary finite-field execution is a later architectural phase.
+
+## Exceptional addition semantics
+
+The remaining exceptional branch semantics are certified independently of the
+dispatcher. `affine-opposite-y-infinity-relation-p(first,second,output)` takes
+two affine curve points with equal fixed x and opposite fixed y, and requires
+the fixed full-point output to be canonical infinity. It includes identical
+self-inverse inputs and has fixing, executable-branch soundness, and fixed-output
+determinacy theorems. Separate three-argument left and right infinity identity
+relations specify the ordered full-point branches using fixed operands and
+outputs; each has fixing, branch soundness, and determinacy without
+commutativity. F11 checks `(2,4),(2,7)` and both infinity orders at
+`(:affine (2 4))`. These are branch specifications, not a combined addition
+relation or group identity laws. The next boundary is the full tagged addition
+relation and its coverage and dispatcher-soundness proof.

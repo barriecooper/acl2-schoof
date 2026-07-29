@@ -414,3 +414,28 @@ pair satisfying `y=-y` is deliberately `:opposite-y`, not
 coefficients and membership; malformed inputs inherit the existing `(0 0)`
 fallback. No fixing-induced equivalence, infinity dispatcher, slope, division,
 or addition boundary is introduced.
+
+## Exceptional addition relations
+
+This layer selects Scope A: the inverse output and both ordered infinity
+branches already share the full-point fixer and branch-local executable
+equations. `affine-opposite-y-infinity-relation-p(first,second,output)` contains
+both affine curve predicates, equal fixed x accessors,
+`y_second=field-neg(y_first)`, and
+`curve-point-fix(output)=curve-point-infinity`. It mentions no classifier,
+dispatcher, executable output, or point negation. Equal x plus opposite y is
+more direct than an equivalent sum-zero spelling; point negation adds an
+unnecessary tagged dependency; classifier- and executable-result definitions
+would be circular. The domain deliberately includes `first=second` when
+`y=-y`. Both memberships define the geometric domain and support soundness,
+but neither is used by determinacy.
+
+The left and right identity predicates each take `(first,second,output)`,
+require both fixed operands to be full curve points, require the appropriately
+oriented fixed operand to be infinity, and equate fixed output to the other
+fixed operand. Membership and equality after fixing give malformed outer
+values their established infinity meaning. Soundness uses the corresponding
+existing branch equation independently in each direction, never commutativity
+or whole-dispatcher expansion. Only fixing theorems rewrite; soundness and
+determinacy have rule class `NIL`. No characteristic fact is consumed. This is
+not case coverage, dispatcher correctness, full addition, or a group law.

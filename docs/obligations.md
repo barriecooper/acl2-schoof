@@ -271,3 +271,15 @@ recognition, and fixing at `(2,4)`.  Malformed, noncanonical, off-curve, and
 wrong-classifier inputs inherit total scalar and affine-constructor semantics.
 No curve membership, closure, tagging, dispatch, geometric doubling theorem,
 doubling specification, general addition, or group-law result is introduced.
+
+## Exceptional addition semantic boundary (proved)
+
+`CURVE-EXCEPTIONAL-ADDITION-RELATIONS` is proved by
+`books/curve/exceptional-addition-relations.lisp`. It supplies the independent
+inverse-to-canonical-infinity relation and independent ordered left/right
+infinity relations, their unconditional fixing stability, non-rewriting
+branch-local executable soundness, and fixed-output determinacy. Self-inverse
+affine points are included. There is no classifier bridge, characteristic
+consumer, dispatcher proof, combined addition relation, or group-law claim.
+The F11 book covers `(2,4),(2,7)` and both infinity orders. Full tagged addition
+coverage, case interaction, and dispatcher correctness are the next obligation.
