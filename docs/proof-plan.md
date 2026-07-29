@@ -182,7 +182,13 @@ execution yields 9.  Their elementary rearrangement interface is also complete:
 the unconditional non-rewriting equations are exactly
 `x3+(1+1)*x_first = m*m` and `y3+y_first = m*(x_first-x3)`, proved from the
 transparent definitions and existing generic field laws.  They add no geometric
-or executable claim.  Output x consequently recomputes the slope internally,
+or executable claim.  The first substantive tangent bridge is now complete:
+under only the `:same-point-non-opposite` classifier hypothesis, tangent
+numerator reconstruction and those two rearrangements prove
+`m*(y_first-y3) = x3^2+x3*x_first+x_first^2+a`.  This proof-only identity does
+not need the input curve equation; that equation belongs to its intended next
+consumer, the separate doubling-closure proof.  Output x consequently
+recomputes the slope internally,
 matching the transparent distinct-x composition rather than introducing a
 performance refactor.  The unary untagged coordinate constructor is also
 complete: it uses parallel x-then-y bindings of those public scalars and the
