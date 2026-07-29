@@ -32,6 +32,8 @@
 (include-book "curve/f11-affine-same-point-non-opposite-output")
 (include-book "curve/affine-same-point-non-opposite-tangent-identity")
 (include-book "curve/affine-same-point-non-opposite-closure")
+(include-book "curve/affine-doubling-relation")
+(include-book "curve/f11-affine-doubling-relation")
 (include-book "curve/affine-same-point-non-opposite-output-point")
 (include-book "curve/f11-affine-same-point-non-opposite-output-point")
 (include-book "curve/affine-distinct-x-slope")

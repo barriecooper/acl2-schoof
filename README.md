@@ -82,7 +82,22 @@ same-point-non-opposite classifier hypothesis.  It is the algebraic bridge consu
 closure theorem, which combines it with the output-y rearrangement, the input curve equation,
 and the assembled coordinate projections.  Under input curve membership and
 `:same-point-non-opposite` classification, the existing untagged unary output
-is therefore on the affine curve.  The transparent unary
+is therefore on the affine curve.  The complete independent affine doubling boundary is now certified by the
+transparent three-argument `affine-doubling-relation-p(input,slope,output)`.
+It requires input and output curve membership, excludes a self-inverse fixed
+input y-coordinate, and states the division-free equations
+`m*(y+y)=((1+1)+1)*(x*x)+a`, `x3+(1+1)*x=m*m`, and
+`y3+y=m*(x-x3)`.  The predicate contains no classifier, division, executable
+slope/output, tagged point, or dispatcher and is stable under fixing.  Under
+input membership and the non-self-inverse y condition, the existing tangent
+slope and unary coordinate output satisfy it; the classifier bridge is
+proof-local.  Non-rewriting theorems establish fixed slope uniqueness, fixed
+output uniqueness at equal fixed slopes, and combined two-instance uniqueness.
+F11 checks `(2,4)`, slope 3, output `(5,9)`, the domain, and the full relation.
+This is not addition completeness, tagged-dispatcher correctness, or a group
+law.
+
+The transparent unary
 `affine-same-point-non-opposite-output-point` now packages that coordinate with
 the established affine full-point constructor.  It is structurally recognized
 and projects to the untagged output unconditionally; under input membership and
