@@ -257,17 +257,9 @@ closure are certified; F11 also checks malformed-input fixer behavior.  An
 independent addition specification and all group laws remain later mathematical
 boundaries.
 
-## Completed exceptional semantic boundary
+## Next addition boundary
 
-The combined exceptional semantic boundary (Scope A) is complete in
-`exceptional-addition-relations.lisp`. The affine inverse relation uses two
-curve memberships, equal fixed x, directly opposite fixed y, and a full output
-whose fixed representative is `(:infinity)`. Separate three-place left and
-right infinity relations use fixed full operands and state the corresponding
-fixed output equality. Each relation has one active fixing theorem, a
-non-rewriting existing-branch soundness theorem, and non-rewriting fixed-output
-determinacy. No classifier bridge is required: the inverse executable branch
-is constant infinity and the full dispatcher already exposes independent
-left/right equations. F11 exercises a genuine inverse pair and both operand
-orders. The next boundary is a full tagged addition relation, including later
-case coverage/disjointness and dispatcher soundness; it is not begun here.
+The independent opposite-y, left-infinity, and right-infinity branch
+specifications, fixing, determinacy, executable soundness, and focused
+regressions are complete. Next establish the independent full tagged-point
+addition relation, case coverage, and soundness of the existing full dispatcher.

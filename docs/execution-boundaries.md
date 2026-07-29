@@ -222,13 +222,3 @@ theorems provide the logical evidence.
 The curve-classification client adds only a non-rewriting semantic theorem and
 focused assertions. It changes no function, guard, classifier branch, or
 logical/executable split; off-curve `:same-x-other` execution remains available.
-
-## Exceptional addition semantic relations
-
-The three new predicates are transparent logical relations, not new executable
-implementations or logical/executable splits. Their executable soundness
-consumers are the existing constant opposite-y branch and the existing separate
-left/right full-point branch equations. Generic certification proves fixing and
-fixed-output determinacy; F11 checks the inverse pair `(2,4),(2,7)` and both
-orders with `(:affine (2 4))`. No guard, representation, fixer, classifier,
-operation, or dispatcher definition changes, and no performance claim is made.
