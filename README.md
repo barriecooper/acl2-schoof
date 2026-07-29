@@ -78,10 +78,13 @@ branch is only total field programming semantics, not a geometric tangent or
 doubling claim.  The proof-only, non-rewriting tangent identity now combines
 tangent-numerator reconstruction and both scalar rearrangements to establish
 `m*(y_first-y3) = x3^2+x3*x_first+x_first^2+a` under only the established
-same-point-non-opposite classifier hypothesis.  It is the algebraic bridge for
-later closure, not curve membership itself.  No tagged doubled point,
-dispatcher, general addition, closure
-theorem, addition or doubling specification, or group-law theorem is defined.
+same-point-non-opposite classifier hypothesis.  It is the algebraic bridge consumed by the proof-only generic
+closure theorem, which combines it with the output-y rearrangement, the input curve equation,
+and the assembled coordinate projections.  Under input curve membership and
+`:same-point-non-opposite` classification, the existing untagged unary output
+is therefore on the affine curve.  No tagged doubled point, dispatcher,
+general addition, addition or doubling specification, or group-law theorem is
+defined.
 
 The generic field layer also certifies that equal squares have equal fixed
 representatives or fixed representatives related by `FIELD-NEG`. The proof has

@@ -186,14 +186,16 @@ or executable claim.  The first substantive tangent bridge is now complete:
 under only the `:same-point-non-opposite` classifier hypothesis, tangent
 numerator reconstruction and those two rearrangements prove
 `m*(y_first-y3) = x3^2+x3*x_first+x_first^2+a`.  This proof-only identity does
-not need the input curve equation; that equation belongs to its intended next
-consumer, the separate doubling-closure proof.  Output x consequently
-recomputes the slope internally,
+not need the input curve equation.  Its separate closure consumer is now
+complete: the identity, output-y rearrangement, input curve equation, and
+assembled projections prove that the existing untagged unary output lies on
+the affine curve under input membership and the same classifier hypothesis.
+Output x consequently recomputes the slope internally,
 matching the transparent distinct-x composition rather than introducing a
 performance refactor.  The unary untagged coordinate constructor is also
 complete: it uses parallel x-then-y bindings of those public scalars and the
 existing affine constructor, with unconditional recognition, projection, and
 fixer stability.  F11 checks `(5 9)` at `(2,4)`.  Total execution outside the
 classifier branch is neither tangent nor geometric doubling correctness.  No
-tagged doubled point, dispatcher, general addition, closure theorem, addition
-or doubling specification, or group-law theorem is yet defined.
+tagged doubled point, dispatcher, general addition, addition or doubling
+specification, or group-law theorem is yet defined.
