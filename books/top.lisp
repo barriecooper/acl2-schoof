@@ -28,6 +28,7 @@
 (include-book "curve/f11-affine-same-point-non-opposite-output-y")
 (include-book "curve/affine-same-point-non-opposite-output")
 (include-book "curve/f11-affine-same-point-non-opposite-output")
+(include-book "curve/affine-same-point-non-opposite-tangent-identity")
 (include-book "curve/affine-distinct-x-slope")
 (include-book "curve/f11-affine-distinct-x-slope")
 (include-book "curve/affine-distinct-x-output-x")
