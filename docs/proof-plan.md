@@ -215,6 +215,11 @@ certification gives unconditional structural recognition and full curve
 membership under exactly the two affine-input membership hypotheses; the
 existing `affine-pair-classify-not-same-x-other-for-curve-points` theorem removes
 the fallback without interpreting it geometrically.  F11 checks all three
-reachable branches and the off-curve fallback.  Next, separately audit a full
-tagged-point dispatcher and infinity-input policy; general addition semantics
-and group laws remain later mathematical boundaries.
+reachable branches and the off-curve fallback.  The full tagged-point dispatcher
+is now complete: `curve-point-pair-output-point` fixes each operand once,
+implements the three infinity identity cases, and delegates its affine/affine
+case to the affine dispatcher.  Its four branch equations, fixing congruence,
+unconditional representation closure, and conditional full curve-membership
+closure are certified; F11 also checks malformed-input fixer behavior.  An
+independent addition specification and all group laws remain later mathematical
+boundaries.

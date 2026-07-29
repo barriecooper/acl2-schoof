@@ -50,6 +50,8 @@
 (include-book "curve/f11-affine-pair-curve-classification")
 (include-book "curve/affine-pair-output-point")
 (include-book "curve/f11-affine-pair-output-point")
+(include-book "curve/curve-point-pair-output-point")
+(include-book "curve/f11-curve-point-pair-output-point")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")
