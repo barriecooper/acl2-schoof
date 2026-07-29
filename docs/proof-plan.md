@@ -22,14 +22,19 @@ addition. Output closure, infinity identity, inverse-to-infinity, and full
 commutativity are complete. Concrete F7, F7X2, and F11 books supply focused
 instantiation and execution regressions rather than additional generic scope.
 
-## Next boundary: consequences of the X-CERT semantic bridge
+## Next boundary: reconstruct H from ordered input secants
 
-The field-only X-CERT composition is now instantiated for the two ordered
-nested distinct-x trees.  Its four output-x residuals vanish unconditionally
-by the existing total output-x rearrangement.  The next tight X-CERT task is to
-determine, using the existing output-y rearrangement, the hypotheses under
-which the specialized `H` or `S` expression vanishes.  It must stop before
-cancellation, exceptional cases, or a curve-associativity conclusion.
+The field-only X-CERT composition is instantiated for the two ordered nested
+distinct-x trees, and its four output-x residuals vanish unconditionally.  An
+audit of both remaining factors found that neither `H` nor `S` follows directly
+from the previously public API: the needed input-secant quotient identity was
+proof-local.  That ordered identity is now public, with exactly the two
+curve-membership and ordered `:distinct-x` hypotheses used by its denominator
+cancellation.  The next tight task is to combine its `(A,B)`, `(B,C)`, and
+`(AB,C)` instances with the existing output coordinate rearrangements to
+reconstruct the exact `(p-r)(p+q)=xa-xc` equality and hence `H=0`.  It must
+still stop before composition simplification, `S`, exceptional cases, or a
+curve-associativity conclusion.
 
 ## Phase 1: prepare associativity
 

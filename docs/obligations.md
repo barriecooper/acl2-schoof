@@ -171,8 +171,26 @@ named F7/F11 operations.
 
 ### Open
 
-- Deriving a specialized `H` or `S` zero consequence from output-y/secant
-  facts, including precisely necessary distinct-x hypotheses.
+- The H/S audit found no directly available zero result.  The smallest missing
+  bridge, formerly proof-local, is now certified publicly as
+  `affine-distinct-x-input-secant-identity`:
+  `slope*(y(second)+y(first)) = x(second)^2 +
+  x(second)*x(first) + x(first)^2 + a`.  Its only hypotheses are curve
+  membership of the two ordered inputs and classification of that same ordered
+  pair as `:distinct-x`; the classification supplies the nonzero denominator
+  used by the theorem's cancellation step.  Regressions instantiate it without
+  operand reversal at `(A,B)`, `(B,C)`, and `(AB,C)` for `p`, `r`, and `q`.
+- Deriving exact `H=(p-r)(p+q)-(xa-xc)=0` remains open.  Its prospective proof
+  combines those three ordered input-secant instances, closure of `AB` from the
+  `(A,B)` hypotheses, and the existing output-x/output-y rearrangements.  The
+  necessary local field reassociation and cancellation bridge has not yet been
+  certified.
+- Exact `S=(p+q)-(r+tt)=0` also remains open.  Its prospective ordered-secant
+  reconstruction additionally involves `(A,BC)` and closure of `BC`; it is not
+  available from output-y rearrangement alone and was not assumed from `H` or
+  from associativity.
+- The four output-x residuals were already zero before this input-secant step.
+  The X-CERT composition has not been simplified with any H/S result.
 - Cancellation, exceptional branches, curve associativity, and any later use
   in Schoof machinery.
 

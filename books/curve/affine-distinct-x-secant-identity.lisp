@@ -442,8 +442,7 @@
         field-fix-of-mul
         field-fix-of-neg))))))
 
-(local
- (defthm affine-distinct-x-input-secant-identity
+(defthm affine-distinct-x-input-secant-identity
    (implies
     (and (short-weierstrass-affine-point-p first)
          (short-weierstrass-affine-point-p second)
@@ -497,7 +496,7 @@
         field-element-p-of-affine-distinct-x-slope
         field-fix-when-field-element-p
         field-fix-of-add
-        field-fix-of-mul))))))
+        field-fix-of-mul)))))
 
 (local
  (defthm field-difference-from-sum

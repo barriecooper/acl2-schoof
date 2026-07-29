@@ -41,6 +41,15 @@ rearrangement and specializes `D_x`, `H`, `S`, `C`, and the opaque composition.
 The bridge adds no polynomial dependency and proves no associativity or
 exceptional-case fact.
 
+The ordered distinct-x theory also exposes the division-free input-secant
+identity `slope*(y(second)+y(first)) = x(second)^2 +
+x(second)*x(first) + x(first)^2 + a`.  It requires both ordered inputs to be
+on the curve and that their classifier be exactly `:distinct-x`; its operand,
+numerator, and denominator orientations are those of
+`affine-distinct-x-slope` and are never silently reversed.  This is the first
+reusable curve-level ingredient selected by the H/S audit, not an H- or S-zero
+result.
+
 ### Canonical dense polynomials
 
 `GPOLY` is authoritative for new polynomial algebra. A polynomial is a dense
