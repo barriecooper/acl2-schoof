@@ -186,9 +186,17 @@ named F7/F11 operations.
   three input-secant equations and the two output-coordinate rearrangements do
   not, by themselves, determine the ordered quotient witnesses: the proof must
   also consume `affine-distinct-x-slope-reconstructs-y-difference` at `(A,B)`,
-  `(B,C)`, and `(AB,C)`.  Those public facts are available under the same three
-  classifier hypotheses, but the necessary local field reassociation bridge
-  combining all eight equations has not yet been certified.
+  `(B,C)`, and `(AB,C)`.  Even the resulting eight scalar equations are not a
+  sufficient hypothesis-free field interface.  Setting every coordinate and
+  y-coordinate, the curve coefficient, and `p` to field zero while setting
+  `q=r=field-one` satisfies all eight equations, but makes the proposed
+  conclusion `(p-r)(p+q)=xa-xc` assert `-1=0`.  The semantic classifiers rule
+  out this degenerate assignment through their three ordered nonzero
+  x-differences, but a scalar bridge that is forbidden to state those facts
+  cannot be certified.  The next proof boundary is therefore to audit a
+  deliberately cancellation-aware bridge carrying exactly the nondegeneracy
+  consequences of `(A,B)`, `(B,C)`, and `(AB,C)`, rather than retrying an
+  unconditional eight-equation normalization.
 - Exact `S=(p+q)-(r+tt)=0` also remains open.  Its prospective ordered-secant
   reconstruction additionally involves `(A,BC)` and closure of `BC`; it is not
   available from output-y rearrangement alone and was not assumed from `H` or
