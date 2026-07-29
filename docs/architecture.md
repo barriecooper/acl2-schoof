@@ -30,10 +30,16 @@ assumed-zero hypotheses.  Certified component theorems establish the output
 telescope and remainder identities, and `xcert-composition` combines those
 components opaquely in the exact left-associated form.
 
-This layer depends only on the generic field kernel.  It does not interpret the
-residuals as curve equations, establish generator-zero consequences, or import
-curve or polynomial semantics.  Those semantic connections are a later
-architectural boundary.
+The field-only book depends only on the generic field kernel.  The separate
+`books/curve/xcert-semantics.lisp` bridge imports that book and the assembled
+affine distinct-x output.  For inputs `A`, `B`, and `C`, it maps `xab` and `xbc`
+to the x-coordinates of `AB = output(A,B)` and `BC = output(B,C)`, maps `xl`
+and `xr` to the x-coordinates of `output(AB,C)` and `output(A,BC)`, and maps
+`p,q,r,tt` to the ordered slopes `(A,B)`, `(AB,C)`, `(B,C)`, and `(A,BC)`.
+It certifies the four residuals as zero from the existing output-x
+rearrangement and specializes `D_x`, `H`, `S`, `C`, and the opaque composition.
+The bridge adds no polynomial dependency and proves no associativity or
+exceptional-case fact.
 
 ### Canonical dense polynomials
 

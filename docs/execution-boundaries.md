@@ -71,8 +71,9 @@ There is no experimental unmatched fast branch.
 The X-CERT algebra book adds ordinary transparent total field expressions and
 certified logical identities.  It introduces no `MBE`, attachment, alternate
 executable branch, or new guard boundary.  Its residual generators are explicit
-expressions and are not assumed to vanish; future curve-semantic connections
-must be proved separately.
+expressions and are not assumed to vanish; the curve-semantic bridge is
+likewise a transparent logical layer.  It adds no executable branch or guard boundary; its four residual-zero results follow
+from the total output-x rearrangement.
 
 ## Transparent executable interfaces
 
