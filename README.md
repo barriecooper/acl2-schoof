@@ -82,9 +82,15 @@ same-point-non-opposite classifier hypothesis.  It is the algebraic bridge consu
 closure theorem, which combines it with the output-y rearrangement, the input curve equation,
 and the assembled coordinate projections.  Under input curve membership and
 `:same-point-non-opposite` classification, the existing untagged unary output
-is therefore on the affine curve.  No tagged doubled point, dispatcher,
-general addition, addition or doubling specification, or group-law theorem is
-defined.
+is therefore on the affine curve.  The transparent unary
+`affine-same-point-non-opposite-output-point` now packages that coordinate with
+the established affine full-point constructor.  It is structurally recognized
+and projects to the untagged output unconditionally; under input membership and
+the binary classifier selection it satisfies the full curve-point predicate.
+A focused F11 regression checks `(:affine (5 9))`, classification, representation,
+coordinate recovery, curve membership, non-infinity, and malformed total output.
+No dispatcher, general addition, addition or doubling specification, or group-law
+theorem is defined.
 
 The generic field layer also certifies that equal squares have equal fixed
 representatives or fixed representatives related by `FIELD-NEG`. The proof has
