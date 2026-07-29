@@ -156,11 +156,25 @@ named F7/F11 operations.
 - Their opaque composition as
   `D_x = (T - (H + H)) + C*S`, with the specified left association.
 
+### Curve-semantic bridge certified
+
+- For ordered inputs `A,B,C`, `xa,xb,xc` are their x-coordinates; `xab,xbc`
+  are the x-coordinates of `AB=output(A,B)` and `BC=output(B,C)`; and `xl,xr`
+  are those of `output(AB,C)` and `output(A,BC)`.
+- `p,q,r,tt` are respectively the ordered slopes `(A,B)`, `(AB,C)`, `(B,C)`,
+  and `(A,BC)`.  No slope operands are swapped.
+- The four specialized coordinate-sum-minus-square residuals are zero
+  unconditionally, directly from `affine-distinct-x-output-x-rearrangement`.
+- `D_x`, `H=(p-r)(p+q)-(xa-xc)`, `S=(p+q)-(r+tt)`, and
+  `C=((p+q)-r)+tt` have exact curve specializations, and the curve composition
+  consumes `xcert-composition` opaquely.
+
 ### Open
 
-- Connecting the residual expressions to actual affine curve operations.
-- Proving any residual is zero and deriving semantic X-CERT consequences.
-- Any use of this algebra in curve associativity or later Schoof machinery.
+- Deriving a specialized `H` or `S` zero consequence from output-y/secant
+  facts, including precisely necessary distinct-x hypotheses.
+- Cancellation, exceptional branches, curve associativity, and any later use
+  in Schoof machinery.
 
 ## Affine addition branches
 

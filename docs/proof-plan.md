@@ -22,14 +22,14 @@ addition. Output closure, infinity identity, inverse-to-infinity, and full
 commutativity are complete. Concrete F7, F7X2, and F11 books supply focused
 instantiation and execution regressions rather than additional generic scope.
 
-## Next boundary: connect X-CERT algebra to curve semantics
+## Next boundary: consequences of the X-CERT semantic bridge
 
-The field-only X-CERT residual, telescope, remainder, and opaque composition
-are certified without curve or polynomial dependencies.  The next X-CERT task
-is to relate those explicit residual expressions to actual affine curve
-operations and only then consider generator-zero consequences.  This does not
-establish curve associativity and should remain separate from the broader
-associativity preparation below.
+The field-only X-CERT composition is now instantiated for the two ordered
+nested distinct-x trees.  Its four output-x residuals vanish unconditionally
+by the existing total output-x rearrangement.  The next tight X-CERT task is to
+determine, using the existing output-y rearrangement, the hypotheses under
+which the specialized `H` or `S` expression vanishes.  It must stop before
+cancellation, exceptional cases, or a curve-associativity conclusion.
 
 ## Phase 1: prepare associativity
 
