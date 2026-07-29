@@ -48,6 +48,8 @@
 (include-book "curve/f11-affine-distinct-x-output-point")
 (include-book "curve/affine-pair-curve-classification")
 (include-book "curve/f11-affine-pair-curve-classification")
+(include-book "curve/affine-pair-output-point")
+(include-book "curve/f11-affine-pair-output-point")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")

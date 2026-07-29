@@ -314,6 +314,21 @@ malformed case, and a wrong-branch call.  No affine accessor theorem, slope,
 coordinate arithmetic, classifier change, representation change, dispatcher,
 or group-law specification is introduced.
 
+`affine-pair-output-point(first, second)` is the ordinary transparent affine-input
+composition seam.  A single `LET` retains one classifier evaluation.  Explicit
+branches call the existing binary distinct-x tagged output, binary opposite-y
+infinity output, and unary same-point tagged output.  The final branch returns
+canonical infinity for `:same-x-other` (and would cover an unexpected value) only
+as a total programming convention.  It assigns no geometric meaning to invalid
+inputs.  Structural recognition is unconditional.  Full curve membership needs
+exactly both affine-input membership hypotheses: branch closure handles the
+three reachable tags and the existing curve-classification theorem contradicts
+`:same-x-other`.  The definition does not accept full tagged points, so infinity
+inputs, a general addition specification, and group laws remain separate work.
+F11 execution covers `(2,4)+(3,5)=(:affine (7 2))`, doubling `(2,4)` to
+`(:affine (5 9))`, the opposite pair `(2,4),(2,7)` to `(:infinity)`, and the
+off-curve `:same-x-other` fallback `(2,4),(2,5)`.
+
 Before any slope or addition operation, the affine-coordinate layer classifies
 two arbitrary objects after applying `affine-coordinates-fix` to both. The
 canonical keyword result is selected by distinct x first, then opposite y,
