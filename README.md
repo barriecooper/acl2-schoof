@@ -89,8 +89,14 @@ and projects to the untagged output unconditionally; under input membership and
 the binary classifier selection it satisfies the full curve-point predicate.
 A focused F11 regression checks `(:affine (5 9))`, classification, representation,
 coordinate recovery, curve membership, non-infinity, and malformed total output.
-No dispatcher, general addition, addition or doubling specification, or group-law
-theorem is defined.
+The next exceptional boundary is also complete: the transparent binary
+`affine-opposite-y-output-point` returns the established canonical `(:infinity)`
+on every input.  Its unconditional rewrite interface certifies exact infinity,
+structural recognition, the infinity predicate, and full curve membership; F11
+checks the on-curve opposite pair `(2,4),(2,7)`, malformed fixed inputs, and
+total execution outside the selected branch.  Binary arity is retained because
+`:opposite-y` is a relational pair-classifier result.  No dispatcher, general
+addition, addition or doubling specification, or group-law theorem is defined.
 
 The generic field layer also certifies that equal squares have equal fixed
 representatives or fixed representatives related by `FIELD-NEG`. The proof has

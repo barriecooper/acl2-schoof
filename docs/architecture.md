@@ -299,6 +299,21 @@ checks the tagged `(2,4) -> (:affine (5 9))` integration and malformed total
 execution.  No representation change, new identity, dispatch, infinity handling,
 addition or doubling specification, or group-law claim is added.
 
+`affine-opposite-y-output-point(first, second)` is the ordinary transparent
+boundary for the already characterized `:opposite-y` classifier result.  Its
+body ignores both arbitrary ACL2 inputs and returns the existing
+`curve-point-infinity`; binary arity is intentional because branch selection is
+relational and a later pair dispatcher will already hold both operands.  Exact
+equality with canonical infinity, structural recognition, the infinity
+predicate, and full short-Weierstrass membership are unconditional.  They need
+no classifier or input-membership hypotheses because infinity is already a
+valid full curve point.  The operation remains total on malformed, off-curve,
+noncanonical, and wrong-classifier inputs; only a later dispatcher will control
+selection.  F11 covers an on-curve opposite pair, the self-inverse fixed `(0,0)`
+malformed case, and a wrong-branch call.  No affine accessor theorem, slope,
+coordinate arithmetic, classifier change, representation change, dispatcher,
+or group-law specification is introduced.
+
 Before any slope or addition operation, the affine-coordinate layer classifies
 two arbitrary objects after applying `affine-coordinates-fix` to both. The
 canonical keyword result is selected by distinct x first, then opposite y,

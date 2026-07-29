@@ -200,6 +200,14 @@ classifier branch is neither tangent nor geometric doubling correctness.  The ta
 transparent wrapper uses the established affine full-point constructor, is
 structurally valid and projects to the untagged output unconditionally, and is
 a full curve point under exactly input membership and binary classifier
-selection.  Its focused F11 substitution is execution evidence only.  No
-dispatcher, general addition, addition or doubling specification, or group-law
-theorem is yet defined.
+selection.  Its focused F11 substitution is execution evidence only.  The exceptional
+`:opposite-y` output boundary is now complete as well: a transparent total
+binary operation returns canonical infinity, with unconditional exact-result,
+representation, infinity, and full curve-membership theorems.  Existing
+classifier characterization establishes equal fixed x and opposite fixed y;
+its priority includes identical self-inverse y.  F11 checks `(2,4),(2,7)`,
+malformed inputs fixed to the self-inverse `(0,0)` case, and total wrong-branch
+execution.  `:same-x-other` remains a total structural fallback but is excluded
+for two curve inputs, so it requires no geometric output before a dispatcher
+restricted to curve inputs.  No dispatcher, general addition, addition or
+doubling specification, or group-law theorem is yet defined.
