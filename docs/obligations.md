@@ -144,6 +144,24 @@ named F7/F11 operations.
 - Characteristics two and three, general discriminant/smoothness development,
   and alternative curve models are deferred.
 
+## Field-only X-CERT algebra
+
+### Certified
+
+- Transparent total definitions for the four output-coordinate residuals and
+  `xcert-dx`, `xcert-telescope`, `xcert-remainder`, `xcert-h`, `xcert-s`, and
+  `xcert-c`.
+- The unconditional output-telescope and remainder component identities for
+  arbitrary ACL2 objects under field fixing.
+- Their opaque composition as
+  `D_x = (T - (H + H)) + C*S`, with the specified left association.
+
+### Open
+
+- Connecting the residual expressions to actual affine curve operations.
+- Proving any residual is zero and deriving semantic X-CERT consequences.
+- Any use of this algebra in curve associativity or later Schoof machinery.
+
 ## Affine addition branches
 
 ### Certified

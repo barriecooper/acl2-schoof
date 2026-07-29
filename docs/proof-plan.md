@@ -22,6 +22,15 @@ addition. Output closure, infinity identity, inverse-to-infinity, and full
 commutativity are complete. Concrete F7, F7X2, and F11 books supply focused
 instantiation and execution regressions rather than additional generic scope.
 
+## Next boundary: connect X-CERT algebra to curve semantics
+
+The field-only X-CERT residual, telescope, remainder, and opaque composition
+are certified without curve or polynomial dependencies.  The next X-CERT task
+is to relate those explicit residual expressions to actual affine curve
+operations and only then consider generator-zero consequences.  This does not
+establish curve associativity and should remain separate from the broader
+associativity preparation below.
+
 ## Phase 1: prepare associativity
 
 Associativity is not ready for a direct proof attempt. The next mathematical

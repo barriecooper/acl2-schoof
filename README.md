@@ -12,6 +12,8 @@ The repository currently certifies these subsystem-level foundations:
 
 - a constrained generic field interface (`GFIELD`) with total fixing, natural
   powers, and characteristic-exclusion and Frobenius-exponent assumptions;
+- a field-only X-CERT algebra layer with explicit residual generators, an
+  output telescope, a factored remainder identity, and their composition;
 - canonical dense polynomials (`GPOLY`) with arithmetic, evaluation, degree,
   division with remainder, Euclidean GCD, extended GCD, modular inversion,
   irreducibility, and reduced arithmetic;

@@ -66,6 +66,14 @@ correctness before guard verification of the public wrapper. This applies to
 the generic field and polynomial powers and their named PFIELD/F2/F7 clients.
 There is no experimental unmatched fast branch.
 
+## Field-only X-CERT logical layer
+
+The X-CERT algebra book adds ordinary transparent total field expressions and
+certified logical identities.  It introduces no `MBE`, attachment, alternate
+executable branch, or new guard boundary.  Its residual generators are explicit
+expressions and are not assumed to vanish; future curve-semantic connections
+must be proved separately.
+
 ## Transparent executable interfaces
 
 Most repository functions are ordinary transparent `DEFUN`/`DEFUND` events,
