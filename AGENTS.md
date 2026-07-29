@@ -28,3 +28,16 @@ follow from the certified invariant or equivalence theorem. An execution
 regression shows that the intended branch runs with practical behaviour, but
 does not replace that proof. Update `docs/execution-boundaries.md` whenever a
 PR adds or changes such a boundary.
+
+## Documentation ownership
+
+Update only maintained documents whose authoritative responsibility changes;
+a small proof PR need not touch every document. Keep `README.md` at subsystem
+level, stable design and dependency boundaries in `docs/architecture.md`,
+detailed proved/open/deferred status in `docs/obligations.md`, forward
+mathematical dependency order in `docs/proof-plan.md`, and logical/executable,
+fixing, guard, and totalisation contracts in `docs/execution-boundaries.md`.
+Leave chronological completion narratives to commits and pull requests rather
+than copying them among maintained documents. When a boundary is completed,
+remove or revise superseded “next step” prose. Verify every new status claim
+against the certified books and update only the authoritative homes affected.
