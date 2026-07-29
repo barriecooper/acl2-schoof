@@ -259,7 +259,8 @@ boundaries.
 
 ## Next addition boundary
 
-The independent opposite-y, left-infinity, and right-infinity branch
-specifications, fixing, determinacy, executable soundness, and focused
-regressions are complete. Next establish the independent full tagged-point
-addition relation, case coverage, and soundness of the existing full dispatcher.
+The independent full tagged-point addition relation is complete, including
+fixing stability, exhaustive mathematical case coverage, fixed-output
+determinacy, full-dispatcher soundness, and focused F11 regressions.  The next
+addition boundary is the first algebraic law for this now-specified operation;
+its exact ordering should be selected before beginning group-law work.

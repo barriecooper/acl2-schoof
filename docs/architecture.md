@@ -439,3 +439,24 @@ existing branch equation independently in each direction, never commutativity
 or whole-dispatcher expansion. Only fixing theorems rewrite; soundness and
 determinacy have rule class `NIL`. No characteristic fact is consumed. This is
 not case coverage, dispatcher correctness, full addition, or a group law.
+
+## Full tagged-point addition relation
+
+`curve-point-addition-relation-p(first,second,output)` is the independent
+three-place semantic boundary for full addition.  It fixes all tagged values,
+requires both fixed inputs to be curve points, and transparently disjoins the
+ordered infinity relations with three affine cases: the established secant
+relation at its unique field quotient, the opposite-y infinity relation, and
+the established doubling relation at its unique field quotient.  Finite
+outputs are explicitly affine-tagged.  The definition mentions neither the
+affine classifier nor either dispatcher; classifier priority is used only in
+the dispatcher-soundness proof.
+
+Both-infinity is harmless overlap between the identity clauses.  A self-inverse
+point belongs to opposite-y, while doubling explicitly excludes it.
+`:same-x-other` is absent because the existing curve-classification theorem
+proves it impossible for two affine curve points.  Malformed tagged inputs fix
+to infinity, so they may satisfy an identity clause exactly according to the
+established total semantics.  Fixing is an active congruence; coverage,
+fixed-output determinacy, and dispatcher soundness are non-rewriting theorems.
+No commutativity, associativity, or other group law is claimed.

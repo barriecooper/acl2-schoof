@@ -281,5 +281,19 @@ infinity relations, their unconditional fixing stability, non-rewriting
 branch-local executable soundness, and fixed-output determinacy. Self-inverse
 affine points are included. There is no classifier bridge, characteristic
 consumer, dispatcher proof, combined addition relation, or group-law claim.
-The F11 book covers `(2,4),(2,7)` and both infinity orders. Full tagged addition
-coverage, case interaction, and dispatcher correctness are the next obligation.
+The F11 book covers `(2,4),(2,7)` and both infinity orders. The subsequent full
+tagged relation, case interaction, and dispatcher correctness are now certified
+in `curve-point-addition-relation.lisp`; algebraic group laws remain open.
+
+## Full tagged addition semantic boundary (proved)
+
+`CURVE-POINT-ADDITION-RELATION-P(first,second,output)` is a transparent,
+classifier- and dispatcher-independent disjunction of the two identity
+relations and the secant, opposite-y, and doubling semantics.  Canonical field
+quotients supply the unique explicit slopes without selecting outputs.
+`CURVE-POINT-ADDITION-CASE-COVERAGE` excludes `:same-x-other` using the existing
+on-curve impossibility theorem.  The active fixing theorem and non-rewriting
+fixed-output determinacy and dispatcher-soundness theorems close the full
+semantic boundary.  Both-infinity overlap is coherent; self-inverse affine
+points use opposite-y.  F11 exercises both identities, both infinity, secant,
+doubling, and opposite-y.  No executable operation or group law is added.
