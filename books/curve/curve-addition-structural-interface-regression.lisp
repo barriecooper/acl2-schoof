@@ -56,3 +56,80 @@
             short-weierstrass-curve-point-p-of-infinity
             curve-point-infinity-representation)
            :in-theory (theory 'minimal-theory))))
+
+(defthm opposite-y-chain-endpoint-client-regression
+  (implies
+   (and (equal (affine-pair-classify p q) :opposite-y)
+        (equal (affine-pair-classify q r) :opposite-y))
+   (equal (affine-coordinates-fix p)
+          (affine-coordinates-fix r)))
+  :hints
+  (("Goal"
+    :use
+    (:instance affine-pair-classify-opposite-y-chain-implies-fixed-endpoints-equal
+               (a p) (b q) (c r))
+    :in-theory (theory 'minimal-theory))))
+
+(defthm both-inner-opposite-y-associativity-client-regression
+  (implies
+   (and (short-weierstrass-affine-point-p p)
+        (short-weierstrass-affine-point-p q)
+        (short-weierstrass-affine-point-p r)
+        (equal (affine-pair-classify p q) :opposite-y)
+        (equal (affine-pair-classify q r) :opposite-y))
+   (equal
+    (curve-point-pair-output-point
+     (curve-point-pair-output-point
+      (curve-point-affine-coordinates p)
+      (curve-point-affine-coordinates q))
+     (curve-point-affine-coordinates r))
+    (curve-point-pair-output-point
+     (curve-point-affine-coordinates p)
+     (curve-point-pair-output-point
+      (curve-point-affine-coordinates q)
+      (curve-point-affine-coordinates r)))))
+  :hints
+  (("Goal"
+    :use
+    (:instance curve-point-pair-output-point-associative-when-both-inner-opposite-y
+               (a p) (b q) (c r))
+    :in-theory (theory 'minimal-theory))))
+
+(defthm repeated-doubling-fixed-triple-client-regression
+  (implies
+   (and (equal (affine-pair-classify p q) :same-point-non-opposite)
+        (equal (affine-pair-classify q r) :same-point-non-opposite))
+   (and (equal (affine-coordinates-fix p) (affine-coordinates-fix q))
+        (equal (affine-coordinates-fix q) (affine-coordinates-fix r))
+        (equal (affine-coordinates-fix p) (affine-coordinates-fix r))))
+  :hints
+  (("Goal"
+    :use
+    (:instance affine-pair-classify-repeated-doubling-implies-fixed-triple
+               (a p) (b q) (c r))
+    :in-theory (theory 'minimal-theory))))
+
+(defthm both-inner-doubling-associativity-client-regression
+  (implies
+   (and (short-weierstrass-affine-point-p p)
+        (short-weierstrass-affine-point-p q)
+        (short-weierstrass-affine-point-p r)
+        (equal (affine-pair-classify p q) :same-point-non-opposite)
+        (equal (affine-pair-classify q r) :same-point-non-opposite))
+   (equal
+    (curve-point-pair-output-point
+     (curve-point-pair-output-point
+      (curve-point-affine-coordinates p)
+      (curve-point-affine-coordinates q))
+     (curve-point-affine-coordinates r))
+    (curve-point-pair-output-point
+     (curve-point-affine-coordinates p)
+     (curve-point-pair-output-point
+      (curve-point-affine-coordinates q)
+      (curve-point-affine-coordinates r)))))
+  :hints
+  (("Goal"
+    :use
+    (:instance curve-point-pair-output-point-associative-when-both-inner-doubling
+               (a p) (b q) (c r))
+    :in-theory (theory 'minimal-theory))))

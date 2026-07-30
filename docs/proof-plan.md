@@ -79,12 +79,14 @@ PR boundaries:
    secant and doubling outputs, and one combined associativity theorem for a
    valid triple with any original input at infinity.  These proofs use only
    classification, fixing, closure, representation, and infinity equations.
-2. **Opposite/opposite and repeated triples (next).** Prove the `O/O` endpoint
-   equality and full-point reduction, and the `T/T` reduction through existing
-   full commutativity.  Bundle these because both are structural and require no
-   new coordinate certificate.  Stop if either proof opens secant/tangent
-   formulas rather than using characterization, fixing, and branch interfaces.
-3. **Exceptional secant structure.** Isolate inverse-translation cases and
+2. **Opposite/opposite and repeated triples (complete).** The certified `O/O`
+   endpoint theorem chains the two fixed negation equations (including
+   self-inverse ordinates), and the full-point theorem reduces both inner calls
+   to infinity.  The certified `T/T` theorem fixes all three inputs equal,
+   identifies the inner doubles through fixing congruence, proves their validity
+   by doubling closure, and closes the reversed outer calls by full-point
+   commutativity.  These are structural proofs with no new coordinate algebra.
+3. **Exceptional secant structure (next).** Isolate inverse-translation cases and
    `D/D` compositions with an outer `O` or `T`.  Establish the semantic line or
    negation lemmas needed to derive the matching outcome on the other tree.
    Do not state independent outer classifications merely to force coverage.
