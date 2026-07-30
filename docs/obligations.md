@@ -202,8 +202,16 @@ named F7/F11 operations.
   cancel and obtain `K=0`; the `(A,B)` and `(AB,C)` nonzero differences are not
   scalar premises of this proof.  This proof-minimality has not been promoted
   to a certified logical-minimality result.  The next tight boundary is to
-  certify this staged residual identity and its single left-cancellation step,
-  rather than retrying unconditional eight-equation normalization.
+  certify this residual identity in separately associated y-term,
+  slope-product, and coordinate-product blocks, followed by its single
+  left-cancellation step.  A direct one-event expansion using only the kernel's
+  associativity, commutativity, distributivity, inverse, fixing, and local
+  separated-cancellation consequences stops after full distribution with a
+  long additive sum containing the expected positive and negative monomials;
+  ACL2 does not align those distant pairs automatically.  Re-enabling more AC
+  rewriting would violate the controlled-proof boundary, so the missing fact
+  is now precisely the staged additive normalization between those three
+  blocks, not the residual coefficients or a further nonzero premise.
 - Exact `S=(p+q)-(r+tt)=0` also remains open.  Its prospective ordered-secant
   reconstruction additionally involves `(A,BC)` and closure of `BC`; it is not
   available from output-y rearrangement alone and was not assumed from `H` or
