@@ -260,9 +260,24 @@ named F7/F11 operations.
   classifier, nonzero, inverse, division, additional-certificate, or
   multiplicative-cancellation premise, and the six residual equations are not
   re-expanded by this composition.
-- Semantic final-y equality and equality of the assembled untagged outputs
-  remain open.  The next boundary is the curve-semantic instantiation of the
-  combined field-only theorem, not output packaging.
+- The semantic theorem `xcert-final-y-coordinates-equal` now instantiates
+  `xcert-field-only-final-y-equal` once under exactly the three input curve
+  memberships and four ordered `:distinct-x` classifications already used for
+  final x equality.  It concludes fixed equality of the y coordinates of
+  `xcert-left` and `xcert-right`.  The semantic map is `p/q/r/tt` to the
+  `(A,B)`, `(AB,C)`, `(B,C)`, and `(A,BC)` slopes; `xa/xb/xc` and `ya/yb/yc`
+  to input coordinates; `xab/yab` to the coordinates of `AB`; and `xl/yl/yr`
+  to left x, left y, and right y.  The nine premises come respectively from
+  the output-x rearrangements for `(AB,C)` and `(A,B)`, semantic H-zero plus
+  its specialization, semantic S-zero, slope reconstruction for `(A,B)`,
+  `(B,C)`, and `(AB,C)`, and output-y rearrangement for `(AB,C)` and `(A,BC)`.
+  Two proof-local bridges reverse the H residual's zero equality and transport
+  the last output-y equation across the already-certified final-x equality.
+  No scalar equation becomes a public premise, and the AB output-y equation
+  remains absent.
+- Semantic final-y equality is complete.  Equality of the assembled untagged
+  affine outputs is the next open boundary; tagged equality and dispatcher
+  associativity remain open after it.
 - Cancellation, exceptional branches, curve associativity, and any later use
   in Schoof machinery.
 

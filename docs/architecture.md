@@ -68,10 +68,15 @@ and the two final output-y equations; the AB output-y equation is absent.  Their
 composition is now certified as the field-only fixed final-y equality: the
 coordinate bridge and maintained H equality substitute the two coordinate
 differences, and a bounded opposite-product identity closes the result.  The
-semantic H-zero and S-zero bridges, certified final x-coordinate equality,
-these three field-only final-y stages, open semantic final-y equality, open
-untagged output equality, and later tagged and dispatcher results remain
-distinct boundaries.
+semantic theorem `xcert-final-y-coordinates-equal` instantiates that combined
+field theorem from semantic H-zero and S-zero, the maintained slope and output
+rearrangements, and a proof-local transport from final-right x to the already
+equal final-left x.  Semantic H/S zero, final x-coordinate equality, the
+output-x/H coordinate bridge, six-residual reduction, combined field-only
+final-y reconstruction, and semantic final-y equality remain distinct
+certified boundaries.  Untagged output equality, tagged output equality,
+dispatcher associativity, and its exceptional branches remain distinct open
+boundaries.
 
 The ordered distinct-x theory also exposes the division-free input-secant
 identity `slope*(y(second)+y(first)) = x(second)^2 +

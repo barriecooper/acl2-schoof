@@ -1,6 +1,6 @@
 (in-package "GFIELD")
 
-(include-book "../field/xcert-s-reconstruction")
+(include-book "../field/xcert-final-y-reconstruction")
 (include-book "affine-distinct-x-closure")
 
 ; The two ordered, total distinct-x calculation trees.  These names abbreviate
@@ -364,3 +364,132 @@
      '(xcert-dx xcert-xl xcert-xr xcert-left xcert-right
        field-fix-of-affine-distinct-x-output-x
        affine-coordinates-x-of-affine-distinct-x-output)))))
+
+; Turn the maintained semantic H-zero result back into the exact scalar
+; equality expected by the field-only final-y theorem.  This is deliberately
+; local: the public semantic interface remains the three curve memberships and
+; four ordered distinct-x classifications.
+(local
+ (defthm equal-zero-reverse-local
+   (implies (equal (field-zero) x)
+            (equal x (field-zero)))
+   :rule-classes nil))
+
+(local
+ (defthm xcert-h-scalar-equality-local
+   (implies
+    (and (short-weierstrass-affine-point-p a)
+         (short-weierstrass-affine-point-p b)
+         (short-weierstrass-affine-point-p c)
+         (equal (affine-pair-classify a b) :distinct-x)
+         (equal (affine-pair-classify b c) :distinct-x)
+         (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x))
+    (equal
+     (field-mul (field-sub (xcert-p a b) (xcert-r b c))
+                (field-add (xcert-p a b) (xcert-q a b c)))
+     (field-sub (xcert-xa a) (xcert-xc c))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance xcert-h-curve-zero)
+           (:instance xcert-h-curve-specialization)
+           (:instance equal-zero-reverse-local
+                      (x
+                       (field-sub
+                        (field-mul
+                         (field-sub (xcert-p a b) (xcert-r b c))
+                         (field-add (xcert-p a b) (xcert-q a b c)))
+                        (field-sub (xcert-xa a) (xcert-xc c)))))
+           (:instance field-sub-equal-zero-implies-fixed-equal
+                      (first
+                       (field-mul
+                        (field-sub (xcert-p a b) (xcert-r b c))
+                        (field-add (xcert-p a b) (xcert-q a b c))))
+                      (second (field-sub (xcert-xa a) (xcert-xc c)))))
+     :in-theory
+     (union-theories (theory 'minimal-theory)
+      '(xcert-p xcert-q xcert-r xcert-xa xcert-xc
+        field-sub field-fix-of-add field-fix-of-mul field-fix-of-neg
+        field-fix-of-zero))))))
+
+(local
+ (defthm xcert-final-right-y-with-left-x-local
+   (implies
+    (and (short-weierstrass-affine-point-p a)
+         (short-weierstrass-affine-point-p b)
+         (short-weierstrass-affine-point-p c)
+         (equal (affine-pair-classify a b) :distinct-x)
+         (equal (affine-pair-classify b c) :distinct-x)
+         (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+         (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+    (equal
+     (field-add (affine-coordinates-y (xcert-right a b c))
+                (affine-coordinates-y a))
+     (field-mul (xcert-tt a b c)
+                (field-sub (xcert-xa a) (xcert-xl a b c)))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance xcert-final-x-coordinates-equal)
+           (:instance affine-distinct-x-output-y-rearrangement
+                      (first a) (second (xcert-bc b c))))
+     :in-theory
+     (union-theories (theory 'minimal-theory)
+      '(xcert-tt xcert-xa xcert-xl xcert-xr xcert-left xcert-right
+        affine-coordinates-x-of-affine-distinct-x-output
+        affine-coordinates-y-of-affine-distinct-x-output))))))
+
+; Semantic map for the single field-theorem instantiation below:
+; p/q/r/tt are the four ordered slopes; xa/xb/xc and ya/yb/yc are
+; coordinates of A/B/C; xab/yab are coordinates of AB; and xl/yl/yr are
+; respectively the final-left x/y coordinates and final-right y coordinate.
+(defthm xcert-final-y-coordinates-equal
+  (implies
+   (and (short-weierstrass-affine-point-p a)
+        (short-weierstrass-affine-point-p b)
+        (short-weierstrass-affine-point-p c)
+        (equal (affine-pair-classify a b) :distinct-x)
+        (equal (affine-pair-classify b c) :distinct-x)
+        (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+        (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+   (equal
+    (field-fix (affine-coordinates-y (xcert-left a b c)))
+    (field-fix (affine-coordinates-y (xcert-right a b c)))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    ((:instance xcert-field-only-final-y-equal
+                (p (xcert-p a b)) (q (xcert-q a b c))
+                (r (xcert-r b c)) (tt (xcert-tt a b c))
+                (xa (xcert-xa a)) (xb (xcert-xb b)) (xc (xcert-xc c))
+                (ya (affine-coordinates-y a))
+                (yb (affine-coordinates-y b))
+                (yc (affine-coordinates-y c))
+                (xab (xcert-xab a b))
+                (yab (affine-coordinates-y (xcert-ab a b)))
+                (xl (xcert-xl a b c))
+                (yl (affine-coordinates-y (xcert-left a b c)))
+                (yr (affine-coordinates-y (xcert-right a b c))))
+     (:instance affine-distinct-x-output-x-rearrangement
+                (first (xcert-ab a b)) (second c))
+     (:instance affine-distinct-x-output-x-rearrangement
+                (first a) (second b))
+     (:instance xcert-h-scalar-equality-local)
+     (:instance xcert-s-curve-zero)
+     (:instance affine-distinct-x-slope-reconstructs-y-difference
+                (first a) (second b))
+     (:instance affine-distinct-x-slope-reconstructs-y-difference
+                (first b) (second c))
+     (:instance affine-distinct-x-slope-reconstructs-y-difference
+                (first (xcert-ab a b)) (second c))
+     (:instance affine-distinct-x-output-y-rearrangement
+                (first (xcert-ab a b)) (second c))
+     (:instance xcert-final-right-y-with-left-x-local))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(xcert-p xcert-q xcert-r xcert-tt xcert-xa xcert-xb xcert-xc
+       xcert-xab xcert-xl xcert-ab xcert-bc xcert-left xcert-right
+       affine-coordinates-x-of-affine-distinct-x-output
+       affine-coordinates-y-of-affine-distinct-x-output)))))
