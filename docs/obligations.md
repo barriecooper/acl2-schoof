@@ -373,6 +373,19 @@ independent semantics to the total executable dispatcher.
 
 ### Certified algebraic laws
 
+- **Stage 1 associativity structural interface:**
+  `affine-pair-classify-symmetric` is unconditional;
+  `affine-pair-classify-opposite-y-implies-fixed-coordinates` exposes fixed x
+  equality and the maintained second-y/negated-first-y orientation; and
+  `affine-pair-classify-same-point-non-opposite-implies-fixed-equal` exposes
+  equality of the fixed affine objects.  The closure-derived theorems
+  `affine-pair-classify-distinct-x-output-not-same-x-other` and
+  `affine-pair-classify-doubling-output-not-same-x-other` exclude the invalid
+  outer class in one orientation, with classifier symmetry covering reversal.
+  `curve-point-pair-output-point-associative-when-infinity-input` proves the
+  literal nested dispatcher equality for three valid full points whenever any
+  original input is infinity.  All are structural proofs: no secant, tangent,
+  X-CERT, cancellation, division, or coordinate-composition algebra is used.
 - **Closure:** the dispatcher returns a curve point for curve-point inputs.
 - **Identity:** infinity is a left and right identity. The semantic relation
   contains both ordered identity clauses, and the dispatcher has unconditional
@@ -399,7 +412,9 @@ state raw ACL2 equality. These two equality levels must remain explicit.
 
 ### Open
 
-- Full tagged-point associativity.
+- Stage 2 associativity: both-inner-opposite (`O/O`) and repeated-triple
+  (`T/T`) structural cases.  Single-`O`, mixed secant/tangent, exceptional
+  secant, finite assembly, and unrestricted associativity also remain open.
 - Cancellation laws.
 - Abstract group or abelian-group packaging.
 - Scalar multiplication and its laws.
