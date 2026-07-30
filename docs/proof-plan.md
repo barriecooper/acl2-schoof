@@ -37,8 +37,11 @@ audit of the algebra needed after the separate H-zero and S-zero results;
   The same seven-hypothesis configuration now also certifies equality of the
   two final x-coordinates by simplifying the maintained composition with both
   H-zero and S-zero.  The next boundary is the field-only final-y
-  reconstruction needed before semantic y-coordinate equality; exceptional
-  cases and associativity remain later work.
+  reconstruction needed before semantic y-coordinate equality.  Its
+  output-x/H coordinate bridge is now certified; the next boundary is the
+  six-residual reduction of the final y difference, followed by their
+  field-only composition.  Exceptional cases and associativity remain later
+  work.
 
 ## Phase 1: prepare associativity
 

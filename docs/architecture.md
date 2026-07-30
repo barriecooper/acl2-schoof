@@ -60,9 +60,11 @@ exceptional-case fact.
 The bridge also certifies equality of the final x-coordinates of the two
 untagged distinct-x trees under the four ordered distinct-x classifications.
 This uses both semantic certificate-zero results through the maintained
-composition.  Field-only final-y reconstruction, semantic y-coordinate
-equality, output representation equality, and dispatcher associativity remain
-separate later boundaries.
+composition.  The field-only final-y layer now contains the separate
+output-x/H coordinate bridge `xl-xb=(q-r)(p+q)`; its proof has no curve or
+nonzero premise.  The six-residual y reduction, their complete field-only
+final-y composition, semantic y-coordinate equality, output representation
+equality, and dispatcher associativity remain separate later boundaries.
 
 The ordered distinct-x theory also exposes the division-free input-secant
 identity `slope*(y(second)+y(first)) = x(second)^2 +

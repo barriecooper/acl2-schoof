@@ -8,6 +8,8 @@
 (include-book "field/xcert-h-reconstruction-regression")
 (include-book "field/xcert-s-reconstruction")
 (include-book "field/xcert-s-reconstruction-regression")
+(include-book "field/xcert-final-y-reconstruction")
+(include-book "field/xcert-final-y-reconstruction-regression")
 (include-book "field/equal-squares")
 (include-book "field/f11-equal-squares")
 (include-book "field/examples/f2")
