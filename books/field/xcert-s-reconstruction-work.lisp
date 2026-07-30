@@ -1,6 +1,5 @@
 (in-package "GFIELD")
 (include-book "xcert-algebra")
-(include-book "sorting/perm" :dir :system)
 
 ; Temporary proof-development book for the exact S reconstruction.
 ; E4--E11 below preserve the ordered differences of the semantic secants.
@@ -227,6 +226,8 @@
               field-add-zero-left field-add-zero-right
               field-fix-of-add field-fix-of-mul field-fix-of-neg))))))
 
-; CONTINUATION: inspect XCERT-S-RESIDUAL-ZERO-LOCAL in the complete log and
-; replace broad AC rewriting with small equation-shaped expansions or a local
-; explicit term-list normalization.  The preceding residual theorem certifies.
+; CONTINUATION CHECKPOINT: the complete log leaves exactly
+;   -yab-ybc+p*xbc+q*xbc+r*xa-p*xab-q*xa-r*xbc = 0.
+; The four secant equations are present above in the maintained order.  Continue
+; by proving equation-shaped segment expansions before any term permutation;
+; do not re-expand XCERT-S-EIGHT-EQUATION-RESIDUAL-LOCAL, which certifies.
