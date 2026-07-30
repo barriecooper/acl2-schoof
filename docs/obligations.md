@@ -323,8 +323,9 @@ named F7/F11 operations.
   boundaries.  The next phase is an audit and decomposition of the remaining
   associativity configurations.  Exceptional same-x, opposite-y and doubling
   interactions, infinity inputs or intermediate infinity, arbitrary classifier
-  combinations, unrestricted associativity, identity and inverse laws, group
-  structure, cancellation, and any later use in Schoof machinery remain open.
+  combinations, unrestricted associativity, group structure, cancellation, and
+  any later use in Schoof machinery remain open.  The certified identity and
+  inverse laws are available structural inputs, not open obligations.
 
 ## Affine addition branches
 
@@ -403,11 +404,78 @@ state raw ACL2 equality. These two equality levels must remain explicit.
 - Abstract group or abelian-group packaging.
 - Scalar multiplication and its laws.
 
-Associativity is not ready for a direct proof. The prerequisite audit specified
-in [the proof plan](proof-plan.md#phase-1-prepare-associativity) must inventory
-existing cancellation/substitution/fixing lemmas, identify reusable
-branch-independent division-free algebra, and record missing tight lemma groups
-before the case proof begins.
+Associativity is not ready for a direct proof.  The completed structural audit
+below and its [proof order](proof-plan.md#phase-1-complete-associativity) govern
+the prerequisite structural and algebraic lemma groups before finite case
+assembly begins.
+
+### Associativity case audit
+
+The following is the authoritative structural ledger for the remaining case
+proof.  Write `D`, `O`, and `T` for the affine classifier results
+`:distinct-x`, `:opposite-y`, and `:same-point-non-opposite`, respectively,
+and write `AB` and `BC` for the two inner outputs.  This is not a Cartesian
+product of four classifier values.  For on-curve affine operands,
+`affine-pair-classify-not-same-x-other-for-curve-points` removes
+`:same-x-other`; output closure then removes it again for any outer affine pair
+whose inner operand came from a `D` or `T` branch.  The proof of that theorem
+uses the generic curve equation and `field-equal-squares-implies-equal-or-neg`,
+not an F11 enumeration.
+
+The outcome of an outer call is meaningful only when its inner result is
+affine.  An inner `O` result is canonical infinity by
+`affine-pair-output-point-when-opposite-y` and
+`affine-opposite-y-output-point-is-infinity`, so the corresponding outer call
+uses `curve-point-pair-output-point-of-infinity-left` or
+`curve-point-pair-output-point-of-infinity-right`; it has no outer affine
+classifier premise.  Conversely, closure
+(`short-weierstrass-affine-point-p-of-affine-distinct-x-output` and
+`short-weierstrass-affine-point-p-of-affine-same-point-non-opposite-output`)
+justifies classifying a `D` or `T` inner result against the remaining affine
+input.
+
+| Family and precise input condition | Inner and outer dispatcher outcomes | Status and certified support | Exact missing boundary | Suggested PR |
+| --- | --- | --- | --- | --- |
+| At least one of the three valid full-point inputs is infinity. | Each call touching that input returns the fixed other operand; the remaining inner call is retained on both sides. | **Pure identity reduction.** The two unconditional infinity equations, `curve-point-pair-output-point-of-fixes`, output representation/closure, and fixing canonicality are sufficient in principle. No affine classifier is involved. | A single public three-input associativity-when-an-input-is-infinity theorem (or three small lemmas) is not yet present. | A |
+| Three valid affine inputs, with either inner pair classified `:same-x-other`. | No dispatcher outcome is geometrically reachable. The executable fallback would be infinity only off the stated domain. | **Impossible**, already supported generically by `affine-pair-classify-not-same-x-other-for-curve-points`. | Only convenient full-point/outer corollaries may be needed for case assembly; no new mathematics. | A |
+| Both inner pairs are `O`: `b=-a` and `c=-b` in fixed affine coordinates (including the self-inverse priority case). | `AB=BC=infinity`; left is `c`, right is `a`. The two `O` characterizations imply `a=c` after fixing. | **Infinity plus representation reduction**, not four-way coordinate algebra. Support: the opposite-y characterization, `affine-opposite-y-output-point-is-infinity`, infinity equations, and field negation involution. | A named fixed-coordinate endpoint-equality lemma and its full-point case theorem. | B |
+| Exactly one inner pair is `O`, while the other is `D` or `T` (the reversed family is obtained by operand/order reversal). | The side with inner `O` reduces to the untouched endpoint. The other side is an outer affine call on the endpoint and a secant or tangent output; its outer result may be `D`, `O`, or `T` but not `:same-x-other`. | **Not a pure infinity identity.** This is the inverse-translation equation `a+((-a)+c)=c` (or its reversal). Existing inverse and identity theorems do not prove it without associativity/cancellation. Commutativity supplies only the left-right mirror. | A semantic inverse/secant and inverse/tangent certificate (or a general chord-and-tangent lemma) proving the outer result equals the endpoint, including exceptional outer `O`/`T` consequences. | D/E |
+| Both inner pairs are `T`. Classifier characterization forces fixed `a=b=c`, with non-self-inverse ordinate. | `AB` and `BC` are the same doubling output. The two outer calls have swapped valid operands `2a` and `a`; their common outer class is automatically the same (`D`, `O`, or `T`) and cannot be `:same-x-other`. | **Commutativity reduction.** Use the `T` characterization/fixing, doubling branch equation, doubling-output closure, and `curve-point-pair-output-point-commutative`. No doubling/doubling coordinate certificate is indicated. | A public repeated-triple reduction theorem; prove any needed equality of the two fixed inner outputs. | C |
+| One inner pair is `T` and the other is `D`; the reversed tree/order is its commutative mirror. | One inner output is a tangent result and the other a secant result. Each outer affine classifier is derivable only after computing its valid inner result and is in `D/O/T`. | **Genuine mixed tangent/secant algebra.** Existing tangent and secant identities certify each individual line/output, but no theorem relates the two compositions. | A mixed semantic certificate covering equality when both outer results are affine and the derived exceptional outer results (`O`/`T`). Do not assume outer `D`. | E |
+| Both inner pairs are `D`, and both derived outer pairs are `D`. | All four affine calls select the secant branch. | **Already proved** by `xcert-full-point-dispatcher-associative-when-all-distinct-x` under its exact three memberships and four ordered classifications. | None for this subfamily. | complete |
+| Both inner pairs are `D`, but at least one derived outer pair is `O` or `T`. | Inner outputs are affine secant outputs. Outer outcomes are in `D/O/T`; an `O` output is infinity and a `T` output is a doubling result. The outcome on the other tree is a consequence to prove, not an independent arbitrary classifier choice. | **Genuine exceptional secant composition.** X-CERT currently requires both outer `D` classifications and therefore does not cover it. Closure and impossibility eliminate only `:same-x-other`. | Chord/secant consequences showing the matching outer outcome and output equality. Determine during certificate design whether these are degenerations of one division-free certificate or need small representation lemmas. | D/E |
+
+The table deliberately does **not** claim that “inner opposite-y collapses the
+case” in general: only the side containing that inner call collapses.  Nor does
+it list outer classifications as four independent choices.  The curve equation,
+inner branch relations, and closure constrain them, and the future semantic
+certificate must derive the matching exceptional outcome.
+
+The available symmetry is strong but limited.  The generic public theorem
+`curve-point-pair-output-point-commutative` gives raw equality for two valid
+curve points, while `curve-point-addition-relation-p-commutative` gives the
+semantic reversal.  Classifier symmetry is evident from the characterizations
+and is used internally by the commutativity development, but there is no named
+public theorem asserting `affine-pair-classify first second` equals its swap.
+There is likewise no separately named affine-dispatcher commutativity theorem.
+Full commutativity can identify the mirror of an associativity family and
+closes the all-equal `T/T` family; it does not justify cyclic permutation of an
+associativity equation before associativity itself is known.  A small public
+classifier-symmetry interface is therefore useful for case assembly, but
+re-proving commutativity is not a prerequisite.
+
+The least-risk algebra plan is to stay at the independent semantic-relation
+boundary and add a small family of division-free chord-and-tangent
+certificates.  First test a shared residual/telescope framework parameterized
+by certified line equations, but do not make branch selection executable or
+hide classifier reasoning in the certificate.  If that parameterization makes
+ACL2 instantiation or hypotheses opaque, prefer two explicit certificates:
+secant--tangent (its reversal supplies tangent--secant) and inverse/exceptional
+secant composition.  Extending the current X-CERT theorem by merely replacing
+secant slopes with tangent quotients is not yet justified: its seven residual
+equations and nonzero factors encode four ordered distinct-x calls.  Whether
+the exceptional outer `O/T` degenerations follow from the same polynomial
+identity remains an **open feasibility question**, not a certified claim.
 
 ## Hasse and Schoof tracks
 
