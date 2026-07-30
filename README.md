@@ -120,8 +120,10 @@ requests retain chronological completion narratives.
 The associativity audit is complete, and its first structural-interface stage
 is certified: classifier symmetry and fixed-coordinate consequences, outer
 impossibility corollaries, and associativity when an original input is
-infinity.  The next boundary is the opposite/opposite and repeated-triple
-structural cases; unrestricted associativity remains later work. Later phases
+infinity.  The opposite/opposite and repeated-triple structural cases are also certified,
+using infinity reduction and full-point commutativity respectively.  The next
+boundary is exceptional secant structure; unrestricted associativity remains
+later work. Later phases
 package the curve laws, build the
 polynomial and rational-function machinery needed by the Hasse and Schoof
 tracks, formalize Frobenius and division polynomials, and develop point
