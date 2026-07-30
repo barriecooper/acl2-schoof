@@ -200,6 +200,30 @@ Associativity, cancellation, group or abelian-group packaging, and scalar
 multiplication are absent. Until associativity is certified, documentation must
 not call the dispatcher a certified group law.
 
+### Associativity reduction boundary
+
+Future associativity work is organized by semantic geometry, not by a Cartesian
+product of dispatcher tags.  For valid affine inputs, equal-x curve points have
+equal or opposite ordinates, so `:same-x-other` is unreachable.  An opposite-y
+inner result crosses immediately to the full-point infinity interface; a
+distinct-x or doubling result remains affine by branch closure.  These facts
+determine whether an outer affine classifier even exists and constrain its
+possible result.
+
+Full commutativity supplies reversal symmetry and closes the all-equal
+doubling/doubling composition, but it does not license cyclic reassociation.
+Structural infinity, fixing, classifier, and representation reductions should
+therefore be certified before new coordinate algebra.  The remaining algebra
+belongs at the independent secant/doubling relation layer.  Candidate mixed
+secant--tangent certificates should expose division-free line and curve
+equations and derive exceptional outer outcomes rather than accepting four
+unrelated classifier premises.  A shared branch-parametric certificate is an
+architectural option only if its hypotheses and specialization remain
+transparent; separate oriented certificates are preferable to an opaque
+generalization.  Dispatcher associativity must ultimately be a lift through
+semantic soundness, determinacy, closure, and canonical fixing, not a replay of
+branch formulas.
+
 ## Design constraints for later work
 
 - Preserve total fixer semantics at public ACL2 boundaries and state clearly

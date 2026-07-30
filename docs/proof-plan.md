@@ -61,31 +61,56 @@ field algebra replayed.  The next phase is an audit and decomposition of the
 remaining associativity configurations, not a presumption that one further
 branch theorem will cover them.  Exceptional same-x, opposite-y and doubling
 interactions, infinity inputs and intermediate infinity, arbitrary classifier
-combinations, unrestricted associativity, identity and inverse laws, and group
-structure remain later work.
+combinations, unrestricted associativity, and group structure remain later
+work; the already certified identity and inverse laws are structural inputs to
+that work.
 
-## Phase 1: prepare associativity
+## Phase 1: complete associativity
 
-Associativity is not ready for a direct proof attempt. The next mathematical
-task is a dedicated audit of the existing field and coordinate theory against
-the identities required to compare the nested additions in all semantic cases.
-That audit must:
+The structural audit is recorded in the
+[associativity case ledger](obligations.md#associativity-case-audit).  It
+reduces the valid affine inputs to `D`, `O`, and `T`, rather than a formal
+four-by-four classifier product.  Work should now proceed in these reviewable
+PR boundaries:
 
-1. inventory reusable denominator-nonzero, cancellation, substitution, fixing,
-   and normalization lemmas already certified;
-2. identify which branch combinations can share division-free algebra instead
-   of expanding executable dispatchers;
-3. determine the missing reusable polynomial/field identities and coordinate
-   equivalences without weakening the associativity statement; and
-4. record the resulting tight lemma groups in `docs/obligations.md` before
-   beginning the full case proof.
+1. **Structural interface.** Bundle the named classifier-swap theorem, useful
+   fixed-coordinate consequences, outer `:same-x-other` impossibility
+   corollaries, and the three infinity-input associativity reductions.  Stop
+   before proving any nontrivial affine composition.
+2. **Opposite/opposite and repeated triples.** Prove the `O/O` endpoint
+   equality and full-point reduction, and the `T/T` reduction through existing
+   full commutativity.  Bundle these because both are structural and require no
+   new coordinate certificate.  Stop if either proof opens secant/tangent
+   formulas rather than using characterization, fixing, and branch interfaces.
+3. **Exceptional secant structure.** Isolate inverse-translation cases and
+   `D/D` compositions with an outer `O` or `T`.  Establish the semantic line or
+   negation lemmas needed to derive the matching outcome on the other tree.
+   Do not state independent outer classifications merely to force coverage.
+   Stop before introducing a large generalized certificate if the exact
+   residual interface has not been audited.
+4. **Mixed secant--tangent certificate.** Certify one coherent division-free
+   family for `D/T`; obtain `T/D` by the already certified commutative mirror.
+   Reuse the individual secant and tangent relations.  A branch-parametric
+   residual framework is preferred only if its hypotheses remain explicit;
+   otherwise use two small, oriented certificates.  Stop when mixed semantic
+   output equality and all genuinely derived exceptional outcomes are covered.
+5. **Finite semantic assembly.** Combine infinity, impossible, `O`, `T`, and
+   `D` families into semantic associativity for valid curve points, relying on
+   `curve-point-addition-case-coverage`.  This PR must add no new coordinate
+   algebra; a need for such algebra means phase 3 or 4 is incomplete.
+6. **Executable lift.** Derive unrestricted
+   `curve-point-pair-output-point` associativity from semantic soundness,
+   fixed-output determinacy, closure, and canonical representation.  Keep this
+   representation proof separate from the semantic case proof.
+7. **Group packaging.** Only after unrestricted associativity certifies,
+   develop cancellation consequences, scalar multiplication, and an abstract
+   abelian-group interface.
 
-The repository does not yet establish a sufficiently detailed associativity
-strategy to predict the final case decomposition. The audit, not an
-associativity theorem, is therefore the next boundary. After its prerequisites
-are certified, prove semantic associativity first and derive the executable
-statement through soundness and determinacy. Then consider cancellation and
-abstract group/abelian-group packaging.
+The stopping conditions are intentional: they prevent an “assembly” PR from
+becoming a hidden coordinate proof and prevent executable dispatcher expansion
+from replacing the independent semantic boundary.  It remains open whether
+one chord-and-tangent certificate covers all exceptional degenerations; phase
+3 must settle that interface before phase 4 is sized.
 
 ## Phase 2: common curve and function-field infrastructure
 
