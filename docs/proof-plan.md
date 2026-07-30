@@ -86,12 +86,19 @@ PR boundaries:
    identifies the inner doubles through fixing congruence, proves their validity
    by doubling closure, and closes the reversed outer calls by full-point
    commutativity.  These are structural proofs with no new coordinate algebra.
-3. **Exceptional secant structure (next).** Isolate inverse-translation cases and
-   `D/D` compositions with an outer `O` or `T`.  Establish the semantic line or
-   negation lemmas needed to derive the matching outcome on the other tree.
-   Do not state independent outer classifications merely to force coverage.
-   Stop before introducing a large generalized certificate if the exact
-   residual interface has not been audited.
+3. **Exceptional secant structure (audited; implementation open).** Work in
+   three stopping-bounded subdivisions: (a) inverse translation with a secant
+   inner output, including the derived outer secant/doubling split and exclusion
+   of outer `O`; (b) inverse translation with a tangent inner output, again
+   deriving rather than assuming the outer outcome; and (c) `D/D` degenerations,
+   first outer `O` by collinearity propagation and then outer `T` by a separate
+   tangency/repeated-root bridge.  Use the existing division-free secant and
+   doubling relations as the scalar interface and package results through
+   `curve-point-addition-relation-p` only afterwards.  The exact oriented
+   equations and residual conclusions are recorded in the obligation ledger.
+   Stop an implementation PR after one subdivision certifies; stop earlier if
+   the opposite-tree outcome cannot be derived without an additional nonzero
+   assumption or an independent outer classifier premise.
 4. **Mixed secant--tangent certificate.** Certify one coherent division-free
    family for `D/T`; obtain `T/D` by the already certified commutative mirror.
    Reuse the individual secant and tangent relations.  A branch-parametric

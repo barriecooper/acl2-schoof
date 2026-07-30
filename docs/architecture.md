@@ -224,6 +224,27 @@ generalization.  Dispatcher associativity must ultimately be a lift through
 semantic soundness, determinacy, closure, and canonical fixing, not a replay of
 branch formulas.
 
+The Stage 3 audit selects the existing semantic branch relations as the primary
+exceptional-secants boundary.  In particular,
+`affine-distinct-x-secant-relation-p` and `affine-doubling-relation-p` already
+expose the required division-free line and output equations, while
+`affine-opposite-y-infinity-relation-p` supplies the exceptional full-point
+result.  `curve-point-addition-relation-p` is the correct eventual packaging
+layer, but its internally selected quotient witnesses make it less suitable
+for discovering and proving the scalar certificates.  No new chord predicate
+is warranted unless an attempted relation-level proof reveals an equation that
+these predicates cannot express.
+
+Inverse translation and exceptional `D/D` composition are not presently one
+certificate family.  Inverse translation is a short sign-reversal argument on
+one secant or tangent witness, followed by a derived outer secant/doubling
+split.  An outer-`O` `D/D` degeneration is instead a collinearity propagation
+argument with one available nonzero secant denominator; an outer-`T`
+degeneration replaces an outer secant equation by a tangent equation and needs
+a repeated-root/tangency bridge.  A common theorem should be introduced only
+if those oriented specializations remain explicit and require no hidden
+nonzero premise.
+
 ## Design constraints for later work
 
 - Preserve total fixer semantics at public ACL2 boundaries and state clearly
