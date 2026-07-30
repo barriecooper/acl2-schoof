@@ -78,6 +78,8 @@
 (include-book "curve/f11-curve-point-addition-commutativity")
 (include-book "curve/curve-addition-structural-interface")
 (include-book "curve/curve-addition-structural-interface-regression")
+(include-book "curve/affine-inverse-tangent-translation")
+(include-book "curve/affine-inverse-tangent-translation-regression")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")

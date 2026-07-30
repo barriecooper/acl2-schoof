@@ -245,6 +245,14 @@ a repeated-root/tangency bridge.  A common theorem should be introduced only
 if those oriented specializations remain explicit and require no hidden
 nonzero premise.
 
+The inverse/tangent specialization is certified at the semantic relation
+boundary by `affine-inverse-tangent-translation`.  It negates the inner tangent
+witness and derives an outer secant when fixed x differs, or outer doubling
+when fixed x coincides.  The latter branch reconstructs the equal ordinate and
+transports the tangent-domain fact across affine negation.  The derived `D/T`
+disjunction excludes outer opposite-y without a classifier premise, extra
+nonzero assumption, division, or new curve polynomial identity.
+
 ## Design constraints for later work
 
 - Preserve total fixer semantics at public ACL2 boundaries and state clearly
