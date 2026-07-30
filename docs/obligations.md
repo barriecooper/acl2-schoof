@@ -183,8 +183,35 @@ named F7/F11 operations.
 - Deriving exact `H=(p-r)(p+q)-(xa-xc)=0` remains open.  Its prospective proof
   combines those three ordered input-secant instances, closure of `AB` from the
   `(A,B)` hypotheses, and the existing output-x/output-y rearrangements.  The
-  necessary local field reassociation and cancellation bridge has not yet been
-  certified.
+  three input-secant equations and the two output-coordinate rearrangements do
+  not, by themselves, determine the ordered quotient witnesses: the proof must
+  also consume `affine-distinct-x-slope-reconstructs-y-difference` at `(A,B)`,
+  `(B,C)`, and `(AB,C)`.  Even the resulting eight scalar equations are not a
+  sufficient hypothesis-free field interface.  Setting every coordinate and
+  y-coordinate, the curve coefficient, and `p` to field zero while setting
+  `q=r=field-one` satisfies all eight equations, but makes the proposed
+  conclusion `(p-r)(p+q)=xa-xc` assert `-1=0`.  The semantic classifiers rule
+  out this degenerate assignment through their three ordered nonzero
+  x-differences, but a scalar bridge that is forbidden to state those facts
+  cannot be certified.  A coefficient audit sharpens the required bridge:
+  writing `Ei` for the left side minus the right side of the eight equations
+  in their listed order and `K=(p-r)(p+q)-(xa-xc)`, field expansion gives
+  `(xc-xb)K = E1-E3-q*E4-(p+q)*E5+p*E6+
+  (xa+xb-xc-xab)*E7+(q-p)*E8`.  Thus `E2` is redundant for this cancellation
+  route, and only the ordered `(B,C)` nonzero difference `xc-xb` is needed to
+  cancel and obtain `K=0`; the `(A,B)` and `(AB,C)` nonzero differences are not
+  scalar premises of this proof.  This proof-minimality has not been promoted
+  to a certified logical-minimality result.  The next tight boundary is to
+  certify this residual identity in separately associated y-term,
+  slope-product, and coordinate-product blocks, followed by its single
+  left-cancellation step.  A direct one-event expansion using only the kernel's
+  associativity, commutativity, distributivity, inverse, fixing, and local
+  separated-cancellation consequences stops after full distribution with a
+  long additive sum containing the expected positive and negative monomials;
+  ACL2 does not align those distant pairs automatically.  Re-enabling more AC
+  rewriting would violate the controlled-proof boundary, so the missing fact
+  is now precisely the staged additive normalization between those three
+  blocks, not the residual coefficients or a further nonzero premise.
 - Exact `S=(p+q)-(r+tt)=0` also remains open.  Its prospective ordered-secant
   reconstruction additionally involves `(A,BC)` and closure of `BC`; it is not
   available from output-y rearrangement alone and was not assumed from `H` or
