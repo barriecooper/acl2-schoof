@@ -36,6 +36,12 @@ secant/output equations and the ordered nonzero factor `xc-xb`; proof-local
 term-list normalization exposes the finite additive cancellations.  It adds no
 executable definition or curve dependency.
 
+`books/field/xcert-s-reconstruction.lisp` extends that field-only layer.  Its
+public scalar theorem reuses the certified H equality and proves the remaining
+finite residual with proof-local explicit sum normalization.  It retains the
+ordered factors `xc-xb` for the H dependency and `xbc-xa` for final S
+cancellation, and adds no curve or executable dependency.
+
 The field-only book depends only on the generic field kernel.  The separate
 `books/curve/xcert-semantics.lisp` bridge imports that book and the assembled
 affine distinct-x output.  For inputs `A`, `B`, and `C`, it maps `xab` and `xbc`
