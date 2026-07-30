@@ -43,8 +43,11 @@ Its semantic instantiation is now complete as
 four ordered nested distinct-x classifications as final x equality.  The
 theorem `xcert-untagged-outputs-equal` packages those coordinate results and
 certifies equality of the assembled untagged affine outputs under exactly the
-same semantic interface.  Tagged output equality, exceptional cases, dispatcher
-results, and associativity remain later work.
+same semantic interface.  `xcert-tagged-outputs-equal` lifts that literal
+payload equality through the existing tagged distinct-x constructor, without
+replaying coordinate or scalar algebra.  Affine-dispatcher equality,
+exceptional cases, full-point dispatcher results, and associativity remain
+later work.
 
 ## Phase 1: prepare associativity
 

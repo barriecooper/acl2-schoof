@@ -146,3 +146,19 @@
    :rule-classes nil
    :hints (("Goal" :use ((:instance xcert-untagged-outputs-equal))
              :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm xcert-tagged-outputs-equal-regression
+   (implies
+    (and (short-weierstrass-affine-point-p a)
+         (short-weierstrass-affine-point-p b)
+         (short-weierstrass-affine-point-p c)
+         (equal (affine-pair-classify a b) :distinct-x)
+         (equal (affine-pair-classify b c) :distinct-x)
+         (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+         (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+    (equal (affine-distinct-x-output-point (xcert-ab a b) c)
+           (affine-distinct-x-output-point a (xcert-bc b c))))
+   :rule-classes nil
+   :hints (("Goal" :use ((:instance xcert-tagged-outputs-equal))
+             :in-theory (theory 'minimal-theory)))))
