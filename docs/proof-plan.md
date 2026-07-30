@@ -29,8 +29,10 @@ factor-ordered equality `(p-r)(p+q)=xa-xc` from the audited seven scalar
 equations and only `xc-xb != field-zero`; E2 is unused.  Its semantic
 instantiation `xcert-h-curve-zero` maps `p`, `q`, and `r` to the ordered slopes
 `(A,B)`, `(AB,C)`, and `(B,C)` and certifies the existing specialized H
-expression as `field-zero`.  The next coherent boundary is the separate exact
-S-zero reconstruction; composition simplification, exceptional cases,
+expression as `field-zero`.  The field-only exact S reconstruction is also complete as
+`xcert-s-scalar-reconstruction`; its two ordered nonzero premises serve the H
+and final-S cancellations separately.  The next coherent boundary is the
+semantic S-zero specialization; composition simplification, exceptional cases,
 coordinate equality, and associativity remain later work.
 
 ## Phase 1: prepare associativity

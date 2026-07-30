@@ -205,10 +205,19 @@ named F7/F11 operations.
   specialized `xcert-h` expression equal to `field-zero`.
 - `H` has not been used in composition, and composition simplification, `S`,
   coordinate equality, exceptional cases, and associativity were not attempted.
-- Exact `S=(p+q)-(r+tt)=0` also remains open.  Its prospective ordered-secant
-  reconstruction additionally involves `(A,BC)` and closure of `BC`; it is not
-  available from output-y rearrangement alone and was not assumed from `H` or
-  from associativity.
+- The field-only theorem `xcert-s-scalar-reconstruction` now certifies the
+  exact `S=(p+q)-(r+tt)=0` reconstruction.  Direct S algebra consumes the
+  ordered `q` and `r` slope equations, AB/BC output-x equations, the BC
+  output-y equation, and the public H equality; the H theorem encapsulates the
+  ordered `(A,B)` and `(AB,C)` input-secant equations, the `p` slope and AB
+  output-y equations, and cancellation of `xc-xb`.  The `tt` slope and both
+  AB/BC output-coordinate pairs connect the staged product to this residual.
+  The scalar theorem therefore has two distinct nonzero premises: `xc-xb` for
+  H reconstruction and `xbc-xa` for the final S cancellation.  The `(B,C)` and
+  `(A,BC)` input-secant equations are not direct scalar hypotheses.
+- Semantic S-zero remains open.  Its specialization must derive closure of BC,
+  instantiate `tt` at ordered `(A,BC)`, and obtain `xbc-xa != field-zero` from
+  that classifier; no semantic specialization is claimed here.
 - The four output-x residuals were already zero before this input-secant step.
   The X-CERT composition has not been simplified with any H/S result.
 - Cancellation, exceptional branches, curve associativity, and any later use
