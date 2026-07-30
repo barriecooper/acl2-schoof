@@ -162,3 +162,23 @@
    :rule-classes nil
    :hints (("Goal" :use ((:instance xcert-tagged-outputs-equal))
              :in-theory (theory 'minimal-theory)))))
+
+; Expose only the new public theorem: this regression neither selects the
+; branches again nor reaches into tagged payloads or preceding semantics.
+(local
+ (defthm xcert-affine-dispatcher-outputs-equal-regression
+   (implies
+    (and (short-weierstrass-affine-point-p a)
+         (short-weierstrass-affine-point-p b)
+         (short-weierstrass-affine-point-p c)
+         (equal (affine-pair-classify a b) :distinct-x)
+         (equal (affine-pair-classify b c) :distinct-x)
+         (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+         (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+    (equal (affine-pair-output-point (xcert-ab a b) c)
+           (affine-pair-output-point a (xcert-bc b c))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance xcert-affine-dispatcher-outputs-equal))
+     :in-theory (theory 'minimal-theory)))))

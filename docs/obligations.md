@@ -292,10 +292,22 @@ named F7/F11 operations.
   content is a direct use of `xcert-untagged-outputs-equal`; controlled unfolding
   of the existing tagged constructor and maintained tree abbreviations is the
   entire representation lift, so no constructor bridge and no coordinate or
-  scalar algebra is added.  Affine-dispatcher and full-point-dispatcher
-  associativity remain open.
-- Cancellation, exceptional branches, curve associativity, and any later use
-  in Schoof machinery.
+  scalar algebra is added.
+- Ordinary affine-dispatcher equality is complete for the maintained
+  four-`:distinct-x` X-CERT configuration.  The public theorem
+  `xcert-affine-dispatcher-outputs-equal` assumes exactly affine curve
+  membership of `a`, `b`, and `c`, plus `:distinct-x` classification of
+  `(a,b)`, `(b,c)`, `(xcert-ab a b,c)`, and `(a,xcert-bc b c)`.  It reduces
+  the two outer `affine-pair-output-point` calls through exactly two instances
+  of the existing `:distinct-x` branch equation, then uses
+  `xcert-tagged-outputs-equal` for all semantic equality.  It replays no
+  coordinate, scalar, or field algebra.
+- Scalar certificate semantics, final coordinate equality, untagged output
+  equality, tagged ordinary-output equality, and this affine-dispatcher
+  ordinary-case equality are separate completed boundaries.  Full-point
+  dispatcher lifting, exceptional and infinity cases, unrestricted
+  associativity, group laws, cancellation, and any later use in Schoof
+  machinery remain open.
 
 ## Affine addition branches
 

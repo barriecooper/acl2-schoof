@@ -45,9 +45,13 @@ theorem `xcert-untagged-outputs-equal` packages those coordinate results and
 certifies equality of the assembled untagged affine outputs under exactly the
 same semantic interface.  `xcert-tagged-outputs-equal` lifts that literal
 payload equality through the existing tagged distinct-x constructor, without
-replaying coordinate or scalar algebra.  Affine-dispatcher equality,
-exceptional cases, full-point dispatcher results, and associativity remain
-later work.
+replaying coordinate or scalar algebra.  The ordinary affine-dispatcher case
+is complete as `xcert-affine-dispatcher-outputs-equal` under the same exact
+seven hypotheses.  It instantiates the existing `:distinct-x` branch equation
+once for each outer dispatcher and uses `xcert-tagged-outputs-equal` for all
+semantic equality, without replaying coordinate or field algebra.  Other
+classifier outcomes, full-point dispatcher results, unrestricted
+associativity, and group laws remain later work.
 
 ## Phase 1: prepare associativity
 
