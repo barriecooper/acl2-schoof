@@ -38,10 +38,12 @@ final x-coordinates by simplifying the maintained composition with both H-zero
 and S-zero.  Field-only final-y reconstruction is complete: the output-x/H
 coordinate bridge and exact six-residual reduction compose through one bounded
 opposite-product cancellation to give fixed equality of the final ordinates.
-The next proof boundary is the semantic instantiation of that combined theorem
-for the two ordered nested distinct-x trees.  Untagged and tagged output
-packaging, exceptional cases, dispatcher results, and associativity remain
-later work.
+Its semantic instantiation is now complete as
+`xcert-final-y-coordinates-equal`, under the same three curve memberships and
+four ordered nested distinct-x classifications as final x equality.  The next
+proof boundary is equality of the assembled untagged affine outputs.  Tagged
+output equality, exceptional cases, dispatcher results, and associativity
+remain later work.
 
 ## Phase 1: prepare associativity
 
