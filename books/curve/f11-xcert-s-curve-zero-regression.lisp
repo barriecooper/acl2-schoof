@@ -28,6 +28,9 @@
                 (f11-affine-distinct-x-output ab c)) 9)
         (equal (f11-affine-coordinates-y
                 (f11-affine-distinct-x-output a bc)) 9)
+        (equal (f11-affine-distinct-x-output ab c)
+               (f11-affine-distinct-x-output a bc))
+        (equal (f11-affine-distinct-x-output ab c) '(7 9))
         (equal
          (f11-add
           (f11-add (f11-affine-distinct-x-slope a b)

@@ -493,3 +493,55 @@
        xcert-xab xcert-xl xcert-ab xcert-bc xcert-left xcert-right
        affine-coordinates-x-of-affine-distinct-x-output
        affine-coordinates-y-of-affine-distinct-x-output)))))
+
+; The maintained output constructor already makes both computation trees
+; canonical affine-coordinate objects.  This local extensionality bridge keeps
+; the public result representation-independent: equal canonical accessors
+; determine equal untagged coordinate objects.
+(local
+ (defthm affine-coordinates-equal-from-accessors-local
+   (implies
+    (and (affine-coordinates-p left)
+         (affine-coordinates-p right)
+         (equal (affine-coordinates-x left)
+                (affine-coordinates-x right))
+         (equal (affine-coordinates-y left)
+                (affine-coordinates-y right)))
+    (equal left right))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance affine-coordinates-fix-when-affine-coordinates-p
+                      (coordinates left))
+           (:instance affine-coordinates-fix-when-affine-coordinates-p
+                      (coordinates right)))
+     :in-theory
+     (union-theories (theory 'minimal-theory)
+                     '(affine-coordinates-fix))))))
+
+(defthm xcert-untagged-outputs-equal
+  (implies
+   (and (short-weierstrass-affine-point-p a)
+        (short-weierstrass-affine-point-p b)
+        (short-weierstrass-affine-point-p c)
+        (equal (affine-pair-classify a b) :distinct-x)
+        (equal (affine-pair-classify b c) :distinct-x)
+        (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+        (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+   (equal (xcert-left a b c)
+          (xcert-right a b c)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance xcert-final-x-coordinates-equal)
+          (:instance xcert-final-y-coordinates-equal)
+          (:instance affine-coordinates-equal-from-accessors-local
+                     (left (xcert-left a b c))
+                     (right (xcert-right a b c))))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(xcert-xl xcert-xr xcert-left xcert-right
+       affine-coordinates-p-of-affine-distinct-x-output
+       field-element-p-of-affine-coordinates-y
+       field-fix-when-field-element-p)))))
