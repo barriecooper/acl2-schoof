@@ -493,6 +493,172 @@ equations and nonzero factors encode four ordered distinct-x calls.  Whether
 the exceptional outer `O/T` degenerations follow from the same polynomial
 identity remains an **open feasibility question**, not a certified claim.
 
+### Stage 3 exceptional-secant certificate audit
+
+This audit fixes an oriented scalar notation.  Write
+`A=(xa,ya)`, `B=(xb,yb)`, and `C=(xc,yc)`.  For a secant witness `m` from
+`P=(xp,yp)` to `Q=(xq,yq)` with output `R=(xr,yr)`, the maintained semantic
+relation supplies exactly
+
+```text
+m (xq-xp) = yq-yp
+xr+xp+xq = m^2
+yr+yp = m (xp-xr),
+```
+
+plus curve membership and `xp != xq`.  For a tangent witness `t` at
+`P=(xp,yp)`, the doubling relation supplies
+
+```text
+t (yp+yp) = 3 xp^2 + a
+xr+2 xp = t^2
+yr+yp = t (xp-xr),
+```
+
+plus curve membership and `yp != -yp`.  These are already the exact
+classifier-free, division-free equations in
+`affine-distinct-x-secant-relation-p` and
+`affine-doubling-relation-p`.  They are the selected proof layer.  The full
+`curve-point-addition-relation-p` remains the later packaging and determinacy
+layer; its fixed quotient witnesses are unnecessary for the field algebra.  No
+new chord predicate, executable branch, or dispatcher premise is justified by
+this audit.
+
+#### A. Inverse translation with an inner secant
+
+Assume the inner `O` facts orient `B=-A`:
+
+```text
+xb = xa
+yb = -ya.
+```
+
+Let `U=(xu,yu)` be the secant output of `(B,C)` with witness `r`.  After the
+`O` substitutions, its three equations are
+
+```text
+r (xc-xa) = yc+ya                         (A-D1)
+xu+xa+xc = r^2                            (A-D2)
+yu-ya = r (xa-xu).                        (A-D3)
+```
+
+The desired outer line through `(A,U)` has witness `s=-r`.  Equation A-D3 is
+exactly `s(xu-xa)=yu-ya`; A-D2 is exactly the outer x-output equation with
+output `C`; and A-D1 is exactly the outer y-output equation
+`yc+ya=s(xa-xc)`.  Thus, when `xu != xa`, the existing secant relation can use
+`C` itself as its output witness, with no curve polynomial identity and no
+multiplicative cancellation.
+
+When `xu=xa`, A-D3 forces `yu=ya`.  The outer affine pair is therefore the same
+fixed point, not an independent tag choice.  If `ya != -ya`, its derived class
+is `T`; the still-missing tangent-premise bridge must prove
+
+```text
+(-r)(ya+ya) = 3 xa^2+a,                   (A-D4)
+```
+
+while A-D2 and A-D1 already give the tangent output equations for `C`.
+If `ya=-ya`, classifier priority would suggest `O`, but an affine `C` and the
+inner secant condition `xc != xa` must make A-D1--A-D3 together with the curve
+equations inconsistent.  This exclusion is an explicit required theorem; the
+outer `O` case must not be assumed and cannot return `C`.  The next
+inverse/secant implementation PR stops unless it certifies both A-D4 in the
+coincident-x subcase and this self-inverse impossibility, generically.
+
+#### B. Inverse translation with an inner tangent
+
+Here `B=-A` and inner `T` also fixes `C=B`; hence
+`xb=xc=xa`, `yb=yc=-ya`, and `yb != -yb`.  Let `U=(xu,yu)` be the tangent
+output at `B` with witness `t`.  Its exact equations are
+
+```text
+t (yb+yb) = 3 xa^2+a                     (A-T1)
+xu+2 xa = t^2                             (A-T2)
+yu+yb = t (xa-xu).                        (A-T3)
+```
+
+The outer witness is `s=-t`.  If `xu != xa`, A-T3 is its secant line equation;
+A-T2 gives the output-x equation for `C=B`; and the output-y equation is the
+zero identity `yb+ya=s(xa-xa)`.  If `xu=xa`, A-T3 gives `yu=ya`, so the outer
+pair fixes to `(A,A)` and is derived `T` because A-T1's domain gives
+`ya != -ya`.  Negating A-T1 supplies the tangent numerator equation at `A`,
+and A-T2 plus the same zero identity supply output `B`.  Consequently outer
+`O` is excluded directly in this family.  What remains open is a controlled
+relation-level theorem packaging precisely this derived `D/T` split; no
+additional polynomial composition certificate is indicated.
+
+#### C. Exceptional `D/D` degenerations
+
+Let `P=AB=(xp,yp)` have inner secant witness `p`, and
+`Q=BC=(xq,yq)` have witness `r`.  Both inner `D` hypotheses provide
+`xa != xb` and `xb != xc` and their two triples of secant equations.
+
+If the left outer pair `(P,C)` is `O`, its semantic content is
+`xp=xc` and `yp=-yc`.  Substitution in the `(A,B)->P` output-y equation gives
+
+```text
+yc-ya = p (xc-xa).                        (DD-O1)
+```
+
+Together with `p(xb-xa)=yb-ya`, DD-O1 implies
+`p(xc-xb)=yc-yb`.  Comparison with `r(xc-xb)=yc-yb` and the certified nonzero
+factor `xc-xb` derives `p=r`.  The `(B,C)->Q` output equations then derive
+
+```text
+xq=xa
+yq=-ya,                                  (DD-O2)
+```
+
+so the opposite tree's outer pair `(A,Q)` is derived `O` and both trees return
+infinity.  This is a small oriented collinearity certificate.  It is not the
+four-`D` X-CERT theorem: it uses the inner `(B,C)` denominator only, and no
+outer denominator exists.  The mirrored left/right result should follow by the
+certified operand/order reversal, not by adding a second outer tag premise.
+
+If `(P,C)` is `T`, its semantic content is `P=C` with `yc != -yc`.  The missing
+certificate must first derive that the chord through `A,B` is tangent at `C`:
+
+```text
+p (yc+yc) = 3 xc^2+a.                     (DD-T1)
+```
+
+It must then combine both inner secant triples, DD-T1, and the tangent output
+triple at `C` to prove the opposite-tree result.  In particular it must derive,
+from coordinates rather than an independent public classifier premise, exactly
+one of:
+
+```text
+xq != xa, and a secant relation for (A,Q) with the same tangent output 2C; or
+xq = xa, yq = ya, ya != -ya, and a doubling relation at A with output 2C.
+```
+
+An opposite-y conclusion on `(A,Q)` would make that tree infinity and must be
+proved impossible because `C` is in the non-opposite tangent domain.  The
+needed DD-T1 repeated-root bridge and this derived `D/T` opposite-tree split
+are open.  They materially replace an outer secant equation and its nonzero
+denominator, so they are not currently a direct specialization of
+`xcert-h-scalar-reconstruction`, `xcert-s-scalar-reconstruction`, or the
+four-`D` semantic X-CERT theorem.
+
+#### Certificate decision and stopping boundaries
+
+One large common chord certificate is **not currently justified**.  The
+inverse families are witness-negation/output-reuse arguments; `DD-O` is
+collinearity propagation with one legitimate cancellation; and `DD-T` needs a
+new repeated-root tangency bridge.  A future shared polynomial lemma may factor
+some curve algebra, but the public interfaces should remain separate oriented
+certificates unless ACL2 experiments show transparent specializations with no
+hidden nonzero hypotheses.
+
+Stage 3 therefore remains open and is subdivided into: (1) inverse/secant,
+including A-D4 and the self-inverse impossibility; (2) inverse/tangent with its
+derived outer `D/T` split; (3) `DD-O` collinearity propagation; and (4) `DD-T`
+tangency plus its derived opposite-tree outcome.  Each implementation PR must
+stop after one subdivision, must expose only semantic relations or their exact
+scalar equations, and must not proceed if it needs an independent opposite
+outer classification.  Mixed `D/T`, finite assembly, unrestricted
+associativity, cancellation, and group packaging remain outside Stage 3.
+
 ## Hasse and Schoof tracks
 
 ### Open
