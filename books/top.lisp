@@ -51,6 +51,7 @@
 (include-book "curve/affine-distinct-x-output")
 (include-book "curve/xcert-semantics")
 (include-book "curve/xcert-semantics-regression")
+(include-book "curve/f11-xcert-s-curve-zero-regression")
 (include-book "curve/xcert-input-secant-regression")
 (include-book "curve/f11-affine-distinct-x-output")
 (include-book "curve/affine-distinct-x-secant-identity")

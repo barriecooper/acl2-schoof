@@ -215,9 +215,15 @@ named F7/F11 operations.
   The scalar theorem therefore has two distinct nonzero premises: `xc-xb` for
   H reconstruction and `xbc-xa` for the final S cancellation.  The `(B,C)` and
   `(A,BC)` input-secant equations are not direct scalar hypotheses.
-- Semantic S-zero remains open.  Its specialization must derive closure of BC,
-  instantiate `tt` at ordered `(A,BC)`, and obtain `xbc-xa != field-zero` from
-  that classifier; no semantic specialization is claimed here.
+- The semantic bridge `xcert-s-curve-zero` instantiates the scalar theorem with
+  the exact ordered slopes `(A,B)`, `(AB,C)`, `(B,C)`, and `(A,BC)`.  Its public
+  hypotheses are curve membership of `A`, `B`, and `C`, and `:distinct-x`
+  classifications of those four pairs.  Distinct-x closure derives membership
+  of both `AB` and `BC`; the secant, slope-reconstruction, output-coordinate,
+  and classifier theorems discharge all ten equations and both ordered
+  nonzero differences.  The result retains the exact grouping
+  `(p+q)-(r+tt)=0`.  An F11 regression uses `A=C=(2,4)`, `B=(3,5)`, and
+  `AB=BC=(7,2)`, with ordered slopes `1,4,1,4`.
 - The four output-x residuals were already zero before this input-secant step.
   The X-CERT composition has not been simplified with any H/S result.
 - Cancellation, exceptional branches, curve associativity, and any later use
