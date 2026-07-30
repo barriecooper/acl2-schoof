@@ -179,6 +179,33 @@
 ; The next event records the exact four ordered input-secant candidates.  It is
 ; intentionally retained as the current proof-development checkpoint.
 (local
+ (defthm field-neg-fixed-congruence-local
+  (implies (equal (field-fix x) (field-fix y))
+           (equal (field-neg x) (field-neg y)))
+  :hints (("Goal" :use ((:instance field-neg-of-fix (x x))
+                           (:instance field-neg-of-fix (x y)))
+           :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm field-slope-equation-reverse-local
+  (implies (equal (field-mul slope (field-sub x2 x1))
+                  (field-sub y2 y1))
+           (equal (field-mul slope (field-sub x1 x2))
+                  (field-sub y1 y2)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance field-neg-fixed-congruence-local
+                   (x (field-mul slope (field-sub x2 x1)))
+                   (y (field-sub y2 y1))))
+           :in-theory (union-theories (theory 'minimal-theory)
+            '(field-sub field-add-associative field-add-commutative
+              field-add-inverse-left field-add-inverse-right
+              field-mul-left-distributive field-mul-right-distributive
+              field-neg-of-add-local field-neg-of-neg
+              field-mul-of-neg-right-local field-add-fix-left field-fix-of-add
+              field-fix-of-mul field-fix-of-neg))))))
+
+(local
  (defthm xcert-s-residual-zero-local
   (implies
    (and
@@ -231,3 +258,7 @@
 ; The four secant equations are present above in the maintained order.  Continue
 ; by proving equation-shaped segment expansions before any term permutation;
 ; do not re-expand XCERT-S-EIGHT-EQUATION-RESIDUAL-LOCAL, which certifies.
+; FIELD-SLOPE-EQUATION-REVERSE-LOCAL now certifies an explicit reversal of an
+; ordered slope equation by negating both sides.  It is available for segment
+; decompositions that require the opposite displayed difference; the retained
+; secant and slope hypotheses themselves remain in their authoritative order.
