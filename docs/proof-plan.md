@@ -32,16 +32,16 @@ instantiation `xcert-h-curve-zero` maps `p`, `q`, and `r` to the ordered slopes
 expression as `field-zero`.  The field-only exact S reconstruction is complete as
 `xcert-s-scalar-reconstruction`, and `xcert-s-curve-zero` specializes it to the
 four ordered nested distinct-x pairs.  Its two ordered nonzero premises serve
-the H and final-S cancellations separately.  The next coherent boundary is an
-audit of the algebra needed after the separate H-zero and S-zero results;
-  The same seven-hypothesis configuration now also certifies equality of the
-  two final x-coordinates by simplifying the maintained composition with both
-  H-zero and S-zero.  The next boundary is the field-only final-y
-  reconstruction needed before semantic y-coordinate equality.  Its
-  output-x/H coordinate bridge and the exact six-residual reduction of the
-  final y difference are now certified; the next boundary is their field-only
-  composition.  Exceptional cases and associativity remain later
-  work.
+the H and final-S cancellations separately.
+The same seven-hypothesis configuration now also certifies equality of the two
+final x-coordinates by simplifying the maintained composition with both H-zero
+and S-zero.  Field-only final-y reconstruction is complete: the output-x/H
+coordinate bridge and exact six-residual reduction compose through one bounded
+opposite-product cancellation to give fixed equality of the final ordinates.
+The next proof boundary is the semantic instantiation of that combined theorem
+for the two ordered nested distinct-x trees.  Untagged and tagged output
+packaging, exceptional cases, dispatcher results, and associativity remain
+later work.
 
 ## Phase 1: prepare associativity
 

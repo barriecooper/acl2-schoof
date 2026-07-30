@@ -246,10 +246,23 @@ named F7/F11 operations.
   from its product balance, then cancels each zero residual.  The AB output-y
   equation is absent.  All support algebra is proof-local; there are no curve,
   classifier, nonzero, or multiplicative-cancellation hypotheses.
-- Combined field-only final-y reconstruction, semantic final-y equality, and
-  equality of the assembled untagged outputs remain open.  The next field-only
-  step is to compose this reduction with the separate output-x/H coordinate
-  bridge above and cancel the two opposite products.
+- The public theorem `xcert-field-only-final-y-equal` now composes the two
+  preceding public theorems.  Its exact interface is the union of their needed
+  hypotheses: final-left and AB output-x; maintained H equality; S-zero; the
+  ordered A-to-B, B-to-C, and AB-to-C slope equations; and final-left and
+  final-right output-y.  It concludes `field-fix(yl)=field-fix(yr)`.  The
+  coordinate bridge substitutes `xl-xb=(q-r)(p+q)`, while maintained H directly
+  substitutes `xa-xc=(p-r)(p+q)`, leaving
+  `(p-r)((q-r)(p+q))+(r-q)((p-r)(p+q))`.  A bounded proof-local three-factor
+  lemma rewrites `r-q` as the negation of `q-r`, associates and commutes only
+  those products, and applies additive inverse; no multiplicative cancellation
+  is used.  The AB output-y equation remains absent.  There is no geometric,
+  classifier, nonzero, inverse, division, additional-certificate, or
+  multiplicative-cancellation premise, and the six residual equations are not
+  re-expanded by this composition.
+- Semantic final-y equality and equality of the assembled untagged outputs
+  remain open.  The next boundary is the curve-semantic instantiation of the
+  combined field-only theorem, not output packaging.
 - Cancellation, exceptional branches, curve associativity, and any later use
   in Schoof machinery.
 

@@ -434,3 +434,70 @@
                              (field-mul (field-sub r q) (field-sub xa xc))))))
           :in-theory (union-theories (theory 'minimal-theory)
            '(field-sub field-fix-of-add field-fix-of-mul field-fix-of-neg)))))
+
+; Once the two public reconstruction results above have supplied the two
+; coordinate differences, only this bounded three-factor cancellation remains.
+(local
+ (defthm field-reverse-subtraction-local
+  (equal (field-sub x y) (field-neg (field-sub y x)))
+  :rule-classes nil
+  :hints (("Goal"
+           :in-theory (union-theories (theory 'minimal-theory)
+            '(field-sub field-neg-of-add-local field-neg-of-neg
+              field-add-commutative field-add-fix-left field-fix-of-add
+              field-fix-of-neg))))))
+
+(local
+ (defthm field-three-factor-swap-local
+  (equal (field-mul b (field-mul a c))
+         (field-mul a (field-mul b c)))
+  :hints (("Goal"
+           :use ((:instance field-mul-associative (x b) (y a) (z c))
+                 (:instance field-mul-associative (x a) (y b) (z c))
+                 (:instance field-mul-commutative (x b) (y a)))
+           :in-theory (union-theories (theory 'minimal-theory)
+            '(field-fix-of-mul))))))
+
+(local
+ (defthm field-opposite-three-factor-sum-local
+  (equal
+   (field-add (field-mul a (field-mul b c))
+              (field-mul (field-neg b) (field-mul a c)))
+   (field-zero))
+  :hints (("Goal"
+           :use ((:instance field-mul-of-neg-left-local
+                            (x b) (y (field-mul a c)))
+                 (:instance field-three-factor-swap-local))
+           :in-theory (union-theories (theory 'minimal-theory)
+            '(field-add-inverse-right field-fix-of-add field-fix-of-mul
+              field-fix-of-neg))))))
+
+(defthm xcert-field-only-final-y-equal
+ (implies
+  (and
+   (equal (field-add (field-add xl xab) xc) (field-mul q q))
+   (equal (field-add (field-add xab xa) xb) (field-mul p p))
+   (equal (field-mul (field-sub p r) (field-add p q))
+          (field-sub xa xc))
+   (equal (field-sub (field-add p q) (field-add r tt)) (field-zero))
+   (equal (field-mul p (field-sub xb xa)) (field-sub yb ya))
+   (equal (field-mul r (field-sub xc xb)) (field-sub yc yb))
+   (equal (field-mul q (field-sub xc xab)) (field-sub yc yab))
+   (equal (field-add yl yab) (field-mul q (field-sub xab xl)))
+   (equal (field-add yr ya) (field-mul tt (field-sub xa xl))))
+  (equal (field-fix yl) (field-fix yr)))
+ :rule-classes nil
+ :hints
+ (("Goal"
+   :do-not '(preprocess)
+   :use ((:instance xcert-y-difference-six-residual-reduction)
+         (:instance xcert-output-x-h-coordinate-bridge)
+         (:instance field-reverse-subtraction-local (x r) (y q))
+         (:instance field-opposite-three-factor-sum-local
+                    (a (field-sub p r))
+                    (b (field-sub q r))
+                    (c (field-add p q)))
+         (:instance field-sub-equal-zero-implies-fixed-equal
+                    (first yl) (second yr)))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(field-fix-of-add field-fix-of-mul field-fix-of-neg)))))

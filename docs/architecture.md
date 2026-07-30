@@ -65,9 +65,13 @@ output-x/H coordinate bridge `xl-xb=(q-r)(p+q)`; its proof has no curve or
 nonzero premise.  Its separate six-residual y reduction derives the final
 ordinate difference as two products from S-zero, three ordered slope equations,
 and the two final output-y equations; the AB output-y equation is absent.  Their
-complete field-only final-y composition, semantic y-coordinate equality, output
-representation equality, and dispatcher associativity remain separate later
-boundaries.
+composition is now certified as the field-only fixed final-y equality: the
+coordinate bridge and maintained H equality substitute the two coordinate
+differences, and a bounded opposite-product identity closes the result.  The
+semantic H-zero and S-zero bridges, certified final x-coordinate equality,
+these three field-only final-y stages, open semantic final-y equality, open
+untagged output equality, and later tagged and dispatcher results remain
+distinct boundaries.
 
 The ordered distinct-x theory also exposes the division-free input-secant
 identity `slope*(y(second)+y(first)) = x(second)^2 +
