@@ -229,9 +229,18 @@ named F7/F11 operations.
   results to certify `xcert-final-x-coordinates-equal`.  Its hypotheses are the
   three input curve memberships and the four ordered `:distinct-x`
   classifications used by `xcert-s-curve-zero`; it adds no nonzero premise.
-- Field-only final-y reconstruction, its semantic specialization, final
-  y-coordinate equality, and equality of the assembled untagged outputs remain
-  open.
+- The field-only theorem `xcert-output-x-h-coordinate-bridge` now derives
+  `xl-xb=(q-r)(p+q)` from exactly the maintained final-left output-x equation
+  `xl+xab+xc=q*q`, the AB output-x equation `xab+xa+xb=p*p`, and the H equality
+  `(p-r)(p+q)=xa-xc`.  Its proof adds the short common block `xb+xab+xc`,
+  transports the three equations one at a time, and uses only bounded additive
+  cancellation and the difference-of-squares step.  It has no nonzero premise
+  and performs no multiplicative cancellation.
+- The six-residual y-difference reduction, combined field-only final-y
+  reconstruction, semantic final-y equality, and equality of the assembled
+  untagged outputs remain open.  The intended reduction still uses S-zero, the
+  ordered `p`, `r`, and `q` slope equations, and the two final output-y
+  equations; the AB output-y equation is not among that interface.
 - Cancellation, exceptional branches, curve associativity, and any later use
   in Schoof machinery.
 
