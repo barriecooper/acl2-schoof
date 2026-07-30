@@ -194,10 +194,16 @@ named F7/F11 operations.
   subtraction/equality bridge gives the displayed reconstruction.  The stated
   premise minimality is relative to this audited proof, not a formal logical
   minimality theorem.
-- Semantic instantiation of that scalar theorem remains open: map `p`, `q`, and
-  `r` to the ordered slopes `(A,B)`, `(AB,C)`, and `(B,C)`, respectively, and
-  derive the existing specialized `H` expression equal to `field-zero`.
-  `H` has not been used in composition, and composition simplification, `S`,
+- The semantic bridge `xcert-h-curve-zero` instantiates that scalar theorem
+  with the ordered slopes `(A,B)`, `(AB,C)`, and `(B,C)`.  Its hypotheses are
+  curve membership of `A`, `B`, and `C`, plus `:distinct-x` classification of
+  `(A,B)`, `(B,C)`, and `(AB,C)`.  Closure supplies curve membership of `AB`;
+  the input-secant identity supplies E1 and E3, slope reconstruction supplies
+  E4--E6, and the unconditional output-x and output-y rearrangements supply E7
+  and E8.  The `(B,C)` classification also supplies the sole nonzero premise
+  `xc-xb != field-zero`.  E2 is not used.  The result is the existing
+  specialized `xcert-h` expression equal to `field-zero`.
+- `H` has not been used in composition, and composition simplification, `S`,
   coordinate equality, exceptional cases, and associativity were not attempted.
 - Exact `S=(p+q)-(r+tt)=0` also remains open.  Its prospective ordered-secant
   reconstruction additionally involves `(A,BC)` and closure of `BC`; it is not

@@ -63,3 +63,19 @@
                           (:instance xcert-gxbc-curve-zero)
                           (:instance xcert-curve-composition))
             :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm xcert-h-curve-zero-regression
+   (implies
+    (and (short-weierstrass-affine-point-p a)
+         (short-weierstrass-affine-point-p b)
+         (short-weierstrass-affine-point-p c)
+         (equal (affine-pair-classify a b) :distinct-x)
+         (equal (affine-pair-classify b c) :distinct-x)
+         (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x))
+    (equal (xcert-h (xcert-p a b) (xcert-q a b c) (xcert-r b c)
+                    (xcert-xa a) (xcert-xc c))
+           (field-zero)))
+   :rule-classes nil
+   :hints (("Goal" :use ((:instance xcert-h-curve-zero))
+             :in-theory (theory 'minimal-theory)))))
