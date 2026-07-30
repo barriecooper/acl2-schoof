@@ -22,16 +22,16 @@ addition. Output closure, infinity identity, inverse-to-infinity, and full
 commutativity are complete. Concrete F7, F7X2, and F11 books supply focused
 instantiation and execution regressions rather than additional generic scope.
 
-## Next boundary: instantiate certified scalar H reconstruction
+## Completed semantic H reconstruction
 
-The field-only theorem `xcert-h-scalar-reconstruction` now derives the exact
+The field-only theorem `xcert-h-scalar-reconstruction` derives the exact
 factor-ordered equality `(p-r)(p+q)=xa-xc` from the audited seven scalar
-equations and only `xc-xb != field-zero`; E2 is unused.  The next tight task is
-semantic instantiation with `p=slope(A,B)`, `q=slope(AB,C)`, and
-`r=slope(B,C)`, using the existing ordered secant, slope-reconstruction, and
-output-coordinate results to derive the existing specialized H expression
-as `field-zero`.  It must still stop before composition simplification, `S`,
-exceptional cases, coordinate equality, or associativity.
+equations and only `xc-xb != field-zero`; E2 is unused.  Its semantic
+instantiation `xcert-h-curve-zero` maps `p`, `q`, and `r` to the ordered slopes
+`(A,B)`, `(AB,C)`, and `(B,C)` and certifies the existing specialized H
+expression as `field-zero`.  The next coherent boundary is the separate exact
+S-zero reconstruction; composition simplification, exceptional cases,
+coordinate equality, and associativity remain later work.
 
 ## Phase 1: prepare associativity
 
