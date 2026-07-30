@@ -2,7 +2,7 @@
 
 (include-book "../field/xcert-final-y-reconstruction")
 (include-book "affine-distinct-x-closure")
-(include-book "affine-pair-output-point")
+(include-book "curve-point-pair-output-point")
 
 ; The two ordered, total distinct-x calculation trees.  These names abbreviate
 ; only existing operations; they neither test a branch nor implement addition.
@@ -590,3 +590,78 @@
                      (first a) (second (xcert-bc b c)))
           (:instance xcert-tagged-outputs-equal))
     :in-theory (theory 'minimal-theory))))
+
+; Lift the completed affine-dispatcher equality across the full tagged-point
+; dispatcher.  The four branch hypotheses make both inner results affine and
+; select both outer ordinary branches; the affine theorem above supplies the
+; only semantic equality.
+(local
+ (defthm full-point-inner-distinct-x-reduction-local
+   (implies
+    (equal (affine-pair-classify first second) :distinct-x)
+    (equal
+     (curve-point-pair-output-point
+      (curve-point-affine-coordinates first)
+      (curve-point-affine-coordinates second))
+     (curve-point-affine-coordinates
+      (affine-distinct-x-output first second))))
+   :hints
+   (("Goal"
+     :use ((:instance affine-pair-output-point-when-distinct-x
+                      (first (affine-coordinates-fix first))
+                      (second (affine-coordinates-fix second))))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(curve-point-pair-output-point-of-affines
+        affine-pair-classify-of-fixes
+        affine-distinct-x-output-point
+        affine-distinct-x-output
+        affine-distinct-x-output-x
+        affine-distinct-x-output-y
+        affine-distinct-x-slope
+        affine-coordinates-x-of-fix
+        affine-coordinates-y-of-fix
+        affine-coordinates-fix-idempotent))))))
+
+(defthm xcert-full-point-dispatcher-associative-when-all-distinct-x
+  (implies
+   (and (short-weierstrass-affine-point-p a)
+        (short-weierstrass-affine-point-p b)
+        (short-weierstrass-affine-point-p c)
+        (equal (affine-pair-classify a b) :distinct-x)
+        (equal (affine-pair-classify b c) :distinct-x)
+        (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+        (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+   (equal
+    (curve-point-pair-output-point
+     (curve-point-pair-output-point
+      (curve-point-affine-coordinates a)
+      (curve-point-affine-coordinates b))
+     (curve-point-affine-coordinates c))
+    (curve-point-pair-output-point
+     (curve-point-affine-coordinates a)
+     (curve-point-pair-output-point
+      (curve-point-affine-coordinates b)
+      (curve-point-affine-coordinates c)))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance xcert-affine-dispatcher-outputs-equal)
+          (:instance full-point-inner-distinct-x-reduction-local
+                     (first a) (second b))
+          (:instance full-point-inner-distinct-x-reduction-local
+                     (first b) (second c)))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(full-point-inner-distinct-x-reduction-local
+       curve-point-pair-output-point-of-affines
+       affine-pair-output-point-when-distinct-x
+       affine-distinct-x-output-point
+       curve-point-affine-coordinates-get-of-constructor
+       curve-point-fix-of-affine-coordinates
+       curve-point-infinity-p-of-affine-coordinates
+       affine-coordinates-fix-idempotent
+       affine-coordinates-fix-of-affine-distinct-x-output
+       xcert-ab xcert-bc)))))

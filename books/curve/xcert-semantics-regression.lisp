@@ -182,3 +182,33 @@
    (("Goal"
      :use ((:instance xcert-affine-dispatcher-outputs-equal))
      :in-theory (theory 'minimal-theory)))))
+
+; The representation-boundary regression exposes only the final public
+; theorem: it does not independently select or simplify dispatcher branches.
+(local
+ (defthm xcert-full-point-dispatcher-associative-when-all-distinct-x-regression
+   (implies
+    (and (short-weierstrass-affine-point-p a)
+         (short-weierstrass-affine-point-p b)
+         (short-weierstrass-affine-point-p c)
+         (equal (affine-pair-classify a b) :distinct-x)
+         (equal (affine-pair-classify b c) :distinct-x)
+         (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+         (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+    (equal
+     (curve-point-pair-output-point
+      (curve-point-pair-output-point
+       (curve-point-affine-coordinates a)
+       (curve-point-affine-coordinates b))
+      (curve-point-affine-coordinates c))
+     (curve-point-pair-output-point
+      (curve-point-affine-coordinates a)
+      (curve-point-pair-output-point
+       (curve-point-affine-coordinates b)
+       (curve-point-affine-coordinates c)))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance
+            xcert-full-point-dispatcher-associative-when-all-distinct-x))
+     :in-theory (theory 'minimal-theory)))))
