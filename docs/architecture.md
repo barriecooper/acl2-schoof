@@ -82,8 +82,13 @@ semantic final-y equality, untagged output equality, and tagged ordinary-output
 equality remain distinct certified boundaries.  The tagged theorem uses the
 same three curve-membership and four ordered `:distinct-x` hypotheses and lifts
 the untagged theorem through `affine-distinct-x-output-point`; it replays no
-coordinate or scalar algebra.  Affine-dispatcher associativity and its
-exceptional branches remain distinct open boundaries.
+coordinate or scalar algebra.  The separate ordinary affine-dispatcher theorem
+`xcert-affine-dispatcher-outputs-equal` retains those exact seven hypotheses
+and reduces its two outer calls through exactly two uses of the public
+`:distinct-x` branch equation.  `xcert-tagged-outputs-equal` supplies all
+semantic equality, so no coordinate or field algebra is replayed.  This does
+not cover other affine classifier outcomes, full-point dispatch, unrestricted
+associativity, or group laws; those remain distinct open boundaries.
 
 The ordered distinct-x theory also exposes the division-free input-secant
 identity `slope*(y(second)+y(first)) = x(second)^2 +

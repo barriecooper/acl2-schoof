@@ -2,7 +2,7 @@
 
 (include-book "../field/xcert-final-y-reconstruction")
 (include-book "affine-distinct-x-closure")
-(include-book "affine-distinct-x-output-point")
+(include-book "affine-pair-output-point")
 
 ; The two ordered, total distinct-x calculation trees.  These names abbreviate
 ; only existing operations; they neither test a branch nor implement addition.
@@ -566,3 +566,27 @@
     (union-theories
      (theory 'minimal-theory)
      '(affine-distinct-x-output-point xcert-left xcert-right)))))
+
+; Realize the maintained ordinary four-distinct-x equality through the two
+; outer affine dispatcher branches.  The tagged theorem supplies all semantic
+; equality; the dispatcher equations only select the known ordinary outputs.
+(defthm xcert-affine-dispatcher-outputs-equal
+  (implies
+   (and (short-weierstrass-affine-point-p a)
+        (short-weierstrass-affine-point-p b)
+        (short-weierstrass-affine-point-p c)
+        (equal (affine-pair-classify a b) :distinct-x)
+        (equal (affine-pair-classify b c) :distinct-x)
+        (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+        (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+   (equal (affine-pair-output-point (xcert-ab a b) c)
+          (affine-pair-output-point a (xcert-bc b c))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance affine-pair-output-point-when-distinct-x
+                     (first (xcert-ab a b)) (second c))
+          (:instance affine-pair-output-point-when-distinct-x
+                     (first a) (second (xcert-bc b c)))
+          (:instance xcert-tagged-outputs-equal))
+    :in-theory (theory 'minimal-theory))))
