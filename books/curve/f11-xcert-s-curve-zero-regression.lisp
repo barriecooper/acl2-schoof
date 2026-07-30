@@ -1,6 +1,7 @@
 (in-package "GFIELD")
 (include-book "xcert-semantics")
 (include-book "f11-affine-distinct-x-output")
+(include-book "f11-curve-point-pair-output-point")
 
 ; A=(2,4), B=(3,5), C=(2,4).  Both inner outputs are (7,2), so all
 ; four ordered pairs used by the public semantic theorem are distinct-x.
@@ -37,4 +38,17 @@
                    (f11-affine-distinct-x-slope ab c))
           (f11-neg (f11-add (f11-affine-distinct-x-slope b c)
                             (f11-affine-distinct-x-slope a bc))))
-         (f11-zero)))))
+        (f11-zero)))))
+
+; Reuse the same witness for the first nested full-point dispatcher execution.
+(assert-event
+ (let ((a '(:affine (2 4)))
+       (b '(:affine (3 5)))
+       (c '(:affine (2 4))))
+   (and
+    (equal (f11-curve-point-pair-output-point
+            (f11-curve-point-pair-output-point a b) c)
+           '(:affine (7 9)))
+    (equal (f11-curve-point-pair-output-point
+            a (f11-curve-point-pair-output-point b c))
+           '(:affine (7 9))))))

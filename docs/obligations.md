@@ -302,12 +302,29 @@ named F7/F11 operations.
   of the existing `:distinct-x` branch equation, then uses
   `xcert-tagged-outputs-equal` for all semantic equality.  It replays no
   coordinate, scalar, or field algebra.
+- Full-point dispatcher associativity is complete for affine leaves in that
+  same ordinary four-`:distinct-x` configuration.  The public theorem
+  `xcert-full-point-dispatcher-associative-when-all-distinct-x` has exactly the
+  three affine curve-membership hypotheses for `a`, `b`, and `c` and the four
+  ordered classifications `(a,b)`, `(b,c)`, `(xcert-ab a b,c)`, and
+  `(a,xcert-bc b c)`.  It proves literal equality of
+  `((affine a + affine b) + affine c)` and
+  `(affine a + (affine b + affine c))`, where every `+` is
+  `curve-point-pair-output-point` and every leaf is constructed by
+  `curve-point-affine-coordinates`.  A proof-local inner distinct-x reduction
+  removes constructor and coordinate fixers; the existing full-point
+  affine/affine equation and affine distinct-x branch equation reduce the two
+  outer calls.  All semantic equality then comes directly from
+  `xcert-affine-dispatcher-outputs-equal`; no coordinate or field algebra is
+  replayed.
 - Scalar certificate semantics, final coordinate equality, untagged output
   equality, tagged ordinary-output equality, and this affine-dispatcher
-  ordinary-case equality are separate completed boundaries.  Full-point
-  dispatcher lifting, exceptional and infinity cases, unrestricted
-  associativity, group laws, cancellation, and any later use in Schoof
-  machinery remain open.
+  ordinary-case equality and its full-point lift are separate completed
+  boundaries.  The next phase is an audit and decomposition of the remaining
+  associativity configurations.  Exceptional same-x, opposite-y and doubling
+  interactions, infinity inputs or intermediate infinity, arbitrary classifier
+  combinations, unrestricted associativity, identity and inverse laws, group
+  structure, cancellation, and any later use in Schoof machinery remain open.
 
 ## Affine addition branches
 

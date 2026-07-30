@@ -50,8 +50,19 @@ is complete as `xcert-affine-dispatcher-outputs-equal` under the same exact
 seven hypotheses.  It instantiates the existing `:distinct-x` branch equation
 once for each outer dispatcher and uses `xcert-tagged-outputs-equal` for all
 semantic equality, without replaying coordinate or field algebra.  Other
-classifier outcomes, full-point dispatcher results, unrestricted
-associativity, and group laws remain later work.
+classifier outcomes remain later work.  The theorem
+`xcert-full-point-dispatcher-associative-when-all-distinct-x` now lifts this
+result to the literal nested `curve-point-pair-output-point` expressions with
+tagged affine `a`, `b`, and `c` leaves, under those same exact seven
+hypotheses.  Existing affine/affine and distinct-x branch interfaces, plus a
+proof-local canonical inner reduction, remove the dispatcher and fixer layers;
+all semantic equality is the affine-dispatcher theorem, with no coordinate or
+field algebra replayed.  The next phase is an audit and decomposition of the
+remaining associativity configurations, not a presumption that one further
+branch theorem will cover them.  Exceptional same-x, opposite-y and doubling
+interactions, infinity inputs and intermediate infinity, arbitrary classifier
+combinations, unrestricted associativity, identity and inverse laws, and group
+structure remain later work.
 
 ## Phase 1: prepare associativity
 

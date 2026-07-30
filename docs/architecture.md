@@ -87,8 +87,17 @@ coordinate or scalar algebra.  The separate ordinary affine-dispatcher theorem
 and reduces its two outer calls through exactly two uses of the public
 `:distinct-x` branch equation.  `xcert-tagged-outputs-equal` supplies all
 semantic equality, so no coordinate or field algebra is replayed.  This does
-not cover other affine classifier outcomes, full-point dispatch, unrestricted
-associativity, or group laws; those remain distinct open boundaries.
+not cover other affine classifier outcomes.  The separate
+`xcert-full-point-dispatcher-associative-when-all-distinct-x` boundary lifts it
+to two nested `curve-point-pair-output-point` trees whose leaves are
+`curve-point-affine-coordinates` constructors for `a`, `b`, and `c`.  Under the
+same three memberships and four ordered classifications, a proof-local inner
+branch reduction and the public full-point affine/affine interface expose the
+two affine dispatcher calls.  Their equality comes solely from
+`xcert-affine-dispatcher-outputs-equal`; constructor and coordinate fixers are
+removed by existing canonicality equations, with no semantic algebra replayed.
+Exceptional classifiers, infinity inputs or results, arbitrary configurations,
+unrestricted associativity, and group laws remain distinct open boundaries.
 
 The ordered distinct-x theory also exposes the division-free input-secant
 identity `slope*(y(second)+y(first)) = x(second)^2 +
