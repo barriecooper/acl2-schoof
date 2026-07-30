@@ -50,9 +50,10 @@ and `xr` to the x-coordinates of `output(AB,C)` and `output(A,BC)`, and maps
 `p,q,r,tt` to the ordered slopes `(A,B)`, `(AB,C)`, `(B,C)`, and `(A,BC)`.
 It certifies the four residuals as zero from the existing output-x
 rearrangement and specializes `D_x`, `H`, `S`, `C`, and the opaque composition.
-It also instantiates the field-only scalar reconstruction with the ordered
-curve slopes and certifies the specialized `H` as zero, using only the three
-input curve memberships and the three relevant distinct-x classifications.
+It also instantiates the field-only scalar reconstructions with the ordered
+curve slopes.  It certifies specialized `H` as zero from the three input curve
+memberships and three relevant distinct-x classifications, and specialized
+`S` as zero after adding only the fourth classification for `(A,BC)`.
 The bridge adds no polynomial dependency and proves no associativity or
 exceptional-case fact.
 

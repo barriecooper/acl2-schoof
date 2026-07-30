@@ -1,6 +1,6 @@
 (in-package "GFIELD")
 
-(include-book "../field/xcert-h-reconstruction")
+(include-book "../field/xcert-s-reconstruction")
 (include-book "affine-distinct-x-closure")
 
 ; The two ordered, total distinct-x calculation trees.  These names abbreviate
@@ -197,6 +197,68 @@
                      (affine-distinct-x-slope a (xcert-bc b c)))))
   :rule-classes nil
   :hints (("Goal" :in-theory (union-theories (theory 'minimal-theory) '(xcert-s xcert-p xcert-q xcert-r xcert-tt)))))
+
+(defthm xcert-s-curve-zero
+  (implies
+   (and (short-weierstrass-affine-point-p a)
+        (short-weierstrass-affine-point-p b)
+        (short-weierstrass-affine-point-p c)
+        (equal (affine-pair-classify a b) :distinct-x)
+        (equal (affine-pair-classify b c) :distinct-x)
+        (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+        (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+   (equal
+    (field-sub
+     (field-add (affine-distinct-x-slope a b)
+                (affine-distinct-x-slope (xcert-ab a b) c))
+     (field-add (affine-distinct-x-slope b c)
+                (affine-distinct-x-slope a (xcert-bc b c))))
+    (field-zero)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    ((:instance short-weierstrass-affine-point-p-of-affine-distinct-x-output
+                (first a) (second b))
+     (:instance short-weierstrass-affine-point-p-of-affine-distinct-x-output
+                (first b) (second c))
+     (:instance affine-distinct-x-input-secant-identity (first a) (second b))
+     (:instance affine-distinct-x-input-secant-identity
+                (first (xcert-ab a b)) (second c))
+     (:instance affine-distinct-x-slope-reconstructs-y-difference
+                (first a) (second b))
+     (:instance affine-distinct-x-slope-reconstructs-y-difference
+                (first (xcert-ab a b)) (second c))
+     (:instance affine-distinct-x-slope-reconstructs-y-difference
+                (first b) (second c))
+     (:instance affine-distinct-x-slope-reconstructs-y-difference
+                (first a) (second (xcert-bc b c)))
+     (:instance affine-distinct-x-output-x-rearrangement (first a) (second b))
+     (:instance affine-distinct-x-output-y-rearrangement (first a) (second b))
+     (:instance affine-distinct-x-output-x-rearrangement (first b) (second c))
+     (:instance affine-distinct-x-output-y-rearrangement (first b) (second c))
+     (:instance affine-pair-classify-distinct-x-implies-x-difference-nonzero
+                (first b) (second c))
+     (:instance affine-pair-classify-distinct-x-implies-x-difference-nonzero
+                (first a) (second (xcert-bc b c)))
+     (:instance xcert-s-scalar-reconstruction
+                (p (xcert-p a b)) (q (xcert-q a b c))
+                (r (xcert-r b c)) (tt (xcert-tt a b c))
+                (xa (xcert-xa a)) (xb (xcert-xb b)) (xc (xcert-xc c))
+                (xab (xcert-xab a b)) (xbc (xcert-xbc b c))
+                (ya (affine-coordinates-y a))
+                (yb (affine-coordinates-y b))
+                (yc (affine-coordinates-y c))
+                (yab (affine-coordinates-y (xcert-ab a b)))
+                (ybc (affine-coordinates-y (xcert-bc b c)))
+                (curve-a (field-fix (short-weierstrass-a)))))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(xcert-p xcert-q xcert-r xcert-tt xcert-xa xcert-xb xcert-xc
+       xcert-xab xcert-xbc xcert-ab xcert-bc
+       affine-coordinates-x-of-affine-distinct-x-output
+       affine-coordinates-y-of-affine-distinct-x-output)))))
 
 (defthm xcert-c-curve-specialization
   (equal (xcert-c (xcert-p a b) (xcert-q a b c) (xcert-r b c)
