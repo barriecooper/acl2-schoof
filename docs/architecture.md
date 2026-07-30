@@ -30,6 +30,12 @@ assumed-zero hypotheses.  Certified component theorems establish the output
 telescope and remainder identities, and `xcert-composition` combines those
 components opaquely in the exact left-associated form.
 
+`books/field/xcert-h-reconstruction.lisp` remains in the same field-only
+layer.  Its public scalar theorem consumes exactly seven explicitly oriented
+secant/output equations and the ordered nonzero factor `xc-xb`; proof-local
+term-list normalization exposes the finite additive cancellations.  It adds no
+executable definition or curve dependency.
+
 The field-only book depends only on the generic field kernel.  The separate
 `books/curve/xcert-semantics.lisp` bridge imports that book and the assembled
 affine distinct-x output.  For inputs `A`, `B`, and `C`, it maps `xab` and `xbc`

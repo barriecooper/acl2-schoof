@@ -4,6 +4,8 @@
 (include-book "field/kernel")
 (include-book "field/xcert-algebra")
 (include-book "field/xcert-algebra-regression")
+(include-book "field/xcert-h-reconstruction")
+(include-book "field/xcert-h-reconstruction-regression")
 (include-book "field/equal-squares")
 (include-book "field/f11-equal-squares")
 (include-book "field/examples/f2")

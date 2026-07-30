@@ -22,19 +22,16 @@ addition. Output closure, infinity identity, inverse-to-infinity, and full
 commutativity are complete. Concrete F7, F7X2, and F11 books supply focused
 instantiation and execution regressions rather than additional generic scope.
 
-## Next boundary: reconstruct H from ordered input secants
+## Next boundary: instantiate certified scalar H reconstruction
 
-The field-only X-CERT composition is instantiated for the two ordered nested
-distinct-x trees, and its four output-x residuals vanish unconditionally.  An
-audit of both remaining factors found that neither `H` nor `S` follows directly
-from the previously public API: the needed input-secant quotient identity was
-proof-local.  That ordered identity is now public, with exactly the two
-curve-membership and ordered `:distinct-x` hypotheses used by its denominator
-cancellation.  The next tight task is to combine its `(A,B)`, `(B,C)`, and
-`(AB,C)` instances with the existing output coordinate rearrangements to
-reconstruct the exact `(p-r)(p+q)=xa-xc` equality and hence `H=0`.  It must
-still stop before composition simplification, `S`, exceptional cases, or a
-curve-associativity conclusion.
+The field-only theorem `xcert-h-scalar-reconstruction` now derives the exact
+factor-ordered equality `(p-r)(p+q)=xa-xc` from the audited seven scalar
+equations and only `xc-xb != field-zero`; E2 is unused.  The next tight task is
+semantic instantiation with `p=slope(A,B)`, `q=slope(AB,C)`, and
+`r=slope(B,C)`, using the existing ordered secant, slope-reconstruction, and
+output-coordinate results to derive the existing specialized H expression
+as `field-zero`.  It must still stop before composition simplification, `S`,
+exceptional cases, coordinate equality, or associativity.
 
 ## Phase 1: prepare associativity
 
