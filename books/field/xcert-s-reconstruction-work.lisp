@@ -205,6 +205,52 @@
               field-mul-of-neg-right-local field-add-fix-left field-fix-of-add
               field-fix-of-mul field-fix-of-neg))))))
 
+; Concrete q-route residual segment.  The displayed input keeps exactly the
+; q*xbc, -q*xa, and -yab terms occurring in the retained residual.
+(local
+ (defthm xcert-s-q-slope-residual-segment-local
+  (implies
+   (equal (field-mul q (field-sub xc xab)) (field-sub yc yab))
+   (equal
+    (field-add (field-sub (field-mul q xbc) (field-mul q xa))
+               (field-neg yab))
+    (field-add (field-sub (field-mul q xbc) (field-mul q xa))
+               (field-sub (field-mul q (field-sub xc xab)) yc))))
+  :rule-classes nil
+  :hints (("Goal" :do-not '(preprocess)
+           :use ((:instance field-add-cancel-around-local
+                   (x yc) (y (field-neg yab))
+                   (z (field-sub (field-mul q xbc) (field-mul q xa)))))
+           :in-theory (union-theories (theory 'minimal-theory)
+            '(field-sub field-add-associative field-add-commutative
+              field-add-swap-local field-add-cancel-around-local field-add-inverse-left
+              field-add-inverse-right field-add-zero-left
+              field-add-zero-right field-add-fix-left field-add-fix-right
+              field-fix-of-add field-fix-of-neg))))))
+
+; Exact expanded q input-secant segment.  This exposes the named secant
+; equation in additive residual syntax before combining it with the q-route
+; segment above.
+(local
+ (defthm xcert-s-q-input-secant-segment-local
+  (implies
+   (equal (field-mul q (field-add yc yab))
+          (field-add (field-mul xc xc)
+           (field-add (field-mul xc xab)
+            (field-add (field-mul xab xab) curve-a))))
+   (equal
+    (field-sub
+     (field-add (field-mul q yc) (field-mul q yab))
+     (field-add (field-mul xc xc)
+      (field-add (field-mul xc xab)
+       (field-add (field-mul xab xab) curve-a))))
+    (field-zero)))
+  :rule-classes nil
+  :hints (("Goal" :do-not '(preprocess)
+           :in-theory (union-theories (theory 'minimal-theory)
+            '(field-sub field-mul-left-distributive field-fix-of-add
+              field-fix-of-mul field-fix-of-neg field-add-inverse-right field-sub-self))))))
+
 (local
  (defthm xcert-s-residual-zero-local
   (implies
@@ -262,3 +308,6 @@
 ; ordered slope equation by negating both sides.  It is available for segment
 ; decompositions that require the opposite displayed difference; the retained
 ; secant and slope hypotheses themselves remain in their authoritative order.
+; The q-route segment and expanded q input-secant segment above both certify.
+; Next combine them after multiplying/moving only the required q-route terms;
+; then construct the analogous r-route segment before normalizing the remainder.
