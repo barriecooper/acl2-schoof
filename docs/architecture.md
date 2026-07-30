@@ -78,9 +78,12 @@ coordinates fixed, and a proof-local affine-coordinate extensionality bridge
 reconstructs the canonical outputs from their equal x and y accessors.
 Semantic H/S zero, final x-coordinate equality, the output-x/H coordinate
 bridge, six-residual reduction, combined field-only final-y reconstruction,
-semantic final-y equality, and untagged output equality remain distinct
-certified boundaries.  Tagged output equality, dispatcher associativity, and
-its exceptional branches remain distinct open boundaries.
+semantic final-y equality, untagged output equality, and tagged ordinary-output
+equality remain distinct certified boundaries.  The tagged theorem uses the
+same three curve-membership and four ordered `:distinct-x` hypotheses and lifts
+the untagged theorem through `affine-distinct-x-output-point`; it replays no
+coordinate or scalar algebra.  Affine-dispatcher associativity and its
+exceptional branches remain distinct open boundaries.
 
 The ordered distinct-x theory also exposes the division-free input-secant
 identity `slope*(y(second)+y(first)) = x(second)^2 +

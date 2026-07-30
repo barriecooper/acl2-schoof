@@ -283,8 +283,17 @@ named F7/F11 operations.
   replaying their scalar algebra.  Since affine y accessors are field elements,
   `field-fix-when-field-element-p` removes both final-y fixers; a proof-local
   generic extensionality lemma then reconstructs the two canonical maintained
-  outputs from their equal accessors.  This is only untagged coordinate-object
-  equality: tagged equality and dispatcher associativity remain open.
+  outputs from their equal accessors.  This is the semantic payload equality
+  used by the next representation boundary.
+- Tagged ordinary distinct-x output equality is complete.  The public theorem
+  `xcert-tagged-outputs-equal` retains exactly the same three input
+  curve-membership and four ordered `:distinct-x` hypotheses and concludes
+  equality of the two `affine-distinct-x-output-point` results.  Its semantic
+  content is a direct use of `xcert-untagged-outputs-equal`; controlled unfolding
+  of the existing tagged constructor and maintained tree abbreviations is the
+  entire representation lift, so no constructor bridge and no coordinate or
+  scalar algebra is added.  Affine-dispatcher and full-point-dispatcher
+  associativity remain open.
 - Cancellation, exceptional branches, curve associativity, and any later use
   in Schoof machinery.
 

@@ -2,6 +2,7 @@
 
 (include-book "../field/xcert-final-y-reconstruction")
 (include-book "affine-distinct-x-closure")
+(include-book "affine-distinct-x-output-point")
 
 ; The two ordered, total distinct-x calculation trees.  These names abbreviate
 ; only existing operations; they neither test a branch nor implement addition.
@@ -545,3 +546,23 @@
        affine-coordinates-p-of-affine-distinct-x-output
        field-element-p-of-affine-coordinates-y
        field-fix-when-field-element-p)))))
+
+(defthm xcert-tagged-outputs-equal
+  (implies
+   (and (short-weierstrass-affine-point-p a)
+        (short-weierstrass-affine-point-p b)
+        (short-weierstrass-affine-point-p c)
+        (equal (affine-pair-classify a b) :distinct-x)
+        (equal (affine-pair-classify b c) :distinct-x)
+        (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+        (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+   (equal (affine-distinct-x-output-point (xcert-ab a b) c)
+          (affine-distinct-x-output-point a (xcert-bc b c))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance xcert-untagged-outputs-equal))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(affine-distinct-x-output-point xcert-left xcert-right)))))
