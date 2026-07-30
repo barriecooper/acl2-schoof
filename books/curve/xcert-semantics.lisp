@@ -297,3 +297,70 @@
                          (p (xcert-p a b)) (q (xcert-q a b c))
                          (r (xcert-r b c)) (tt (xcert-tt a b c))))
            :in-theory (theory 'minimal-theory))))
+
+(local
+ (defthm xcert-curve-telescope-zero-local
+   (equal
+    (xcert-telescope (xcert-xl a b c) (xcert-xr a b c)
+                     (xcert-xab a b) (xcert-xbc b c)
+                     (xcert-xa a) (xcert-xb b) (xcert-xc c)
+                     (xcert-p a b) (xcert-q a b c) (xcert-r b c)
+                     (xcert-tt a b c))
+    (field-zero))
+   :hints
+   (("Goal"
+     :use ((:instance xcert-gxl-curve-zero)
+           (:instance xcert-gxr-curve-zero)
+           (:instance xcert-gxab-curve-zero)
+           (:instance xcert-gxbc-curve-zero))
+     :in-theory
+     (union-theories (theory 'minimal-theory)
+      '(xcert-telescope field-sub field-neg-of-zero field-add-zero-left
+        field-add-zero-right field-fix-of-zero))))))
+
+(local
+ (defthm xcert-final-x-difference-zero-local
+   (implies
+    (and (short-weierstrass-affine-point-p a)
+         (short-weierstrass-affine-point-p b)
+         (short-weierstrass-affine-point-p c)
+         (equal (affine-pair-classify a b) :distinct-x)
+         (equal (affine-pair-classify b c) :distinct-x)
+         (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+         (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+    (equal (xcert-dx (xcert-xl a b c) (xcert-xr a b c))
+           (field-zero)))
+   :hints
+   (("Goal"
+     :use ((:instance xcert-curve-composition)
+           (:instance xcert-curve-telescope-zero-local)
+           (:instance xcert-h-curve-zero)
+           (:instance xcert-s-curve-zero)
+           (:instance xcert-s-curve-specialization))
+     :in-theory
+     (union-theories (theory 'minimal-theory)
+      '(field-sub field-neg-of-zero field-add-zero-left field-add-zero-right
+        field-mul-zero-right field-fix-of-zero))))))
+
+(defthm xcert-final-x-coordinates-equal
+  (implies
+   (and (short-weierstrass-affine-point-p a)
+        (short-weierstrass-affine-point-p b)
+        (short-weierstrass-affine-point-p c)
+        (equal (affine-pair-classify a b) :distinct-x)
+        (equal (affine-pair-classify b c) :distinct-x)
+        (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+        (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+   (equal (xcert-xl a b c) (xcert-xr a b c)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance xcert-final-x-difference-zero-local)
+          (:instance field-sub-equal-zero-implies-fixed-equal
+                     (first (xcert-xl a b c))
+                     (second (xcert-xr a b c))))
+    :in-theory
+    (union-theories (theory 'minimal-theory)
+     '(xcert-dx xcert-xl xcert-xr xcert-left xcert-right
+       field-fix-of-affine-distinct-x-output-x
+       affine-coordinates-x-of-affine-distinct-x-output)))))

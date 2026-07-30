@@ -34,8 +34,11 @@ expression as `field-zero`.  The field-only exact S reconstruction is complete a
 four ordered nested distinct-x pairs.  Its two ordered nonzero premises serve
 the H and final-S cancellations separately.  The next coherent boundary is an
 audit of the algebra needed after the separate H-zero and S-zero results;
-composition simplification, coordinate equality, exceptional cases, and
-associativity remain later work.
+  The same seven-hypothesis configuration now also certifies equality of the
+  two final x-coordinates by simplifying the maintained composition with both
+  H-zero and S-zero.  The next boundary is the field-only final-y
+  reconstruction needed before semantic y-coordinate equality; exceptional
+  cases and associativity remain later work.
 
 ## Phase 1: prepare associativity
 
