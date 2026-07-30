@@ -193,10 +193,17 @@ named F7/F11 operations.
   conclusion `(p-r)(p+q)=xa-xc` assert `-1=0`.  The semantic classifiers rule
   out this degenerate assignment through their three ordered nonzero
   x-differences, but a scalar bridge that is forbidden to state those facts
-  cannot be certified.  The next proof boundary is therefore to audit a
-  deliberately cancellation-aware bridge carrying exactly the nondegeneracy
-  consequences of `(A,B)`, `(B,C)`, and `(AB,C)`, rather than retrying an
-  unconditional eight-equation normalization.
+  cannot be certified.  A coefficient audit sharpens the required bridge:
+  writing `Ei` for the left side minus the right side of the eight equations
+  in their listed order and `K=(p-r)(p+q)-(xa-xc)`, field expansion gives
+  `(xc-xb)K = E1-E3-q*E4-(p+q)*E5+p*E6+
+  (xa+xb-xc-xab)*E7+(q-p)*E8`.  Thus `E2` is redundant for this cancellation
+  route, and only the ordered `(B,C)` nonzero difference `xc-xb` is needed to
+  cancel and obtain `K=0`; the `(A,B)` and `(AB,C)` nonzero differences are not
+  scalar premises of this proof.  This proof-minimality has not been promoted
+  to a certified logical-minimality result.  The next tight boundary is to
+  certify this staged residual identity and its single left-cancellation step,
+  rather than retrying unconditional eight-equation normalization.
 - Exact `S=(p+q)-(r+tt)=0` also remains open.  Its prospective ordered-secant
   reconstruction additionally involves `(A,BC)` and closure of `BC`; it is not
   available from output-y rearrangement alone and was not assumed from `H` or
