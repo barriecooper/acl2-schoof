@@ -583,9 +583,14 @@ zero identity `yb+ya=s(xa-xa)`.  If `xu=xa`, A-T3 gives `yu=ya`, so the outer
 pair fixes to `(A,A)` and is derived `T` because A-T1's domain gives
 `ya != -ya`.  Negating A-T1 supplies the tangent numerator equation at `A`,
 and A-T2 plus the same zero identity supply output `B`.  Consequently outer
-`O` is excluded directly in this family.  What remains open is a controlled
-relation-level theorem packaging precisely this derived `D/T` split; no
-additional polynomial composition certificate is indicated.
+`O` is excluded directly in this family.  The classifier-free theorem
+`affine-inverse-tangent-translation` now certifies precisely this derived
+`D/T` split, using the existing secant and doubling relations with witness
+`-t`.  Its coincident-x branch reconstructs `U=A` and transports the tangent
+domain across negation.  No additional polynomial composition certificate or
+independent nonzero premise is used.  The full-point case remains deferred to
+semantic assembly and the later executable lift, so dispatcher algebra is not
+replayed here.
 
 #### C. Exceptional `D/D` degenerations
 
@@ -650,9 +655,10 @@ some curve algebra, but the public interfaces should remain separate oriented
 certificates unless ACL2 experiments show transparent specializations with no
 hidden nonzero hypotheses.
 
-Stage 3 therefore remains open and is subdivided into: (1) inverse/secant,
+Stage 3 therefore remains partially open and is subdivided into: (1) inverse/secant,
 including A-D4 and the self-inverse impossibility; (2) inverse/tangent with its
-derived outer `D/T` split; (3) `DD-O` collinearity propagation; and (4) `DD-T`
+derived outer `D/T` split (**semantic boundary complete**); (3) `DD-O`
+collinearity propagation; and (4) `DD-T`
 tangency plus its derived opposite-tree outcome.  Each implementation PR must
 stop after one subdivision, must expose only semantic relations or their exact
 scalar equations, and must not proceed if it needs an independent opposite

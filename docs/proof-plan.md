@@ -86,12 +86,13 @@ PR boundaries:
    identifies the inner doubles through fixing congruence, proves their validity
    by doubling closure, and closes the reversed outer calls by full-point
    commutativity.  These are structural proofs with no new coordinate algebra.
-3. **Exceptional secant structure (audited; implementation open).** Work in
-   three stopping-bounded subdivisions: (a) inverse translation with a secant
+3. **Exceptional secant structure (partially implemented).** Work in
+   four stopping-bounded subdivisions: (a) inverse translation with a secant
    inner output, including the derived outer secant/doubling split and exclusion
-   of outer `O`; (b) inverse translation with a tangent inner output, again
-   deriving rather than assuming the outer outcome; and (c) `D/D` degenerations,
-   first outer `O` by collinearity propagation and then outer `T` by a separate
+   of outer `O`; (b) inverse translation with a tangent inner output
+   (**semantic certificate complete**), deriving rather than assuming the outer
+   outcome; (c) `D/D` outer `O` by collinearity propagation; and (d) `D/D`
+   outer `T` by a separate
    tangency/repeated-root bridge.  Use the existing division-free secant and
    doubling relations as the scalar interface and package results through
    `curve-point-addition-relation-p` only afterwards.  The exact oriented
