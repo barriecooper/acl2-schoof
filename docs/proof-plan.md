@@ -40,10 +40,11 @@ coordinate bridge and exact six-residual reduction compose through one bounded
 opposite-product cancellation to give fixed equality of the final ordinates.
 Its semantic instantiation is now complete as
 `xcert-final-y-coordinates-equal`, under the same three curve memberships and
-four ordered nested distinct-x classifications as final x equality.  The next
-proof boundary is equality of the assembled untagged affine outputs.  Tagged
-output equality, exceptional cases, dispatcher results, and associativity
-remain later work.
+four ordered nested distinct-x classifications as final x equality.  The
+theorem `xcert-untagged-outputs-equal` packages those coordinate results and
+certifies equality of the assembled untagged affine outputs under exactly the
+same semantic interface.  Tagged output equality, exceptional cases, dispatcher
+results, and associativity remain later work.
 
 ## Phase 1: prepare associativity
 

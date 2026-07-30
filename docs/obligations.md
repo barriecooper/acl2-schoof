@@ -275,9 +275,16 @@ named F7/F11 operations.
   the last output-y equation across the already-certified final-x equality.
   No scalar equation becomes a public premise, and the AB output-y equation
   remains absent.
-- Semantic final-y equality is complete.  Equality of the assembled untagged
-  affine outputs is the next open boundary; tagged equality and dispatcher
-  associativity remain open after it.
+- Semantic final-y equality is complete.  The public theorem
+  `xcert-untagged-outputs-equal` now concludes literal equality of `xcert-left`
+  and `xcert-right` from exactly the three input curve memberships and four
+  ordered `:distinct-x` classifications used by both final-coordinate results.
+  It packages the raw final-x equality and fixed final-y equality rather than
+  replaying their scalar algebra.  Since affine y accessors are field elements,
+  `field-fix-when-field-element-p` removes both final-y fixers; a proof-local
+  generic extensionality lemma then reconstructs the two canonical maintained
+  outputs from their equal accessors.  This is only untagged coordinate-object
+  equality: tagged equality and dispatcher associativity remain open.
 - Cancellation, exceptional branches, curve associativity, and any later use
   in Schoof machinery.
 

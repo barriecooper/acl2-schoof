@@ -71,12 +71,16 @@ differences, and a bounded opposite-product identity closes the result.  The
 semantic theorem `xcert-final-y-coordinates-equal` instantiates that combined
 field theorem from semantic H-zero and S-zero, the maintained slope and output
 rearrangements, and a proof-local transport from final-right x to the already
-equal final-left x.  Semantic H/S zero, final x-coordinate equality, the
-output-x/H coordinate bridge, six-residual reduction, combined field-only
-final-y reconstruction, and semantic final-y equality remain distinct
-certified boundaries.  Untagged output equality, tagged output equality,
-dispatcher associativity, and its exceptional branches remain distinct open
-boundaries.
+equal final-left x.  The public theorem `xcert-untagged-outputs-equal` then
+packages raw final-x equality and fixed final-y equality into equality of
+`xcert-left` and `xcert-right`.  Generic accessor closure makes both actual y
+coordinates fixed, and a proof-local affine-coordinate extensionality bridge
+reconstructs the canonical outputs from their equal x and y accessors.
+Semantic H/S zero, final x-coordinate equality, the output-x/H coordinate
+bridge, six-residual reduction, combined field-only final-y reconstruction,
+semantic final-y equality, and untagged output equality remain distinct
+certified boundaries.  Tagged output equality, dispatcher associativity, and
+its exceptional branches remain distinct open boundaries.
 
 The ordered distinct-x theory also exposes the division-free input-secant
 identity `slope*(y(second)+y(first)) = x(second)^2 +
