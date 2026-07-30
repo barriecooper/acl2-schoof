@@ -73,11 +73,13 @@ reduces the valid affine inputs to `D`, `O`, and `T`, rather than a formal
 four-by-four classifier product.  Work should now proceed in these reviewable
 PR boundaries:
 
-1. **Structural interface.** Bundle the named classifier-swap theorem, useful
-   fixed-coordinate consequences, outer `:same-x-other` impossibility
-   corollaries, and the three infinity-input associativity reductions.  Stop
-   before proving any nontrivial affine composition.
-2. **Opposite/opposite and repeated triples.** Prove the `O/O` endpoint
+1. **Structural interface (complete).** The certified interface provides
+   unconditional classifier symmetry, fixed opposite-y coordinates and fixed
+   same-point equality, closure-derived outer `:same-x-other` exclusions for
+   secant and doubling outputs, and one combined associativity theorem for a
+   valid triple with any original input at infinity.  These proofs use only
+   classification, fixing, closure, representation, and infinity equations.
+2. **Opposite/opposite and repeated triples (next).** Prove the `O/O` endpoint
    equality and full-point reduction, and the `T/T` reduction through existing
    full commutativity.  Bundle these because both are structural and require no
    new coordinate certificate.  Stop if either proof opens secant/tangent

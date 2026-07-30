@@ -117,11 +117,12 @@ requests retain chronological completion narratives.
 
 ## Roadmap and limitations
 
-The immediate mathematical task is not an associativity proof. It is an audit
-of the algebraic identities and reusable field/coordinate lemmas that a
-tractable associativity proof would require, followed by development of the
-missing reusable prerequisites. Only then should full tagged-point
-associativity be scoped. Later phases package the curve laws, build the
+The associativity audit is complete, and its first structural-interface stage
+is certified: classifier symmetry and fixed-coordinate consequences, outer
+impossibility corollaries, and associativity when an original input is
+infinity.  The next boundary is the opposite/opposite and repeated-triple
+structural cases; unrestricted associativity remains later work. Later phases
+package the curve laws, build the
 polynomial and rational-function machinery needed by the Hasse and Schoof
 tracks, formalize Frobenius and division polynomials, and develop point
 counting and CRT reconstruction. The dependency rationale is maintained in

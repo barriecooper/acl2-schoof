@@ -31,6 +31,37 @@
                                (affine-coordinates-fix second))
          (affine-pair-classify first second)))
 
+(local
+ (defthm field-neg-equality-symmetric
+   (equal (equal (field-fix y) (field-neg x))
+          (equal (field-fix x) (field-neg y)))
+   :hints (("Goal"
+            :use ((:instance field-neg-of-neg (x x))
+                  (:instance field-neg-of-neg (x y))
+                  (:instance field-neg-of-fix (x x))
+                  (:instance field-neg-of-fix (x y)))
+            :cases ((equal (field-fix y) (field-neg x))
+                    (equal (field-fix x) (field-neg y)))
+            :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm field-neg-equal-zero-iff
+   (equal (equal (field-neg x) (field-zero))
+          (equal (field-fix x) (field-zero)))
+   :hints (("Goal"
+            :use (:instance field-neg-equality-symmetric
+                            (x x) (y (field-zero)))
+            :in-theory
+            (union-theories (theory 'minimal-theory)
+                            '(field-fix-of-zero field-neg-of-zero))))))
+
+(defthm affine-pair-classify-symmetric
+  (equal (affine-pair-classify first second)
+         (affine-pair-classify second first))
+  :hints (("Goal" :in-theory (enable affine-pair-classify
+                                      field-neg-equality-symmetric
+                                      field-neg-equal-zero-iff))))
+
 (defthm affine-pair-classify-distinct-x-characterization
   (equal (equal (affine-pair-classify first second) :distinct-x)
          (not (equal (affine-coordinates-x (affine-coordinates-fix first))
@@ -74,6 +105,18 @@
                               (affine-coordinates-x-of-fix
                                affine-coordinates-y-of-fix)))))
 
+(defthm affine-pair-classify-opposite-y-implies-fixed-coordinates
+  (implies
+   (equal (affine-pair-classify first second) :opposite-y)
+   (and (equal (affine-coordinates-x (affine-coordinates-fix first))
+               (affine-coordinates-x (affine-coordinates-fix second)))
+        (equal (affine-coordinates-y (affine-coordinates-fix second))
+               (field-neg
+                (affine-coordinates-y (affine-coordinates-fix first))))))
+  :rule-classes nil
+  :hints (("Goal" :use affine-pair-classify-opposite-y-characterization
+                   :in-theory (theory 'minimal-theory))))
+
 (local
  (defthm field-neg-equal-zero-when-fix-equal-zero
    (implies (equal (field-fix x) (field-zero))
@@ -96,6 +139,17 @@
   :hints (("Goal" :in-theory (e/d (affine-pair-classify)
                               (affine-coordinates-x-of-fix
                                affine-coordinates-y-of-fix)))))
+
+(defthm affine-pair-classify-same-point-non-opposite-implies-fixed-equal
+  (implies
+   (equal (affine-pair-classify first second) :same-point-non-opposite)
+   (equal (affine-coordinates-fix first)
+          (affine-coordinates-fix second)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use affine-pair-classify-same-point-non-opposite-characterization
+           :in-theory (enable affine-coordinates-fix
+                              affine-coordinates-make))))
 
 ; This is the exact denominator anticipated by the conventional tangent
 ; quotient.  Classification supplies the non-self-inverse y fact; additive
