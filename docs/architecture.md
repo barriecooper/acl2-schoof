@@ -57,6 +57,13 @@ memberships and three relevant distinct-x classifications, and specialized
 The bridge adds no polynomial dependency and proves no associativity or
 exceptional-case fact.
 
+The bridge also certifies equality of the final x-coordinates of the two
+untagged distinct-x trees under the four ordered distinct-x classifications.
+This uses both semantic certificate-zero results through the maintained
+composition.  Field-only final-y reconstruction, semantic y-coordinate
+equality, output representation equality, and dispatcher associativity remain
+separate later boundaries.
+
 The ordered distinct-x theory also exposes the division-free input-secant
 identity `slope*(y(second)+y(first)) = x(second)^2 +
 x(second)*x(first) + x(first)^2 + a`.  It requires both ordered inputs to be

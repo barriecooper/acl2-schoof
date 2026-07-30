@@ -98,3 +98,18 @@
    :hints (("Goal" :use ((:instance xcert-s-curve-zero))
              :in-theory (union-theories (theory 'minimal-theory)
                          '(xcert-p xcert-q xcert-r xcert-tt))))))
+
+(local
+ (defthm xcert-final-x-coordinates-equal-regression
+   (implies
+    (and (short-weierstrass-affine-point-p a)
+         (short-weierstrass-affine-point-p b)
+         (short-weierstrass-affine-point-p c)
+         (equal (affine-pair-classify a b) :distinct-x)
+         (equal (affine-pair-classify b c) :distinct-x)
+         (equal (affine-pair-classify (xcert-ab a b) c) :distinct-x)
+         (equal (affine-pair-classify a (xcert-bc b c)) :distinct-x))
+    (equal (xcert-xl a b c) (xcert-xr a b c)))
+   :rule-classes nil
+   :hints (("Goal" :use ((:instance xcert-final-x-coordinates-equal))
+             :in-theory (theory 'minimal-theory)))))

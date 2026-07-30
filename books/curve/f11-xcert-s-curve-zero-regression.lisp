@@ -20,6 +20,10 @@
         (equal (f11-affine-distinct-x-slope ab c) 4)
         (equal (f11-affine-distinct-x-slope b c) 1)
         (equal (f11-affine-distinct-x-slope a bc) 4)
+        (equal (f11-affine-coordinates-x
+                (f11-affine-distinct-x-output ab c)) 7)
+        (equal (f11-affine-coordinates-x
+                (f11-affine-distinct-x-output a bc)) 7)
         (equal
          (f11-add
           (f11-add (f11-affine-distinct-x-slope a b)

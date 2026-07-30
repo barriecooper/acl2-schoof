@@ -225,7 +225,13 @@ named F7/F11 operations.
   `(p+q)-(r+tt)=0`.  An F11 regression uses `A=C=(2,4)`, `B=(3,5)`, and
   `AB=BC=(7,2)`, with ordered slopes `1,4,1,4`.
 - The four output-x residuals were already zero before this input-secant step.
-  The X-CERT composition has not been simplified with any H/S result.
+  The X-CERT composition is now simplified with both public H-zero and S-zero
+  results to certify `xcert-final-x-coordinates-equal`.  Its hypotheses are the
+  three input curve memberships and the four ordered `:distinct-x`
+  classifications used by `xcert-s-curve-zero`; it adds no nonzero premise.
+- Field-only final-y reconstruction, its semantic specialization, final
+  y-coordinate equality, and equality of the assembled untagged outputs remain
+  open.
 - Cancellation, exceptional branches, curve associativity, and any later use
   in Schoof machinery.
 
