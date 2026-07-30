@@ -236,11 +236,20 @@ named F7/F11 operations.
   transports the three equations one at a time, and uses only bounded additive
   cancellation and the difference-of-squares step.  It has no nonzero premise
   and performs no multiplicative cancellation.
-- The six-residual y-difference reduction, combined field-only final-y
-  reconstruction, semantic final-y equality, and equality of the assembled
-  untagged outputs remain open.  The intended reduction still uses S-zero, the
-  ordered `p`, `r`, and `q` slope equations, and the two final output-y
-  equations; the AB output-y equation is not among that interface.
+- The field-only theorem `xcert-y-difference-six-residual-reduction` certifies
+  `yl-yr=(p-r)(xl-xb)+(r-q)(xa-xc)` from exactly six equations: S-zero
+  `(p+q)-(r+tt)=0`; the ordered slope equations
+  `p(xb-xa)=yb-ya`, `r(xc-xb)=yc-yb`, and
+  `q(xc-xab)=yc-yab`; and the final output-y equations
+  `yl+yab=q(xab-xl)` and `yr+ya=tt(xa-xl)`.  The proof certifies the
+  documented six-residual decomposition by separating its ordinate telescope
+  from its product balance, then cancels each zero residual.  The AB output-y
+  equation is absent.  All support algebra is proof-local; there are no curve,
+  classifier, nonzero, or multiplicative-cancellation hypotheses.
+- Combined field-only final-y reconstruction, semantic final-y equality, and
+  equality of the assembled untagged outputs remain open.  The next field-only
+  step is to compose this reduction with the separate output-x/H coordinate
+  bridge above and cancel the two opposite products.
 - Cancellation, exceptional branches, curve associativity, and any later use
   in Schoof machinery.
 

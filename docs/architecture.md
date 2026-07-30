@@ -62,9 +62,12 @@ untagged distinct-x trees under the four ordered distinct-x classifications.
 This uses both semantic certificate-zero results through the maintained
 composition.  The field-only final-y layer now contains the separate
 output-x/H coordinate bridge `xl-xb=(q-r)(p+q)`; its proof has no curve or
-nonzero premise.  The six-residual y reduction, their complete field-only
-final-y composition, semantic y-coordinate equality, output representation
-equality, and dispatcher associativity remain separate later boundaries.
+nonzero premise.  Its separate six-residual y reduction derives the final
+ordinate difference as two products from S-zero, three ordered slope equations,
+and the two final output-y equations; the AB output-y equation is absent.  Their
+complete field-only final-y composition, semantic y-coordinate equality, output
+representation equality, and dispatcher associativity remain separate later
+boundaries.
 
 The ordered distinct-x theory also exposes the division-free input-secant
 identity `slope*(y(second)+y(first)) = x(second)^2 +

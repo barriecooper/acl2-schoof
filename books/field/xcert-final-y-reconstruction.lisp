@@ -183,3 +183,254 @@
           :in-theory (union-theories (theory 'minimal-theory)
            '(field-sub field-fix-of-add field-fix-of-mul
              field-fix-of-neg)))))
+
+
+; The algebra is split into a y-only telescope and a product-only identity so
+; that ACL2 never normalizes the full residual expression at once.
+(local
+ (defthm xcert-y-telescope-stage1-local
+  (equal
+   (field-add (field-neg (field-sub yb ya))
+              (field-neg (field-sub yc yb)))
+   (field-sub ya yc))
+  :hints (("Goal" :use ((:instance field-add-inverse-shuffle-local
+                           (x (field-neg yb)) (y ya) (z (field-neg yc))))
+   :in-theory (union-theories (theory 'minimal-theory)
+   '(field-sub field-neg-of-add-local field-neg-of-neg field-add-associative
+     field-add-commutative field-add-inverse-tail-local
+     field-add-inverse-around-short-local field-add-inverse-left
+     field-add-inverse-right field-add-zero-left field-add-zero-right
+     field-add-fix-left field-add-fix-right field-fix-of-add field-fix-of-neg))))))
+(local
+ (defthm xcert-y-telescope-stage2-local
+  (equal (field-add (field-sub ya yc) (field-sub yc yab))
+         (field-sub ya yab))
+  :hints (("Goal" :use ((:instance field-add-inverse-shuffle-local (x (field-neg yc)) (y ya) (z (field-neg yab)))
+                          (:instance field-add-swap-local (x ya) (y (field-neg yc))
+                           (z (field-add yc (field-neg yab)))))
+   :in-theory (union-theories (theory 'minimal-theory)
+   '(field-sub field-neg-of-neg field-add-associative field-add-commutative
+     field-add-inverse-around-short-local field-add-inverse-tail-local
+     field-add-inverse-left field-add-inverse-right field-add-zero-left
+     field-add-zero-right field-add-fix-left field-add-fix-right field-fix-of-add field-fix-of-neg))))))
+(local
+ (defthm xcert-y-telescope-stage3-local
+  (equal (field-add (field-sub ya yab) (field-add yl yab))
+         (field-add ya yl))
+  :hints (("Goal" :use ((:instance field-add-cancel-around-local (x (field-neg yab)) (y ya) (z yl))
+                          (:instance field-add-swap-local (x ya) (y (field-neg yab))
+                           (z (field-add yab yl))))
+   :in-theory (union-theories (theory 'minimal-theory)
+   '(field-sub field-neg-of-neg field-add-associative field-add-commutative
+     field-add-inverse-around-short-local field-add-inverse-tail-local
+     field-add-inverse-left field-add-inverse-right field-add-zero-left
+     field-add-zero-right field-add-fix-left field-add-fix-right field-fix-of-add field-fix-of-neg))))))
+(local
+ (defthm xcert-y-telescope-stage4-local
+  (equal (field-add (field-add ya yl) (field-neg (field-add yr ya)))
+         (field-sub yl yr))
+  :hints (("Goal" :use ((:instance field-add-cancel-around-local (x ya) (y yl) (z (field-neg yr))))
+   :in-theory (union-theories (theory 'minimal-theory)
+   '(field-sub field-neg-of-add-local field-add-associative
+     field-add-commutative field-add-inverse-around-short-local
+     field-add-inverse-tail-local field-add-inverse-left
+     field-add-inverse-right field-add-zero-left field-add-zero-right
+     field-add-fix-left field-add-fix-right field-fix-of-add field-fix-of-neg))))))
+(local
+ (defthm xcert-y-ordinate-telescope-local
+  (equal
+   (field-add
+    (field-add
+     (field-add
+      (field-add (field-neg (field-sub yb ya))
+                 (field-neg (field-sub yc yb)))
+      (field-sub yc yab))
+     (field-add yl yab))
+    (field-neg (field-add yr ya)))
+   (field-sub yl yr))
+  :hints (("Goal" :use ((:instance xcert-y-telescope-stage1-local)
+                          (:instance xcert-y-telescope-stage2-local)
+                          (:instance xcert-y-telescope-stage3-local)
+                          (:instance xcert-y-telescope-stage4-local))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(xcert-y-telescope-stage1-local xcert-y-telescope-stage2-local
+      xcert-y-telescope-stage3-local xcert-y-telescope-stage4-local
+      field-add-associative field-add-fix-left field-add-fix-right field-fix-of-add field-fix-of-neg))))))
+
+(local
+ (defthm field-add-cancel-after-7-local
+  (equal (field-add x (field-add a (field-add b (field-add c (field-add d (field-add e (field-add f (field-add g (field-add (field-neg x) z)))))))))
+         (field-add a (field-add b (field-add c (field-add d (field-add e (field-add f (field-add g (field-fix z)))))))))
+  :hints (("Goal" :use ((:instance field-add-inverse-shuffle-local
+                           (y (field-add a (field-add b (field-add c (field-add d (field-add e (field-add f g)))))))))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(field-add-associative field-add-fix-left field-add-fix-right
+      field-fix-of-add field-fix-of-neg))))))
+(local
+ (defthm field-add-cancel-after-6-local
+  (equal (field-add x (field-add a (field-add b (field-add c (field-add d (field-add e (field-add f (field-add (field-neg x) z))))))))
+         (field-add a (field-add b (field-add c (field-add d (field-add e (field-add f (field-fix z))))))))
+  :hints (("Goal" :use ((:instance field-add-inverse-shuffle-local
+                           (y (field-add a (field-add b (field-add c (field-add d (field-add e f))))))))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(field-add-associative field-add-fix-left field-add-fix-right
+      field-fix-of-add field-fix-of-neg))))))
+(local
+ (defthm field-add-cancel-after-3-local
+  (equal (field-add x (field-add a (field-add b (field-add c (field-add (field-neg x) z)))))
+         (field-add a (field-add b (field-add c (field-fix z)))))
+  :hints (("Goal" :use ((:instance field-add-inverse-shuffle-local
+                           (y (field-add a (field-add b c)))))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(field-add-associative field-add-fix-left field-add-fix-right
+      field-fix-of-add field-fix-of-neg))))))
+(local
+ (defthm field-add-cancel-after-2-local
+  (equal (field-add x (field-add a (field-add b (field-add (field-neg x) z))))
+         (field-add a (field-add b (field-fix z))))
+  :hints (("Goal" :use ((:instance field-add-inverse-shuffle-local
+                           (y (field-add a b))))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(field-add-associative field-add-fix-left field-add-fix-right
+      field-fix-of-add field-fix-of-neg))))))
+
+(local
+ (defthm field-add-cancel-after-4-local
+  (equal (field-add x (field-add a (field-add b (field-add c (field-add d (field-add (field-neg x) z)))))) (field-add a (field-add b (field-add c (field-add d (field-fix z))))))
+  :hints (("Goal" :use ((:instance field-add-inverse-shuffle-local (y (field-add a (field-add b (field-add c d))))))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(field-add-associative field-add-fix-left field-add-fix-right
+      field-fix-of-add field-fix-of-neg))))))
+
+(local
+ (defthm field-add-cancel-after-4-end-local
+  (equal
+   (field-add x (field-add a (field-add b (field-add c
+    (field-add d (field-neg x))))))
+   (field-add a (field-add b (field-add c (field-fix d)))))
+  :hints (("Goal" :use ((:instance field-add-cancel-after-4-local
+                           (z (field-zero))))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(field-add-zero-right field-add-fix-right field-fix-of-add
+      field-fix-of-neg))))))
+
+(local
+ (defthm field-add-cancel-after-1-local
+  (equal (field-add x (field-add a (field-add (field-neg x) z)))
+         (field-add a (field-fix z)))
+  :hints (("Goal" :use ((:instance field-add-inverse-shuffle-local
+                           (y a)))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(field-add-fix-right field-fix-of-add field-fix-of-neg))))))
+
+(local
+ (defthm xcert-y-product-balance-local
+  (equal
+   (field-add
+    (field-mul (field-sub xa xl)
+               (field-sub (field-add p q) (field-add r tt)))
+    (field-add
+     (field-mul p (field-sub xb xa))
+     (field-add
+      (field-mul r (field-sub xc xb))
+      (field-add
+       (field-neg (field-mul q (field-sub xc xab)))
+       (field-add
+        (field-neg (field-mul q (field-sub xab xl)))
+        (field-mul tt (field-sub xa xl)))))))
+   (field-neg
+    (field-add
+     (field-mul (field-sub p r) (field-sub xl xb))
+     (field-mul (field-sub r q) (field-sub xa xc)))))
+  :hints (("Goal" :do-not '(preprocess)
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(field-sub field-mul-left-distributive field-mul-right-distributive
+      field-mul-associative field-mul-commutative field-mul-of-neg-right-local
+      field-mul-of-neg-left-local field-neg-of-add-local field-neg-of-neg
+      field-add-associative field-add-commutative field-add-swap-local
+      field-add-inverse-tail-local field-add-inverse-shuffle-local
+      field-add-cancel-around-local field-add-inverse-around-short-local
+      field-add-inverse-left field-add-inverse-right field-add-zero-left
+      field-add-zero-right field-add-cancel-after-7-local
+      field-add-cancel-after-6-local field-add-cancel-after-3-local
+      field-add-cancel-after-2-local field-add-cancel-after-4-local field-add-cancel-after-4-end-local field-add-fix-left field-add-fix-right field-fix-of-add field-fix-of-mul field-fix-of-neg))))))
+
+(local
+ (defthm xcert-y-six-residual-decomposition-local
+  (equal
+   (field-sub
+    (field-sub yl yr)
+    (field-add
+     (field-mul (field-sub p r) (field-sub xl xb))
+     (field-mul (field-sub r q) (field-sub xa xc))))
+   (field-add
+    (field-mul (field-sub xa xl)
+               (field-sub (field-add p q) (field-add r tt)))
+    (field-add
+     (field-sub (field-mul p (field-sub xb xa)) (field-sub yb ya))
+     (field-add
+      (field-sub (field-mul r (field-sub xc xb)) (field-sub yc yb))
+      (field-add
+       (field-neg (field-sub (field-mul q (field-sub xc xab))
+                             (field-sub yc yab)))
+       (field-add
+        (field-sub (field-add yl yab)
+                   (field-mul q (field-sub xab xl)))
+        (field-neg (field-sub (field-add yr ya)
+                              (field-mul tt (field-sub xa xl))))))))))
+  :rule-classes nil
+  :hints (("Goal" :do-not '(preprocess)
+   :use ((:instance xcert-y-ordinate-telescope-local)
+         (:instance xcert-y-product-balance-local))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(field-sub field-neg-of-add-local field-neg-of-neg
+      field-add-associative field-add-commutative field-add-swap-local
+      field-add-inverse-tail-local field-add-inverse-shuffle-local
+      field-add-cancel-around-local field-add-inverse-around-short-local
+      field-add-inverse-left field-add-inverse-right field-add-zero-left
+      field-add-zero-right field-add-cancel-after-3-local
+      field-add-cancel-after-2-local field-add-cancel-after-1-local field-add-fix-left field-add-fix-right field-fix-of-add field-fix-of-neg))))))
+
+(local
+ (defthm xcert-y-residuals-vanish-local
+  (implies
+   (and
+    (equal (field-sub (field-add p q) (field-add r tt)) (field-zero))
+    (equal (field-mul p (field-sub xb xa)) (field-sub yb ya))
+    (equal (field-mul r (field-sub xc xb)) (field-sub yc yb))
+    (equal (field-mul q (field-sub xc xab)) (field-sub yc yab))
+    (equal (field-add yl yab) (field-mul q (field-sub xab xl)))
+    (equal (field-add yr ya) (field-mul tt (field-sub xa xl))))
+   (equal
+    (field-sub (field-sub yl yr)
+     (field-add (field-mul (field-sub p r) (field-sub xl xb))
+                (field-mul (field-sub r q) (field-sub xa xc))))
+    (field-zero)))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance xcert-y-six-residual-decomposition-local))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(field-sub-self field-fix-idempotent field-fix-of-zero field-neg-of-zero field-mul-zero-right field-add-zero-left
+      field-add-zero-right field-fix-of-add
+      field-fix-of-mul field-fix-of-neg))))))
+
+(defthm xcert-y-difference-six-residual-reduction
+ (implies
+  (and
+   (equal (field-sub (field-add p q) (field-add r tt)) (field-zero))
+   (equal (field-mul p (field-sub xb xa)) (field-sub yb ya))
+   (equal (field-mul r (field-sub xc xb)) (field-sub yc yb))
+   (equal (field-mul q (field-sub xc xab)) (field-sub yc yab))
+   (equal (field-add yl yab) (field-mul q (field-sub xab xl)))
+   (equal (field-add yr ya) (field-mul tt (field-sub xa xl))))
+  (equal (field-sub yl yr)
+   (field-add (field-mul (field-sub p r) (field-sub xl xb))
+              (field-mul (field-sub r q) (field-sub xa xc)))))
+ :rule-classes nil
+ :hints (("Goal" :use ((:instance xcert-y-residuals-vanish-local)
+                        (:instance field-sub-equal-zero-implies-fixed-equal
+                         (first (field-sub yl yr))
+                         (second (field-add
+                             (field-mul (field-sub p r) (field-sub xl xb))
+                             (field-mul (field-sub r q) (field-sub xa xc))))))
+          :in-theory (union-theories (theory 'minimal-theory)
+           '(field-sub field-fix-of-add field-fix-of-mul field-fix-of-neg)))))
