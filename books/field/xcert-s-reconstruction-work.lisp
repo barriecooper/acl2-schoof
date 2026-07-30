@@ -1,5 +1,5 @@
 (in-package "GFIELD")
-(include-book "xcert-algebra")
+(include-book "xcert-h-reconstruction")
 
 ; Temporary proof-development book for the exact S reconstruction.
 ; E4--E11 below preserve the ordered differences of the semantic secants.
@@ -252,6 +252,83 @@
               field-fix-of-mul field-fix-of-neg field-add-inverse-right field-sub-self))))))
 
 (local
+ (defthm xcert-s-residual-combination-local
+  (equal
+   (field-sub
+    (field-add
+     (field-sub (field-mul q (field-sub xbc xa))
+                (field-mul r (field-sub xbc xa)))
+     (field-mul p xbc))
+    (field-add (field-mul p xab) (field-add yab ybc)))
+   (field-add
+    (field-neg (field-sub (field-mul q (field-sub xc xab))
+                          (field-sub yc yab)))
+    (field-add
+     (field-sub (field-mul r (field-sub xc xb)) (field-sub yc yb))
+     (field-add
+      (field-neg
+       (field-mul (field-add p q)
+        (field-sub (field-add (field-add xab xa) xb) (field-mul p p))))
+      (field-add
+       (field-mul (field-add p q)
+        (field-sub (field-add (field-add xbc xb) xc) (field-mul r r)))
+       (field-add
+        (field-neg
+         (field-sub (field-add ybc yb)
+                    (field-mul r (field-sub xb xbc))))
+        (field-neg
+         (field-mul (field-add p r)
+          (field-sub
+           (field-mul (field-sub p r) (field-add p q))
+           (field-sub xa xc))))))))))
+  :rule-classes nil
+  :hints (("Goal" :do-not '(preprocess)
+           :in-theory (union-theories (theory 'minimal-theory)
+            '(field-sub field-mul-left-distributive field-mul-right-distributive
+              field-mul-associative field-mul-commutative
+              field-mul-of-neg-right-local field-mul-of-neg-left-local
+              field-neg-of-add-local field-neg-of-neg field-add-swap-local
+              field-add-associative field-add-commutative
+              field-add-inverse-left field-add-inverse-right
+              field-add-zero-left field-add-zero-right field-add-fix-left
+              field-add-fix-right field-fix-of-add field-fix-of-mul
+              field-fix-of-neg field-fix-of-zero))))))
+
+(local
+ (defthm xcert-s-residual-zero-from-h-local
+  (implies
+   (and
+    (equal (field-mul (field-sub p r) (field-add p q))
+           (field-sub xa xc))
+    (equal (field-mul q (field-sub xc xab)) (field-sub yc yab))
+    (equal (field-mul r (field-sub xc xb)) (field-sub yc yb))
+    (equal (field-add (field-add xab xa) xb) (field-mul p p))
+    (equal (field-add (field-add xbc xb) xc) (field-mul r r))
+    (equal (field-add ybc yb) (field-mul r (field-sub xb xbc))))
+   (equal
+    (field-sub
+     (field-add
+      (field-sub (field-mul q (field-sub xbc xa))
+                 (field-mul r (field-sub xbc xa)))
+      (field-mul p xbc))
+     (field-add (field-mul p xab) (field-add yab ybc)))
+    (field-zero)))
+  :rule-classes nil
+  :hints (("Goal" :do-not '(preprocess)
+           :use ((:instance xcert-s-residual-combination-local))
+           :in-theory (union-theories (theory 'minimal-theory)
+            '(field-sub field-mul-left-distributive field-mul-right-distributive
+              field-mul-associative field-mul-commutative
+              field-mul-of-neg-right-local field-mul-of-neg-left-local
+              field-neg-of-add-local field-neg-of-neg field-add-swap-local
+              field-add-associative field-add-commutative
+              field-add-cancel-around-local field-add-inverse-tail-local
+              field-add-inverse-left field-add-inverse-right
+              field-add-zero-left field-add-zero-right field-add-fix-left
+              field-add-fix-right field-fix-of-add field-fix-of-mul
+              field-fix-of-neg field-fix-of-zero))))))
+
+(local
  (defthm xcert-s-residual-zero-local
   (implies
    (and
@@ -278,7 +355,8 @@
     (equal (field-add (field-add xab xa) xb) (field-mul p p))
     (equal (field-add yab ya) (field-mul p (field-sub xa xab)))
     (equal (field-add (field-add xbc xb) xc) (field-mul r r))
-    (equal (field-add ybc yb) (field-mul r (field-sub xb xbc))))
+    (equal (field-add ybc yb) (field-mul r (field-sub xb xbc)))
+    (not (equal (field-sub xc xb) (field-zero))))
    (equal
     (field-sub
      (field-add
@@ -288,7 +366,10 @@
      (field-add (field-mul p xab) (field-add yab ybc)))
     (field-zero)))
   :rule-classes nil
-  :hints (("Goal" :do-not '(preprocess)
+   :hints (("Goal" :do-not '(preprocess)
+           :use ((:instance xcert-h-scalar-reconstruction
+                   (a curve-a))
+                 (:instance xcert-s-residual-zero-from-h-local))
            :in-theory (union-theories (theory 'minimal-theory)
             '(field-sub field-mul-left-distributive field-mul-right-distributive
               field-mul-associative field-mul-commutative
@@ -311,3 +392,10 @@
 ; The q-route segment and expanded q input-secant segment above both certify.
 ; Next combine them after multiplying/moving only the required q-route terms;
 ; then construct the analogous r-route segment before normalizing the remainder.
+; Retained combination checkpoint: XCERT-S-RESIDUAL-COMBINATION-LOCAL encodes
+;   -E_q-slope + E_r-slope -(p+q)E_AB-x +(p+q)E_BC-x
+;   -E_BC-y -(p+r)E_H.
+; Its expanded ACL2 goal is now solely a finite additive permutation.  Continue
+; with a local FIELD-SUM-LIST expansion/permutation for this exact combination;
+; then XCERT-S-RESIDUAL-ZERO-FROM-H-LOCAL consumes the certified public H
+; reconstruction rather than separately re-normalizing the four secant cubics.
