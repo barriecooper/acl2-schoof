@@ -119,8 +119,12 @@ PR boundaries:
    now certified: the common-curve equal-x dichotomy gives equal or opposite
    ordinates, and structural secant/opposite-y reversal mirrors DD-O so that
    the opposite alternative contradicts the tangent domain at `C`.  This step
-   is characteristic-independent.  Next establish `ya != -ya`, the tangent
-   numerator at `A`, and the coincident-x output-x and output-y equations,
+   is characteristic-independent.  The tangent domain `ya != -ya` is also
+   complete: reuse the certified ordinate equality to construct a temporary
+   `(A,Q)` opposite-y relation under `ya=-ya`, mirror DD-O to `(C,C)`, and
+   contradict the tangent domain at `C`.  This structural step is likewise
+   characteristic-independent.  Next establish the tangent numerator at `A`
+   and the coincident-x output-x and output-y equations,
    before packaging the outer doubling
    relation and combined DD-T result.  Use the
    existing division-free secant and doubling relations as the scalar interface

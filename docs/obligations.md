@@ -847,7 +847,15 @@ non-self-inverse tangent-domain conjunct in
 the two inner secant relations, doubling at `C`, and `xq=xa`.  No
 characteristic predicate, classifier, denominator, division, or inverse is
 used.  Coincident-x ordinate reconstruction and outer opposite-y exclusion are
-complete.  Still open are `ya != -ya`, the tangent numerator at `A` for
+complete.  The tangent domain at `A` is now certified as well.  Under the
+temporary assumption `ya=-ya`, the certified equality `yq=ya`, the public
+equality `xq=xa`, and curve membership supplied by the two secant relations
+construct the local `(A,Q)` opposite-y relation with canonical infinity output.
+Mirrored DD-O propagation produces the `(C,C)` opposite-y relation and hence
+`yc=-yc`, contradicting the tangent-domain conjunct of doubling at `C`.
+Consequently `affine-dd-t-coincident-x-excludes-self-inverse` proves
+`ya != -ya` characteristic-independently, without coordinate algebra.
+Still open are the tangent numerator at `A` for
 `s=(p+t)-r`, coincident-x output-x and output-y, the outer doubling relation,
 combined DD-T, mixed D/T, finite semantic assembly, and unrestricted
 associativity.
