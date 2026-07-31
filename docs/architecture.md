@@ -315,8 +315,13 @@ classifier-free boundary by `affine-dd-opposite-y-propagates-to-other-tree`.
 Two inner distinct-x secant relations and the left outer opposite-y relation
 derive the opposite outer relation.  Its sole multiplicative cancellation uses
 the nonzero `(B,C)` secant difference; there is no outer denominator or outer
-classifier premise.  The mirrored orientation is reserved for semantic
-operand/order reversal rather than a duplicate coordinate certificate.
+classifier premise.  The mirrored orientation is now exposed by
+`affine-dd-opposite-y-propagates-to-left-tree`: it uses the public secant
+operand-reversal and opposite-y symmetry interfaces plus reversed point order,
+rather than a duplicate coordinate certificate.  This structural endpoint is
+used by the characteristic-independent DD-T coincident-x boundary to turn a
+temporary outer opposite-y alternative into a contradiction with the tangent
+domain at `C`.
 
 ## Design constraints for later work
 

@@ -29,8 +29,7 @@
                              affine-coordinates-x
                              affine-coordinates-y))))))
 
-(local
- (defthm equal-affine-x-on-curve-implies-equal-or-neg-y
+(defthm short-weierstrass-equal-x-implies-equal-or-neg-y
    (implies
     (and (short-weierstrass-affine-point-p p)
          (short-weierstrass-affine-point-p q)
@@ -53,7 +52,7 @@
      (union-theories
       (theory 'minimal-theory)
       '(field-element-p-of-affine-coordinates-y
-        field-fix-when-field-element-p))))))
+        field-fix-when-field-element-p)))))
 
 (defthm affine-pair-classify-not-same-x-other-for-curve-points
   (implies
@@ -65,7 +64,7 @@
   (("Goal"
     :do-not '(preprocess)
     :use (affine-pair-classify-same-x-other-characterization
-          (:instance equal-affine-x-on-curve-implies-equal-or-neg-y
+          (:instance short-weierstrass-equal-x-implies-equal-or-neg-y
                      (p first) (q second)))
     :in-theory
     (union-theories

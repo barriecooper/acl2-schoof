@@ -216,8 +216,7 @@
         field-mul-of-neg-right-local field-mul-of-neg-left-local
         field-neg-of-add-local field-neg-of-neg))))))
 
-(local
- (defthm affine-distinct-x-secant-relation-reverse-local
+(defthm affine-distinct-x-secant-relation-p-reverse
    (implies
     (affine-distinct-x-secant-relation-p first second slope output)
     (affine-distinct-x-secant-relation-p second first slope output))
@@ -250,7 +249,7 @@
         field-element-p-of-field-fix
         field-mul-of-neg-right-local field-neg-of-neg
         field-add-associative field-add-commutative field-fix-of-add
-        field-fix-of-mul field-fix-of-neg))))))
+        field-fix-of-mul field-fix-of-neg)))))
 
 (local
  (defun commutativity-doubling-slope-local (input)
@@ -345,7 +344,7 @@
                               (curve-point-fix second)))
                      (output (curve-point-affine-coordinates-get
                               (curve-point-fix output))))
-          (:instance affine-distinct-x-secant-relation-reverse-local
+          (:instance affine-distinct-x-secant-relation-p-reverse
                      (first (curve-point-affine-coordinates-get
                              (curve-point-fix first)))
                      (second (curve-point-affine-coordinates-get

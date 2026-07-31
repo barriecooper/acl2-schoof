@@ -830,11 +830,27 @@ and `affine-dd-t-outer-distinct-x-translation` now packages them as the public
 secant relation `(A,Q,s,D)` with the exact witness
 `s=(field-sub (field-add (field-fix p) (field-fix t-slope)) (field-fix r))`.
 Thus the DD-T outer distinct-x branch is complete.  This packaging proof is
-characteristic-independent and classifier-free.  Coincident-x ordinate
-reconstruction, exclusion of outer opposite-y, the tangent numerator at `A`,
-the coincident-x output-x and output-y equations, the outer doubling relation,
+characteristic-independent and classifier-free.
+
+The coincident-x ordinate boundary is now certified.  The reusable theorem
+`short-weierstrass-equal-x-implies-equal-or-neg-y` gives the characteristic-
+independent common-curve dichotomy `yq=ya` or `yq=-ya`.  The new structural
+mirror `affine-dd-opposite-y-propagates-to-left-tree` reverses both secant
+operands and the opposite-y pair, then applies the existing oriented DD-O
+theorem to the reversed point order; it replays none of the DD-O field algebra.
+Under the temporary `yq=-ya` alternative, the two secant relations supply curve
+membership and `xq=xa` constructs the local `(A,Q)` opposite-y relation.  The
+mirror derives `(C,C)` opposite-y, hence `yc=-yc`, contradicting exactly the
+non-self-inverse tangent-domain conjunct in
+`affine-doubling-relation-p(C,t,D)`.  Therefore
+`affine-dd-t-coincident-x-implies-ordinate-equality` certifies `yq=ya` from only
+the two inner secant relations, doubling at `C`, and `xq=xa`.  No
+characteristic predicate, classifier, denominator, division, or inverse is
+used.  Coincident-x ordinate reconstruction and outer opposite-y exclusion are
+complete.  Still open are `ya != -ya`, the tangent numerator at `A` for
+`s=(p+t)-r`, coincident-x output-x and output-y, the outer doubling relation,
 combined DD-T, mixed D/T, finite semantic assembly, and unrestricted
-associativity remain open.
+associativity.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
 requested endpoint.  Take
