@@ -825,9 +825,16 @@ The canonical output-y rearrangement then certifies
 `yd+ya=s*(xa-xd)` in the relation's exact orientation.
 
 No characteristic premise, classifier premise, division, inverse, or independent
-denominator is used.  All three outer distinct-x scalar endpoints are complete;
-semantic relation packaging, all coincident-x DD-T work, combined DD-T, mixed
-D/T, finite assembly, and unrestricted associativity remain open.
+denominator is used.  All three outer distinct-x scalar endpoints are complete,
+and `affine-dd-t-outer-distinct-x-translation` now packages them as the public
+secant relation `(A,Q,s,D)` with the exact witness
+`s=(field-sub (field-add (field-fix p) (field-fix t-slope)) (field-fix r))`.
+Thus the DD-T outer distinct-x branch is complete.  This packaging proof is
+characteristic-independent and classifier-free.  Coincident-x ordinate
+reconstruction, exclusion of outer opposite-y, the tangent numerator at `A`,
+the coincident-x output-x and output-y equations, the outer doubling relation,
+combined DD-T, mixed D/T, finite semantic assembly, and unrestricted
+associativity remain open.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
 requested endpoint.  Take
@@ -861,8 +868,10 @@ division, the equation:
 yd+ya=s*(xa-xd),                         s=(p+t)-r,
 ```
 
-Semantic packaging of `(A,Q,s,D)` as a secant relation remains open.  A later coincident-x
-certificate must decide from the same nine equations whether `xq=xa` forces
+The three certified scalar equations are now packaged as the public secant
+relation `(A,Q,s,D)` with exact fixed witness `s=(p+t)-r`; this completes only
+the DD-T outer distinct-x branch.  A later coincident-x certificate must decide
+from the same nine equations whether `xq=xa` forces
 `yq=ya`; concrete F7 curve cases support the same `s=(p+t)-r` as the tangent witness
 at `A`.  If so, it must separately derive
 

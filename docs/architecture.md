@@ -283,10 +283,13 @@ incorrect: the secant result is the reflection of the chord's third
 intersection, so equality of that result with the tangent input does not make
 the secant witness a tangent witness.  The two inner secant witnesses and the
 actual tangent witness must remain independent; the audited candidate for the
-opposite-tree witness is `(p+t)-r`.  Its distinct-x equations and the separate
-coincident-x/opposite-y analysis remain open.  A common theorem should be
-introduced only if those oriented specializations remain explicit and require
-no hidden nonzero premise.
+opposite-tree witness is `(p+t)-r`.  Its three certified distinct-x equations
+are now packaged into the public semantic secant relation, with exact witness
+`(field-sub (field-add (field-fix p) (field-fix t-slope)) (field-fix r))`.
+This characteristic-independent, classifier-free DD-T outer distinct-x branch
+is complete; the separate coincident-x/opposite-y analysis remains open.  A
+common theorem should be introduced only if those oriented specializations
+remain explicit and require no hidden nonzero premise.
 
 The inverse/tangent specialization is certified at the semantic relation
 boundary by `affine-inverse-tangent-translation`.  It negates the inner tangent
