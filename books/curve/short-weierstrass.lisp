@@ -1,6 +1,6 @@
 (in-package "GFIELD")
 
-(include-book "../field/characteristic-exclusions")
+(include-book "short-weierstrass-characteristic")
 
 ; The parameters are deliberately not required to be canonical.  Every use is
 ; fixed, which gives arbitrary ACL2 witnesses the same total semantics as

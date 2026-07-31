@@ -10,8 +10,10 @@ nor Schoof's algorithm is complete.
 
 The repository currently certifies these subsystem-level foundations:
 
-- a constrained generic field interface (`GFIELD`) with total fixing, natural
-  powers, and characteristic-exclusion and Frobenius-exponent assumptions;
+- an unrestricted-by-characteristic generic field interface (`GFIELD`) with
+  total fixing, natural powers, and a Frobenius-exponent assumption, plus an
+  explicit curve-level predicate for the initial characteristic-greater-than-
+  three short-Weierstrass scope;
 - a field-only X-CERT algebra layer with explicit residual generators, an
   output telescope, a factored remainder identity, and their composition, plus
   a curve-semantic specialization for the two ordered nested distinct-x trees;
@@ -38,6 +40,14 @@ cancellation, group packaging, and scalar multiplication remain unproved.
 There is no certified Hasse theorem, point-count correctness theorem,
 division-polynomial theory, Frobenius machinery for Schoof, or Schoof
 algorithm.
+
+The generic field and polynomial layers intentionally continue to admit F2.
+Curve results that require the initial short-Weierstrass characteristic scope
+use `short-weierstrass-characteristic-p`, which states nonzero two and nonzero
+three directly in the actual `field-*` operations.  Characteristics two and
+three are not ruled out for elliptic curves or Schoof mathematically; they need
+separate curve models and downstream formulas and are outside the first
+implementation scope.
 
 ## Architecture
 

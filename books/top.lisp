@@ -18,6 +18,8 @@
 (include-book "field/power-correspondence-regression")
 (include-book "field/characteristic-exclusions")
 (include-book "field/characteristic-exclusions-regression")
+(include-book "curve/short-weierstrass-characteristic")
+(include-book "curve/short-weierstrass-characteristic-regression")
 (include-book "curve/short-weierstrass")
 (include-book "curve/f11-short-weierstrass")
 (include-book "curve/affine-coordinates")

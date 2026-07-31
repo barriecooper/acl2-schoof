@@ -67,6 +67,16 @@ that work.
 
 ## Phase 1: complete associativity
 
+Before characteristic-dependent exceptional certificates resume, use the
+certified curve boundary `short-weierstrass-characteristic-p`.  It states
+nonzero two and nonzero three in the same `GFIELD` operations used by the curve
+equation, while leaving generic field and polynomial clients—including F2—
+unchanged.  Existing representation, secant, classifier, dispatcher, X-CERT,
+inverse/tangent, and DD-O theorems remain at their certified generic scope;
+only new arguments that exclude a small-characteristic degeneration should
+consume the named predicate.  Inverse/secant and DD-T remain separate later
+PRs and are not resumed by the characteristic-boundary work.
+
 The structural audit is recorded in the
 [associativity case ledger](obligations.md#associativity-case-audit).  It
 reduces the valid affine inputs to `D`, `O`, and `T`, rather than a formal
