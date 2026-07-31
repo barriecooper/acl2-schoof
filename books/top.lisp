@@ -34,6 +34,8 @@
 (include-book "curve/affine-inverse-secant-repeated-root-regression")
 (include-book "curve/affine-inverse-secant-a-d4")
 (include-book "curve/affine-inverse-secant-a-d4-regression")
+(include-book "curve/affine-inverse-secant-self-inverse")
+(include-book "curve/affine-inverse-secant-self-inverse-regression")
 (include-book "curve/f11-short-weierstrass")
 (include-book "curve/affine-coordinates")
 (include-book "curve/f11-affine-coordinates")

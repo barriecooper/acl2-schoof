@@ -579,15 +579,20 @@ The characteristic interface is now certified as
 `field-add(field-one,field-one)` nonzero for the same constrained `GFIELD`
 operations and also records nonzero three.  Under that explicit curve premise,
 `ya=-ya` gives `ya=0`; A-D4 gives
-`3*xa^2+a=0`; the curve equation and the standard resultant calculation then
-contradict the nonzero short-Weierstrass discriminant.  Inverse/secant remains
-open until a later bounded certificate consumes this premise.  Its outer
-distinct-x algebra, ordinate
-coincidence, and A-D4 reconstruction are not marked complete independently,
-because the requested certificate family and combined theorem cannot be
-certified at the unrestricted generic boundary.  The named characteristic
-predicate—not a classifier or ad hoc denominator premise—is the approved
-scope correction.
+`3*xa^2+a=0`; the curve equation gives `xa^3+a*xa+b=0`.  The certified
+scalar theorem `short-weierstrass-common-root-implies-discriminant-zero` solves
+these equations division-free as `a=-(3*xa^2)` and `b=2*xa^3`, then proves the
+exact checked-in identity `4*a^3+27*b^2=0`, where `4=(1+1)^2` and
+`27=(1+1+1)^3` in the constrained field operations and the coefficients are
+fixed.  This contradicts
+`short-weierstrass-discriminant-expression-nonzero`.  The public semantic
+theorem `affine-inverse-secant-coincident-x-excludes-self-inverse` therefore
+certifies that the coincident-x outer ordinate is not self-inverse.  Only the
+self-inverse-to-zero step consumes the nonzero-two projection; A-D4, the
+scalar resultant algebra, and the contradiction do not consume nonzero three.
+The combined characteristic predicate remains the single public premise.
+Inverse/secant nevertheless remains open pending the outer relation
+translations and combined theorem.
 
 The earlier `ADDITIVE-FIELD` theorems remain a separate reusable
 functional-instantiation template over `additive-field-fix`, zero, one, add,
@@ -597,9 +602,8 @@ proving its nonzero hypotheses.  It cannot instantiate to unrestricted
 Boolean witness refutes the required nonzero-two obligation.  The new curve
 predicate avoids claiming such a generic instantiation.
 The former architectural blocker is therefore resolved at the intended curve
-boundary.  What remains is the bounded inverse/secant proof itself: certify
-A-D4, certify the exact discriminant/resultant contradiction, and assemble the
-outer distinct-x and doubling branches under the single named predicate.  The
+boundary.  The remaining inverse/secant work is to assemble the outer
+distinct-x and doubling branches under the single named predicate.  The
 self-contained additive-normalization prerequisite is now certified separately:
 `field-sub-eliminate-common-right-summand` removes a shared right summand from
 two equal field sums, and
@@ -629,13 +633,16 @@ staged quadratic simplification is
 certify A-D4, `(-r)*(ya+ya)=3*xa^2+a`, both as an unrestricted generic field
 theorem and directly from the three semantic relation premises.  A-D4 is
 therefore complete and characteristic-independent; it uses no inverse,
-nonzero premise, curve equation, or characteristic assumption.  This does not
-complete the inverse/secant family.  The self-inverse-to-zero step consumes the
-predicate's nonzero-two projection.
-Whether the resultant proof also consumes nonzero three must be established by
-that certificate rather than inferred from the combined predicate.  No
-classifier, independent characteristic premise, or ad hoc denominator premise
-should be added.
+nonzero premise, curve equation, or characteristic assumption.  The subsequent
+self-inverse exclusion is also complete: it composes
+self-inverse-to-zero, A-D4, the scalar curve equation, the division-free
+resultant identity, and the constrained nonzero discriminant.  It uses no
+classifier, denominator, division, inverse, or independent characteristic
+premise.  This does not complete the inverse/secant family: coincident-x
+ordinate reconstruction (unless exposed by a later public bridge), outer
+doubling, outer distinct-x translation, and the combined inverse/secant
+translation remain open, as do DD-T, mixed D/T, semantic assembly, and
+unrestricted associativity.
 
 #### B. Inverse translation with an inner tangent
 
