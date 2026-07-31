@@ -558,12 +558,28 @@ is `T`; the still-missing tangent-premise bridge must prove
 ```
 
 while A-D2 and A-D1 already give the tangent output equations for `C`.
-If `ya=-ya`, classifier priority would suggest `O`, but an affine `C` and the
-inner secant condition `xc != xa` must make A-D1--A-D3 together with the curve
-equations inconsistent.  This exclusion is an explicit required theorem; the
-outer `O` case must not be assumed and cannot return `C`.  The next
-inverse/secant implementation PR stops unless it certifies both A-D4 in the
-coincident-x subcase and this self-inverse impossibility, generically.
+If `ya=-ya`, classifier priority suggests `O`.  The proposed generic
+self-inverse exclusion is **false under the current constrained interfaces**:
+the `GFIELD` kernel admits characteristic two, while the separately constrained
+`ADDITIVE-FIELD` characteristic-exclusion interface is not connected to the
+`GFIELD` operations used by curve coordinates.  A concrete model is the
+two-element `GFIELD` with `a=0`, `b=1`, `A=B=U=(0,1)`, `C=(1,0)`, and `r=1`.
+Both points satisfy `y^2=x^3+1`; `B=-A`; `(B,C,r,U)` satisfies the distinct-x
+secant relation; and `xu=xa` and `ya=-ya`.  Thus the requested combined `D/T`
+conclusion is also false: the outer pair `(A,U)` is opposite-y/self-inverse,
+not a valid doubling pair.
+
+The exact architectural blocker is a missing certified connection making
+`field-add(field-one,field-one)` nonzero for the same constrained `GFIELD`
+operations (or an equivalent global characteristic-two exclusion).  Once that
+connection exists, `ya=-ya` gives `ya=0`; A-D4 gives
+`3*xa^2+a=0`; the curve equation and the standard resultant calculation then
+contradict the nonzero short-Weierstrass discriminant.  Until then,
+inverse/secant remains open.  Its outer distinct-x algebra, ordinate
+coincidence, and A-D4 reconstruction are not marked complete independently,
+because the requested certificate family and combined theorem cannot be
+certified at the current generic boundary.  No classifier or ad hoc nonzero
+premise should be added to hide this mismatch.
 
 #### B. Inverse translation with an inner tangent
 
