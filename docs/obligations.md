@@ -620,9 +620,18 @@ kernel subtraction-zero theorem; left cancellation therefore certifies
 `r*(yc-ya)=xc^2+xc*xa+xa^2+a`.  The public semantic specialization derives
 this relation directly from the inverse relation, the inner secant relation,
 and coincident outer x-output, without a characteristic premise, inverse, or
-division.  Substitution of `yc`, simplification using `r^2`, and A-D4 remain
-open; this repeated-root prerequisite does not certify A-D4 itself.  The
-self-inverse-to-zero step consumes the predicate's nonzero-two projection.
+division.  The next bounded certificate consumes exactly the repeated-root
+equation `r*(yc-ya)=xc^2+xc*xa+xa^2+a`, the inverse-substituted secant equation
+`r*(xc-xa)=yc+ya`, and the coincident-output equation `r^2=xc+xa+xa`.  Its
+local ordinate substitution is `yc-ya=r*(xc-xa)-(ya+ya)`, and its separately
+staged quadratic simplification is
+`(xc+xa+xa)*(xc-xa)=xc^2+xc*xa-(xa^2+xa^2)`.  These division-free identities
+certify A-D4, `(-r)*(ya+ya)=3*xa^2+a`, both as an unrestricted generic field
+theorem and directly from the three semantic relation premises.  A-D4 is
+therefore complete and characteristic-independent; it uses no inverse,
+nonzero premise, curve equation, or characteristic assumption.  This does not
+complete the inverse/secant family.  The self-inverse-to-zero step consumes the
+predicate's nonzero-two projection.
 Whether the resultant proof also consumes nonzero three must be established by
 that certificate rather than inferred from the combined predicate.  No
 classifier, independent characteristic premise, or ad hoc denominator premise
