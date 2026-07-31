@@ -98,8 +98,9 @@ PR boundaries:
    commutativity.  These are structural proofs with no new coordinate algebra.
 3. **Exceptional secant structure (partially implemented).** Work in
    four stopping-bounded subdivisions: (a) inverse translation with a secant
-   inner output, including the derived outer secant/doubling split and exclusion
-   of outer `O`; (b) inverse translation with a tangent inner output
+   inner output (**semantic certificate complete**), including the derived
+   outer secant/doubling split and exclusion of outer `O`; (b) inverse
+   translation with a tangent inner output
    (**semantic certificate complete**), deriving rather than assuming the outer
    outcome; (c) `D/D` outer `O` by collinearity propagation
    (**semantic certificate complete**); and (d) `D/D`

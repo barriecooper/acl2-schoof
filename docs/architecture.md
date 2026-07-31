@@ -290,6 +290,17 @@ transports the tangent-domain fact across affine negation.  The derived `D/T`
 disjunction excludes outer opposite-y without a classifier premise, extra
 nonzero assumption, division, or new curve polynomial identity.
 
+The inverse/secant specialization is likewise complete at that boundary.
+`affine-inverse-secant-translation` negates the fixed inner witness and derives
+an outer secant when the outer x coordinates differ, or outer doubling when
+they coincide.  In the latter branch the inner output-y equation first proves
+ordinate coincidence; the certified A-D4 equation supplies the tangent
+numerator, and the characteristic predicate is used only through the existing
+self-inverse exclusion theorem.  Thus the final D/T disjunction excludes outer
+opposite-y without an outer classifier premise.  The branch equations remain
+division-free, and all sign, square, reassociation, and fixing normalization is
+proof-local.
+
 The oriented outer-opposite `D/D` specialization is certified at the same
 classifier-free boundary by `affine-dd-opposite-y-propagates-to-other-tree`.
 Two inner distinct-x secant relations and the left outer opposite-y relation

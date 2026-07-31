@@ -590,9 +590,10 @@ theorem `affine-inverse-secant-coincident-x-excludes-self-inverse` therefore
 certifies that the coincident-x outer ordinate is not self-inverse.  Only the
 self-inverse-to-zero step consumes the nonzero-two projection; A-D4, the
 scalar resultant algebra, and the contradiction do not consume nonzero three.
-The combined characteristic predicate remains the single public premise.
-Inverse/secant nevertheless remains open pending the outer relation
-translations and combined theorem.
+The combined characteristic predicate remains the single public premise of
+the combined family and of its outer-doubling branch.  It is absent from the
+ordinate-coincidence and outer-distinct-x theorems, which are
+characteristic-independent.
 
 The earlier `ADDITIVE-FIELD` theorems remain a separate reusable
 functional-instantiation template over `additive-field-fix`, zero, one, add,
@@ -602,8 +603,7 @@ proving its nonzero hypotheses.  It cannot instantiate to unrestricted
 Boolean witness refutes the required nonzero-two obligation.  The new curve
 predicate avoids claiming such a generic instantiation.
 The former architectural blocker is therefore resolved at the intended curve
-boundary.  The remaining inverse/secant work is to assemble the outer
-distinct-x and doubling branches under the single named predicate.  The
+boundary.  The
 self-contained additive-normalization prerequisite is now certified separately:
 `field-sub-eliminate-common-right-summand` removes a shared right summand from
 two equal field sums, and
@@ -638,11 +638,25 @@ self-inverse exclusion is also complete: it composes
 self-inverse-to-zero, A-D4, the scalar curve equation, the division-free
 resultant identity, and the constrained nonzero discriminant.  It uses no
 classifier, denominator, division, inverse, or independent characteristic
-premise.  This does not complete the inverse/secant family: coincident-x
-ordinate reconstruction (unless exposed by a later public bridge), outer
-doubling, outer distinct-x translation, and the combined inverse/secant
-translation remain open, as do DD-T, mixed D/T, semantic assembly, and
-unrestricted associativity.
+premise.  The public
+`affine-inverse-secant-coincident-x-implies-ordinate-equality` theorem now
+reconstructs `yu=ya` directly from the inner output-y equation when `xu=xa`.
+For `xu!=xa`,
+`affine-inverse-secant-translation-outer-distinct-x` packages the outer secant
+with the exact witness `-field-fix(r)` and equations
+`(-r)(xu-xa)=yu-ya`, `xc+xa+xu=(-r)^2`, and
+`yc+ya=(-r)(xa-xc)`.  This branch needs neither characteristic nor
+cancellation.  For `xu=xa`,
+`affine-inverse-secant-translation-outer-doubling` combines ordinate
+coincidence, the public self-inverse exclusion, A-D4, A-D2, and A-D1/A-D3 to
+establish curve membership of `A,C`, the tangent domain, numerator equation,
+and both output equations for the same negated witness.  Finally
+`affine-inverse-secant-translation` splits only on `xu=xa` and certifies the
+outer D/T disjunction.  Outer O is excluded by the self-inverse theorem rather
+than assumed away by a classifier premise.  The inverse/secant semantic family
+is complete.  DD-T and DD-T1, any nonautomatic mirrored exceptional results,
+mixed D/T, finite semantic assembly, unrestricted associativity, executable
+lifting, and group-law packaging remain open.
 
 #### B. Inverse translation with an inner tangent
 
