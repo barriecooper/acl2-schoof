@@ -806,11 +806,28 @@ outer slope equation against the canonical slope reconstruction, using only
 rearrangement certifies the exact associated equation
 `(xd+xa)+xq=s*s`.
 
-No characteristic premise, classifier premise, division, inverse, independent
-denominator, or output-y conclusion is used.  The outer slope and output-x
-endpoints are complete; outer output-y, relation packaging, all coincident-x
-DD-T work, combined DD-T, mixed D/T, finite assembly, and unrestricted
-associativity remain open.
+The outer output-y endpoint is now certified as well.  It reuses the certified
+witness equality `s=affine-distinct-x-slope(A,Q)` and obtains
+`x(affine-distinct-x-output(A,Q))=xd` by cancelling the common two-coordinate
+tail from the certified outer output-x equation and the canonical output-x
+rearrangement.  The ordinate bridge is the field-only X-CERT final-y theorem,
+specialized with `xab=C`, left slope `t`, left output `D`, right slope the
+canonical outer slope, and right output the canonical `(A,Q)` output.  Its exact
+bounded residual is the six output-y residual reduction
+
+```text
+yd-y(E) = (p-r)*(xd-xb) + (r-t)*(xa-xc),
+```
+
+with the H coordinate bridge and balance `p+t=r+u` cancelling the right side.
+Thus `y(E)=yd`; no equal-x sign alternative or sign-selection premise is used.
+The canonical output-y rearrangement then certifies
+`yd+ya=s*(xa-xd)` in the relation's exact orientation.
+
+No characteristic premise, classifier premise, division, inverse, or independent
+denominator is used.  All three outer distinct-x scalar endpoints are complete;
+semantic relation packaging, all coincident-x DD-T work, combined DD-T, mixed
+D/T, finite assembly, and unrestricted associativity remain open.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
 requested endpoint.  Take
@@ -837,14 +854,14 @@ adding the tangent-domain premise, either inner nonzero denominator, a
 characteristic premise, or an outer distinct-x premise does not remove this
 countermodel.
 
-The remaining curve-aware outer-distinct-x certificate must derive, without
-division, the still-open equation:
+The completed curve-aware outer-distinct-x scalar certificate derives, without
+division, the equation:
 
 ```text
 yd+ya=s*(xa-xd),                         s=(p+t)-r,
 ```
 
-and then package `(A,Q,s,D)` as a secant relation.  A later coincident-x
+Semantic packaging of `(A,Q,s,D)` as a secant relation remains open.  A later coincident-x
 certificate must decide from the same nine equations whether `xq=xa` forces
 `yq=ya`; concrete F7 curve cases support the same `s=(p+t)-r` as the tangent witness
 at `A`.  If so, it must separately derive
@@ -876,10 +893,8 @@ xq = xa, yq = ya, ya != -ya, and a doubling relation at A with output 2C.
 
 An opposite-y conclusion on `(A,Q)` would make that tree infinity and must be
 proved impossible from the scalar equations; it may not be excluded by a
-public classifier premise.  The outer output-y identity, the coincident-x ordinate/domain bridge, and
-the
-three outer-doubling identities are the remaining replacement obligations.
-They are open.  They are not currently a
+public classifier premise.  The coincident-x ordinate/domain bridge and the three outer-doubling identities
+are the remaining replacement obligations.  They are open.  They are not currently a
 direct specialization of
 `xcert-h-scalar-reconstruction`, `xcert-s-scalar-reconstruction`, or the
 four-`D` semantic X-CERT theorem.
@@ -900,8 +915,7 @@ including A-D4 and the self-inverse impossibility; (2) inverse/tangent with its
 derived outer `D/T` split (**semantic boundary complete**); (3) `DD-O`
 collinearity propagation (**semantic boundary complete**); and (4) `DD-T`
 independent-witness reconstruction plus its derived opposite-tree outcome.
-The recommended bounded order is: next certify the outer output-y equation
-for `s=(p+t)-r`; then audit and certify the coincident-x
+The recommended bounded order is: next audit and certify the coincident-x
 ordinate/opposite-y exclusion; then certify its tangent equations; and only
 then package the combined semantic DD-T family.  Each implementation PR must
 stop after one subdivision, must expose only semantic relations or their exact

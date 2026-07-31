@@ -105,6 +105,8 @@
 (include-book "curve/affine-dd-t-outer-distinct-x-slope-regression")
 (include-book "curve/affine-dd-t-outer-distinct-x-output-x")
 (include-book "curve/affine-dd-t-outer-distinct-x-output-x-regression")
+(include-book "curve/affine-dd-t-outer-distinct-x-output-y")
+(include-book "curve/affine-dd-t-outer-distinct-x-output-y-regression")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")
