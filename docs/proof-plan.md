@@ -91,7 +91,8 @@ PR boundaries:
    inner output, including the derived outer secant/doubling split and exclusion
    of outer `O`; (b) inverse translation with a tangent inner output
    (**semantic certificate complete**), deriving rather than assuming the outer
-   outcome; (c) `D/D` outer `O` by collinearity propagation; and (d) `D/D`
+   outcome; (c) `D/D` outer `O` by collinearity propagation
+   (**semantic certificate complete**); and (d) `D/D`
    outer `T` by a separate
    tangency/repeated-root bridge.  Use the existing division-free secant and
    doubling relations as the scalar interface and package results through

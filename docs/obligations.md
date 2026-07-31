@@ -598,6 +598,9 @@ Let `P=AB=(xp,yp)` have inner secant witness `p`, and
 `Q=BC=(xq,yq)` have witness `r`.  Both inner `D` hypotheses provide
 `xa != xb` and `xb != xc` and their two triples of secant equations.
 
+The certified theorem `affine-dd-opposite-y-propagates-to-other-tree` completes
+the oriented `DD-O` family from exactly the two inner secant relations
+`(A,B,p,P)` and `(B,C,r,Q)` and the outer opposite-y relation `(P,C,infinity)`.
 If the left outer pair `(P,C)` is `O`, its semantic content is
 `xp=xc` and `yp=-yc`.  Substitution in the `(A,B)->P` output-y equation gives
 
@@ -615,10 +618,16 @@ yq=-ya,                                  (DD-O2)
 ```
 
 so the opposite tree's outer pair `(A,Q)` is derived `O` and both trees return
-infinity.  This is a small oriented collinearity certificate.  It is not the
+infinity.  The only multiplicative cancellation is
+`field-mul-left-cancel-forward`, after commuting the products, and its nonzero
+factor `xc-xb` comes solely from the `(B,C)` secant relation.  No outer
+classifier, outer denominator, division, or independent nonzero premise is
+used.  This is a small oriented collinearity certificate.  It is not the
 four-`D` X-CERT theorem: it uses the inner `(B,C)` denominator only, and no
-outer denominator exists.  The mirrored left/right result should follow by the
-certified operand/order reversal, not by adding a second outer tag premise.
+outer denominator exists.  The mirrored left/right result should later follow
+by semantic secant operand reversal and opposite-y symmetry together with
+order reversal, not by replaying the field proof or adding a second outer tag
+premise.
 
 If `(P,C)` is `T`, its semantic content is `P=C` with `yc != -yc`.  The missing
 certificate must first derive that the chord through `A,B` is tangent at `C`:
@@ -658,7 +667,7 @@ hidden nonzero hypotheses.
 Stage 3 therefore remains partially open and is subdivided into: (1) inverse/secant,
 including A-D4 and the self-inverse impossibility; (2) inverse/tangent with its
 derived outer `D/T` split (**semantic boundary complete**); (3) `DD-O`
-collinearity propagation; and (4) `DD-T`
+collinearity propagation (**semantic boundary complete**); and (4) `DD-T`
 tangency plus its derived opposite-tree outcome.  Each implementation PR must
 stop after one subdivision, must expose only semantic relations or their exact
 scalar equations, and must not proceed if it needs an independent opposite
