@@ -105,6 +105,8 @@
 (include-book "curve/short-weierstrass-equal-x-ordinate-regression")
 (include-book "curve/affine-dd-t-coincident-x-ordinate")
 (include-book "curve/affine-dd-t-coincident-x-ordinate-regression")
+(include-book "curve/affine-dd-t-coincident-x-tangent-domain")
+(include-book "curve/affine-dd-t-coincident-x-tangent-domain-regression")
 (include-book "curve/affine-dd-t-outer-distinct-x-slope")
 (include-book "curve/affine-dd-t-outer-distinct-x-slope-regression")
 (include-book "curve/affine-dd-t-outer-distinct-x-output-x")
