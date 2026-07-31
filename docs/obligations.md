@@ -762,6 +762,36 @@ slope.  The tempting candidates `p`, `-p`, `r`, and `t` respectively give
 `1`, `10`, `2`, and `4` there and are all refuted.  Those computations did not
 establish that the nine relation equations alone suffice.
 
+The corrected curve-semantic outer-distinct-x endpoint is now certified.  Its
+common-curve bridge uses the `A,B` curve equations through the existing input
+secant identity and the `A,Q` curve equations through the existing semantic
+outer secant slope reconstruction.  Together with the first two complete
+secant triples and only the tangent numerator equation at `C`, the
+pre-cancellation X-CERT H/S algebra specializes with `xab=C`, `xbc=Q`,
+`q=t`, and an internal certified secant slope `u` for `(A,Q)`.  Its exact
+factored residual is
+
+```text
+(xq-xa) * (p+t-(r+u)) = 0.
+```
+
+The outer premise `xq != xa`, coordinate closure, and the field subtraction
+zero theorem make `xq-xa` nonzero; the existing X-CERT S cancellation gives
+`p+t=r+u`.  Hence the exact fixed witness `s=(p+t)-r` equals `u`, and the
+certified `u*(xq-xa)=yq-ya` equation yields
+`s*(xq-xa)=yq-ya`.  Equivalently, before this substitution the desired slope
+residual has the aligned factorization
+
+```text
+(xq-xa) * (s*(xq-xa)-(yq-ya)) = 0.
+```
+
+No characteristic premise, classifier premise, division, inverse, independent
+denominator, output-x conclusion, or output-y conclusion is used.  Only this
+outer slope endpoint is complete; outer output-x, outer output-y, relation
+packaging, all coincident-x DD-T work, combined DD-T, mixed D/T, finite
+assembly, and unrestricted associativity remain open.
+
 The field-only audit is stopped by a concrete F11 countermodel to the first
 requested endpoint.  Take
 
