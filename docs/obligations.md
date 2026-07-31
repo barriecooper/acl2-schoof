@@ -786,11 +786,31 @@ residual has the aligned factorization
 (xq-xa) * (s*(xq-xa)-(yq-ya)) = 0.
 ```
 
+The outer output-x endpoint is also certified.  Its earliest common-curve
+bridge is `xcert-h-scalar-reconstruction`, specialized with `xab=C`, its
+second input identity replaced by the tangent identity at `C`, and its left
+outer output `xl=D`.  The pre-cancellation residual is
+
+```text
+(xc-xb) * ((p-r)*(p+t)-(xa-xc)) = 0.
+```
+
+The only cancellation factor is `xc-xb`; its nonzero fact comes from the
+inner `(B,C,r,Q)` secant relation.  This gives H zero.  The three checked-in
+output-x equations give the X-CERT telescope zero, while the already certified
+balance gives S zero.  `xcert-composition` therefore identifies the canonical
+outer secant output's x-coordinate with `xd`.  Separately, cancellation of the
+outer slope equation against the canonical slope reconstruction, using only
+`xq-xa != 0`, proves locally that the fixed witness `s=(p+t)-r` equals
+`affine-distinct-x-slope(A,Q)`.  Transport through the canonical output-x
+rearrangement certifies the exact associated equation
+`(xd+xa)+xq=s*s`.
+
 No characteristic premise, classifier premise, division, inverse, independent
-denominator, output-x conclusion, or output-y conclusion is used.  Only this
-outer slope endpoint is complete; outer output-x, outer output-y, relation
-packaging, all coincident-x DD-T work, combined DD-T, mixed D/T, finite
-assembly, and unrestricted associativity remain open.
+denominator, or output-y conclusion is used.  The outer slope and output-x
+endpoints are complete; outer output-y, relation packaging, all coincident-x
+DD-T work, combined DD-T, mixed D/T, finite assembly, and unrestricted
+associativity remain open.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
 requested endpoint.  Take
@@ -817,12 +837,10 @@ adding the tangent-domain premise, either inner nonzero denominator, a
 characteristic premise, or an outer distinct-x premise does not remove this
 countermodel.
 
-A later curve-aware outer-distinct-x certificate may derive, without division,
-exactly:
+The remaining curve-aware outer-distinct-x certificate must derive, without
+division, the still-open equation:
 
 ```text
-s*(xq-xa)=yq-ya
-xd+xa+xq=s^2
 yd+ya=s*(xa-xd),                         s=(p+t)-r,
 ```
 
@@ -837,11 +855,10 @@ xd+xa+xa=s^2
 yd+ya=s*(xa-xd)
 ```
 
-and derive `ya != -ya`, rather than assuming an outer classifier.  The first
-unresolved scalar step is now the outer slope equation itself: the nine
-relation equations must first be supplemented by an exact consequence of
-common curve membership.  Only after that repair is the exceptional scalar
-step the dichotomy at `xq=xa`: exclude
+and derive `ya != -ya`, rather than assuming an outer classifier.  The outer
+slope and output-x scalar steps now use the certified common-curve
+H/S bridge.  The next exceptional scalar step is the outer output-y equation;
+after it, the dichotomy at `xq=xa` remains: exclude
 `yq=-ya` and establish `yq=ya` from the nine equations and `yc != -yc`.
 The concrete order-two pattern suggests that the tangent domain at `C`, not an
 arbitrary denominator, is the ultimate source, but no generic division-free
@@ -859,9 +876,10 @@ xq = xa, yq = ya, ya != -ya, and a doubling relation at A with output 2C.
 
 An opposite-y conclusion on `(A,Q)` would make that tree infinity and must be
 proved impossible from the scalar equations; it may not be excluded by a
-public classifier premise.  The three outer-secant identities, the
-coincident-x ordinate/domain bridge, and the three outer-doubling identities
-are the replacement obligations.  They are open.  They are not currently a
+public classifier premise.  The outer output-y identity, the coincident-x ordinate/domain bridge, and
+the
+three outer-doubling identities are the remaining replacement obligations.
+They are open.  They are not currently a
 direct specialization of
 `xcert-h-scalar-reconstruction`, `xcert-s-scalar-reconstruction`, or the
 four-`D` semantic X-CERT theorem.
@@ -882,9 +900,8 @@ including A-D4 and the self-inverse impossibility; (2) inverse/tangent with its
 derived outer `D/T` split (**semantic boundary complete**); (3) `DD-O`
 collinearity propagation (**semantic boundary complete**); and (4) `DD-T`
 independent-witness reconstruction plus its derived opposite-tree outcome.
-The recommended bounded order is: first identify and certify the missing
-common-curve scalar bridge exposed by the F11 countermodel, then reconstruct
-the three outer equations for `s=(p+t)-r`; then audit and certify the coincident-x
+The recommended bounded order is: next certify the outer output-y equation
+for `s=(p+t)-r`; then audit and certify the coincident-x
 ordinate/opposite-y exclusion; then certify its tangent equations; and only
 then package the combined semantic DD-T family.  Each implementation PR must
 stop after one subdivision, must expose only semantic relations or their exact

@@ -111,8 +111,8 @@ PR boundaries:
    the actual tangent triple and identifies `s=(p+t)-r` as the candidate
    opposite-tree witness.  The nine relation equations alone have an F11
    countermodel even with both inner x-differences and the tangent domain
-   nonzero.  First identify the exact common-curve scalar bridge that excludes
-   it; only then certify the three outer-secant equations.
+   nonzero.  The common-curve H/S bridge now certifies the outer slope and
+   output-x equations; certify the outer output-y equation next, then
    separately establish the coincident-x ordinate and opposite-y exclusion,
    then its three doubling equations, before semantic packaging.  Use the
    existing division-free secant and doubling relations as the scalar interface
