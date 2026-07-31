@@ -596,17 +596,15 @@ proving its nonzero hypotheses.  It cannot instantiate to unrestricted
 `GFIELD` without an additional assumption: the kernel's characteristic-two
 Boolean witness refutes the required nonzero-two obligation.  The new curve
 predicate avoids claiming such a generic instantiation.
-The exact architectural blocker is a missing certified connection making
-`field-add(field-one,field-one)` nonzero for the same constrained `GFIELD`
-operations (or an equivalent global characteristic-two exclusion).  Once that
-connection exists, `ya=-ya` gives `ya=0`; A-D4 gives
-`3*xa^2+a=0`; the curve equation and the standard resultant calculation then
-contradict the nonzero short-Weierstrass discriminant.  Until then,
-inverse/secant remains open.  Its outer distinct-x algebra, ordinate
-coincidence, and A-D4 reconstruction are not marked complete independently,
-because the requested certificate family and combined theorem cannot be
-certified at the current generic boundary.  No classifier or ad hoc nonzero
-premise should be added to hide this mismatch.
+The former architectural blocker is therefore resolved at the intended curve
+boundary.  What remains is the bounded inverse/secant proof itself: certify
+A-D4, certify the exact discriminant/resultant contradiction, and assemble the
+outer distinct-x and doubling branches under the single named predicate.  The
+self-inverse-to-zero step consumes the predicate's nonzero-two projection.
+Whether the resultant proof also consumes nonzero three must be established by
+that certificate rather than inferred from the combined predicate.  No
+classifier, independent characteristic premise, or ad hoc denominator premise
+should be added.
 
 #### B. Inverse translation with an inner tangent
 
