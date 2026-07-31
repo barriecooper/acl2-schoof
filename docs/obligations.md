@@ -654,7 +654,7 @@ and both output equations for the same negated witness.  Finally
 `affine-inverse-secant-translation` splits only on `xu=xa` and certifies the
 outer D/T disjunction.  Outer O is excluded by the self-inverse theorem rather
 than assumed away by a classifier premise.  The inverse/secant semantic family
-is complete.  DD-T and DD-T1, any nonautomatic mirrored exceptional results,
+is complete.  Corrected DD-T reconstruction, any nonautomatic mirrored exceptional results,
 mixed D/T, finite semantic assembly, unrestricted associativity, executable
 lifting, and group-law packaging remain open.
 
@@ -722,17 +722,75 @@ by semantic secant operand reversal and opposite-y symmetry together with
 order reversal, not by replaying the field proof or adding a second outer tag
 premise.
 
-If `(P,C)` is `T`, its semantic content is `P=C` with `yc != -yc`.  The missing
-certificate must first derive that the chord through `A,B` is tangent at `C`:
+If `(P,C)` is `T`, its semantic content is `P=C` with `yc != -yc`.  The former
+proposed DD-T1 equation `p*(yc+yc)=3*xc^2+a` is **false** and is retracted, not
+left as an open theorem.  A secant output is the reflection of the third
+intersection of its chord with the curve.  Consequently `P=C` says that the
+line through `A,B` meets the curve at `-C`; it does not make that line tangent
+at `C`.  The first secant witness `p` and the actual tangent witness `t` are
+independent.  Negating `p` does not repair the assertion.
+
+The checked-in F11 curve gives a small countermodel: with `a=1`, `b=6`,
+`A=(2,4)`, `B=(3,5)`, `C=(7,2)`, and `p=1`, all three points are on the curve
+and `(A,B,p,C)` satisfies the secant relation.  The second secant exists with
+`r=2` and `Q=(5,2)`; `C` is in the tangent domain, with `t=4` and
+`D=2C=(2,7)`.  Nevertheless `p*(yc+yc)=4` while `3*xc^2+a=5` modulo 11;
+`(-p)*(yc+yc)=7` also differs from 5.  The outer relation `(A,Q)->D` has
+witness `s=3`.
+
+The corrected independent-witness audit starts from exactly these nine
+relation equations (all operations and coefficients are fixed as in the
+semantic predicates, and the displayed associations abbreviate the checked-in
+`field-add` trees):
 
 ```text
-p (yc+yc) = 3 xc^2+a.                     (DD-T1)
+p*(xb-xa)=yb-ya        xc+xa+xb=p^2       yc+ya=p*(xa-xc)
+r*(xc-xb)=yc-yb        xq+xb+xc=r^2       yq+yb=r*(xb-xq)
+t*(yc+yc)=3*xc^2+a     xd+xc+xc=t^2       yd+yc=t*(xc-xd).
 ```
 
-It must then combine both inner secant triples, DD-T1, and the tangent output
-triple at `C` to prove the opposite-tree result.  In particular it must derive,
-from coordinates rather than an independent public classifier premise, exactly
-one of:
+Both inner secant triples and the actual tangent triple must therefore remain
+visible.  The audited candidate for the opposite-tree witness is
+`s=(p+t)-r`.  It is the specialization suggested by the four-secant S balance
+`p+q=r+tt` after the left outer witness `q` is replaced by the independent
+tangent witness `t`; the existing X-CERT theorem cannot itself be instantiated,
+because it assumes distinct-x outer secants and performs the corresponding
+cancellation.  Exhaustive temporary computations on the checked-in F11 curve
+and on several nonsingular F7 curves found this candidate correct in every
+applicable case.  In the countermodel it gives `1+4-2=3`, the actual outer
+slope.  The tempting candidates `p`, `-p`, `r`, and `t` respectively give
+`1`, `10`, `2`, and `4` there and are all refuted.
+
+A later outer-distinct-x certificate must derive, without division, exactly:
+
+```text
+s*(xq-xa)=yq-ya
+xd+xa+xq=s^2
+yd+ya=s*(xa-xd),                         s=(p+t)-r,
+```
+
+and then package `(A,Q,s,D)` as a secant relation.  A later coincident-x
+certificate must decide from the same nine equations whether `xq=xa` forces
+`yq=ya`; concrete F7 cases support the same `s=(p+t)-r` as the tangent witness
+at `A`.  If so, it must separately derive
+
+```text
+s*(ya+ya)=3*xa^2+a
+xd+xa+xa=s^2
+yd+ya=s*(xa-xd)
+```
+
+and derive `ya != -ya`, rather than assuming an outer classifier.  The first
+unresolved exceptional scalar step is the dichotomy at `xq=xa`: exclude
+`yq=-ya` and establish `yq=ya` from the nine equations and `yc != -yc`.
+The concrete order-two pattern suggests that the tangent domain at `C`, not an
+arbitrary denominator, is the ultimate source, but no generic division-free
+certificate for that implication has yet been audited.  Nonsingularity may be
+needed only if the scalar derivation reaches a common curve/tangent root; it
+must not be added speculatively.
+
+Thus DD-T must eventually derive, from coordinates rather than an independent
+public classifier premise, exactly one of:
 
 ```text
 xq != xa, and a secant relation for (A,Q) with the same tangent output 2C; or
@@ -740,10 +798,11 @@ xq = xa, yq = ya, ya != -ya, and a doubling relation at A with output 2C.
 ```
 
 An opposite-y conclusion on `(A,Q)` would make that tree infinity and must be
-proved impossible because `C` is in the non-opposite tangent domain.  The
-needed DD-T1 repeated-root bridge and this derived `D/T` opposite-tree split
-are open.  They materially replace an outer secant equation and its nonzero
-denominator, so they are not currently a direct specialization of
+proved impossible from the scalar equations; it may not be excluded by a
+public classifier premise.  The three outer-secant identities, the
+coincident-x ordinate/domain bridge, and the three outer-doubling identities
+are the replacement obligations.  They are open.  They are not currently a
+direct specialization of
 `xcert-h-scalar-reconstruction`, `xcert-s-scalar-reconstruction`, or the
 four-`D` semantic X-CERT theorem.
 
@@ -752,8 +811,9 @@ four-`D` semantic X-CERT theorem.
 One large common chord certificate is **not currently justified**.  The
 inverse families are witness-negation/output-reuse arguments; `DD-O` is
 collinearity propagation with one legitimate cancellation; and `DD-T` needs a
-new repeated-root tangency bridge.  A future shared polynomial lemma may factor
-some curve algebra, but the public interfaces should remain separate oriented
+new independent-witness scalar reconstruction.  A future shared polynomial
+lemma may factor some curve algebra, but the public interfaces should remain
+separate oriented
 certificates unless ACL2 experiments show transparent specializations with no
 hidden nonzero hypotheses.
 
@@ -761,7 +821,11 @@ Stage 3 therefore remains partially open and is subdivided into: (1) inverse/sec
 including A-D4 and the self-inverse impossibility; (2) inverse/tangent with its
 derived outer `D/T` split (**semantic boundary complete**); (3) `DD-O`
 collinearity propagation (**semantic boundary complete**); and (4) `DD-T`
-tangency plus its derived opposite-tree outcome.  Each implementation PR must
+independent-witness reconstruction plus its derived opposite-tree outcome.
+The recommended bounded order is: first certify a field-only distinct-x
+reconstruction for `s=(p+t)-r`; then audit and certify the coincident-x
+ordinate/opposite-y exclusion; then certify its tangent equations; and only
+then package the combined semantic DD-T family.  Each implementation PR must
 stop after one subdivision, must expose only semantic relations or their exact
 scalar equations, and must not proceed if it needs an independent opposite
 outer classification.  Mixed `D/T`, finite assembly, unrestricted

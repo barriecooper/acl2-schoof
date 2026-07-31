@@ -104,10 +104,17 @@ PR boundaries:
    (**semantic certificate complete**), deriving rather than assuming the outer
    outcome; (c) `D/D` outer `O` by collinearity propagation
    (**semantic certificate complete**); and (d) `D/D`
-   outer `T` by a separate
-   tangency/repeated-root bridge.  Use the existing division-free secant and
-   doubling relations as the scalar interface and package results through
-   `curve-point-addition-relation-p` only afterwards.  The exact oriented
+   outer `T` by a separate independent-witness reconstruction.  The former
+   proposed bridge `p*(yc+yc)=3*xc^2+a` is false: a secant output reflects the
+   third chord intersection, and its witness is independent of the tangent
+   witness at that output.  The corrected audit keeps both inner secants and
+   the actual tangent triple and identifies `s=(p+t)-r` as the candidate
+   opposite-tree witness.  Certify its three outer-secant equations first;
+   separately establish the coincident-x ordinate and opposite-y exclusion,
+   then its three doubling equations, before semantic packaging.  Use the
+   existing division-free secant and doubling relations as the scalar interface
+   and package results through `curve-point-addition-relation-p` only
+   afterwards.  The exact oriented
    equations and residual conclusions are recorded in the obligation ledger.
    Stop an implementation PR after one subdivision certifies; stop earlier if
    the opposite-tree outcome cannot be derived without an additional nonzero
