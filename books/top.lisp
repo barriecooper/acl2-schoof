@@ -101,6 +101,8 @@
 (include-book "curve/affine-inverse-tangent-translation-regression")
 (include-book "curve/affine-dd-opposite-y-propagation")
 (include-book "curve/affine-dd-opposite-y-propagation-regression")
+(include-book "curve/affine-dd-t-outer-distinct-x-slope")
+(include-book "curve/affine-dd-t-outer-distinct-x-slope-regression")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")
