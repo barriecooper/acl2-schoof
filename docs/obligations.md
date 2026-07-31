@@ -757,11 +757,38 @@ tangent witness `t`; the existing X-CERT theorem cannot itself be instantiated,
 because it assumes distinct-x outer secants and performs the corresponding
 cancellation.  Exhaustive temporary computations on the checked-in F11 curve
 and on several nonsingular F7 curves found this candidate correct in every
-applicable case.  In the countermodel it gives `1+4-2=3`, the actual outer
+applicable curve case.  In the countermodel it gives `1+4-2=3`, the actual outer
 slope.  The tempting candidates `p`, `-p`, `r`, and `t` respectively give
-`1`, `10`, `2`, and `4` there and are all refuted.
+`1`, `10`, `2`, and `4` there and are all refuted.  Those computations did not
+establish that the nine relation equations alone suffice.
 
-A later outer-distinct-x certificate must derive, without division, exactly:
+The field-only audit is stopped by a concrete F11 countermodel to the first
+requested endpoint.  Take
+
+```text
+a=8,
+A=(xa,ya)=(0,1), B=(xb,yb)=(1,1), C=(xc,yc)=(10,10),
+Q=(xq,yq)=(1,10), D=(xd,yd)=(2,1),
+p=0, r=1, t=0.
+```
+
+All nine displayed equations hold modulo 11 (including both nonzero inner
+x-differences and the tangent-domain inequality `yc != -yc`).  However the
+fixed candidate is `s=(p+t)-r=10`, and the outer slope residual is
+`s*(xq-xa)-(yq-ya)=1`, not zero.  Thus no theorem with exactly those nine
+hypotheses can certify even the outer slope equation, and the output-x and
+output-y endpoints cannot be packaged as the requested combined boundary.
+No omission among the nine equations causes this failure.  The countermodel
+is not a common-curve model: the three coordinates give incompatible values
+of the constant `b` in `y^2=x^3+a*x+b`.  Consequently a curve-equation bridge
+(or an equivalent scalar consequence of common curve membership) is
+mathematically necessary before this witness can be reconstructed.  Merely
+adding the tangent-domain premise, either inner nonzero denominator, a
+characteristic premise, or an outer distinct-x premise does not remove this
+countermodel.
+
+A later curve-aware outer-distinct-x certificate may derive, without division,
+exactly:
 
 ```text
 s*(xq-xa)=yq-ya
@@ -771,7 +798,7 @@ yd+ya=s*(xa-xd),                         s=(p+t)-r,
 
 and then package `(A,Q,s,D)` as a secant relation.  A later coincident-x
 certificate must decide from the same nine equations whether `xq=xa` forces
-`yq=ya`; concrete F7 cases support the same `s=(p+t)-r` as the tangent witness
+`yq=ya`; concrete F7 curve cases support the same `s=(p+t)-r` as the tangent witness
 at `A`.  If so, it must separately derive
 
 ```text
@@ -781,7 +808,10 @@ yd+ya=s*(xa-xd)
 ```
 
 and derive `ya != -ya`, rather than assuming an outer classifier.  The first
-unresolved exceptional scalar step is the dichotomy at `xq=xa`: exclude
+unresolved scalar step is now the outer slope equation itself: the nine
+relation equations must first be supplemented by an exact consequence of
+common curve membership.  Only after that repair is the exceptional scalar
+step the dichotomy at `xq=xa`: exclude
 `yq=-ya` and establish `yq=ya` from the nine equations and `yc != -yc`.
 The concrete order-two pattern suggests that the tangent domain at `C`, not an
 arbitrary denominator, is the ultimate source, but no generic division-free
@@ -822,8 +852,9 @@ including A-D4 and the self-inverse impossibility; (2) inverse/tangent with its
 derived outer `D/T` split (**semantic boundary complete**); (3) `DD-O`
 collinearity propagation (**semantic boundary complete**); and (4) `DD-T`
 independent-witness reconstruction plus its derived opposite-tree outcome.
-The recommended bounded order is: first certify a field-only distinct-x
-reconstruction for `s=(p+t)-r`; then audit and certify the coincident-x
+The recommended bounded order is: first identify and certify the missing
+common-curve scalar bridge exposed by the F11 countermodel, then reconstruct
+the three outer equations for `s=(p+t)-r`; then audit and certify the coincident-x
 ordinate/opposite-y exclusion; then certify its tangent equations; and only
 then package the combined semantic DD-T family.  Each implementation PR must
 stop after one subdivision, must expose only semantic relations or their exact

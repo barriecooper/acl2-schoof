@@ -109,7 +109,10 @@ PR boundaries:
    third chord intersection, and its witness is independent of the tangent
    witness at that output.  The corrected audit keeps both inner secants and
    the actual tangent triple and identifies `s=(p+t)-r` as the candidate
-   opposite-tree witness.  Certify its three outer-secant equations first;
+   opposite-tree witness.  The nine relation equations alone have an F11
+   countermodel even with both inner x-differences and the tangent domain
+   nonzero.  First identify the exact common-curve scalar bridge that excludes
+   it; only then certify the three outer-secant equations.
    separately establish the coincident-x ordinate and opposite-y exclusion,
    then its three doubling equations, before semantic packaging.  Use the
    existing division-free secant and doubling relations as the scalar interface
