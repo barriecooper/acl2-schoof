@@ -25,10 +25,14 @@ correctness.
   including additive and multiplicative closure, identities, inverses,
   distributivity, cancellation, and congruence modulo fixing.
 - Natural powers and their generated fast/spec correspondence.
-- Equal-squares alternatives, characteristic-two and characteristic-three
-  exclusions used by the short-Weierstrass layer, and a minimal positive
-  Frobenius exponent satisfying the fixed-representative power equation.
+- Equal-squares alternatives and a minimal positive Frobenius exponent
+  satisfying the fixed-representative power equation.  `GFIELD` itself remains
+  unrestricted by characteristic.
 - PFIELD adaptation and named executable F2, F7, and F11 instances.
+- The curve-level `short-weierstrass-characteristic-p` states nonzero two and
+  nonzero three using the actual `GFIELD` operations, exposes both facts
+  separately, and proves that a self-inverse field element is zero under that
+  premise.  F7, F11, and the concrete F7X2 extension satisfy the boundary.
 
 ### Qualifications and non-claims
 
@@ -41,7 +45,8 @@ correctness.
 
 - Generic finite-field cardinality/enumeration metadata and a connection from
   that metadata to the Frobenius exponent are open.
-- Characteristics two and three are deferred for the initial curve scope.
+- Characteristics two and three are deferred for the initial curve scope;
+  their exclusion is a curve predicate, not a generic-field axiom.
 
 ### Relevant public interface
 
@@ -569,6 +574,28 @@ secant relation; and `xu=xa` and `ya=-ya`.  Thus the requested combined `D/T`
 conclusion is also false: the outer pair `(A,U)` is opposite-y/self-inverse,
 not a valid doubling pair.
 
+The characteristic interface is now certified as
+`short-weierstrass-characteristic-p`: it makes
+`field-add(field-one,field-one)` nonzero for the same constrained `GFIELD`
+operations and also records nonzero three.  Under that explicit curve premise,
+`ya=-ya` gives `ya=0`; A-D4 gives
+`3*xa^2+a=0`; the curve equation and the standard resultant calculation then
+contradict the nonzero short-Weierstrass discriminant.  Inverse/secant remains
+open until a later bounded certificate consumes this premise.  Its outer
+distinct-x algebra, ordinate
+coincidence, and A-D4 reconstruction are not marked complete independently,
+because the requested certificate family and combined theorem cannot be
+certified at the unrestricted generic boundary.  The named characteristic
+predicate—not a classifier or ad hoc denominator premise—is the approved
+scope correction.
+
+The earlier `ADDITIVE-FIELD` theorems remain a separate reusable
+functional-instantiation template over `additive-field-fix`, zero, one, add,
+and repeated addition.  F7 and F11 instantiate it only after separately
+proving its nonzero hypotheses.  It cannot instantiate to unrestricted
+`GFIELD` without an additional assumption: the kernel's characteristic-two
+Boolean witness refutes the required nonzero-two obligation.  The new curve
+predicate avoids claiming such a generic instantiation.
 The exact architectural blocker is a missing certified connection making
 `field-add(field-one,field-one)` nonzero for the same constrained `GFIELD`
 operations (or an equivalent global characteristic-two exclusion).  Once that

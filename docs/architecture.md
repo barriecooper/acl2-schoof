@@ -139,9 +139,46 @@ finite-field package.
 ## Curve representations
 
 The initial curve layer uses constrained short-Weierstrass coefficients and
-total field operations. It assumes the nonzero standard discriminant
-expression and the separately certified exclusions of characteristics two and
-three.
+total field operations.  The generic `GFIELD` interface remains unrestricted
+by characteristic, because F2 and generic polynomial and quotient-field work
+are legitimate clients.  The curve-level predicate
+`short-weierstrass-characteristic-p` is the single explicit boundary for the
+initial characteristic-greater-than-three model: it asserts that the canonical
+field numerals two and three, expressed with the actual `field-*` operations,
+are nonzero.  It also certifies the characteristic-dependent consequence that
+a self-inverse field element is zero.
+
+ACL2 cannot add assumptions about already constrained `GFIELD` symbols merely
+by including a second encapsulate: a genuinely assumption-free constrained
+extension would have to duplicate or regenerate the complete field signature.
+The current least-invasive architecture therefore keeps existing
+characteristic-independent curve definitions and theorems unchanged and uses
+one named predicate premise only for results which need the restricted scope.
+`short-weierstrass.lisp` includes that interface at the common equation root,
+without making curve membership itself depend on it or changing executable
+addition.  The nonzero standard discriminant remains the coefficient
+constraint.
+
+The short equation and its displayed derivative remain meaningful in
+characteristic three (where the `3*x^2` term vanishes), so the checked-in basic
+formulas alone do not force a characteristic-three exclusion.  Nonzero three
+is nevertheless part of the declared first curve boundary to match the
+project's characteristic-greater-than-three scope and avoid committing future
+division-polynomial and Schoof work to small-characteristic special cases.
+Characteristic two requires a different general Weierstrass model; supported
+small-characteristic theories may be added separately later.
+
+The dependency cut is deliberate.  Generic field fixing, affine/tagged
+representations, the curve equation as a predicate, secant-only identities,
+classifiers, dispatchers, semantic relations, structural associativity,
+X-CERT, inverse/tangent, and DD-O retain their existing statements because
+their certified proofs do not require nonzero two or three.  Tangent and
+exceptional nonsingularity arguments that actually eliminate self-inverse or
+repeated-root degenerations are the first consumers of the named premise.
+Concrete F7 and F11 regressions discharge it directly.  F7X2 also discharges
+it concretely through its quotient operations; a reusable theorem that an
+arbitrary fixed-modulus extension inherits the base-field characteristic is
+still open and should precede generic extension-field curve instantiation.
 
 An **affine coordinate** is a canonical two-element list `(x y)` after field
 fixing. Structural recognition is separate from satisfaction of the curve
