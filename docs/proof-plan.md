@@ -111,10 +111,14 @@ PR boundaries:
    the actual tangent triple and identifies `s=(p+t)-r` as the candidate
    opposite-tree witness.  The nine relation equations alone have an F11
    countermodel even with both inner x-differences and the tangent domain
-   nonzero.  The common-curve H/S bridge now certifies the outer slope and
-   output-x equations; certify the outer output-y equation next, then
-   separately establish the coincident-x ordinate and opposite-y exclusion,
-   then its three doubling equations, before semantic packaging.  Use the
+   nonzero.  The common-curve H/S bridge now certifies the outer slope,
+   output-x, and output-y equations, and these are packaged into the public
+   outer distinct-x secant relation with the exact fixed witness
+   `s=(p+t)-r`.  That branch is complete, characteristic-independent, and
+   classifier-free.  Next separately establish the coincident-x ordinate and
+   opposite-y exclusion, then the tangent numerator at `A` and the coincident-x
+   output-x and output-y equations, before packaging the outer doubling
+   relation and combined DD-T result.  Use the
    existing division-free secant and doubling relations as the scalar interface
    and package results through `curve-point-addition-relation-p` only
    afterwards.  The exact oriented
