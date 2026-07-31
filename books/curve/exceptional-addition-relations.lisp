@@ -35,6 +35,22 @@
        affine-coordinates-y-of-fix
        curve-point-fix-idempotent)))))
 
+(defthm affine-opposite-y-infinity-relation-p-symmetric
+  (implies
+   (affine-opposite-y-infinity-relation-p first second output)
+   (affine-opposite-y-infinity-relation-p second first output))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance field-neg-of-neg
+                     (x (affine-coordinates-y first))))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(affine-opposite-y-infinity-relation-p
+       field-element-p-of-affine-coordinates-y
+       field-fix-when-field-element-p)))))
+
 (defthm affine-opposite-y-infinity-relation-output-determinate
   (implies
    (and (affine-opposite-y-infinity-relation-p first second output-a)

@@ -115,9 +115,13 @@ PR boundaries:
    output-x, and output-y equations, and these are packaged into the public
    outer distinct-x secant relation with the exact fixed witness
    `s=(p+t)-r`.  That branch is complete, characteristic-independent, and
-   classifier-free.  Next separately establish the coincident-x ordinate and
-   opposite-y exclusion, then the tangent numerator at `A` and the coincident-x
-   output-x and output-y equations, before packaging the outer doubling
+   classifier-free.  The coincident-x ordinate and opposite-y exclusion are
+   now certified: the common-curve equal-x dichotomy gives equal or opposite
+   ordinates, and structural secant/opposite-y reversal mirrors DD-O so that
+   the opposite alternative contradicts the tangent domain at `C`.  This step
+   is characteristic-independent.  Next establish `ya != -ya`, the tangent
+   numerator at `A`, and the coincident-x output-x and output-y equations,
+   before packaging the outer doubling
    relation and combined DD-T result.  Use the
    existing division-free secant and doubling relations as the scalar interface
    and package results through `curve-point-addition-relation-p` only

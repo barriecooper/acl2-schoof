@@ -2,6 +2,7 @@
 
 (include-book "affine-distinct-x-secant-relation")
 (include-book "exceptional-addition-relations")
+(include-book "curve-point-addition-commutativity")
 
 ; Proof-local additive normalization for the oriented DD-O certificate.
 (local
@@ -390,3 +391,28 @@
        field-fix-of-add field-fix-of-neg
        field-element-p-of-affine-coordinates-x
        field-element-p-of-affine-coordinates-y)))))
+
+; The converse tree orientation is structural: reverse both inner secants,
+; reverse the opposite-y pair, and apply the oriented DD-O certificate to the
+; point order C,B,A.  No coordinate algebra is replayed here.
+(defthm affine-dd-opposite-y-propagates-to-left-tree
+  (implies
+   (and (affine-distinct-x-secant-relation-p a b p-slope c)
+        (affine-distinct-x-secant-relation-p b c r-slope q)
+        (affine-opposite-y-infinity-relation-p a q infinity))
+   (affine-opposite-y-infinity-relation-p c c infinity))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    ((:instance affine-distinct-x-secant-relation-p-reverse
+                (first a) (second b) (slope p-slope) (output c))
+     (:instance affine-distinct-x-secant-relation-p-reverse
+                (first b) (second c) (slope r-slope) (output q))
+     (:instance affine-opposite-y-infinity-relation-p-symmetric
+                (first a) (second q) (output infinity))
+     (:instance affine-dd-opposite-y-propagates-to-other-tree
+                (a c) (b b) (c a)
+                (p-slope r-slope) (p q)
+                (r-slope p-slope) (q c)))
+    :in-theory (theory 'minimal-theory))))
