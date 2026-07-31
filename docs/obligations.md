@@ -611,8 +611,17 @@ unfactored subtraction bridge now feeds the certified generic
 factor the remaining right-hand side.  The certified
 `short-weierstrass-curve-equations-imply-factored-square-difference` corollary
 therefore exposes the single factor `xc-xa` from the curve square difference.
-Repeated-root substitution and A-D4 remain open; these factorization theorems
-do not certify any part of the A-D4 conclusion itself.  The
+The generic `field-difference-of-squares` now supplies the matching
+`(yc-ya)(yc+ya)` factorization.  Combining it with the inverse/secant line
+equation exposes the separately proved common-factor equality
+`(xc-xa)*(r*(yc-ya))=(xc-xa)*(xc^2+xc*xa+xa^2+a)`.  The inner secant domain,
+together with coordinate field-element closure, makes `xc-xa` nonzero via the
+kernel subtraction-zero theorem; left cancellation therefore certifies
+`r*(yc-ya)=xc^2+xc*xa+xa^2+a`.  The public semantic specialization derives
+this relation directly from the inverse relation, the inner secant relation,
+and coincident outer x-output, without a characteristic premise, inverse, or
+division.  Substitution of `yc`, simplification using `r^2`, and A-D4 remain
+open; this repeated-root prerequisite does not certify A-D4 itself.  The
 self-inverse-to-zero step consumes the predicate's nonzero-two projection.
 Whether the resultant proof also consumes nonzero three must be established by
 that certificate rather than inferred from the combined predicate.  No
