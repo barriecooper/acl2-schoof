@@ -5,6 +5,8 @@
 (include-book "field/difference-of-squares")
 (include-book "field/common-summand-subtraction")
 (include-book "field/common-summand-subtraction-regression")
+(include-book "field/two-line-telescope")
+(include-book "field/two-line-telescope-regression")
 (include-book "field/cubic-plus-linear-difference-factorization")
 (include-book "field/cubic-plus-linear-difference-factorization-regression")
 (include-book "field/xcert-algebra")

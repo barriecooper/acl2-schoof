@@ -855,6 +855,16 @@ Mirrored DD-O propagation produces the `(C,C)` opposite-y relation and hence
 `yc=-yc`, contradicting the tangent-domain conjunct of doubling at `C`.
 Consequently `affine-dd-t-coincident-x-excludes-self-inverse` proves
 `ya != -ya` characteristic-independently, without coordinate algebra.
+The generic additive prerequisite for that numerator reconstruction is now
+certified separately: from exactly `yb-ya=p*delta` and
+`ya+yb=r*delta`, `field-two-line-equations-imply-doubled-first-ordinate`
+derives `ya+ya=(r-p)*delta`.  Its proof subtracts the two oriented line
+equations, using the bounded identities `(ya+yb)-(yb-ya)=ya+ya` and
+`r*delta-p*delta=(r-p)*delta`; it needs no element or nonzero hypotheses.
+The audited DD-T specialization still has H equation
+`(p-r)*(p+t)=xa-xc`, while its final unresolved residual remains
+`s*(ya+ya)-(3*xa^2+a)=0` for `s=(p+t)-r`.
+
 Still open are the tangent numerator at `A` for
 `s=(p+t)-r`, coincident-x output-x and output-y, the outer doubling relation,
 combined DD-T, mixed D/T, finite semantic assembly, and unrestricted
