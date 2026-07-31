@@ -278,9 +278,15 @@ one secant or tangent witness, followed by a derived outer secant/doubling
 split.  An outer-`O` `D/D` degeneration is instead a collinearity propagation
 argument with one available nonzero secant denominator; an outer-`T`
 degeneration replaces an outer secant equation by a tangent equation and needs
-a repeated-root/tangency bridge.  A common theorem should be introduced only
-if those oriented specializations remain explicit and require no hidden
-nonzero premise.
+an independent-witness reconstruction.  The earlier proposed DD-T1 bridge was
+incorrect: the secant result is the reflection of the chord's third
+intersection, so equality of that result with the tangent input does not make
+the secant witness a tangent witness.  The two inner secant witnesses and the
+actual tangent witness must remain independent; the audited candidate for the
+opposite-tree witness is `(p+t)-r`.  Its distinct-x equations and the separate
+coincident-x/opposite-y analysis remain open.  A common theorem should be
+introduced only if those oriented specializations remain explicit and require
+no hidden nonzero premise.
 
 The inverse/tangent specialization is certified at the semantic relation
 boundary by `affine-inverse-tangent-translation`.  It negates the inner tangent
