@@ -600,6 +600,12 @@ The former architectural blocker is therefore resolved at the intended curve
 boundary.  What remains is the bounded inverse/secant proof itself: certify
 A-D4, certify the exact discriminant/resultant contradiction, and assemble the
 outer distinct-x and doubling branches under the single named predicate.  The
+self-contained additive-normalization prerequisite is now certified separately:
+`field-sub-eliminate-common-right-summand` removes a shared right summand from
+two equal field sums, and
+`short-weierstrass-curve-equations-imply-square-difference` instantiates it to
+cancel the common curve constant from the two scalar curve equations.  This
+unfactored subtraction bridge does not certify any part of A-D4 itself.  The
 self-inverse-to-zero step consumes the predicate's nonzero-two projection.
 Whether the resultant proof also consumes nonzero three must be established by
 that certificate rather than inferred from the combined predicate.  No
