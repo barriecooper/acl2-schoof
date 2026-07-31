@@ -605,7 +605,14 @@ self-contained additive-normalization prerequisite is now certified separately:
 two equal field sums, and
 `short-weierstrass-curve-equations-imply-square-difference` instantiates it to
 cancel the common curve constant from the two scalar curve equations.  This
-unfactored subtraction bridge does not certify any part of A-D4 itself.  The
+unfactored subtraction bridge now feeds the certified generic
+`field-cubic-plus-linear-difference-factorization`, whose public
+`field-difference-of-cubes` prerequisite and a local linear-term distribution
+factor the remaining right-hand side.  The certified
+`short-weierstrass-curve-equations-imply-factored-square-difference` corollary
+therefore exposes the single factor `xc-xa` from the curve square difference.
+Repeated-root substitution and A-D4 remain open; these factorization theorems
+do not certify any part of the A-D4 conclusion itself.  The
 self-inverse-to-zero step consumes the predicate's nonzero-two projection.
 Whether the resultant proof also consumes nonzero three must be established by
 that certificate rather than inferred from the combined predicate.  No
