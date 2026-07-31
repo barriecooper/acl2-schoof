@@ -253,6 +253,14 @@ transports the tangent-domain fact across affine negation.  The derived `D/T`
 disjunction excludes outer opposite-y without a classifier premise, extra
 nonzero assumption, division, or new curve polynomial identity.
 
+The oriented outer-opposite `D/D` specialization is certified at the same
+classifier-free boundary by `affine-dd-opposite-y-propagates-to-other-tree`.
+Two inner distinct-x secant relations and the left outer opposite-y relation
+derive the opposite outer relation.  Its sole multiplicative cancellation uses
+the nonzero `(B,C)` secant difference; there is no outer denominator or outer
+classifier premise.  The mirrored orientation is reserved for semantic
+operand/order reversal rather than a duplicate coordinate certificate.
+
 ## Design constraints for later work
 
 - Preserve total fixer semantics at public ACL2 boundaries and state clearly
