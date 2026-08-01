@@ -1387,13 +1387,37 @@ validation over the already counted coincident-x configurations confirms the
 exact witness in all 216 F7 cases and all 1,000 F11 cases, with no
 counterexamples; this enumeration is validation rather than proof.
 
-The certified tangent-domain theorem separately records `yA != -yA` for later
-canonical slope identification, while the numerator proof itself uses only
-the certified equalities `xQ=xA` and `yQ=yA` and does not identify the witness
-with a canonical tangent function.  The remaining open endpoints are output
-x, output y, semantic doubling packaging, outer O/O degeneration, the combined
-oriented D/T theorem, the T/D mirror, finite semantic assembly, and
-unrestricted associativity.
+The coincident-x output-x endpoint is now certified as
+`affine-dt-d-coincident-x-output-x-equation`, with the same four semantic
+premises and exact witness `s=(p+q)-t`.  Its canonical tangent slope is
+`u=affine-same-point-non-opposite-slope(A)`.  The tangent-domain theorem gives
+`yA != -yA`, hence the local bridge `yA+yA != 0`; cancelling exactly this
+doubled ordinate between the public tangent equation for `s` and the canonical
+tangent-numerator reconstruction proves `s=u`.  This is the only new local
+cancellation in the output-x book.
+
+For canonical tangent output x
+`xD=affine-same-point-non-opposite-output-x(A)`, the canonical scalar
+rearrangement is `xD+2*xA=u^2`; the public theorem preserves the repository's
+left-associated doubling convention `(xD+xA)+xA=u^2`.  Confluent H supplies
+`(p-t)*(p+q)=xA-xB`, which is only converted to the zero orientation required
+by `xcert-h`.  The equality `s=u` and the witness balance give `p+q=t+u`, hence
+`xcert-s=0` without cancellation.  The telescope specializes `xl=xR`, `xr=xD`,
+`xab=xP`, `xbc=xQ`, `xc=xB`, with outer slopes `q/u`; its four equations are
+the three semantic output-x equations and the canonical tangent rearrangement,
+aligned by `xQ=xA`.  `xcert-composition` yields `xR-xD=0`, hence `xD=xR`, with
+no composition-stage cancellation.  Substitution proves `xR+xA+xA=s^2`.
+
+The complete cancellation inventory is `xB-xA` and `xB-xP`, internal to the
+certified confluent-H reconstruction, plus `yA+yA` solely for local canonical
+slope uniqueness.  No characteristic or classifier premise, division,
+inverse, output denominator, or independent public nonzero hypothesis is used.
+Exhaustive validation of the exact target passes all 216 applicable F7 and all
+1,000 applicable F11 configurations, with no counterexamples.  The focused
+minimal-theory regression invokes only the public output-x theorem.
+Coincident-x output y, semantic doubling packaging, outer O/O degeneration,
+combined oriented D/T, the T/D mirror, finite semantic assembly, and
+unrestricted associativity remain open.
 
 Exhaustive F7/F11 validation of the existing semantic data finds respectively
 216 and 1,000 applicable coincident-x configurations with a left outer secant;
