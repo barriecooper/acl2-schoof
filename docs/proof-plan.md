@@ -148,7 +148,7 @@ PR boundaries:
    Stop an implementation PR after one subdivision certifies; stop earlier if
    the opposite-tree outcome cannot be derived without an additional nonzero
    assumption or an independent outer classifier premise.
-4. **Mixed-inner secant/tangent certificate (next: tangent numerator at A).**
+4. **Mixed-inner secant/tangent certificate (next: coincident-x output x).**
    The field-only confluent H reconstructions and the public
    `affine-dt-d-outer-distinct-x-slope-equation` and the corresponding public
    outer distinct-x output-x and output-y equations are complete.  The public
@@ -163,8 +163,11 @@ PR boundaries:
    the opposite ordinate against the left outer secant.  The tangent-domain
    endpoint is now also certified: under `yA=-yA`, ordinate equality packages
    `A=-Q`, mixed propagation gives `P=-B`, and its x equality contradicts the
-   second secant's distinct-x clause.  Next prove only the tangent numerator at
-   `A`; output equations remain later separate endpoints.
+   second secant's distinct-x clause.  The coincident-x tangent numerator at
+   `A` is now certified for the exact witness `s=p+q-t`, using the doubled
+   ordinate telescope, confluent H, the tangent numerator at `B`, and doubling
+   output x.  Next prove only coincident-x output x; output y and semantic
+   doubling packaging remain later separate endpoints.
    Here `D/T` means that `A+B=P` is a distinct-x secant and `B+B=Q` is a
    doubling; it does not describe an outer pair.  The bounded left-outer-secant
    translation from the three public premises `(A,B,p,P)`, `(B,t,Q)`, and
