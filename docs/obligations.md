@@ -961,12 +961,24 @@ endpoints `affine-dd-t-coincident-x-implies-ordinate-equality`,
 `affine-dd-t-coincident-x-output-y-equation`; curve membership of `A` and `D`
 comes from the first secant and the doubling relation at `C`.  The packaging is
 characteristic-independent and adds no classifier, division, inverse, or
-independent denominator premise.  Thus only the DD-T coincident-x semantic
-doubling branch is complete.
+independent denominator premise.  Thus the DD-T coincident-x semantic doubling
+branch is complete.
 
-Still open are the combined DD-T secant/doubling disjunction, mixed D/T, finite
-semantic assembly, unrestricted associativity, executable lifting, and final
-group-law packaging.
+`affine-dd-t-translation` now completes the DD-T family at the affine semantic
+relation boundary.  From exactly the two secant relations `(A,B,p,C)` and
+`(B,C,r,Q)` and the doubling relation `(C,t,D)`, it splits only on `xq=xa`.
+The disequality case invokes
+`affine-dd-t-outer-distinct-x-translation` for the secant result, and the
+equality case invokes `affine-dd-t-coincident-x-translation` for the doubling
+result.  Both disjuncts use the syntactically identical witness
+`(field-sub (field-add (field-fix p-slope) (field-fix t-slope))
+(field-fix r-slope))`.  The composition is characteristic-independent and has
+no classifier, division, inverse, or independent denominator premise; neither
+branch proof is replayed.
+
+Still open are the mixed D/T exceptional families, finite affine semantic
+assembly, unrestricted associativity, lifting to the full curve-point
+relations, executable correctness, and final group-law packaging.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
 requested endpoint.  Take
