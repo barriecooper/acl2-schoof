@@ -542,6 +542,30 @@
                  (:instance xcert-s-residual-zero-from-h-local))
            :in-theory (theory 'minimal-theory)))))
 
+; Stable factored S interface for confluent specializations.  Unlike the
+; scalar reconstruction below, this theorem consumes an already reconstructed
+; H equation and therefore permits the third input pair to coincide.
+(defthm xcert-s-factored-reconstruction-from-h
+ (implies
+  (and
+   (equal (field-mul (field-sub p r) (field-add p q))
+          (field-sub xa xc))
+   (equal (field-mul p (field-sub xb xa)) (field-sub yb ya))
+   (equal (field-mul q (field-sub xc xab)) (field-sub yc yab))
+   (equal (field-mul r (field-sub xc xb)) (field-sub yc yb))
+   (equal (field-mul tt (field-sub xbc xa)) (field-sub ybc ya))
+   (equal (field-add (field-add xab xa) xb) (field-mul p p))
+   (equal (field-add yab ya) (field-mul p (field-sub xa xab)))
+   (equal (field-add (field-add xbc xb) xc) (field-mul r r))
+   (equal (field-add ybc yb) (field-mul r (field-sub xb xbc))))
+  (equal
+   (field-mul (field-sub xbc xa)
+    (field-sub (field-add p q) (field-add r tt)))
+   (field-zero)))
+ :rule-classes nil
+ :hints (("Goal" :use ((:instance xcert-s-zero-product-local))
+          :in-theory (theory 'minimal-theory))))
+
 (defthm xcert-s-scalar-reconstruction
  (implies
   (and

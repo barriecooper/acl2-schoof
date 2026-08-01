@@ -1179,8 +1179,33 @@ quadratic identity
 gives the exact public two-factor residual above.  The scalar theorem cancels
 `xb-xa` first and `xb-xp` second, in separate kernel cancellation steps.
 No characteristic, curve predicate, classifier, division, inverse, or trust
-mechanism is used.  The later mixed D/T outer S residual and public curve-level
-slope endpoint remain open.
+mechanism is used.
+
+The mixed-inner D/T outer-distinct-x slope endpoint is now certified as
+`affine-dt-d-outer-distinct-x-slope-equation`, for the semantic inputs
+`A+B=P` (slope `p`), `B+B=Q` (tangent `t`), and `P+B=R` (slope `q`), with
+witness `(p+q)-t`.  Its confluent H specialization uses exactly: the ordered
+input identities for `(A,B,p)` and `(P,B,q)`; the tangent numerator at `B`;
+the ordered line equations for those two secants; and the output-x and
+output-y equations of the first secant.  The conclusion is
+`(p-t)*(p+q)=xA-xB`.  The reusable field S bridge
+`xcert-s-factored-reconstruction-from-h` is specialized with `xc=xb`,
+`xab=P`, `xbc=Q`, `r=t`, and `tt=u`, where
+`u=affine-distinct-x-slope(A,Q)`.  Its remaining inputs are the first secant
+line/output equations, the second secant line equation, the vacuous tangent
+line equation at `(B,B)`, the tangent output equations for `Q`, and the
+canonical outer equation `u*(xQ-xA)=yQ-yA`.  It yields exactly
+`(xQ-xA)*(p+q-(t+u))=0`.
+
+The three and only three cancellations are `xB-xA` (first secant) and
+`xB-xP` (second secant) inside confluent H, followed by `xQ-xA` from the
+public outer disequality in the S stage.  Thus `p+q=t+u`, bounded additive
+normalization gives `(p+q)-t=u`, and canonical slope reconstruction gives the
+public slope equation.  The recorded F11 countermodel is excluded because it
+does not satisfy the two common-curve input identities consumed by confluent
+H.  Outer distinct-x output-x, output-y, semantic packaging, coincident-x D/T,
+O/O degeneration, complete D/T translation, the T/D mirror, finite semantic
+assembly, and unrestricted associativity remain open.
 
 Exhaustive enumeration over every short-Weierstrass equation
 `y^2=x^3+a*x+b` over F7 and F11, every non-self-inverse `B`, and every affine
