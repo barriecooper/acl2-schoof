@@ -1233,6 +1233,49 @@ hypothesis is used.  Outer distinct-x output-y and semantic secant packaging,
 coincident-x D/T analysis, O/O degeneration, complete D/T translation, the T/D
 mirror, finite semantic assembly, and unrestricted associativity remain open.
 
+The mixed-inner D/T outer-distinct-x output-y endpoint is now certified as
+`affine-dt-d-outer-distinct-x-output-y-equation`, with exactly the same four
+semantic premises and witness `(p+q)-t`.  Put `u` for the canonical slope of
+`(A,Q)` and `E` for its canonical output.  The proof reuses the public slope
+endpoint to establish `(p+q)-t=u`, and recovers `x(E)=xR` by additive
+cancellation between the public output-x equation and the canonical output-x
+rearrangement.  Both equalities remain local.
+
+The exact `xcert-field-only-final-y-equal` specialization is `xab=P`, `xbc=Q`,
+`xc=B`, with left outer slope/output `q/R` and right outer slope/output `u/E`:
+`xl=xR`, `yl=yR`, `yr=yE`, `p=p`, `q=q`, `r=t`, and `tt=u`.  Its nine inputs
+are the output-x equations for `P`, `R`, the confluent H equation
+`(p-t)*(p+q)=xA-xB`, the balance `p+q=t+u`, the line equations for `A+B=P`,
+`B+B=Q` (whose difference is zero), and `P+B=R`, the output-y equation for
+`P+B=R`, and the canonical output-y equation for `A+Q=E`.  The canonical
+output-x equality is consumed in both outer output equations by setting the
+shared final abscissa to `xR=xE`.
+
+Before its bounded simplification, the exact specialized field residual is
+
+```text
+(yR-yE) - ((p-t)*(xR-xB) + (t-q)*(xA-xB)).
+```
+
+Equivalently, the two coefficients multiplying `xR-xB` and `xA-xB` are
+respectively `p-t` and `t-q`.  The final-y bridge derives
+`xR-xB=(q-t)*(p+q)` from the left output-x equation and H, substitutes
+`xA-xB=(p-t)*(p+q)` from H, and the two products cancel.  Its six-residual
+decomposition also consumes S as the zero coefficient
+`p+q-(t+u)` multiplying `xA-xR`; thus final-y introduces no cancellation.
+It concludes `y(E)=yR`.  Finally the canonical equation
+`y(E)+yA=u*(xA-x(E))`, together with `y(E)=yR`, `x(E)=xR`, and `u=(p+q)-t`,
+gives the public theorem in its required orientation.
+
+The complete inherited cancellation inventory is unchanged: `xB-xA` and
+`xB-xP` inside confluent H, and `xQ-xA` in slope reconstruction and the compact
+local recovery of `u`.  There is no output-coordinate denominator, new
+nonzero x-difference, division, inverse, characteristic assumption, classifier
+premise, or independent nonzero hypothesis.  Outer distinct-x semantic secant
+packaging, coincident-x D/T analysis, O/O degeneration, complete D/T
+translation, the T/D mirror, finite semantic assembly, and unrestricted
+associativity remain open.
+
 Exhaustive enumeration over every short-Weierstrass equation
 `y^2=x^3+a*x+b` over F7 and F11, every non-self-inverse `B`, and every affine
 `A` with `xA != xB` found respectively 1,764 and 12,100 oriented `D/T` inputs.
