@@ -901,9 +901,28 @@ A final bounded association converts this to `3*xa^2+a`.  No characteristic
 premise, classifier, division, inverse, outer denominator, or additional
 cancellation is used.  The tangent numerator at `A` is complete.
 
-Still open are coincident-x output-x and output-y, the outer doubling relation,
-combined DD-T, mixed D/T, finite semantic assembly, and unrestricted
-associativity.
+The coincident-x output-x equation is now certified as
+`affine-dd-t-coincident-x-output-x-equation`.  Its canonical slope is
+`u=affine-same-point-non-opposite-slope(A)`.  The tangent-domain theorem gives
+`ya != -ya`, hence `ya+ya != 0` by additive-inverse uniqueness; cancelling
+exactly that factor between the reconstructed tangent numerator and the
+canonical tangent numerator proves `s=u`.  The other cancellation is the
+already-audited `xc-xb` in H reconstruction, whose nonzeroness comes from the
+second secant relation.
+
+For the canonical output `E=affine-same-point-non-opposite-output(A)`, its
+output-x rearrangement gives `(x(E)+xa)+xa=u^2`.  X-CERT composition is
+specialized with `xab=C`, `xbc=A`, left outer slope/output `t/D`, and right
+outer slope/output `u/E`.  H is zero from `(p-r)*(p+t)=xa-xc`; S is zero from
+`p+t=r+s` and `s=u`; and the telescope is zero from the two secant output-x
+equations, doubling output-x at C, and canonical output-x at A.  Composition
+therefore gives `xd-x(E)=0`, so `x(E)=xd`, and finally
+`(xd+xa)+xa=s^2`.  This proof is characteristic-independent and introduces no
+classifier, division, inverse, outer denominator, or independent nonzero
+premise.
+
+Still open are coincident-x output-y, the outer doubling relation, combined
+DD-T, mixed D/T, finite semantic assembly, and unrestricted associativity.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
 requested endpoint.  Take
