@@ -1354,10 +1354,46 @@ introduces no cancellation of its own and has no characteristic assumption;
 the propagation theorem's earlier internal cancellation remains confined to
 the first secant's certified nonzero x difference.
 
-Only the tangent-domain endpoint is completed by this step.  The
-tangent numerator at `A`, output x, output y, semantic doubling packaging,
-outer O/O degeneration, the combined oriented D/T theorem, the T/D mirror,
-finite semantic assembly, and unrestricted associativity remain open.
+The tangent numerator at `A` is now certified as
+`affine-dt-d-coincident-x-tangent-equation`, with the same four exact semantic
+premises and witness `s=(p+q)-t`.  Writing `d=xB-xA` and `L=p+q`, the extracted
+line equations are `p*d=yB-yA` and `t*d=yA+yB`; the generic two-line telescope
+therefore gives `yA+yA=(t-p)*d`.  Confluent H supplies
+`(p-t)*L=xA-xB`, oriented locally as `(t-p)*L=d`, while the definition of the
+witness gives the cancellation-free balance `L=t+s`.
+The H wrapper's exact inherited scalar interface is the ordered secant input
+identities for `(A,B,p)` and `(P,B,q)`, the tangent numerator at `(B,t)`, the
+two ordered secant line equations, and the first secant output-x and output-y
+equations.  Its two secant relations also provide the nonzero differences
+`xB-xA` and `xB-xP`; these are consumed only inside confluent H.
+
+The residual is staged rather than normalized with all curve equations at
+once.  Multiplication first gives `s*(yA+yA)=(s*(t-p))*d`; balance and H rewrite
+this to `d^2-t*(yA+yA)`.  The second line and the tangent numerator at `B`
+rewrite `t*(yA+yA)` to `2*t^2*d-(3*xB^2+a)`.  The only remaining scalar input
+is doubling output x, `t^2=xA+2*xB`; neither secant output-x equation nor the
+second secant input identity is needed by this final stage.  The exact bounded
+polynomial residual is
+`d^2-2*(xA+2*xB)*d+3*xB^2+a=3*xA^2+a`, for `d=xB-xA`.
+Thus the exact fixed witness satisfies
+`s*(yA+yA)=3*xA^2+a` without cancelling `yA+yA`.
+
+No cancellation is introduced by the numerator reconstruction.  Its only
+inherited cancellations are `xB-xA` and `xB-xP`, both internal to the certified
+confluent-H theorem; the earlier opposite-y propagation cancellation is not
+used.  There is no characteristic or classifier premise, division, inverse,
+independent denominator, or new public nonzero hypothesis.  Exhaustive
+validation over the already counted coincident-x configurations confirms the
+exact witness in all 216 F7 cases and all 1,000 F11 cases, with no
+counterexamples; this enumeration is validation rather than proof.
+
+The certified tangent-domain theorem separately records `yA != -yA` for later
+canonical slope identification, while the numerator proof itself uses only
+the certified equalities `xQ=xA` and `yQ=yA` and does not identify the witness
+with a canonical tangent function.  The remaining open endpoints are output
+x, output y, semantic doubling packaging, outer O/O degeneration, the combined
+oriented D/T theorem, the T/D mirror, finite semantic assembly, and
+unrestricted associativity.
 
 Exhaustive F7/F11 validation of the existing semantic data finds respectively
 216 and 1,000 applicable coincident-x configurations with a left outer secant;
