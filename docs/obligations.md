@@ -1271,10 +1271,28 @@ The complete inherited cancellation inventory is unchanged: `xB-xA` and
 `xB-xP` inside confluent H, and `xQ-xA` in slope reconstruction and the compact
 local recovery of `u`.  There is no output-coordinate denominator, new
 nonzero x-difference, division, inverse, characteristic assumption, classifier
-premise, or independent nonzero hypothesis.  Outer distinct-x semantic secant
-packaging, coincident-x D/T analysis, O/O degeneration, complete D/T
-translation, the T/D mirror, finite semantic assembly, and unrestricted
-associativity remain open.
+premise, or independent nonzero hypothesis.
+
+The outer-distinct-x mixed-inner D/T semantic branch is now complete as
+`affine-dt-d-outer-distinct-x-translation`.  Its exact premises are the secant
+relations `A+B=P` with witness `p`, and `P+B=R` with witness `q`, the doubling
+relation `B+B=Q` with witness `t`, and only the outer disequality `xQ != xA`.
+Its exact secant witness is
+`(field-sub (field-add (field-fix p-slope) (field-fix q-slope))
+(field-fix t-slope))`.  Direct relation unfolding takes curve membership of
+`A` from the first secant, membership of `Q` from doubling, and membership of
+`R` from the second secant; the premise supplies distinct x.  The slope,
+output-x, and output-y clauses come respectively and exclusively from
+`affine-dt-d-outer-distinct-x-slope-equation`,
+`affine-dt-d-outer-distinct-x-output-x-equation`, and
+`affine-dt-d-outer-distinct-x-output-y-equation`; existing field fixing closes
+the witness.  No coordinate or X-CERT reconstruction is replayed.  The result
+is characteristic-independent and has no classifier, division, inverse, or
+independent denominator premise.
+
+Coincident-x D/T analysis, outer O/O degeneration, the complete oriented D/T
+theorem, the T/D structural mirror, finite semantic assembly, unrestricted
+associativity, full-point lifting, and executable correctness remain open.
 
 Exhaustive enumeration over every short-Weierstrass equation
 `y^2=x^3+a*x+b` over F7 and F11, every non-self-inverse `B`, and every affine
