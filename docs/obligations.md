@@ -1341,7 +1341,20 @@ non-self-inverse alternative for `A`, division, inverse, or independent
 nonzero premise, so it also covers self-inverse ordinates under the relation's
 priority convention.
 
-Only ordinate equality is complete here.  Coincident-x tangent domain, the
+The tangent-domain endpoint is now also certified as
+`affine-dt-d-coincident-x-excludes-self-inverse`.  Assuming `yA=-yA`, the
+certified ordinate equality `yQ=yA` supplies `yQ=-yA`.  Curve membership of
+`A` from the first secant, curve membership of `Q` from doubling, the premise
+`xQ=xA`, and canonical infinity fixing package the temporary relation
+`affine-opposite-y-infinity-relation-p(A,Q,infinity)`.  Reusing
+`affine-dt-opposite-y-propagates-to-left-output` produces
+`affine-opposite-y-infinity-relation-p(P,B,infinity)`, hence `xP=xB`, which
+contradicts the distinct-x clause of the second secant `P+B=R`.  This theorem
+introduces no cancellation of its own and has no characteristic assumption;
+the propagation theorem's earlier internal cancellation remains confined to
+the first secant's certified nonzero x difference.
+
+Only the tangent-domain endpoint is completed by this step.  The
 tangent numerator at `A`, output x, output y, semantic doubling packaging,
 outer O/O degeneration, the combined oriented D/T theorem, the T/D mirror,
 finite semantic assembly, and unrestricted associativity remain open.
@@ -1351,3 +1364,7 @@ Exhaustive F7/F11 validation of the existing semantic data finds respectively
 all have `yQ=yA`.  No configuration in either field satisfies the four semantic
 premises together with `yQ=-yA` (0 and 0).  These counts are validation, not
 proof.
+
+The same enumeration confirms the tangent-domain conclusion: among the 216 F7
+and 1,000 F11 configurations satisfying the four premises, respectively 0 and
+0 have `yA=-yA`.  This finite check is validation rather than proof.
