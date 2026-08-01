@@ -1207,6 +1207,32 @@ H.  Outer distinct-x output-x, output-y, semantic packaging, coincident-x D/T,
 O/O degeneration, complete D/T translation, the T/D mirror, finite semantic
 assembly, and unrestricted associativity remain open.
 
+The mixed-inner D/T outer-distinct-x output-x endpoint is now certified as
+`affine-dt-d-outer-distinct-x-output-x-equation`, with the same four semantic
+premises and witness `(p+q)-t`.  Internally, `u` and `E` are the canonical
+secant slope and output for `(A,Q)`.  The equality `(p+q)-t=u` is obtained
+compactly from the public slope equation and canonical slope reconstruction by
+cancelling `xQ-xA`; this repeats the same semantic factor already cancelled by
+the slope proof and introduces no new premise.
+
+The confluent X-CERT assignment is `xab=P`, `xbc=Q`, `xc=xb`, left outer
+slope/output `q/R`, and right outer slope/output `u/E`.  H zero comes from the
+certified confluent H scalar reconstruction, namely
+`(p-t)*(p+q)=xA-xB`; S zero comes from `p+q=t+u`.  Telescope zero uses exactly
+`xP+xA+xB=p^2`, `xQ+xB+xB=t^2`, `xR+xP+xB=q^2`, and the canonical equation
+`xE+xA+xQ=u^2`.  `xcert-composition` then gives `xR-xE=0`, hence `xE=xR`,
+and the canonical output-x rearrangement yields the public equation
+`xR+xA+xQ=((p+q)-t)^2` with the repository's fixed association.
+
+The complete cancellation inventory remains `xB-xA` and `xB-xP` inside the
+confluent H reconstruction, plus `xQ-xA` in the slope reconstruction (reused
+once locally to identify the canonical slope).  Composition adds no
+cancellation.  No output-coordinate denominator, division, inverse,
+characteristic assumption, classifier premise, or independent nonzero
+hypothesis is used.  Outer distinct-x output-y and semantic secant packaging,
+coincident-x D/T analysis, O/O degeneration, complete D/T translation, the T/D
+mirror, finite semantic assembly, and unrestricted associativity remain open.
+
 Exhaustive enumeration over every short-Weierstrass equation
 `y^2=x^3+a*x+b` over F7 and F11, every non-self-inverse `B`, and every affine
 `A` with `xA != xB` found respectively 1,764 and 12,100 oriented `D/T` inputs.

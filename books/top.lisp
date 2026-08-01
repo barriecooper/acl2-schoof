@@ -123,6 +123,8 @@
 (include-book "curve/affine-dd-t-outer-distinct-x-slope-regression")
 (include-book "curve/affine-dt-d-outer-distinct-x-slope")
 (include-book "curve/affine-dt-d-outer-distinct-x-slope-regression")
+(include-book "curve/affine-dt-d-outer-distinct-x-output-x")
+(include-book "curve/affine-dt-d-outer-distinct-x-output-x-regression")
 (include-book "curve/affine-dd-t-outer-distinct-x-output-x")
 (include-book "curve/affine-dd-t-outer-distinct-x-output-x-regression")
 (include-book "curve/affine-dd-t-outer-distinct-x-output-y")
