@@ -130,8 +130,14 @@ PR boundaries:
    output x-coordinate with `xd`.  The coincident-x output-y equation is also
    complete via the field-only final-y reconstruction and the canonical
    tangent output at A.  All scalar and domain clauses for this branch are now
-   certified.  Next package only the semantic outer doubling relation, before
-   the combined DD-T result.  Use the
+   certified, and `affine-dd-t-coincident-x-translation` packages them into the
+   public doubling relation with exact fixed witness `s=(p+t)-r`.  The five
+   public ordinate, tangent-domain, tangent-numerator, output-x, and output-y
+   endpoints supply its clauses directly.  This coincident-x semantic branch
+   is characteristic-independent and uses no classifier, division, inverse,
+   or independent denominator premise.  Next combine the already certified
+   outer distinct-x and coincident-x branches, without replaying either scalar
+   proof.  Use the
    existing division-free secant and doubling relations as the scalar interface
    and package results through `curve-point-addition-relation-p` only
    afterwards.  The exact oriented
