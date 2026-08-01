@@ -123,9 +123,9 @@ PR boundaries:
    complete: reuse the certified ordinate equality to construct a temporary
    `(A,Q)` opposite-y relation under `ya=-ya`, mirror DD-O to `(C,C)`, and
    contradict the tangent domain at `C`.  This structural step is likewise
-   characteristic-independent.  Next establish the tangent numerator at `A`
-   and the coincident-x output-x and output-y equations,
-   before packaging the outer doubling
+   characteristic-independent.  The tangent numerator at `A` is now complete using the certified two-line
+   telescope and the audited H reconstruction.  Next establish the coincident-x
+   output-x and output-y equations, before packaging the outer doubling
    relation and combined DD-T result.  Use the
    existing division-free secant and doubling relations as the scalar interface
    and package results through `curve-point-addition-relation-p` only

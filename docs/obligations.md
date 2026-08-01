@@ -861,12 +861,47 @@ certified separately: from exactly `yb-ya=p*delta` and
 derives `ya+ya=(r-p)*delta`.  Its proof subtracts the two oriented line
 equations, using the bounded identities `(ya+yb)-(yb-ya)=ya+ya` and
 `r*delta-p*delta=(r-p)*delta`; it needs no element or nonzero hypotheses.
-The audited DD-T specialization still has H equation
-`(p-r)*(p+t)=xa-xc`, while its final unresolved residual remains
-`s*(ya+ya)-(3*xa^2+a)=0` for `s=(p+t)-r`.
+The DD-T coincident-x tangent numerator at `A` is now certified.  With
+`delta=xb-xa`, the first secant slope equation and the second secant output-y
+equation (after the certified `xq=xa`, `yq=ya` substitution) instantiate
+`field-two-line-equations-imply-doubled-first-ordinate` exactly as
 
-Still open are the tangent numerator at `A` for
-`s=(p+t)-r`, coincident-x output-x and output-y, the outer doubling relation,
+```text
+ya+ya=(r-p)*delta.
+```
+
+The audited H specialization consumes the common-curve input-secant identity
+for `(A,B,p)`, the tangent numerator identity at `C`, and the inner `(B,C,r,Q)`
+secant equations.  `xcert-h-scalar-reconstruction` yields
+`(p-r)*(p+t)=xa-xc`; its only cancellation factor is `xc-xb`, whose
+nonzeroness comes from the second secant relation.  The fixed witness
+`s=(p+t)-r` separately satisfies the definitional balance `p+t=r+s` by field
+normalization alone.
+
+The remaining bounded algebra is staged as
+
+```text
+s*(r-p) = -((p-r)*(p+t)) + (p-r)*r,
+s*(ya+ya) = ((xc-xa) + (p-r)*r)*delta,
+           = p*(r*delta) + (((xc-xa)-r^2)*delta).
+```
+
+The second line equation and first input-secant identity replace
+`p*(r*delta)` by `xb^2+xb*xa+xa^2+a`; the second secant output-x equation with
+`xq=xa` replaces `r^2` by `(xa+xb)+xc`.  The smallest final coordinate
+residual is therefore
+
+```text
+(xb^2+xb*xa+xa^2+a)
+ + (((xc-xa)-((xa+xb)+xc))*(xb-xa))
+ = xa^2+(xa^2+(xa^2+a)).
+```
+
+A final bounded association converts this to `3*xa^2+a`.  No characteristic
+premise, classifier, division, inverse, outer denominator, or additional
+cancellation is used.  The tangent numerator at `A` is complete.
+
+Still open are coincident-x output-x and output-y, the outer doubling relation,
 combined DD-T, mixed D/T, finite semantic assembly, and unrestricted
 associativity.
 
