@@ -2,11 +2,13 @@
 
 (include-book "affine-dt-d-coincident-x-tangent-equation")
 (include-book "affine-same-point-non-opposite-output-x")
+(include-book "affine-same-point-non-opposite-output-y")
 (include-book "affine-distinct-x-secant-identity")
 (include-book "affine-distinct-x-secant-relation")
 (include-book "affine-doubling-relation")
 (include-book "../field/xcert-confluent-h-reconstruction")
 (include-book "../field/xcert-s-reconstruction")
+(include-book "../field/xcert-final-y-reconstruction")
 
 (local
  (defthm relation-input-secant-identity-local
@@ -354,3 +356,141 @@
        field-fix-of-add field-fix-of-mul
        field-element-p-of-affine-coordinates-x
        field-fix-when-field-element-p)))))
+
+(local
+ (defthm field-add-right-cancel-output-y-local
+  (implies (equal (field-add left common) (field-add right common))
+   (equal (field-fix left) (field-fix right)))
+  :hints (("Goal"
+           :use ((:instance field-add-left-cancel-forward
+                            (x common) (y left) (z right))
+                 (:instance field-add-commutative (x left) (y common))
+                 (:instance field-add-commutative (x right) (y common)))
+           :in-theory (theory 'minimal-theory)))))
+
+; Recover the canonical output association from the public output-x endpoint,
+; rather than replaying H, S, the telescope, or composition.
+(local
+ (defthm dt-d-canonical-output-x-for-output-y-local
+  (implies
+   (and (affine-distinct-x-secant-relation-p a b p-slope p-output)
+        (affine-doubling-relation-p b t-slope q-output)
+        (affine-distinct-x-secant-relation-p p-output b q-slope r-output)
+        (equal (affine-coordinates-x q-output)
+               (affine-coordinates-x a)))
+   (equal (affine-same-point-non-opposite-output-x a)
+          (affine-coordinates-x r-output)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    (dt-d-witness-equals-canonical-slope-local
+     (:instance affine-dt-d-coincident-x-output-x-equation)
+     (:instance affine-same-point-non-opposite-output-x-rearrangement
+                (first a))
+     (:instance field-add-right-cancel-output-y-local
+      (left (field-add (affine-same-point-non-opposite-output-x a)
+                       (affine-coordinates-x a)))
+      (right (field-add (affine-coordinates-x r-output)
+                        (affine-coordinates-x a)))
+      (common (affine-coordinates-x a)))
+     (:instance field-add-right-cancel-output-y-local
+      (left (affine-same-point-non-opposite-output-x a))
+      (right (affine-coordinates-x r-output))
+      (common (affine-coordinates-x a))))
+    :in-theory
+    (union-theories (theory 'minimal-theory)
+     '(field-two-times-local field-add-associative field-fix-of-add field-fix-of-mul
+       field-fix-when-field-element-p field-element-p-of-affine-coordinates-x
+       field-element-p-of-affine-same-point-non-opposite-output-x
+       field-mul-fixed-congruence
+       field-fix-of-affine-same-point-non-opposite-slope))))))
+
+; With xab=P, xc=B, the left outer line q/R, and the right outer
+; canonical tangent u/D, the final-y interface has exactly nine equations:
+; two output-x equations, confluent H, balance, three input-line equations,
+; and the two output-y equations.  Before H/S reduction its residual is
+;
+;   yR-yD = (p-t)*(xR-xB) + (t-q)*(xA-xB).
+;
+; Thus the coefficients are p-t and t-q respectively.  The field-only
+; theorem consumes H and balance (S=0), together with the left output-x
+; equation, to eliminate both terms; xD=xR associates the right output-y
+; equation with the same output abscissa.  No multiplication cancellation is
+; added here.
+(local
+ (defthm dt-d-canonical-output-y-local
+  (implies
+   (and (affine-distinct-x-secant-relation-p a b p-slope p-output)
+        (affine-doubling-relation-p b t-slope q-output)
+        (affine-distinct-x-secant-relation-p p-output b q-slope r-output)
+        (equal (affine-coordinates-x q-output)
+               (affine-coordinates-x a)))
+   (equal (affine-coordinates-y r-output)
+          (affine-same-point-non-opposite-output-y a)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    (dt-d-confluent-h-local
+     dt-d-witness-equals-canonical-slope-local
+     dt-d-canonical-output-x-for-output-y-local
+     (:instance dt-d-balance-from-witness-local
+      (p (field-fix p-slope)) (q (field-fix q-slope))
+      (r (field-fix t-slope))
+      (tt (affine-same-point-non-opposite-slope a)))
+     (:instance affine-same-point-non-opposite-output-y-rearrangement
+      (first a))
+     (:instance xcert-field-only-final-y-equal
+      (xl (affine-coordinates-x r-output))
+      (yl (affine-coordinates-y r-output))
+      (yr (affine-same-point-non-opposite-output-y a))
+      (xab (affine-coordinates-x p-output))
+      (yab (affine-coordinates-y p-output))
+      (xa (affine-coordinates-x a)) (ya (affine-coordinates-y a))
+      (xb (affine-coordinates-x b)) (yb (affine-coordinates-y b))
+      (xc (affine-coordinates-x b)) (yc (affine-coordinates-y b))
+      (p (field-fix p-slope)) (q (field-fix q-slope))
+      (r (field-fix t-slope))
+      (tt (affine-same-point-non-opposite-slope a))))
+    :in-theory
+    (union-theories (theory 'minimal-theory)
+     '(affine-distinct-x-secant-relation-p affine-doubling-relation-p
+       field-fix-idempotent field-fix-when-field-element-p
+       field-element-p-of-affine-coordinates-y
+       field-element-p-of-affine-same-point-non-opposite-output-y
+       field-fix-of-affine-same-point-non-opposite-slope
+       field-fix-of-affine-same-point-non-opposite-output-y
+       field-fix-of-add field-fix-of-mul field-fix-of-neg field-sub-self
+       field-mul-zero-left field-mul-zero-right))))))
+
+(defthm affine-dt-d-coincident-x-output-y-equation
+  (implies
+   (and
+    (affine-distinct-x-secant-relation-p a b p-slope p-output)
+    (affine-doubling-relation-p b t-slope q-output)
+    (affine-distinct-x-secant-relation-p p-output b q-slope r-output)
+    (equal (affine-coordinates-x q-output)
+           (affine-coordinates-x a)))
+   (equal
+    (field-add (affine-coordinates-y r-output)
+               (affine-coordinates-y a))
+    (field-mul
+     (field-sub (field-add (field-fix p-slope)
+                           (field-fix q-slope))
+                (field-fix t-slope))
+     (field-sub (affine-coordinates-x a)
+                (affine-coordinates-x r-output)))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use (dt-d-witness-equals-canonical-slope-local
+          dt-d-canonical-output-x-for-output-y-local
+          dt-d-canonical-output-y-local
+          (:instance affine-same-point-non-opposite-output-y-rearrangement
+                     (first a)))
+    :in-theory
+    (union-theories (theory 'minimal-theory)
+     '(field-add-fixed-congruence field-mul-fixed-congruence
+       field-fix-of-add field-fix-of-mul field-fix-of-neg
+       field-fix-of-affine-same-point-non-opposite-slope)))))

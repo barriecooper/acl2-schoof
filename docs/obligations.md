@@ -1415,9 +1415,48 @@ inverse, output denominator, or independent public nonzero hypothesis is used.
 Exhaustive validation of the exact target passes all 216 applicable F7 and all
 1,000 applicable F11 configurations, with no counterexamples.  The focused
 minimal-theory regression invokes only the public output-x theorem.
-Coincident-x output y, semantic doubling packaging, outer O/O degeneration,
+Semantic doubling packaging, outer O/O degeneration,
 combined oriented D/T, the T/D mirror, finite semantic assembly, and
 unrestricted associativity remain open.
+
+The mixed-inner D/T coincident-x output-y endpoint is now certified as
+`affine-dt-d-coincident-x-output-y-equation`, under exactly `A+B=P` by secant
+`p`, `B+B=Q` by tangent `t`, `P+B=R` by secant `q`, and `xQ=xA`, with witness
+`s=(p+q)-t` and orientation `yR+yA=s*(xA-xR)`.  Set
+`u=affine-same-point-non-opposite-slope(A)` and let `D` be its canonical
+same-point-non-opposite output.  The tangent-domain and tangent-equation
+endpoints, canonical tangent-numerator reconstruction, and cancellation of
+the nonzero `yA+yA` prove `s=u`.  The public coincident-x output-x equation and
+canonical rearrangement `xD+xA+xA=u^2` then give `xD=xR` by two additive
+cancellations, without replaying H, S, the telescope, or composition.
+
+The exact `xcert-field-only-final-y-equal` specialization is `xl=xR`, `yl=yR`,
+`yr=yD`, `p=p`, `q=q`, `r=t`, `tt=u`, `xa=xA`, `ya=yA`, `xb=xc=xB`,
+`yb=yc=yB`, and `xab=xP`, `yab=yP`.  Its nine hypotheses are, in order: the
+left outer output-x equation `xR+xP+xB=q^2`; first secant output x
+`xP+xA+xB=p^2`; confluent H `(p-t)*(p+q)=xA-xB`; balance
+`(p+q)-(t+u)=0`; the first secant line equation; the vacuous tangent line at
+`B,B`; the second secant line equation; second secant output y; and canonical
+tangent output y `yD+yA=u*(xA-xR)`, associated using `xD=xR`.
+
+Before H/S simplification the specialized residual is
+`yR-yD=(p-t)*(xR-xB)+(t-q)*(xA-xB)`: its coefficients are respectively `p-t`
+and `t-q`.  Confluent H removes the second term; H and the left output-x
+equation transform the first; balance is exactly the consumed S-zero equation.
+With `xD=xR` consumed in the canonical right output-y equation, final-y proves
+`yR=yD`.  Substituting `yD=yR`, `xD=xR`, and `u=s` in the canonical tangent
+output-y rearrangement gives the public theorem.
+
+The complete multiplication-cancellation inventory remains `xB-xA` and
+`xB-xP` inside confluent H, plus `yA+yA` solely for `s=u`; final-y adds no
+multiplication cancellation.  The additive cancellations proving `xD=xR`
+need no nonzero premise.  No characteristic or classifier premise, division,
+inverse, output-coordinate denominator, new nonzero difference, or independent
+public nonzero hypothesis is used.  Exhaustive validation covers all 216
+applicable F7 and 1,000 applicable F11 configurations with no counterexamples.
+Semantic doubling packaging, outer O/O degeneration, combined oriented D/T,
+the T/D mirror, finite semantic assembly, and unrestricted associativity remain
+open.
 
 Exhaustive F7/F11 validation of the existing semantic data finds respectively
 216 and 1,000 applicable coincident-x configurations with a left outer secant;
