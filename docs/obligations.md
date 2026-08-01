@@ -921,8 +921,37 @@ therefore gives `xd-x(E)=0`, so `x(E)=xd`, and finally
 classifier, division, inverse, outer denominator, or independent nonzero
 premise.
 
-Still open are coincident-x output-y, the outer doubling relation, combined
-DD-T, mixed D/T, finite semantic assembly, and unrestricted associativity.
+The coincident-x output-y equation is now certified as
+`affine-dd-t-coincident-x-output-y-equation`.  The proof reuses the canonical
+tangent slope `u=affine-same-point-non-opposite-slope(A)` and canonical output
+`E=affine-same-point-non-opposite-output(A)`.  The output-x reconstruction
+supplies `x(E)=xd`.  Specializing `xcert-field-only-final-y-equal` with
+`xab=C`, left slope/output `t/D`, and right slope/output `u/E` gives the exact
+pre-reconstruction residual
+
+```text
+yd-y(E)=(p-r)*(xd-xb)+(r-t)*(xa-xc).
+```
+
+The H input is `(p-r)*(p+t)=xa-xc`; the S input is
+`(p+t)-(r+u)=0`, obtained from the definitional balance `p+t=r+s` and `s=u`.
+Together with the two output-x equations these eliminate the residual, while
+`x(E)=xd` specializes the canonical output-y rearrangement to the right-hand
+line required by the field theorem.  Thus `y(E)=yd`; substituting that equality,
+`x(E)=xd`, and `u=s` in the canonical output-y rearrangement proves
+`yd+ya=s*(xa-xd)`.
+
+No cancellation is introduced by the final-y reconstruction.  The complete
+coincident-x chain uses only the two earlier cancellations: `xc-xb`, nonzero
+from the second distinct-x secant relation, in H reconstruction; and `ya+ya`,
+nonzero from the certified `ya != -ya` tangent domain and additive-inverse
+uniqueness, in the canonical slope identification.  There is no characteristic
+premise, classifier premise, division, inverse, outer denominator, or
+independent nonzero hypothesis.  All scalar and domain clauses for the
+coincident-x doubling branch are now certified.
+
+Still open are semantic outer doubling relation packaging, combined DD-T,
+mixed D/T, finite semantic assembly, and unrestricted associativity.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
 requested endpoint.  Take

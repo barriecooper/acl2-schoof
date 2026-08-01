@@ -2,7 +2,7 @@
 
 (include-book "affine-dd-t-coincident-x-tangent-domain")
 (include-book "affine-dd-t-coincident-x-tangent-equation")
-(include-book "affine-same-point-non-opposite-output-x")
+(include-book "affine-same-point-non-opposite-output-y")
 (include-book "../field/xcert-algebra")
 
 (include-book "../field/common-summand-subtraction")
@@ -410,6 +410,60 @@
        field-element-p-of-affine-same-point-non-opposite-output-x
        field-fix-of-add field-fix-of-neg))))))
 
+; In the field-only final-y reconstruction, xab=C, the left outer
+; slope/output is t/D, and the right outer slope/output is u/E, where u and E
+; are the canonical tangent slope and output at A.  Its specialized residual
+; before H and S reconstruction is
+;
+;   yd-y(E) = (p-r)*(xd-xb) + (r-t)*(xa-xc).
+;
+; The field theorem eliminates that residual from the two output-x equations,
+; H=(p-r)*(p+t)-(xa-xc)=0, and S=(p+t)-(r+u)=0.
+(local
+ (defthm dd-t-canonical-output-y-equals-d-local
+  (implies
+   (and (affine-distinct-x-secant-relation-p a b p-slope c)
+        (affine-distinct-x-secant-relation-p b c r-slope q)
+        (affine-doubling-relation-p c t-slope d)
+        (equal (affine-coordinates-x q) (affine-coordinates-x a)))
+   (equal (affine-same-point-non-opposite-output-y a)
+          (affine-coordinates-y d)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    ((:instance dd-t-h-local (p p-slope) (r r-slope))
+     (:instance dd-t-witness-equals-canonical-slope-local)
+     (:instance dd-t-canonical-output-x-equals-d-local)
+     (:instance dd-t-witness-balance-local
+                (p p-slope) (r r-slope) (tangent-slope t-slope))
+     (:instance affine-same-point-non-opposite-output-y-rearrangement
+                (first a))
+     (:instance xcert-field-only-final-y-equal
+      (xl (affine-coordinates-x d))
+      (yl (affine-coordinates-y d))
+      (yr (affine-same-point-non-opposite-output-y a))
+      (xab (affine-coordinates-x c))
+      (yab (affine-coordinates-y c))
+      (xa (affine-coordinates-x a)) (ya (affine-coordinates-y a))
+      (xb (affine-coordinates-x b)) (yb (affine-coordinates-y b))
+      (xc (affine-coordinates-x c)) (yc (affine-coordinates-y c))
+      (p (field-fix p-slope)) (q (field-fix t-slope))
+      (r (field-fix r-slope))
+      (tt (affine-same-point-non-opposite-slope a))))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(affine-distinct-x-secant-relation-p affine-doubling-relation-p
+       field-add-associative field-two-times-local
+       field-fix-idempotent field-fix-when-field-element-p
+       field-element-p-of-affine-coordinates-y
+       field-element-p-of-affine-same-point-non-opposite-output-y
+       field-fix-of-affine-same-point-non-opposite-slope
+       field-fix-of-affine-same-point-non-opposite-output-y
+       field-fix-of-add field-fix-of-mul field-fix-of-neg field-sub-self
+       field-mul-zero-left field-mul-zero-right))))))
+
 (defthm affine-dd-t-coincident-x-output-x-equation
   (implies
    (and
@@ -437,3 +491,32 @@
     (union-theories (theory 'minimal-theory)
      '(field-mul-left-distributive field-two-times-local field-add-associative
        field-fix-of-add field-fix-of-mul)))))
+
+(defthm affine-dd-t-coincident-x-output-y-equation
+  (implies
+   (and
+    (affine-distinct-x-secant-relation-p a b p-slope c)
+    (affine-distinct-x-secant-relation-p b c r-slope q)
+    (affine-doubling-relation-p c t-slope d)
+    (equal (affine-coordinates-x q) (affine-coordinates-x a)))
+   (equal
+    (field-add (affine-coordinates-y d) (affine-coordinates-y a))
+    (field-mul
+     (field-sub (field-add (field-fix p-slope) (field-fix t-slope))
+                (field-fix r-slope))
+     (field-sub (affine-coordinates-x a)
+                (affine-coordinates-x d)))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use (dd-t-witness-equals-canonical-slope-local
+          dd-t-canonical-output-x-equals-d-local
+          dd-t-canonical-output-y-equals-d-local
+          (:instance affine-same-point-non-opposite-output-y-rearrangement
+                     (first a)))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(field-add-fixed-congruence field-mul-fixed-congruence
+       field-fix-of-add field-fix-of-mul field-fix-of-neg
+       field-fix-of-affine-same-point-non-opposite-slope)))))

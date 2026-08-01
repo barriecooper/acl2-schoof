@@ -113,6 +113,8 @@
 (include-book "curve/affine-dd-t-coincident-x-tangent-equation-regression")
 (include-book "curve/affine-dd-t-coincident-x-output-x")
 (include-book "curve/affine-dd-t-coincident-x-output-x-regression")
+(include-book "curve/affine-dd-t-coincident-x-output-y")
+(include-book "curve/affine-dd-t-coincident-x-output-y-regression")
 (include-book "curve/affine-dd-t-outer-distinct-x-slope")
 (include-book "curve/affine-dd-t-outer-distinct-x-slope-regression")
 (include-book "curve/affine-dd-t-outer-distinct-x-output-x")

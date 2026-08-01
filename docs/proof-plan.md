@@ -127,9 +127,11 @@ PR boundaries:
    telescope and audited H reconstruction.  The coincident-x output-x equation
    is also complete: the reconstructed witness is identified with the canonical
    tangent slope at A, and X-CERT composition identifies the canonical tangent
-   output x-coordinate with `xd`.  Next establish only the coincident-x
-   output-y equation, before packaging the outer doubling
-   relation and combined DD-T result.  Use the
+   output x-coordinate with `xd`.  The coincident-x output-y equation is also
+   complete via the field-only final-y reconstruction and the canonical
+   tangent output at A.  All scalar and domain clauses for this branch are now
+   certified.  Next package only the semantic outer doubling relation, before
+   the combined DD-T result.  Use the
    existing division-free secant and doubling relations as the scalar interface
    and package results through `curve-point-addition-relation-p` only
    afterwards.  The exact oriented
