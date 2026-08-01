@@ -1319,3 +1319,35 @@ validation, not proof; focused F7/F11 regressions should include one `D/D`, one
 - Performance optimization is deferred until a correct executable boundary
   exists. Benchmarks and execution regressions will remain distinct from
   logical correctness.
+
+### Mixed-inner D/T coincident-x ordinate endpoint
+
+The coincident-x ordinate endpoint is certified as
+`affine-dt-d-coincident-x-implies-ordinate-equality`, with exactly the semantic
+premises `A+B=P` (secant `p`), `B+B=Q` (doubling `t`), `P+B=R` (secant `q`),
+and `xQ=xA`.  Curve membership of `A` comes from the first secant and membership
+of `Q` from doubling.  Therefore
+`short-weierstrass-equal-x-implies-equal-or-neg-y` gives the common-curve
+dichotomy `yQ=yA` or `yQ=-yA`.
+
+The opposite alternative is packaged as the public opposite-y relation and
+rejected structurally by the reusable mixed propagation theorem
+`affine-dt-opposite-y-propagates-to-left-output`: from `A+B=P`, `B+B=Q`, and
+`A=-Q`, it derives `P=-B`.  The latter relation supplies `xP=xB`, contradicting
+exactly the distinct-x conjunct of the existing second secant relation
+`P+B=R`.  The propagation cancels only the nonzero x difference already
+provided by the first secant.  It needs no characteristic, classifier,
+non-self-inverse alternative for `A`, division, inverse, or independent
+nonzero premise, so it also covers self-inverse ordinates under the relation's
+priority convention.
+
+Only ordinate equality is complete here.  Coincident-x tangent domain, the
+tangent numerator at `A`, output x, output y, semantic doubling packaging,
+outer O/O degeneration, the combined oriented D/T theorem, the T/D mirror,
+finite semantic assembly, and unrestricted associativity remain open.
+
+Exhaustive F7/F11 validation of the existing semantic data finds respectively
+216 and 1,000 applicable coincident-x configurations with a left outer secant;
+all have `yQ=yA`.  No configuration in either field satisfies the four semantic
+premises together with `yQ=-yA` (0 and 0).  These counts are validation, not
+proof.
