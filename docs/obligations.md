@@ -1157,11 +1157,30 @@ for `(A,Q)`, and its expected residual is
 
 Only `xQ-xA`, supplied by the outer distinct-x premise, is then cancelled.
 This common-curve input excludes the recorded F11 field-only countermodel,
-whose coordinates do not supply these identities.  The public slope endpoint
-is not yet certified: the field library exposes ordinary two-distinct-input
-X-CERT H reconstruction, but not this confluent two-factor H bridge, and the
-direct bounded normalization attempt stopped at that missing theorem
-interface.  No statement was weakened and no trust mechanism was introduced.
+whose coordinates do not supply these identities.  The field bridge is now certified in
+`xcert-confluent-h-factored-reconstruction` and
+`xcert-confluent-h-scalar-reconstruction`.  Their public interface retains
+exactly seven equations: the two ordered common-curve secant identities, the
+B tangent numerator, both ordered secant line equations, and the first
+secant's output-x and output-y equations.  The second common-curve identity is
+retained for the audited semantic interface although the staged proof does not
+consume it directly.
+
+The proof first obtains `(xb-xp)*(p+q)=yb+yb` from both line equations and the
+output-y equation.  It transports this telescope through `p-tangent`, scales
+the first line equation to obtain the dimensionally correct bridge
+`p*(yb+yb)-p*(p*(xb-xa))=p*(yb+ya)`, subtracts the tangent numerator from the
+first common-curve identity to obtain
+`xa^2+xa*xb-(xb^2+xb^2)`, and uses the output-x equation in the bounded
+quadratic identity
+`p^2*(xb-xa)+(xa^2+xa*xb-(xb^2+xb^2))=
+-(xb-xa)*(xb-xp)`.  These checkpoints give the one-factor residual
+`(xb-xp)*((p-tangent)*(p+q)-(xa-xb))=0`, then multiplication by `xb-xa`
+gives the exact public two-factor residual above.  The scalar theorem cancels
+`xb-xa` first and `xb-xp` second, in separate kernel cancellation steps.
+No characteristic, curve predicate, classifier, division, inverse, or trust
+mechanism is used.  The later mixed D/T outer S residual and public curve-level
+slope endpoint remain open.
 
 Exhaustive enumeration over every short-Weierstrass equation
 `y^2=x^3+a*x+b` over F7 and F11, every non-self-inverse `B`, and every affine

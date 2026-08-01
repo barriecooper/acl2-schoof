@@ -148,7 +148,11 @@ PR boundaries:
    Stop an implementation PR after one subdivision certifies; stop earlier if
    the opposite-tree outcome cannot be derived without an additional nonzero
    assumption or an independent outer classifier premise.
-4. **Mixed-inner secant/tangent certificate (next: `affine-dt-d-translation`).**
+4. **Mixed-inner secant/tangent certificate (next: outer distinct-x slope).**
+   The field-only confluent H factored and separately cancelled scalar
+   reconstructions are complete.  The next bounded task returns to
+   `affine-dt-d-outer-distinct-x-slope-equation`; only after that endpoint
+   succeeds should the enclosing `affine-dt-d-translation` proceed.
    Here `D/T` means that `A+B=P` is a distinct-x secant and `B+B=Q` is a
    doubling; it does not describe an outer pair.  First certify the bounded
    left-outer-secant translation from the three public premises

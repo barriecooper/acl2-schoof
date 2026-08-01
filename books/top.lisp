@@ -13,6 +13,8 @@
 (include-book "field/xcert-algebra-regression")
 (include-book "field/xcert-h-reconstruction")
 (include-book "field/xcert-h-reconstruction-regression")
+(include-book "field/xcert-confluent-h-reconstruction")
+(include-book "field/xcert-confluent-h-reconstruction-regression")
 (include-book "field/xcert-s-reconstruction")
 (include-book "field/xcert-s-reconstruction-regression")
 (include-book "field/xcert-final-y-reconstruction")
