@@ -148,19 +148,26 @@ PR boundaries:
    Stop an implementation PR after one subdivision certifies; stop earlier if
    the opposite-tree outcome cannot be derived without an additional nonzero
    assumption or an independent outer classifier premise.
-4. **Mixed-inner secant/tangent certificate (next: outer distinct-x semantic secant packaging).**
+4. **Mixed-inner secant/tangent certificate (next: coincident-x analysis).**
    The field-only confluent H reconstructions and the public
    `affine-dt-d-outer-distinct-x-slope-equation` and the corresponding public
-   outer distinct-x output-x and output-y equations are complete.  The next
-   bounded task is only outer distinct-x semantic secant packaging; coincident-x
-   and opposite-y analysis remain later separate endpoints.
+   outer distinct-x output-x and output-y equations are complete.  The public
+   `affine-dt-d-outer-distinct-x-translation` now packages exactly those three
+   endpoints directly into the secant relation, with premises `A+B=P`,
+   `B+B=Q`, `P+B=R`, and `xQ != xA`, and exact fixed witness
+   `(field-sub (field-add (field-fix p-slope) (field-fix q-slope))
+   (field-fix t-slope))`.  This outer-distinct-x branch is complete without a
+   characteristic condition, classifier, division, inverse, or independent
+   denominator premise.  Coincident-x and opposite-y analysis remain later
+   separate endpoints.
    Here `D/T` means that `A+B=P` is a distinct-x secant and `B+B=Q` is a
-   doubling; it does not describe an outer pair.  First certify the bounded
-   left-outer-secant translation from the three public premises
-   `(A,B,p,P)`, `(B,t,Q)`, and `(P,B,q,R)` to a secant/doubling disjunction for
-   `(A,Q,s,R)`, with the exact witness `s=p+q-t`.  The proof must use a
+   doubling; it does not describe an outer pair.  The bounded left-outer-secant
+   translation from the three public premises `(A,B,p,P)`, `(B,t,Q)`, and
+   `(P,B,q,R)` to the secant relation for `(A,Q,s,R)` is the completed branch
+   above, with exact witness `s=p+q-t`.  Its scalar endpoints use the certified
    common-curve bridge: the corresponding bare scalar equation groups have an
-   F11 countermodel.  Then derive the `O/O` degeneration and obtain inner
+   F11 countermodel.  Next derive the coincident-x and `O/O` outcomes, then
+   combine the oriented D/T cases and obtain inner
    `T/D` by reversing `A,B,C`, reversing secants, opposite-y symmetry, and
    commutativity.  Exhaustive F7/F11 validation observes only outer `D/D`,
    `D/T`, and `O/O`.  Stop after the named translation; do not combine its

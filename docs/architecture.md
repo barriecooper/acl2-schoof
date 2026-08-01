@@ -300,9 +300,16 @@ uses the same exact witness in both arms:
 `(field-sub (field-add (field-fix p-slope) (field-fix t-slope))
 (field-fix r-slope))`.  The composition replays neither branch proof and is
 characteristic-independent, with no classifier, division, inverse, or
-independent denominator premise.  Mixed D/T families, finite affine semantic
-assembly, unrestricted associativity, full curve-point lifting, executable
-correctness, and final group-law packaging remain open.
+independent denominator premise.  For the mixed-inner D/T family, the three
+public outer-distinct-x scalar endpoints are now directly packaged by
+`affine-dt-d-outer-distinct-x-translation` into the same public secant
+relation, with exact witness `(p+q)-t`.  This branch likewise adds no
+characteristic condition, classifier, division, inverse, or independent
+denominator premise, and does not replay its coordinate or X-CERT proofs.
+Coincident-x and O/O D/T analysis, the complete oriented D/T theorem, its T/D
+mirror, finite affine semantic assembly, unrestricted associativity, full
+curve-point lifting, executable correctness, and final group-law packaging
+remain open.
 
 The inverse/tangent specialization is certified at the semantic relation
 boundary by `affine-inverse-tangent-translation`.  It negates the inner tangent
