@@ -432,71 +432,65 @@ assembly begins.
 
 ### Associativity case audit
 
-The following is the authoritative structural ledger for the remaining case
-proof.  Write `D`, `O`, and `T` for the affine classifier results
-`:distinct-x`, `:opposite-y`, and `:same-point-non-opposite`, respectively,
-and write `AB` and `BC` for the two inner outputs.  This is not a Cartesian
-product of four classifier values.  For on-curve affine operands,
-`affine-pair-classify-not-same-x-other-for-curve-points` removes
-`:same-x-other`; output closure then removes it again for any outer affine pair
-whose inner operand came from a `D` or `T` branch.  The proof of that theorem
-uses the generic curve equation and `field-equal-squares-implies-equal-or-neg`,
-not an F11 enumeration.
+This inventory is authoritative for finite semantic assembly.  Here `D`, `O`,
+and `T` mean the public affine relations
+`affine-distinct-x-secant-relation-p`,
+`affine-opposite-y-infinity-relation-p`, and
+`affine-doubling-relation-p`; they are not names for arbitrary classifier
+values.  For valid affine operands, `curve-point-addition-case-coverage` and
+`affine-pair-classify-not-same-x-other-for-curve-points` leave exactly these
+three geometric cases.  The executable `:same-x-other` fallback is unreachable
+on curve points.  Infinity is a separate tagged-point identity case, not a
+fourth affine relation.
 
-The outcome of an outer call is meaningful only when its inner result is
-affine.  An inner `O` result is canonical infinity by
-`affine-pair-output-point-when-opposite-y` and
-`affine-opposite-y-output-point-is-infinity`, so the corresponding outer call
-uses `curve-point-pair-output-point-of-infinity-left` or
-`curve-point-pair-output-point-of-infinity-right`; it has no outer affine
-classifier premise.  Conversely, closure
-(`short-weierstrass-affine-point-p-of-affine-distinct-x-output` and
-`short-weierstrass-affine-point-p-of-affine-same-point-non-opposite-output`)
-justifies classifying a `D` or `T` inner result against the remaining affine
-input.
+For `P=A+B` and `Q=B+C`, the exact inner-pair matrix is:
 
-| Family and precise input condition | Inner and outer dispatcher outcomes | Status and certified support | Exact missing boundary | Suggested PR |
-| --- | --- | --- | --- | --- |
-| At least one of the three valid full-point inputs is infinity. | Each call touching that input returns the fixed other operand; the remaining inner call is retained on both sides. | **Pure identity reduction.** The two unconditional infinity equations, `curve-point-pair-output-point-of-fixes`, output representation/closure, and fixing canonicality are sufficient in principle. No affine classifier is involved. | A single public three-input associativity-when-an-input-is-infinity theorem (or three small lemmas) is not yet present. | A |
-| Three valid affine inputs, with either inner pair classified `:same-x-other`. | No dispatcher outcome is geometrically reachable. The executable fallback would be infinity only off the stated domain. | **Impossible**, already supported generically by `affine-pair-classify-not-same-x-other-for-curve-points`. | Only convenient full-point/outer corollaries may be needed for case assembly; no new mathematics. | A |
-| Both inner pairs are `O`: `b=-a` and `c=-b` in fixed affine coordinates (including the self-inverse priority case). | `AB=BC=infinity`; left is `c`, right is `a`. The two `O` consequences imply `a=c` after fixing. | **Proved structurally.** `affine-pair-classify-opposite-y-chain-implies-fixed-endpoints-equal` uses the two Stage 1 fixed-coordinate consequences, negation involution, and fixed-object reconstruction without a nonzero-y premise. `curve-point-pair-output-point-associative-when-both-inner-opposite-y` uses the affine branch and infinity equations to retain the equal fixed endpoints. No coordinate-composition algebra is used. | None for this family. | complete |
-| Exactly one inner pair is `O`, while the other is `D` or `T` (the reversed family is obtained by operand/order reversal). | The side with inner `O` reduces to the untouched endpoint. The other side is an outer affine call on the endpoint and a secant or tangent output; its outer result may be `D`, `O`, or `T` but not `:same-x-other`. | **Not a pure infinity identity.** This is the inverse-translation equation `a+((-a)+c)=c` (or its reversal). Existing inverse and identity theorems do not prove it without associativity/cancellation. Commutativity supplies only the left-right mirror. | A semantic inverse/secant and inverse/tangent certificate (or a general chord-and-tangent lemma) proving the outer result equals the endpoint, including exceptional outer `O`/`T` consequences. | D/E |
-| Both inner pairs are `T`. Classifier characterization forces fixed `a=b=c`, with non-self-inverse ordinate. | `AB` and `BC` are the same doubling output. The two outer calls have swapped valid operands `2a` and `a`; their common outer class may be `D`, `O`, or `T`. | **Proved structurally.** `affine-pair-classify-repeated-doubling-implies-fixed-triple` chains the two Stage 1 fixed equalities. `curve-point-pair-output-point-associative-when-both-inner-doubling` reduces both inner branches, identifies their tagged outputs by fixing congruence, obtains validity from doubling closure, and applies `curve-point-pair-output-point-commutative`; it neither classifies the outer pair nor introduces tangent/composition algebra. | None for this family. | complete |
-| One inner pair is `T` and the other is `D`; the reversed tree/order is its commutative mirror. | One inner output is a tangent result and the other a secant result. Each outer affine classifier is derivable only after computing its valid inner result and is in `D/O/T`. | **Genuine mixed tangent/secant algebra.** Existing tangent and secant identities certify each individual line/output, but no theorem relates the two compositions. | A mixed semantic certificate covering equality when both outer results are affine and the derived exceptional outer results (`O`/`T`). Do not assume outer `D`. | E |
-| Both inner pairs are `D`, and both derived outer pairs are `D`. | All four affine calls select the secant branch. | **Already proved** by `xcert-full-point-dispatcher-associative-when-all-distinct-x` under its exact three memberships and four ordered classifications. | None for this subfamily. | complete |
-| Both inner pairs are `D`, but at least one derived outer pair is `O` or `T`. | Inner outputs are affine secant outputs. Outer outcomes are in `D/O/T`; an `O` output is infinity and a `T` output is a doubling result. The outcome on the other tree is a consequence to prove, not an independent arbitrary classifier choice. | **Genuine exceptional secant composition.** X-CERT currently requires both outer `D` classifications and therefore does not cover it. Closure and impossibility eliminate only `:same-x-other`. | Chord/secant consequences showing the matching outer outcome and output equality. Determine during certificate design whether these are degenerations of one division-free certificate or need small representation lemmas. | D/E |
+| inner `AB` | inner `BC` | status after symmetry | certified boundary or missing family |
+| --- | --- | --- | --- |
+| `O` | `O` | complete | `curve-point-pair-output-point-associative-when-both-inner-opposite-y` |
+| `O` | `D` | complete; reverse point order gives `D/O` | `affine-inverse-secant-translation`, whose conclusion is outer `D` or `T` with output `C` and witness `-r` |
+| `O` | `T` | complete; reverse point order gives `T/O` | `affine-inverse-tangent-translation`, whose conclusion is outer `D` or `T` with output `B` and witness `-t` |
+| `T` | `T` | complete structurally | `curve-point-pair-output-point-associative-when-both-inner-doubling`; both premises force fixed `A=B=C`, and outer commutativity closes the trees |
+| `D` | `D` | complete at the affine semantic family level | ordinary outer `D/D` is covered by the X-CERT theorems; outer `O/O` by `affine-dd-opposite-y-propagates-to-other-tree` and its left-tree mirror; an outer `T` and its opposite-tree `D/T` result by `affine-dd-t-translation` and point-order reversal |
+| `D` | `T` | **open** | the genuinely mixed inner secant/tangent family described below |
+| `T` | `D` | no independent mathematics | reverse `A,B,C`, reverse secant operands with `affine-distinct-x-secant-relation-p-reverse`, use the symmetry of the opposite-y relation, and commute the two outer additions; this is the mirror of `D/T` |
 
-The table deliberately does **not** claim that “inner opposite-y collapses the
-case” in general: only the side containing that inner call collapses.  Nor does
-it list outer classifications as four independent choices.  The curve equation,
-inner branch relations, and closure constrain them, and the future semantic
-certificate must derive the matching exceptional outcome.
+Thus the former phrase “mixed `D/T`” refers **only to the types of the two
+inner additions**, not to an outer pair and not to the DD-T naming convention.
+`D-D` is complete, `T-T` is complete, and only one oriented `D-T` family is
+new mathematics.  `T-D` is its point-order/operand-reversal mirror.  Relation
+reversal preserves the secant witness; doubling is intrinsically a one-input
+relation; opposite-y reversal is
+`affine-opposite-y-infinity-relation-p-symmetric`; and full relation reversal
+is `curve-point-addition-relation-p-commutative`.
 
-The available symmetry is strong but limited.  The generic public theorem
-`curve-point-pair-output-point-commutative` gives raw equality for two valid
-curve points, while `curve-point-addition-relation-p-commutative` gives the
-semantic reversal.  Classifier symmetry is evident from the characterizations
-and is used internally by the commutativity development, but there is no named
-public theorem asserting `affine-pair-classify first second` equals its swap.
-There is likewise no separately named affine-dispatcher commutativity theorem.
-Full commutativity can identify the mirror of an associativity family and
-closes the all-equal `T/T` family; it does not justify cyclic permutation of an
-associativity equation before associativity itself is known.  A small public
-classifier-symmetry interface is therefore useful for case assembly, but
-re-proving commutativity is not a prerequisite.
+The completed `D/D` submatrix is more precise than a free outer three-by-three
+product.  If both outer additions are secants, the public X-CERT endpoints
+`xcert-final-x-coordinates-equal`, `xcert-final-y-coordinates-equal`,
+`xcert-untagged-outputs-equal`, and `xcert-tagged-outputs-equal` have orientation
+`(A+B)+C = A+(B+C)` and use the four canonical ordered secant witnesses.  If
+one outer relation is `O`, DD-O propagates `O` to the other tree (the converse
+orientation is the structural theorem
+`affine-dd-opposite-y-propagates-to-left-tree`).  If the left outer relation is
+`T`, the exact equations are `A+B=C`, `B+C=Q`, `C+C=D`, and the theorem
+`affine-dd-t-translation` derives either `A+Q=D` by a secant or `A+A=D` by a
+doubling, in both cases with witness `(p+t)-r`.  Reversing `C,B,A` supplies the
+right-outer-`T` orientation.  There is therefore no remaining DD family.
 
-The least-risk algebra plan is to stay at the independent semantic-relation
-boundary and add a small family of division-free chord-and-tangent
-certificates.  First test a shared residual/telescope framework parameterized
-by certified line equations, but do not make branch selection executable or
-hide classifier reasoning in the certificate.  If that parameterization makes
-ACL2 instantiation or hypotheses opaque, prefer two explicit certificates:
-secant--tangent (its reversal supplies tangent--secant) and inverse/exceptional
-secant composition.  Extending the current X-CERT theorem by merely replacing
-secant slopes with tangent quotients is not yet justified: its seven residual
-equations and nonzero factors encode four ordered distinct-x calls.  Whether
-the exceptional outer `O/T` degenerations follow from the same polynomial
-identity remains an **open feasibility question**, not a certified claim.
+Infinity inputs are already complete through
+`curve-point-pair-output-point-associative-when-infinity-input`.  An inner `O`
+produces canonical infinity on that tree, while the inverse/secant or
+inverse/tangent translation supplies the non-infinity tree.  Malformed ACL2
+objects matter only to the later total executable lift through the fixers; they
+are not extra semantic cases for the finite valid-curve-point theorem.
+
+Finite affine semantic assembly must consume the `D`, `O`, or `T` relation for
+both inner additions, closure for affine inner outputs, and the matching outer
+relation(s).  Its natural endpoint is
+`curve-point-addition-relation-p` for a common output on each tree, rather than
+a permanently exposed lower-level disjunction: the latter is only the input to
+assembly.  Before assembly, the sole missing cells are oriented inner `D/T`
+and its structural `T/D` mirror.
 
 ### Stage 3 exceptional-secant certificate audit
 
@@ -654,9 +648,9 @@ and both output equations for the same negated witness.  Finally
 `affine-inverse-secant-translation` splits only on `xu=xa` and certifies the
 outer D/T disjunction.  Outer O is excluded by the self-inverse theorem rather
 than assumed away by a classifier premise.  The inverse/secant semantic family
-is complete.  Corrected DD-T reconstruction, any nonautomatic mirrored exceptional results,
-mixed D/T, finite semantic assembly, unrestricted associativity, executable
-lifting, and group-law packaging remain open.
+is complete.  The single oriented mixed-inner `D/T` certificate, its structural mirror,
+finite semantic assembly, unrestricted associativity, executable lifting, and
+group-law packaging remain open.
 
 #### B. Inverse translation with an inner tangent
 
@@ -976,8 +970,8 @@ result.  Both disjuncts use the syntactically identical witness
 no classifier, division, inverse, or independent denominator premise; neither
 branch proof is replayed.
 
-Still open are the mixed D/T exceptional families, finite affine semantic
-assembly, unrestricted associativity, lifting to the full curve-point
+Still open are the oriented mixed-inner `D/T` family and its mirror, finite
+affine semantic assembly, unrestricted associativity, lifting to the full curve-point
 relations, executable correctness, and final group-law packaging.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
@@ -1063,18 +1057,89 @@ separate oriented
 certificates unless ACL2 experiments show transparent specializations with no
 hidden nonzero hypotheses.
 
-Stage 3 therefore remains partially open and is subdivided into: (1) inverse/secant,
-including A-D4 and the self-inverse impossibility; (2) inverse/tangent with its
-derived outer `D/T` split (**semantic boundary complete**); (3) `DD-O`
-collinearity propagation (**semantic boundary complete**); and (4) `DD-T`
-independent-witness reconstruction plus its derived opposite-tree outcome.
-The recommended bounded order is: next audit and certify the coincident-x
-ordinate/opposite-y exclusion; then certify its tangent equations; and only
-then package the combined semantic DD-T family.  Each implementation PR must
-stop after one subdivision, must expose only semantic relations or their exact
-scalar equations, and must not proceed if it needs an independent opposite
-outer classification.  Mixed `D/T`, finite assembly, unrestricted
-associativity, cancellation, and group packaging remain outside Stage 3.
+Stage 3 is complete through inverse/secant, inverse/tangent, DD-O, and DD-T at
+the affine semantic relation boundary.  Stage 4 now has exactly one genuinely
+new orientation: inner `D/T`; inner `T/D` is its structural mirror.  Finite
+assembly, unrestricted associativity, cancellation, and group packaging remain
+later stages.
+
+### Selected next bounded theorem: mixed-inner `D/T`, left outer secant
+
+The next PR should certify one theorem, provisionally named
+`affine-dt-d-translation`.  Its exact oriented point equations are
+
+```text
+A+B=P       (distinct-x secant, witness p),
+B+B=Q       (doubling, witness t; hence C=B in A,B,C notation),
+P+B=R       (distinct-x secant, witness q),
+A+Q=R       (desired distinct-x secant or doubling, witness s=p+q-t).
+```
+
+The public premises should therefore be exactly
+
+```lisp
+(affine-distinct-x-secant-relation-p a b p-slope p)
+(affine-doubling-relation-p b t-slope q)
+(affine-distinct-x-secant-relation-p p b q-slope r)
+```
+
+and the conclusion should be the disjunction
+
+```lisp
+(or (affine-distinct-x-secant-relation-p a q s r)
+    (affine-doubling-relation-p a s r))
+```
+
+with the single syntactically fixed witness
+
+```lisp
+s = (field-sub (field-add (field-fix p-slope)
+                          (field-fix q-slope))
+               (field-fix t-slope)).
+```
+
+This bounded theorem covers the observed outer `D/D` and `D/T` outcomes.  The
+outer `O/O` degeneration is a separate endpoint to derive, not an assumed
+classifier exclusion; no left-outer `T` case was observed in the exhaustive
+checks below.  The mirror inner `T/D` family is expected to require only point
+order reversal, secant-relation reversal, opposite-y symmetry, and outer
+commutativity after this oriented family and its `O/O` endpoint exist.
+
+The semantic relations already supply the nonzero factors `xb-xa`, `xb-xp`,
+and `yb+yb` needed respectively by the two secant witnesses and the tangent
+witness.  No independent denominator hypothesis should be public.  X-CERT's
+H/S/telescope organization is the likely reusable algebra, but its existing
+four-secants theorem is not directly instantiable because one inner line is a
+tangent.  Characteristic assumptions are not presently indicated: the public
+doubling relation itself supplies `yb != -yb`, and both F7 and F11 validation
+work in the existing generic field scope.  A characteristic predicate must not
+be added unless a later certified cancellation identifies a genuinely new
+factor.
+
+A field-only interface consisting only of the three displayed relation-equation
+groups is insufficient.  Modulo 11 the scalar assignment
+
+```text
+a=2, A=(8,3), B=(5,5), P=(7,0), Q=(1,6), R=(8,8),
+p=3, t=0, q=3, s=p+q-t=6
+```
+
+satisfies the two secant equation groups, the tangent equation group, both
+secant nonzero differences, and the tangent domain, but the desired outer slope
+residual is `s*(xQ-xA)-(yQ-yA)=10`, not zero.  The points do not share one
+short-Weierstrass curve.  Consequently the new reconstruction needs an
+explicit common-curve bridge (or a scalar consequence proved from the curve
+memberships already contained in the semantic relations); a field-only theorem
+must not omit it.
+
+Exhaustive enumeration over every short-Weierstrass equation
+`y^2=x^3+a*x+b` over F7 and F11, every non-self-inverse `B`, and every affine
+`A` with `xA != xB` found respectively 1,764 and 12,100 oriented `D/T` inputs.
+The paired outer outcomes were F7: 1,296 `D/D`, 216 `D/T`, and 252 `O/O`; F11:
+10,000 `D/D`, 1,000 `D/T`, and 1,100 `O/O`.  Every affine case used
+`s=p+q-t` and produced the same output on both trees.  These checks are
+validation, not proof; focused F7/F11 regressions should include one `D/D`, one
+`D/T`, and one `O/O` witness.
 
 ## Hasse and Schoof tracks
 

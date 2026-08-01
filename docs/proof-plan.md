@@ -72,10 +72,9 @@ certified curve boundary `short-weierstrass-characteristic-p`.  It states
 nonzero two and nonzero three in the same `GFIELD` operations used by the curve
 equation, while leaving generic field and polynomial clients—including F2—
 unchanged.  Existing representation, secant, classifier, dispatcher, X-CERT,
-inverse/tangent, and DD-O theorems remain at their certified generic scope;
-only new arguments that exclude a small-characteristic degeneration should
-consume the named predicate.  Inverse/secant and DD-T remain separate later
-PRs and are not resumed by the characteristic-boundary work.
+inverse translation, DD-O, and DD-T theorems remain at their certified scope; only new
+arguments that exclude a demonstrated small-characteristic degeneration should
+consume the named predicate.
 
 The structural audit is recorded in the
 [associativity case ledger](obligations.md#associativity-case-audit).  It
@@ -143,18 +142,24 @@ PR boundaries:
    uses no classifier, division, inverse, or independent denominator premise.
    No scalar branch proof is replayed.  Use the existing division-free secant
    and doubling relations as the scalar interface and package through
-   `curve-point-addition-relation-p` only after the still-open mixed D/T
-   families and finite affine semantic assembly.  The exact oriented
-   equations and residual conclusions are recorded in the obligation ledger.
+   `curve-point-addition-relation-p` only after the still-open mixed-inner
+   `D/T` family, its structural mirror, and finite affine semantic assembly.
+   The exact oriented equations and residual conclusions are recorded in the obligation ledger.
    Stop an implementation PR after one subdivision certifies; stop earlier if
    the opposite-tree outcome cannot be derived without an additional nonzero
    assumption or an independent outer classifier premise.
-4. **Mixed secant--tangent certificate.** Certify one coherent division-free
-   family for `D/T`; obtain `T/D` by the already certified commutative mirror.
-   Reuse the individual secant and tangent relations.  A branch-parametric
-   residual framework is preferred only if its hypotheses remain explicit;
-   otherwise use two small, oriented certificates.  Stop when mixed semantic
-   output equality and all genuinely derived exceptional outcomes are covered.
+4. **Mixed-inner secant/tangent certificate (next: `affine-dt-d-translation`).**
+   Here `D/T` means that `A+B=P` is a distinct-x secant and `B+B=Q` is a
+   doubling; it does not describe an outer pair.  First certify the bounded
+   left-outer-secant translation from the three public premises
+   `(A,B,p,P)`, `(B,t,Q)`, and `(P,B,q,R)` to a secant/doubling disjunction for
+   `(A,Q,s,R)`, with the exact witness `s=p+q-t`.  The proof must use a
+   common-curve bridge: the corresponding bare scalar equation groups have an
+   F11 countermodel.  Then derive the `O/O` degeneration and obtain inner
+   `T/D` by reversing `A,B,C`, reversing secants, opposite-y symmetry, and
+   commutativity.  Exhaustive F7/F11 validation observes only outer `D/D`,
+   `D/T`, and `O/O`.  Stop after the named translation; do not combine its
+   reconstruction with semantic assembly.
 5. **Finite semantic assembly.** Combine infinity, impossible, `O`, `T`, and
    `D` families into semantic associativity for valid curve points, relying on
    `curve-point-addition-case-coverage`.  This PR must add no new coordinate
