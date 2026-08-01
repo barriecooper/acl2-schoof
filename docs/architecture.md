@@ -291,10 +291,18 @@ is complete.  The coincident-x branch is also packaged separately as the public
 doubling relation by `affine-dd-t-coincident-x-translation`, using the same
 exact fixed witness and the five certified ordinate/domain/scalar endpoints.
 That semantic packaging adds no characteristic, classifier, division, inverse,
-or independent denominator premise.  The combined theorem selecting these two
-relations from the outer x test remains open; a common theorem should preserve
-the two explicit oriented specializations and introduce no hidden nonzero
-premise.
+or independent denominator premise.  `affine-dd-t-translation` now completes
+the DD-T family at the affine semantic relation boundary.  It assumes exactly
+the two inner secant relations and the tangent relation, splits only on
+`xq=xa`, and invokes the coincident-x translation on equality and the
+outer-distinct-x translation on disequality.  Its secant/doubling disjunction
+uses the same exact witness in both arms:
+`(field-sub (field-add (field-fix p-slope) (field-fix t-slope))
+(field-fix r-slope))`.  The composition replays neither branch proof and is
+characteristic-independent, with no classifier, division, inverse, or
+independent denominator premise.  Mixed D/T families, finite affine semantic
+assembly, unrestricted associativity, full curve-point lifting, executable
+correctness, and final group-law packaging remain open.
 
 The inverse/tangent specialization is certified at the semantic relation
 boundary by `affine-inverse-tangent-translation`.  It negates the inner tangent

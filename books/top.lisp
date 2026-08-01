@@ -125,6 +125,8 @@
 (include-book "curve/affine-dd-t-outer-distinct-x-output-y-regression")
 (include-book "curve/affine-dd-t-outer-distinct-x-translation")
 (include-book "curve/affine-dd-t-outer-distinct-x-translation-regression")
+(include-book "curve/affine-dd-t-translation")
+(include-book "curve/affine-dd-t-translation-regression")
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/f7x2-representation")

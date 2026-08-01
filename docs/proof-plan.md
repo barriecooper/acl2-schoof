@@ -133,14 +133,18 @@ PR boundaries:
    certified, and `affine-dd-t-coincident-x-translation` packages them into the
    public doubling relation with exact fixed witness `s=(p+t)-r`.  The five
    public ordinate, tangent-domain, tangent-numerator, output-x, and output-y
-   endpoints supply its clauses directly.  This coincident-x semantic branch
-   is characteristic-independent and uses no classifier, division, inverse,
-   or independent denominator premise.  Next combine the already certified
-   outer distinct-x and coincident-x branches, without replaying either scalar
-   proof.  Use the
-   existing division-free secant and doubling relations as the scalar interface
-   and package results through `curve-point-addition-relation-p` only
-   afterwards.  The exact oriented
+   endpoints supply its clauses directly.  The combined
+   `affine-dd-t-translation` theorem now completes the DD-T semantic family:
+   it splits only on `xq=xa`, invokes the outer-distinct-x theorem in the
+   disequality branch and the coincident-x theorem in the equality branch, and
+   returns the secant/doubling disjunction with the identical exact witness
+   `(field-sub (field-add (field-fix p-slope) (field-fix t-slope))
+   (field-fix r-slope))`.  This composition is characteristic-independent and
+   uses no classifier, division, inverse, or independent denominator premise.
+   No scalar branch proof is replayed.  Use the existing division-free secant
+   and doubling relations as the scalar interface and package through
+   `curve-point-addition-relation-p` only after the still-open mixed D/T
+   families and finite affine semantic assembly.  The exact oriented
    equations and residual conclusions are recorded in the obligation ledger.
    Stop an implementation PR after one subdivision certifies; stop earlier if
    the opposite-tree outcome cannot be derived without an additional nonzero
