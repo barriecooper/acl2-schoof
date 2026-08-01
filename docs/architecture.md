@@ -287,9 +287,14 @@ opposite-tree witness is `(p+t)-r`.  Its three certified distinct-x equations
 are now packaged into the public semantic secant relation, with exact witness
 `(field-sub (field-add (field-fix p) (field-fix t-slope)) (field-fix r))`.
 This characteristic-independent, classifier-free DD-T outer distinct-x branch
-is complete; the separate coincident-x/opposite-y analysis remains open.  A
-common theorem should be introduced only if those oriented specializations
-remain explicit and require no hidden nonzero premise.
+is complete.  The coincident-x branch is also packaged separately as the public
+doubling relation by `affine-dd-t-coincident-x-translation`, using the same
+exact fixed witness and the five certified ordinate/domain/scalar endpoints.
+That semantic packaging adds no characteristic, classifier, division, inverse,
+or independent denominator premise.  The combined theorem selecting these two
+relations from the outer x test remains open; a common theorem should preserve
+the two explicit oriented specializations and introduce no hidden nonzero
+premise.
 
 The inverse/tangent specialization is certified at the semantic relation
 boundary by `affine-inverse-tangent-translation`.  It negates the inner tangent

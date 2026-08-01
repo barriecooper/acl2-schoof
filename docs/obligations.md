@@ -950,8 +950,23 @@ premise, classifier premise, division, inverse, outer denominator, or
 independent nonzero hypothesis.  All scalar and domain clauses for the
 coincident-x doubling branch are now certified.
 
-Still open are semantic outer doubling relation packaging, combined DD-T,
-mixed D/T, finite semantic assembly, and unrestricted associativity.
+`affine-dd-t-coincident-x-translation` now packages that branch into the public
+doubling relation `(A,s,D)`, with the exact witness
+`s=(field-sub (field-add (field-fix p-slope) (field-fix t-slope))
+(field-fix r-slope))`.  Its direct semantic proof invokes the five public
+endpoints `affine-dd-t-coincident-x-implies-ordinate-equality`,
+`affine-dd-t-coincident-x-excludes-self-inverse`,
+`affine-dd-t-coincident-x-tangent-equation`,
+`affine-dd-t-coincident-x-output-x-equation`, and
+`affine-dd-t-coincident-x-output-y-equation`; curve membership of `A` and `D`
+comes from the first secant and the doubling relation at `C`.  The packaging is
+characteristic-independent and adds no classifier, division, inverse, or
+independent denominator premise.  Thus only the DD-T coincident-x semantic
+doubling branch is complete.
+
+Still open are the combined DD-T secant/doubling disjunction, mixed D/T, finite
+semantic assembly, unrestricted associativity, executable lifting, and final
+group-law packaging.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
 requested endpoint.  Take
