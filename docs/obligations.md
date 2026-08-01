@@ -1132,6 +1132,37 @@ explicit common-curve bridge (or a scalar consequence proved from the curve
 memberships already contained in the semantic relations); a field-only theorem
 must not omit it.
 
+The first confluent X-CERT specialization narrows the missing bridge further.
+Put `xa,ya=A`, `xb,yb=B`, and `xp,yp=P`.  The two X-CERT input slots are the
+ordered secant identities for `(A,B,p)` and `(P,B,q)`; the ordinary `B,C`
+input is replaced by the tangent numerator at `B` with witness `t`.  Together
+with the first secant output equations, these inputs give the factored
+confluent H residual
+
+```text
+(xb-xa)*(xb-xp)*((p-t)*(p+q)-(xa-xb))=0.
+```
+
+Both factors are necessary at this interface: polynomial reduction leaves a
+nonzero residual if only `xb-xa` is retained, but reduces identically to zero
+when both factors are retained.  Their nonzeroness is already supplied by the
+two semantic secant relations, so neither is a new public premise.  Cancelling
+them yields `(p-t)*(p+q)=xa-xb`.  The remaining X-CERT S substitution is
+`xab=P`, `xbc=Q`, `r=t`, and `tt=u`, where `u` is the canonical outer slope
+for `(A,Q)`, and its expected residual is
+
+```text
+(xQ-xA)*(p+q-(t+u))=0.
+```
+
+Only `xQ-xA`, supplied by the outer distinct-x premise, is then cancelled.
+This common-curve input excludes the recorded F11 field-only countermodel,
+whose coordinates do not supply these identities.  The public slope endpoint
+is not yet certified: the field library exposes ordinary two-distinct-input
+X-CERT H reconstruction, but not this confluent two-factor H bridge, and the
+direct bounded normalization attempt stopped at that missing theorem
+interface.  No statement was weakened and no trust mechanism was introduced.
+
 Exhaustive enumeration over every short-Weierstrass equation
 `y^2=x^3+a*x+b` over F7 and F11, every non-self-inverse `B`, and every affine
 `A` with `xA != xB` found respectively 1,764 and 12,100 oriented `D/T` inputs.
