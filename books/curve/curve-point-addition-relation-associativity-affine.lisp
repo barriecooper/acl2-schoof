@@ -149,3 +149,89 @@
         affine-coordinates-x-of-fix
         affine-coordinates-y-of-fix
         curve-point-fix-of-infinity))))))
+
+; O/O matrix cell.  The extracted opposite-y relations already have exactly
+; the structural theorem's witness orientation; no packaging or case split is
+; involved.
+(local
+ (defthm curve-point-addition-relation-associative-affine-o-o-cell-local
+   (implies
+    (and
+     (affine-opposite-y-infinity-relation-p a b ab)
+     (affine-opposite-y-infinity-relation-p b c bc)
+     (curve-point-addition-relation-p
+      ab (curve-point-affine-coordinates c) left)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a) bc right))
+    (equal (curve-point-fix left)
+           (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance
+       curve-point-addition-relation-associative-when-both-inner-opposite-y))
+     :in-theory (theory 'minimal-theory)))))
+
+; T/T matrix cell.  The extraction interface records the repeated fixed inputs;
+; tangent witnesses and tangent equations play no role in this structural cell.
+(local
+ (defthm curve-point-addition-relation-associative-affine-t-t-cell-local
+   (implies
+    (and
+     (affine-doubling-relation-p a ab-tangent-slope ab-payload)
+     (equal (affine-coordinates-fix a) (affine-coordinates-fix b))
+     (equal (curve-point-fix ab)
+            (curve-point-affine-coordinates
+             (affine-coordinates-fix ab-payload)))
+     (affine-doubling-relation-p b bc-tangent-slope bc-payload)
+     (equal (affine-coordinates-fix b) (affine-coordinates-fix c))
+     (equal (curve-point-fix bc)
+            (curve-point-affine-coordinates
+             (affine-coordinates-fix bc-payload)))
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a)
+      (curve-point-affine-coordinates b) ab)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates b)
+      (curve-point-affine-coordinates c) bc)
+     (curve-point-addition-relation-p
+      ab (curve-point-affine-coordinates c) left)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a) bc right))
+    (equal (curve-point-fix left)
+           (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance
+       curve-point-addition-relation-associative-when-both-inner-doubling
+       (a (curve-point-affine-coordinates a))
+       (b (curve-point-affine-coordinates b))
+       (c (curve-point-affine-coordinates c))))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(curve-point-fix-of-affine-coordinates))))))
+
+; Relation congruence used after inner determinacy has aligned an extracted
+; tagged payload with the supplied inner witness.  This changes operands only;
+; output comparison remains the responsibility of fixed-operands determinacy.
+(local
+ (defthm addition-relation-transport-fixed-operands-local
+   (implies
+    (and
+     (curve-point-addition-relation-p first-a second-a output)
+     (equal (curve-point-fix first-a) (curve-point-fix first-b))
+     (equal (curve-point-fix second-a) (curve-point-fix second-b)))
+    (curve-point-addition-relation-p first-b second-b output))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance curve-point-addition-relation-p-of-fixes
+                 (first first-a) (second second-a) (output output))
+      (:instance curve-point-addition-relation-p-of-fixes
+                 (first first-b) (second second-b) (output output)))
+     :in-theory (theory 'minimal-theory)))))
