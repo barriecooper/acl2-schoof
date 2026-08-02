@@ -21,7 +21,8 @@ and the executable and independent semantic layers for full tagged-point
 addition. Executable output closure, literal left/right infinity identity,
 transparent point negation, involution, literal left/right inverse,
 commutativity, associativity, and algebraic left/right cancellation are
-complete. Concrete F7, F7X2, and F11
+complete. A carrier-based abstract abelian-group interface and its contextual
+curve functional instance are also complete. Concrete F7, F7X2, and F11
 books supply focused instantiation and execution regressions rather than
 additional generic scope.
 
@@ -48,10 +49,10 @@ dispatcher witnesses to `curve-point-addition-relation-associative`, and
 canonical output turns its fixed-output equality into literal executable
 equality. Proceed with one bounded boundary per proof change:
 
-1. **Group packaging.** With cancellation and its public regressions complete,
-   package the certified laws behind an abstract abelian-group interface.
-2. **Scalar multiplication.** Specify and certify repeated addition only after
-   the group boundary is complete.
+1. **Scalar multiplication.** Specify and certify repeated addition using the
+   completed abstract abelian-group boundary. Keep its logical specification,
+   executable implementation, correspondence, guards, and focused execution
+   evidence distinct.
 
 The stopping conditions prevent semantic assembly from hiding unfinished
 coordinate work and prevent dispatcher expansion from replacing the
