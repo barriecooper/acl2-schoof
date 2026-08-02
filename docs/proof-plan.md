@@ -26,8 +26,8 @@ instantiation and execution regressions rather than additional generic scope.
 
 ### Completed boundaries
 
-The certified semantic base includes original-infinity reductions,
-opposite/opposite, repeated triples, inverse/secant, inverse/tangent, the
+The certified semantic base includes relation-witness original-infinity,
+opposite/opposite, and repeated-triple structural predecessors, inverse/secant, inverse/tangent, the
 complete D/D family, and the complete oriented mixed-inner D/T family.  Its
 left-outer-secant boundary combines the distinct-x and coincident-x outcomes,
 while its separate O/O boundary preserves the witness-free infinity result.
@@ -42,10 +42,8 @@ countermodel, and endpoint derivations are preserved in the
 
 Proceed in this dependency order, with one bounded boundary per proof change:
 
-1. **Supply structural semantic bridges, then assemble finite affine semantic
-   associativity.** Add relation-witness O/O and T/T lemmas (and the analogous
-   original-infinity lemma before full tagged assembly), without importing
-   their existing dispatcher theorems. Then combine O, T, D/D, D/T, and T/D
+1. **Assemble Candidate C finite affine semantic associativity.** All required
+   family and structural predecessors now exist. Combine O, T, D/D, D/T, and T/D
    through case coverage into fixed equality of explicit final witnesses for
    the two independent semantic-relation trees. Completion must add no
    coordinate algebra and does not unfold the executable dispatcher. The exact

@@ -489,12 +489,16 @@ relation(s).  Its natural endpoint is
 a permanently exposed lower-level disjunction: the latter is only the input to
 assembly.  All matrix cells are now certified. The remaining task is finite affine
 semantic assembly through the independent relation and case-coverage books.
-The [assembly audit](audits/associativity-assembly.md) found one interface gap:
-the O/O and T/T associativity boundaries currently checked in are executable
-dispatcher theorems, not relation-witness theorems. Relation-level structural
-predecessors (and the analogous original-infinity predecessor for later full
-tagged assembly) must be certified before independent assembly can use them.
-No affine-family mathematics is missing.
+The structural semantic predecessor ledger is complete:
+
+| predecessor | status | relation-level theorem |
+| --- | --- | --- |
+| O/O | certified | `curve-point-addition-relation-associative-when-both-inner-opposite-y` |
+| T/T | certified | `curve-point-addition-relation-associative-when-both-inner-doubling` |
+| Original-input infinity | certified | `curve-point-addition-relation-associative-when-original-infinity` |
+
+Finite affine semantic assembly remains open. No affine-family mathematics or
+structural predecessor is missing.
 
 ### Stage 3 exceptional-secant certificate audit
 
