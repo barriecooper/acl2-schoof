@@ -49,7 +49,7 @@ correctness. The full evidence model is maintained in
 | Evaluation and powers | Certified | `eval`; `poly-pow` | Evaluation and ring compatibility are certified. |
 | Degree and leading coefficient | Certified | `poly-degree`; `poly-leading-coefficient` | Defined over normalized dense polynomials. |
 | Formal derivative operation and additive laws | Certified | `poly-derivative`; `canonical-polynomial-p-of-poly-derivative`; `poly-derivative-of-poly-add`; `poly-derivative-of-poly-neg`; `poly-derivative-of-poly-sub` | Uses generic `field-nat-mul`; a characteristic-safe length upper bound is certified. |
-| Derivative product and power rules | Open | — | First add a bounded indexed-convolution bridge for `raw-mul`. |
+| Derivative product and power rules | Open | `raw-derivative-aux-successor`; `raw-derivative-aux-of-zero-prefix` | The exact indexed and leading-zero shift bridges are certified.  The raw Horner product rule remains open at the list-alignment/reassociation step; power remains deferred until the public product rule and a clean natural polynomial-scaling interface exist. |
 | Square-free and separability theory | Open | — | Required by later function-field and Schoof work. |
 | Rational-function algebra | Open | — | Requires equality, cancellation, and degree theory. |
 | Further HS/PFIELD bridges | Deferred | — | Add only when a downstream theorem requires them. |
