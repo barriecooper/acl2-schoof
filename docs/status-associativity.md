@@ -24,7 +24,7 @@ boundaries. Detailed obligations remain in [the ledger](obligations.md).
 | T/D mirror | `A+A=P`, `A+B=Q`; mirrored right-outer secant outcomes and left-to-right O/O propagation | **Certified** | `affine-td-d-translation`, together with `affine-td-left-output-opposite-y-propagates-to-right-output` | None | Finite affine semantic assembly |
 | Finite affine semantic assembly | Exhaustive affine O/T/D case combination | **Certified semantically** | `curve-point-addition-relation-associative-for-affine-inputs` | `short-weierstrass-characteristic-p` (only O/D and D/O) | Full tagged semantic wrapper |
 | Full tagged semantic associativity | All valid tagged curve-point inputs | **Certified semantically** | `curve-point-addition-relation-associative`; non-infinity inputs use `short-weierstrass-curve-point-non-infinity-representation` | Inherited from the affine theorem | None at the semantic boundary |
-| Executable dispatcher lift | Lift semantic equality to nested `curve-point-pair-output-point` | **Open** | Unrestricted dispatcher theorem not yet checked in | Inherited from the semantic theorem | Soundness, determinacy, closure, and fixing |
+| Executable dispatcher lift | All valid tagged inputs, with nested `curve-point-pair-output-point` calls | **Certified executably** | `curve-point-pair-output-point-associative`; `curve-point-pair-output-point-associative-fixed` is the semantic bridge | Inherited from the semantic theorem | None; abstract group packaging is next |
 
 The D/T notation describes the two **inner** geometries, not an outer
 classifier. The maintained orientation and certificate details are in the

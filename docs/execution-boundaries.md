@@ -111,6 +111,16 @@ semantic commutativity and determinacy are applied. Off-domain branch and
 fallback executions remain total programming conventions, not geometric
 claims.
 
+Executable associativity follows the same separation.  Four applications of
+dispatcher soundness, with closure for the two inner results, instantiate the
+independent theorem `curve-point-addition-relation-associative`.  Its
+fixed-output conclusion is converted to literal dispatcher equality only by
+the canonical-output theorem
+`curve-point-fix-of-curve-point-pair-output-point`.  The lift replays no
+classifier case split or affine branch algebra.  Concrete F11 triples and
+finite F7/F11 enumeration validate execution separately; they do not establish
+semantic correctness.
+
 ## Guard and termination boundaries
 
 Recursive polynomial division uses a certified strict decrease of the

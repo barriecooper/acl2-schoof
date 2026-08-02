@@ -80,4 +80,38 @@
                                              '(:affine (13 15)))
          '(:affine (2 4)))))
 
+; Focused associativity executions.  These cover three affine inputs, an
+; infinity input, an opposite-y inner call, and a doubling inner call.  They
+; are concrete branch-execution regressions, not the generic proof.
+(assert-event
+ (and
+  (equal
+   (f11-curve-point-pair-output-point
+    (f11-curve-point-pair-output-point '(:affine (2 4)) '(:affine (3 5)))
+    '(:affine (5 2)))
+   (f11-curve-point-pair-output-point
+    '(:affine (2 4))
+    (f11-curve-point-pair-output-point '(:affine (3 5)) '(:affine (5 2)))))
+  (equal
+   (f11-curve-point-pair-output-point
+    (f11-curve-point-pair-output-point '(:infinity) '(:affine (2 4)))
+    '(:affine (3 5)))
+   (f11-curve-point-pair-output-point
+    '(:infinity)
+    (f11-curve-point-pair-output-point '(:affine (2 4)) '(:affine (3 5)))))
+  (equal
+   (f11-curve-point-pair-output-point
+    (f11-curve-point-pair-output-point '(:affine (2 4)) '(:affine (2 7)))
+    '(:affine (3 5)))
+   (f11-curve-point-pair-output-point
+    '(:affine (2 4))
+    (f11-curve-point-pair-output-point '(:affine (2 7)) '(:affine (3 5)))))
+  (equal
+   (f11-curve-point-pair-output-point
+    (f11-curve-point-pair-output-point '(:affine (2 4)) '(:affine (2 4)))
+    '(:affine (3 5)))
+   (f11-curve-point-pair-output-point
+    '(:affine (2 4))
+    (f11-curve-point-pair-output-point '(:affine (2 4)) '(:affine (3 5)))))))
+
 (verify-guards f11-curve-point-pair-output-point)

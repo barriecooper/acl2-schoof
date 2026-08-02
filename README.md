@@ -36,8 +36,10 @@ a generic theorem. The detailed proved/open ledger is
 [`docs/obligations.md`](docs/obligations.md), and the current associativity
 case matrix is [`docs/status-associativity.md`](docs/status-associativity.md).
 
-The curve development is **not** yet a certified group law: associativity,
-cancellation, group packaging, and scalar multiplication remain unproved.
+The full tagged executable curve-point dispatcher is now associative for valid
+curve points, certified by lifting the independent semantic relation theorem.
+The curve development is **not** yet a packaged group law: cancellation, group
+packaging, and scalar multiplication remain unproved.
 There is no certified Hasse theorem, point-count correctness theorem,
 division-polynomial theory, Frobenius machinery for Schoof, or Schoof
 algorithm.
@@ -130,11 +132,9 @@ question and explain how it was resolved, but must label it as history.
 ## Roadmap and limitations
 
 Full tagged semantic associativity is certified, including infinity-input
-reductions and the complete affine D/O/T case assembly.  The next boundary is
-to lift that independent semantic theorem to the executable dispatcher using
-soundness, determinacy, closure, and canonical fixing.
-
-Unrestricted associativity is not yet certified. Consequently there is no
-certified group packaging. There is also no Hasse theorem and no certified
-Schoof algorithm. See the [current matrix](docs/status-associativity.md) and
+reductions and the complete affine D/O/T case assembly.  Executable dispatcher
+associativity for valid tagged inputs is also certified from that independent
+relation using soundness, closure, and canonical fixing. Abstract group
+packaging is the next boundary. There is still no Hasse theorem and no
+certified Schoof algorithm. See the [current matrix](docs/status-associativity.md) and
 [forward proof plan](docs/proof-plan.md) for the maintained boundaries.
