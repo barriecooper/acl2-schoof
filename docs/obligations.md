@@ -168,18 +168,19 @@ bridges.  It does not constitute abstract group packaging.
 | Involution | **Certified** | `curve-point-neg-of-neg`; raw canonical form: `curve-point-neg-involution-when-representation-p` |
 | Right inverse | **Certified** | `curve-point-pair-output-point-with-negate-right` |
 | Left inverse | **Certified** | `curve-point-pair-output-point-with-negate-left` |
-| Left cancellation | **Open** | To be derived algebraically from the public executable laws |
-| Right cancellation | **Open** | To be derived algebraically from the public executable laws |
+| Left cancellation | **Certified** | `curve-point-pair-output-point-cancel-left` |
+| Right cancellation | **Certified** | `curve-point-pair-output-point-cancel-right` |
 | Negation canonical output | **Certified** | `curve-point-fix-of-neg` |
 | Negation fixing congruence | **Certified** | `curve-point-neg-of-fix` and the `equal` congruence for `curve-point-neg` |
 | Addition canonical output/fixing | **Certified** | `curve-point-fix-of-curve-point-pair-output-point`; `curve-point-pair-output-point-of-fixes` |
 
-The semantic inverse bridge is
+Both cancellation laws are purely algebraic consequences of the public
+executable associativity, inverse, identity, and commutativity laws; they do
+not use the semantic relation or reopen dispatcher branches.  The semantic inverse bridge is
 `curve-point-addition-relation-p-of-point-and-neg`.  The executable right law
 uses dispatcher soundness and relation output determinacy; the left law follows
-from executable commutativity.  Cancellation and abstract abelian-group
-packaging remain open, and scalar multiplication is deferred until after those
-boundaries.
+from executable commutativity.  Abstract abelian-group packaging remains open,
+and scalar multiplication is deferred until after that boundary.
 
 ## Field-only X-CERT algebra
 
@@ -1152,7 +1153,9 @@ All entries use the orientation `A+B=P` by secant `p`, `B+B=Q` by doubling
   equality.  It removes both output fixers to give the exact public executable
   theorem `curve-point-pair-output-point-associative` for valid tagged inputs.
   No dispatcher branch or affine algebra is unfolded in this lift.
-- **Open:** abstract group packaging and its prerequisite cancellation laws.
+- **Open:** abstract abelian-group packaging.  Its cancellation prerequisites
+  are certified by `curve-point-pair-output-point-cancel-left` and
+  `curve-point-pair-output-point-cancel-right`.
 
 ### Candidate C finite semantic assembly interface
 
