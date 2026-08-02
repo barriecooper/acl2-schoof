@@ -306,9 +306,19 @@ public outer-distinct-x scalar endpoints are now directly packaged by
 relation, with exact witness `(p+q)-t`.  This branch likewise adds no
 characteristic condition, classifier, division, inverse, or independent
 denominator premise, and does not replay its coordinate or X-CERT proofs.
-Coincident-x and O/O D/T analysis, the complete oriented D/T theorem, its T/D
-mirror, finite affine semantic assembly, unrestricted associativity, full
-curve-point lifting, executable correctness, and final group-law packaging
+The mixed-inner D/T coincident-x domain and scalar endpoints are likewise
+packaged directly into `affine-doubling-relation-p` by
+`affine-dt-d-coincident-x-translation`, with the exact four semantic premises
+and fixed witness `(field-sub (field-add (field-fix p-slope)
+(field-fix q-slope)) (field-fix t-slope))`.  The relation clauses obtain input
+and output curve membership from the two secants and obtain tangent domain,
+tangent numerator, output x, and output y from the four named public endpoints.
+This boundary replays no coordinate, confluent-H, X-CERT, or final-y proof and
+adds no characteristic, classifier, division, inverse, independent
+denominator, or public nonzero premise.  O/O D/T analysis, the complete
+oriented D/T theorem, its T/D mirror, finite affine semantic assembly,
+unrestricted associativity, full curve-point lifting, executable correctness,
+and final group-law packaging
 remain open.
 
 The inverse/tangent specialization is certified at the semantic relation

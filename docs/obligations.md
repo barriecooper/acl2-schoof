@@ -1458,6 +1458,39 @@ Semantic doubling packaging, outer O/O degeneration, combined oriented D/T,
 the T/D mirror, finite semantic assembly, and unrestricted associativity remain
 open.
 
+The coincident-x semantic doubling branch is now complete.
+`affine-dt-d-coincident-x-translation` assumes exactly the four relations
+`A+B=P` (distinct-x secant `p`), `B+B=Q` (doubling `t`), `P+B=R`
+(distinct-x secant `q`), and `xQ=xA`, and returns the public doubling relation
+from `A` to `R` with the exact fixed witness
+`(field-sub (field-add (field-fix p-slope) (field-fix q-slope))
+(field-fix t-slope))`.  Unfolding only the semantic relation interfaces and
+the field fixing interface discharges every doubling clause directly: curve
+membership of `A` comes from the first secant, curve membership of `R` from
+the second secant, tangent domain from
+`affine-dt-d-coincident-x-excludes-self-inverse`, tangent numerator from
+`affine-dt-d-coincident-x-tangent-equation`, output x from
+`affine-dt-d-coincident-x-output-x-equation`, and output y from
+`affine-dt-d-coincident-x-output-y-equation`.  Existing field subtraction and
+fixing lemmas close the witness form.  The already-certified ordinate equality
+is not needed separately by this packaging theorem.
+
+This direct packaging replays no opposite-y propagation, confluent H,
+doubled-ordinate telescope, tangent-numerator reconstruction, canonical
+tangent-slope uniqueness, X-CERT telescope or composition, or final-y
+reconstruction.  It inherits, but does not repeat or extend, the complete
+endpoint cancellation inventory: `xB-xA` inside the earlier opposite-y
+propagation, `xB-xA` and `xB-xP` inside confluent H, and `yA+yA` solely in
+canonical slope uniqueness.  These cancellations remain internal to their
+certified endpoints; final-y adds no multiplication cancellation, while its
+additive cancellations need no nonzero premise.  The
+public theorem has no characteristic or classifier premise, division,
+inverse, independent denominator, or independent public nonzero premise.  Its
+focused minimal-theory regression invokes only the translation theorem.
+Outer O/O degeneration, the complete oriented D/T theorem combining branches,
+the T/D structural mirror, finite affine semantic assembly, unrestricted
+associativity, full-point lifting, and executable correctness remain open.
+
 Exhaustive F7/F11 validation of the existing semantic data finds respectively
 216 and 1,000 applicable coincident-x configurations with a left outer secant;
 all have `yQ=yA`.  No configuration in either field satisfies the four semantic
