@@ -165,3 +165,12 @@ O. `curve-point-addition-relation-output-determinate-under-fixed-operands`
 promotes the general fixed-operand alignment used by the structural proofs.
 The next task is the staged nine-cell composition; no associativity cell is
 claimed by these interface theorems.
+
+## Staged assembly checkpoint at `4011dc9`
+
+The three proof-local packaging obligations have been certified in the new
+assembly book: an arbitrary secant or doubling witness is first aligned with
+the repository-selected quotient slope, and secant, doubling, and opposite-y
+relations are then packaged as full tagged addition relations.  The full
+relation is unfolded only in these three helpers.  No matrix cell or public
+associativity theorem is retained yet; staged cell composition remains open.

@@ -107,6 +107,7 @@
 (include-book "curve/curve-point-addition-relation-associativity-structural-regression")
 (include-book "curve/curve-point-addition-relation-affine-interface")
 (include-book "curve/curve-point-addition-relation-affine-interface-regression")
+(include-book "curve/curve-point-addition-relation-associativity-affine")
 (include-book "curve/affine-inverse-tangent-translation")
 (include-book "curve/affine-inverse-tangent-translation-regression")
 (include-book "curve/affine-dd-opposite-y-propagation")
