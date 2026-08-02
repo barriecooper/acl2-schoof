@@ -131,6 +131,8 @@
 (include-book "curve/affine-dt-d-outer-distinct-x-translation-regression")
 (include-book "curve/affine-dt-opposite-y-propagation")
 (include-book "curve/affine-dt-opposite-y-propagation-regression")
+(include-book "curve/affine-dt-left-output-opposite-y-propagation")
+(include-book "curve/affine-dt-left-output-opposite-y-propagation-regression")
 (include-book "curve/affine-dt-d-coincident-x-ordinate")
 (include-book "curve/affine-dt-d-coincident-x-ordinate-regression")
 (include-book "curve/affine-dt-d-coincident-x-tangent-domain")
