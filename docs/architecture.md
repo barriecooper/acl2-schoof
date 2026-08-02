@@ -176,9 +176,10 @@ infinity, semantic operand-reversal commutativity, and raw dispatcher
 commutativity. The raw dispatcher theorem is possible because executable
 outputs are canonical; semantic statements otherwise use fixer-level equality.
 
-Associativity, cancellation, group or abelian-group packaging, and scalar
-multiplication are absent. Until associativity is certified, documentation must
-not call the dispatcher a certified group law.
+Associativity, cancellation, contextual abelian-group packaging, and natural
+scalar multiplication by transparent linear recursion are certified. The
+scalar specification is intentionally distinct from any future fast
+double-and-add implementation.
 
 ### Associativity certificate boundary
 

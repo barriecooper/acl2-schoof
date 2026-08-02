@@ -204,8 +204,18 @@ The curve instance maps the carrier to
 endpoint is `def-curve-point-abelian-group-theorem`; the exported
 `curve-point-abelian-group-inverse-of-identity` demonstrates a generic
 consequence without replaying a curve proof.  Cancellation remains a certified
-consequence rather than an axiom. Scalar multiplication/repeated addition is
-the next open boundary.
+consequence rather than an axiom.
+
+Natural repeated addition is **certified**. `abelian-group-nat-mul` uses
+`nfix` totalisation, identity at zero, and left addition at successors. Its
+public laws are `abelian-group-element-p-of-nat-mul`,
+`abelian-group-nat-mul-one`, `abelian-group-nat-mul-of-sum`, and
+`abelian-group-nat-mul-distributes-over-op`. The executable curve operation is
+`curve-point-nat-mul`; `def-curve-point-natural-scalar-theorem` is the
+functional-instantiation endpoint for closure, one, scalar-sum, and
+distribution. Canonical output, point-input fixing, scalar `nfix` congruence,
+and guards are certified. Nested multiplication, signed scalars, and optimized
+double-and-add are deferred.
 
 ## Field-only X-CERT algebra
 

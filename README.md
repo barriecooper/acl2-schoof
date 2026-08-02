@@ -44,9 +44,10 @@ case matrix is [`docs/status-associativity.md`](docs/status-associativity.md).
 The full tagged executable curve-point dispatcher has independently public
 closure, identity, commutativity, associativity, inverse, and cancellation laws
 for valid curve points.  The generic functional-instance endpoint
-`def-curve-point-abelian-group-theorem` now packages those points as an
-abelian group under the maintained characteristic hypothesis. Scalar
-multiplication remains open.
+`def-curve-point-abelian-group-theorem` packages those points as an abelian
+group under the maintained characteristic hypothesis. Natural scalar
+multiplication is certified as transparent linear repeated addition; an
+optimized scalar algorithm remains open.
 There is no certified Hasse theorem, point-count correctness theorem,
 division-polynomial theory, Frobenius machinery for Schoof, or Schoof
 algorithm.
@@ -145,7 +146,8 @@ are certified through the independent relation using soundness, determinacy,
 closure, and canonical fixing. Algebraic left and right cancellation from the
 public executable laws is also certified, and the resulting abstract
 abelian-group package retains the characteristic premise. Scalar
-multiplication/repeated addition is the next boundary. There is
+natural multiplication by linear repeated addition is also certified; fast
+scalar multiplication is the next execution boundary. There is
 still no Hasse theorem and no
 certified Schoof algorithm. See the [current matrix](docs/status-associativity.md) and
 [forward proof plan](docs/proof-plan.md) for the maintained boundaries.
