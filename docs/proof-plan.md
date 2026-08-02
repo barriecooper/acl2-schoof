@@ -42,10 +42,15 @@ countermodel, and endpoint derivations are preserved in the
 
 Proceed in this dependency order, with one bounded boundary per proof change:
 
-1. **Finite affine semantic assembly.** Combine the infinity, O, T, D/D, D/T,
-   and T/D families through case coverage into associativity of the independent
-   semantic relation. Completion must add no coordinate algebra and does not
-   unfold the executable dispatcher.
+1. **Supply structural semantic bridges, then assemble finite affine semantic
+   associativity.** Add relation-witness O/O and T/T lemmas (and the analogous
+   original-infinity lemma before full tagged assembly), without importing
+   their existing dispatcher theorems. Then combine O, T, D/D, D/T, and T/D
+   through case coverage into fixed equality of explicit final witnesses for
+   the two independent semantic-relation trees. Completion must add no
+   coordinate algebra and does not unfold the executable dispatcher. The exact
+   mismatch and selected endpoint are in the
+   [assembly audit](audits/associativity-assembly.md).
 2. **Executable dispatcher lift.** Use semantic soundness, fixed-output
    determinacy, closure, and canonical representation to prove unrestricted
    `curve-point-pair-output-point` associativity. Completion keeps guard and
