@@ -33,7 +33,8 @@ The repository currently certifies these subsystem-level foundations:
 Concrete F7 and F11 books are focused executable and instantiation regressions.
 They demonstrate particular computations; they do not by themselves establish
 a generic theorem. The detailed proved/open ledger is
-[`docs/obligations.md`](docs/obligations.md).
+[`docs/obligations.md`](docs/obligations.md), and the current associativity
+case matrix is [`docs/status-associativity.md`](docs/status-associativity.md).
 
 The curve development is **not** yet a certified group law: associativity,
 cancellation, group packaging, and scalar multiplication remain unproved.
@@ -108,34 +109,36 @@ docker run --rm acl2-schoof
 - `docs/` — maintained architecture, status, execution, and planning records,
   plus focused audit and design records.
 
-## Documentation guide
+## Document ownership
 
-- [`docs/architecture.md`](docs/architecture.md): stable layers,
-  representations, and dependency boundaries.
-- [`docs/obligations.md`](docs/obligations.md): authoritative detailed ledger of
-  certified, open, and deferred obligations.
-- [`docs/proof-plan.md`](docs/proof-plan.md): forward dependency path toward
-  Hasse and Schoof.
-- [`docs/execution-boundaries.md`](docs/execution-boundaries.md): totalisation
-  and logical/executable contracts.
-- [`docs/references.md`](docs/references.md): principal external references.
+- `README.md` owns high-level project scope and the current milestone.
+- [`docs/architecture.md`](docs/architecture.md) owns stable design and
+  dependency boundaries.
+- [`docs/proof-plan.md`](docs/proof-plan.md) owns forward mathematical order.
+- [`docs/status-associativity.md`](docs/status-associativity.md) owns the
+  at-a-glance current associativity matrix.
+- [`docs/obligations.md`](docs/obligations.md) is the concise authoritative
+  certified/open/deferred ledger.
+- [`docs/audits/`](docs/audits/) preserves detailed proof investigations,
+  residuals, countermodels, and historical rationale.
+- Git history and pull requests own chronological implementation history.
 
-Focused documents under `docs/` preserve technical audits and design rationale.
-When their historical status language differs from the ledger, the certified
-books and `docs/obligations.md` govern current status; Git history and pull
-requests retain chronological completion narratives.
+Resolved blockers are replaced in live status documents rather than appended
+beneath obsolete statements. Focused audit records may retain the historical
+question and explain how it was resolved, but must label it as history.
 
 ## Roadmap and limitations
 
-The associativity audit is complete, and its first structural-interface stage
-is certified: classifier symmetry and fixed-coordinate consequences, outer
-impossibility corollaries, and associativity when an original input is
-infinity.  The opposite/opposite and repeated-triple structural cases are also certified,
-using infinity reduction and full-point commutativity respectively.  The next
-boundary is exceptional secant structure; unrestricted associativity remains
-later work. Later phases
-package the curve laws, build the
-polynomial and rational-function machinery needed by the Hasse and Schoof
-tracks, formalize Frobenius and division polynomials, and develop point
-counting and CRT reconstruction. The dependency rationale is maintained in
-[`docs/proof-plan.md`](docs/proof-plan.md).
+Certified semantic associativity work now covers infinity-input reductions,
+opposite/opposite and repeated-triple configurations, inverse/secant and
+inverse/tangent translations, every D/D outcome, and both the outer distinct-x
+and coincident-x doubling branches of the oriented mixed-inner D/T family.
+The principal remaining affine semantic tasks are the mixed D/T outer O/O
+degeneration, the T/D structural mirror, and finite semantic case assembly;
+the semantic result must then be lifted separately to the executable
+dispatcher.
+
+Unrestricted associativity is not yet certified. Consequently there is no
+certified group packaging. There is also no Hasse theorem and no certified
+Schoof algorithm. See the [current matrix](docs/status-associativity.md) and
+[forward proof plan](docs/proof-plan.md) for the maintained boundaries.

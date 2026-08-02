@@ -23,90 +23,33 @@ come only from the generic certified books.
 
 ### Field-only X-CERT algebra
 
-`books/field/xcert-algebra.lisp` defines explicit output-coordinate residuals
-and the field expressions `xcert-dx`, `xcert-telescope`, `xcert-remainder`,
-`xcert-h`, `xcert-s`, and `xcert-c`.  The residuals are total expressions, not
-assumed-zero hypotheses.  Certified component theorems establish the output
-telescope and remainder identities, and `xcert-composition` combines those
-components opaquely in the exact left-associated form.
+`books/field/xcert-algebra.lisp` defines total field expressions for the output
+residuals and `xcert-dx`, `xcert-telescope`, `xcert-remainder`, `xcert-h`,
+`xcert-s`, and `xcert-c`. The component identities and their opaque composition
+form a field-only algebra layer: residuals are explicit expressions, never
+assumed-zero hypotheses, and the layer has no curve, polynomial, classifier,
+or executable dependency.
 
-`books/field/xcert-h-reconstruction.lisp` remains in the same field-only
-layer.  Its public scalar theorem consumes exactly seven explicitly oriented
-secant/output equations and the ordered nonzero factor `xc-xb`; proof-local
-term-list normalization exposes the finite additive cancellations.  It adds no
-executable definition or curve dependency.
+Reconstruction books expose small scalar interfaces for H, S, and the final
+ordinate. Curve-semantic bridges instantiate those interfaces with ordered
+secant/doubling relations and common-curve facts. Operand orientation and
+nonzero factors remain explicit; proof-local normalization and cancellation do
+not leak into the public semantic relation. This separation lets certificate
+algebra be reused without treating a concrete curve regression as generic
+proof.
 
-`books/field/xcert-s-reconstruction.lisp` extends that field-only layer.  Its
-public scalar theorem reuses the certified H equality and proves the remaining
-finite residual with proof-local explicit sum normalization.  It retains the
-ordered factors `xc-xb` for the H dependency and `xbc-xa` for final S
-cancellation, and adds no curve or executable dependency.
+The ordinary all-distinct-x tree is already connected through coordinate,
+untagged, tagged, affine-dispatcher, and full-point boundaries. Exceptional
+D/D and oriented D/T work uses the same design: certify division-free scalar
+endpoints, then package them into semantic relations without replaying the
+algebra. Exact completion status belongs in
+[associativity status](status-associativity.md); the specialized mixed D/T
+residual staging belongs in its [audit](audits/mixed-dt-certificate.md).
 
-The field-only book depends only on the generic field kernel.  The separate
-`books/curve/xcert-semantics.lisp` bridge imports that book and the assembled
-affine distinct-x output.  For inputs `A`, `B`, and `C`, it maps `xab` and `xbc`
-to the x-coordinates of `AB = output(A,B)` and `BC = output(B,C)`, maps `xl`
-and `xr` to the x-coordinates of `output(AB,C)` and `output(A,BC)`, and maps
-`p,q,r,tt` to the ordered slopes `(A,B)`, `(AB,C)`, `(B,C)`, and `(A,BC)`.
-It certifies the four residuals as zero from the existing output-x
-rearrangement and specializes `D_x`, `H`, `S`, `C`, and the opaque composition.
-It also instantiates the field-only scalar reconstructions with the ordered
-curve slopes.  It certifies specialized `H` as zero from the three input curve
-memberships and three relevant distinct-x classifications, and specialized
-`S` as zero after adding only the fourth classification for `(A,BC)`.
-The bridge adds no polynomial dependency and proves no associativity or
-exceptional-case fact.
-
-The bridge also certifies equality of the final x-coordinates of the two
-untagged distinct-x trees under the four ordered distinct-x classifications.
-This uses both semantic certificate-zero results through the maintained
-composition.  The field-only final-y layer now contains the separate
-output-x/H coordinate bridge `xl-xb=(q-r)(p+q)`; its proof has no curve or
-nonzero premise.  Its separate six-residual y reduction derives the final
-ordinate difference as two products from S-zero, three ordered slope equations,
-and the two final output-y equations; the AB output-y equation is absent.  Their
-composition is now certified as the field-only fixed final-y equality: the
-coordinate bridge and maintained H equality substitute the two coordinate
-differences, and a bounded opposite-product identity closes the result.  The
-semantic theorem `xcert-final-y-coordinates-equal` instantiates that combined
-field theorem from semantic H-zero and S-zero, the maintained slope and output
-rearrangements, and a proof-local transport from final-right x to the already
-equal final-left x.  The public theorem `xcert-untagged-outputs-equal` then
-packages raw final-x equality and fixed final-y equality into equality of
-`xcert-left` and `xcert-right`.  Generic accessor closure makes both actual y
-coordinates fixed, and a proof-local affine-coordinate extensionality bridge
-reconstructs the canonical outputs from their equal x and y accessors.
-Semantic H/S zero, final x-coordinate equality, the output-x/H coordinate
-bridge, six-residual reduction, combined field-only final-y reconstruction,
-semantic final-y equality, untagged output equality, and tagged ordinary-output
-equality remain distinct certified boundaries.  The tagged theorem uses the
-same three curve-membership and four ordered `:distinct-x` hypotheses and lifts
-the untagged theorem through `affine-distinct-x-output-point`; it replays no
-coordinate or scalar algebra.  The separate ordinary affine-dispatcher theorem
-`xcert-affine-dispatcher-outputs-equal` retains those exact seven hypotheses
-and reduces its two outer calls through exactly two uses of the public
-`:distinct-x` branch equation.  `xcert-tagged-outputs-equal` supplies all
-semantic equality, so no coordinate or field algebra is replayed.  This does
-not cover other affine classifier outcomes.  The separate
-`xcert-full-point-dispatcher-associative-when-all-distinct-x` boundary lifts it
-to two nested `curve-point-pair-output-point` trees whose leaves are
-`curve-point-affine-coordinates` constructors for `a`, `b`, and `c`.  Under the
-same three memberships and four ordered classifications, a proof-local inner
-branch reduction and the public full-point affine/affine interface expose the
-two affine dispatcher calls.  Their equality comes solely from
-`xcert-affine-dispatcher-outputs-equal`; constructor and coordinate fixers are
-removed by existing canonicality equations, with no semantic algebra replayed.
-Exceptional classifiers, infinity inputs or results, arbitrary configurations,
-unrestricted associativity, and group laws remain distinct open boundaries.
-
-The ordered distinct-x theory also exposes the division-free input-secant
-identity `slope*(y(second)+y(first)) = x(second)^2 +
-x(second)*x(first) + x(first)^2 + a`.  It requires both ordered inputs to be
-on the curve and that their classifier be exactly `:distinct-x`; its operand,
-numerator, and denominator orientations are those of
-`affine-distinct-x-slope` and are never silently reversed.  This is the first
-reusable curve-level ingredient selected by the H/S audit, not an H- or S-zero
-result.
+The ordered input-secant identity preserves the numerator and denominator
+orientation of `affine-distinct-x-slope`. Reversal must use a certified symmetry
+theorem rather than silently commuting operands. This is a stable interface
+rule for every future X-CERT specialization.
 
 ### Canonical dense polynomials
 
@@ -237,121 +180,36 @@ Associativity, cancellation, group or abelian-group packaging, and scalar
 multiplication are absent. Until associativity is certified, documentation must
 not call the dispatcher a certified group law.
 
-### Associativity reduction boundary
+### Associativity certificate boundary
 
-Future associativity work is organized by semantic geometry, not by a Cartesian
-product of dispatcher tags.  For valid affine inputs, equal-x curve points have
-equal or opposite ordinates, so `:same-x-other` is unreachable.  An opposite-y
-inner result crosses immediately to the full-point infinity interface; a
-distinct-x or doubling result remains affine by branch closure.  These facts
-determine whether an outer affine classifier even exists and constrain its
-possible result.
+Associativity is organized by semantic geometry rather than a Cartesian
+product of dispatcher tags. For valid affine inputs, equal-x curve points have
+equal or opposite ordinates, opposite-y results cross to the tagged infinity
+interface, and secant or doubling results remain affine by closure. Structural
+fixing, symmetry, infinity, and representation reductions precede coordinate
+algebra.
 
-Full commutativity supplies reversal symmetry and closes the all-equal
-doubling/doubling composition, but it does not license cyclic reassociation.
-Structural infinity, fixing, classifier, and representation reductions should
-therefore be certified before new coordinate algebra.  The remaining algebra
-belongs at the independent secant/doubling relation layer.  Candidate mixed
-secant--tangent certificates should expose division-free line and curve
-equations and derive exceptional outer outcomes rather than accepting four
-unrelated classifier premises.  A shared branch-parametric certificate is an
-architectural option only if its hypotheses and specialization remain
-transparent; separate oriented certificates are preferable to an opaque
-generalization.  Dispatcher associativity must ultimately be a lift through
-semantic soundness, determinacy, closure, and canonical fixing, not a replay of
-branch formulas.
+The proof interface is the existing division-free semantic relations:
+`affine-distinct-x-secant-relation-p`, `affine-doubling-relation-p`, and
+`affine-opposite-y-infinity-relation-p`. They expose line, curve, and output
+equations without importing classifier priority, quotient computations, or
+executable formulas. X-CERT remains a field-only algebra layer; curve books
+supply the common-curve hypotheses that make its residual certificates
+semantically applicable.
 
-The Stage 3 audit selects the existing semantic branch relations as the primary
-exceptional-secants boundary.  In particular,
-`affine-distinct-x-secant-relation-p` and `affine-doubling-relation-p` already
-expose the required division-free line and output equations, while
-`affine-opposite-y-infinity-relation-p` supplies the exceptional full-point
-result.  `curve-point-addition-relation-p` is the correct eventual packaging
-layer, but its internally selected quotient witnesses make it less suitable
-for discovering and proving the scalar certificates.  No new chord predicate
-is warranted unless an attempted relation-level proof reveals an equation that
-these predicates cannot express.
+D/D and the certified branches of oriented D/T demonstrate this architecture:
+small scalar endpoints are reconstructed first, then packaged into a semantic
+relation without replaying algebra. The complete current boundary matrix is in
+[associativity status](status-associativity.md), and the mixed D/T derivation,
+cancellation inventory, and countermodel are in the
+[mixed D/T audit](audits/mixed-dt-certificate.md). These changeable completion
+details are deliberately not architecture.
 
-Inverse translation and exceptional `D/D` composition are not presently one
-certificate family.  Inverse translation is a short sign-reversal argument on
-one secant or tangent witness, followed by a derived outer secant/doubling
-split.  An outer-`O` `D/D` degeneration is instead a collinearity propagation
-argument with one available nonzero secant denominator; an outer-`T`
-degeneration replaces an outer secant equation by a tangent equation and needs
-an independent-witness reconstruction.  The earlier proposed DD-T1 bridge was
-incorrect: the secant result is the reflection of the chord's third
-intersection, so equality of that result with the tangent input does not make
-the secant witness a tangent witness.  The two inner secant witnesses and the
-actual tangent witness must remain independent; the audited candidate for the
-opposite-tree witness is `(p+t)-r`.  Its three certified distinct-x equations
-are now packaged into the public semantic secant relation, with exact witness
-`(field-sub (field-add (field-fix p) (field-fix t-slope)) (field-fix r))`.
-This characteristic-independent, classifier-free DD-T outer distinct-x branch
-is complete.  The coincident-x branch is also packaged separately as the public
-doubling relation by `affine-dd-t-coincident-x-translation`, using the same
-exact fixed witness and the five certified ordinate/domain/scalar endpoints.
-That semantic packaging adds no characteristic, classifier, division, inverse,
-or independent denominator premise.  `affine-dd-t-translation` now completes
-the DD-T family at the affine semantic relation boundary.  It assumes exactly
-the two inner secant relations and the tangent relation, splits only on
-`xq=xa`, and invokes the coincident-x translation on equality and the
-outer-distinct-x translation on disequality.  Its secant/doubling disjunction
-uses the same exact witness in both arms:
-`(field-sub (field-add (field-fix p-slope) (field-fix t-slope))
-(field-fix r-slope))`.  The composition replays neither branch proof and is
-characteristic-independent, with no classifier, division, inverse, or
-independent denominator premise.  For the mixed-inner D/T family, the three
-public outer-distinct-x scalar endpoints are now directly packaged by
-`affine-dt-d-outer-distinct-x-translation` into the same public secant
-relation, with exact witness `(p+q)-t`.  This branch likewise adds no
-characteristic condition, classifier, division, inverse, or independent
-denominator premise, and does not replay its coordinate or X-CERT proofs.
-The mixed-inner D/T coincident-x domain and scalar endpoints are likewise
-packaged directly into `affine-doubling-relation-p` by
-`affine-dt-d-coincident-x-translation`, with the exact four semantic premises
-and fixed witness `(field-sub (field-add (field-fix p-slope)
-(field-fix q-slope)) (field-fix t-slope))`.  The relation clauses obtain input
-and output curve membership from the two secants and obtain tangent domain,
-tangent numerator, output x, and output y from the four named public endpoints.
-This boundary replays no coordinate, confluent-H, X-CERT, or final-y proof and
-adds no characteristic, classifier, division, inverse, independent
-denominator, or public nonzero premise.  O/O D/T analysis, the complete
-oriented D/T theorem, its T/D mirror, finite affine semantic assembly,
-unrestricted associativity, full curve-point lifting, executable correctness,
-and final group-law packaging
-remain open.
-
-The inverse/tangent specialization is certified at the semantic relation
-boundary by `affine-inverse-tangent-translation`.  It negates the inner tangent
-witness and derives an outer secant when fixed x differs, or outer doubling
-when fixed x coincides.  The latter branch reconstructs the equal ordinate and
-transports the tangent-domain fact across affine negation.  The derived `D/T`
-disjunction excludes outer opposite-y without a classifier premise, extra
-nonzero assumption, division, or new curve polynomial identity.
-
-The inverse/secant specialization is likewise complete at that boundary.
-`affine-inverse-secant-translation` negates the fixed inner witness and derives
-an outer secant when the outer x coordinates differ, or outer doubling when
-they coincide.  In the latter branch the inner output-y equation first proves
-ordinate coincidence; the certified A-D4 equation supplies the tangent
-numerator, and the characteristic predicate is used only through the existing
-self-inverse exclusion theorem.  Thus the final D/T disjunction excludes outer
-opposite-y without an outer classifier premise.  The branch equations remain
-division-free, and all sign, square, reassociation, and fixing normalization is
-proof-local.
-
-The oriented outer-opposite `D/D` specialization is certified at the same
-classifier-free boundary by `affine-dd-opposite-y-propagates-to-other-tree`.
-Two inner distinct-x secant relations and the left outer opposite-y relation
-derive the opposite outer relation.  Its sole multiplicative cancellation uses
-the nonzero `(B,C)` secant difference; there is no outer denominator or outer
-classifier premise.  The mirrored orientation is now exposed by
-`affine-dd-opposite-y-propagates-to-left-tree`: it uses the public secant
-operand-reversal and opposite-y symmetry interfaces plus reversed point order,
-rather than a duplicate coordinate certificate.  This structural endpoint is
-used by the characteristic-independent DD-T coincident-x boundary to turn a
-temporary outer opposite-y alternative into a contradiction with the tangent
-domain at `C`.
+Semantic associativity must be assembled before any unrestricted executable
+claim. The final dispatcher theorem is a representation lift through semantic
+soundness, determinacy, closure, and canonical fixing; it is not a proof by
+expanding branch formulas. Guard verification and execution regressions remain
+separate evidence under [execution boundaries](execution-boundaries.md).
 
 ## Design constraints for later work
 
