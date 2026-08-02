@@ -42,12 +42,12 @@ countermodel, and endpoint derivations are preserved in the
 
 Proceed in this dependency order, with one bounded boundary per proof change:
 
-1. **Wrap certified Candidate C as full tagged semantic associativity.** The public theorem `curve-point-addition-relation-associative-for-affine-inputs` now certifies all finite affine inputs through two bounded D/O/T extractions and the nine local cells. The next bounded task is a representation-only split between an original infinity input and three tagged affine inputs; it must use the structural infinity theorem and introduce no dispatcher or coordinate algebra.
-2. **Executable dispatcher lift.** Use semantic soundness, fixed-output
+1. **Executable dispatcher lift.** Full tagged semantic associativity is now
+   certified by `curve-point-addition-relation-associative`. Use semantic soundness, fixed-output
    determinacy, closure, and canonical representation to prove unrestricted
    `curve-point-pair-output-point` associativity. Completion keeps guard and
    execution evidence distinct from semantic correctness.
-3. **Group packaging.** Only after unrestricted associativity certifies,
+2. **Group packaging.** Only after unrestricted associativity certifies,
    package the curve law, cancellation consequences, and scalar
    multiplication behind an abstract abelian-group interface.
 
