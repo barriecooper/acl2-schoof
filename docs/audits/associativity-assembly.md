@@ -40,24 +40,29 @@ The audited principal map is:
 
 | inner cell | certified family boundary |
 | --- | --- |
-| O/O | only `curve-point-pair-output-point-associative-when-both-inner-opposite-y` |
+| O/O | `curve-point-addition-relation-associative-when-both-inner-opposite-y` |
 | O/D and D/O | `affine-inverse-secant-translation`, plus reversal |
 | O/T and T/O | `affine-inverse-tangent-translation`, plus reversal |
 | D/D | `affine-dd-t-translation` and both `affine-dd-opposite-y-propagates-*` theorems |
 | D/T | `affine-dt-d-translation` and `affine-dt-left-output-opposite-y-propagates-to-right-output` |
 | T/D | `affine-td-d-translation` and `affine-td-left-output-opposite-y-propagates-to-right-output` |
-| T/T | only `curve-point-pair-output-point-associative-when-both-inner-doubling` |
-| original infinity | only `curve-point-pair-output-point-associative-when-infinity-input` |
+| T/T | `curve-point-addition-relation-associative-when-both-inner-doubling` |
+| original infinity | `curve-point-addition-relation-associative-when-original-infinity` |
 
 The inverse/secant row is the sole source of the required
 `short-weierstrass-characteristic-p` premise. No stronger characteristic or
 cardinality premise is indicated.
 
-## Blocking semantic mismatch
+## Resolved structural semantic interface
 
-Assembly stops at O/O, the first matrix corner. Its exact desired semantic
-goal, for affine `a`, `b`, and `c`, inner infinity witnesses `ab` and `bc`, and
-final witnesses `left` and `right`, is:
+The former semantic mismatch is resolved by these certified public boundaries:
+
+* `curve-point-addition-relation-associative-when-both-inner-opposite-y`;
+* `curve-point-addition-relation-associative-when-both-inner-doubling`;
+* `curve-point-addition-relation-associative-when-original-infinity`.
+
+The O/O boundary has the exact audited shape for affine `a`, `b`, and `c`,
+inner infinity witnesses `ab` and `bc`, and final witnesses `left` and `right`:
 
 ```text
 O(a,b,ab) and O(b,c,bc)
@@ -66,20 +71,16 @@ and addition-relation(a,bc,right)
 imply fix(left)=fix(right).
 ```
 
-The repository has no relation-level O/O bridge with this statement (nor a
-common-output variant). The only complete O/O associativity theorem expands
-the executable classifier/dispatcher tree. T/T and original-infinity have the
-same semantic-versus-executable mismatch. Using those theorems would mix
-layers and violate the required independent semantic boundary; unfolding the
-dispatcher to manufacture predecessors would violate the task explicitly.
+O/O uses determinacy for each outer operand pair against its ordered infinity
+identity witness. T/T first uses determinacy to align `ab` and `bc` after the
+fixed repeated-triple premises align both input pairs, then reverses the left
+outer witness by semantic commutativity and uses determinacy for the aligned
+outer pair. Each ordered original-infinity proof uses determinacy only after
+an infinity identity fixes an inner witness and thereby aligns the relevant
+outer operand pair. The combined theorem packages the three positions.
 
-The missing tight lemma group is therefore semantic O/O, semantic T/T, and
-semantic original-infinity associativity over explicit relation witnesses.
-These are structural tagged-relation lemmas: they should use the existing
-opposite-y and ordered infinity identities, fixed repeated-point facts,
-commutativity, and determinacy. They require no coordinate formula, slope
-formula, field normalization, cancellation, polynomial, H/S/X-CERT/final-y,
-or executable expansion. No such algebra or expansion was attempted here.
+Candidate C and the case map above are unchanged. Finite affine matrix
+assembly, rather than any structural interface, is now the open task.
 
 ## Finite validation
 
