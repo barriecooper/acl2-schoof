@@ -23,7 +23,8 @@ s=(p+q)-t
 
 Here D/T names the inner secant and doubling. The certified branches reconstruct
 `A+Q=R` as a secant when `xQ != xA` and as a doubling when `xQ=xA`. The outer
-O/O degeneration is still open.
+O/O degeneration is also certified in the required converse direction:
+`P=-B` implies `A=-Q`.
 
 ## Why the bare scalar interface failed
 
@@ -150,12 +151,34 @@ The complete inventory across the certified mixed D/T endpoints is:
 2. `xQ-xA` in the outer distinct-x S/slope reconstruction;
 3. `xB-xA` inside opposite-y propagation; and
 4. `yA+yA` solely to identify the coincident-x witness with the canonical
-   tangent slope.
+   tangent slope; and
+5. for the outer O/O converse, `xB-xA` inside the reused inverse/secant
+   tangent-equation certificate and `yB+yB` to identify `p=t`.
 
 Packaging and final-y add no multiplication cancellation. Additive
 cancellations used to align canonical output coordinates require no nonzero
 premise. No endpoint adds division, inverse, classifier assumptions, an
 independent denominator, or a characteristic premise.
+
+## Certified outer O/O converse
+
+The associativity endpoint needs the converse of the older propagation
+theorem: from `A+B=P`, `B+B=Q`, and `P=-B`, theorem
+`affine-dt-left-output-opposite-y-propagates-to-right-output` derives `A=-Q`
+with the same fixed infinity payload. Secant operand reversal and opposite-y
+symmetry alone cannot reverse the older implication, so the proof uses a
+staged coordinate certificate rather than an unproved reassociation.
+
+After reversing `A+B=P` to `B+A=P` and symmetrizing `P=-B`, the certified
+inverse/secant A-D4 theorem reconstructs the tangent numerator for `p` at B:
+`p*(yB+yB)=3*xB^2+a`. Its internal common-curve step cancels only the original
+secant factor `xB-xA`. The doubling relation supplies the same numerator for
+`t` and its intrinsic domain clause `yB!=-yB`; the latter proves
+`yB+yB!=0`, whose single cancellation yields `field-fix(p)=field-fix(t)`.
+The secant and tangent output-x equations then give `xQ=xA` by additive
+cancellation, and the two line/output-y equations give `yQ=-yA`. No
+characteristic predicate, classifier, division, inverse, outer denominator,
+or independent nonzero premise is used.
 
 ## Finite validation
 
@@ -174,8 +197,6 @@ regression guidance, **not proof** of the generic theorems.
 
 ## Open boundary
 
-The mixed D/T outer O/O degeneration remains open. It must be derived from the
-same semantic orientation without assuming an outer classifier or adding an
-unjustified nonzero premise. Only after that theorem certifies should the three
-oriented D/T outcomes be combined; the T/D mirror and finite semantic assembly
-follow later.
+All three oriented mixed D/T outer outcomes are now individually certified.
+The next boundary is their complete oriented branch combination; the T/D
+mirror and finite semantic assembly follow later.

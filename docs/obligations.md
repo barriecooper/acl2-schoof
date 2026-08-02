@@ -1092,10 +1092,10 @@ All entries use the orientation `A+B=P` by secant `p`, `B+B=Q` by doubling
 | Coincident-x output x | `affine-dt-d-coincident-x-output-x-equation` | Same scope; proves the doubling output-x equation for R | `yA+yA` for canonical slope identification | [Audit](audits/mixed-dt-certificate.md) |
 | Coincident-x output y | `affine-dt-d-coincident-x-output-y-equation` | Same scope; proves the doubling output-y equation for R | None beyond inherited slope identification | [Audit](audits/mixed-dt-certificate.md) |
 | Coincident-x doubling package | `affine-dt-d-coincident-x-translation` | Packages the domain and scalar clauses as `affine-doubling-relation-p(A,s,R)` | None | [Audit](audits/mixed-dt-certificate.md) |
+| Outer O/O propagation | `affine-dt-left-output-opposite-y-propagates-to-right-output` | From A+B=P, B+B=Q, and P opposite B, derives A opposite Q with the same infinity payload | `xB-xA` inside the reused inverse/secant tangent equation; `yB+yB` for slope identification | [Audit](audits/mixed-dt-certificate.md) |
 
 #### Open
 
-- Mixed D/T outer O/O degeneration.
 - Complete oriented D/T theorem.
 - T/D structural mirror.
 - Finite affine semantic assembly.
