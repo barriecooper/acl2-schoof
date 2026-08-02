@@ -502,11 +502,12 @@ extraction is complete: the certified theorem
 `curve-point-addition-relation-affine-case-coverage` exposes one tagged affine
 relation as D/O/T, and public fixed-operands determinacy supports representation
 alignment. The remaining work is the staged nine-cell composition.  D/D is assembled,
-and the mixed D/T and T/D affine/opposite-y subcells are certified.  Their
-nominal outer-tangent extraction branches still require a classifier-free
-semantic exclusion stating that the relevant secant output cannot be
-fixed-equal to its operand; no coordinate proof should be replayed in the
-assembly book.
+and the complete mixed D/T and T/D cells are certified.  Their nominal
+outer-tangent branches are excluded by
+`affine-dt-left-outer-doubling-impossible` and
+`affine-td-right-outer-doubling-impossible`, using only the secant line
+relations versus the tangent-domain nonzero condition.  The inverse cells and
+final Candidate C assembly remain open.
 
 ### Stage 3 exceptional-secant certificate audit
 

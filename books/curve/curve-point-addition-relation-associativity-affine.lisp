@@ -11,6 +11,7 @@
 (include-book "affine-td-opposite-y-propagation")
 (include-book "affine-inverse-secant-translation")
 (include-book "affine-inverse-tangent-translation")
+(include-book "affine-mixed-outer-doubling-impossibility")
 (include-book "curve-point-addition-commutativity")
 
 ; These packaging lemmas are the only places in this assembly book where the
@@ -939,3 +940,311 @@
        (second-b (curve-point-affine-coordinates q-output))
        (output-b right)))
      :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm doubling-relation-implies-output-affine-local
+   (implies (affine-doubling-relation-p input slope output)
+            (short-weierstrass-affine-point-p output))
+   :hints (("Goal" :in-theory (enable affine-doubling-relation-p)))))
+
+(local
+ (defthm affine-d-t-bounded-left-cases-local
+   (implies
+    (and
+     (affine-distinct-x-secant-relation-p a b p-slope p-output)
+     (affine-doubling-relation-p b t-slope q-output)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a)
+      (curve-point-affine-coordinates q-output) right)
+     (or
+      (and (equal (curve-point-fix left)
+                  (curve-point-affine-coordinates
+                   (affine-coordinates-fix left-payload)))
+           (affine-distinct-x-secant-relation-p
+            p-output b left-slope left-payload))
+      (affine-opposite-y-infinity-relation-p p-output b left)
+      (and (equal (affine-coordinates-fix p-output)
+                  (affine-coordinates-fix b))
+           (affine-doubling-relation-p
+            p-output left-tangent left-payload))))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance affine-d-t-outer-d-cell-local)
+      (:instance affine-d-t-outer-o-cell-local)
+      (:instance affine-dt-left-outer-doubling-impossible))
+     :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm curve-point-addition-relation-associative-affine-d-t-cell-local
+   (implies
+    (and
+     (short-weierstrass-affine-point-p a)
+     (short-weierstrass-affine-point-p b)
+     (short-weierstrass-affine-point-p c)
+     (affine-distinct-x-secant-relation-p a b p-slope p-output)
+     (equal (curve-point-fix ab)
+            (curve-point-affine-coordinates
+             (affine-coordinates-fix p-output)))
+     (affine-doubling-relation-p b t-slope q-output)
+     (equal (affine-coordinates-fix b) (affine-coordinates-fix c))
+     (equal (curve-point-fix bc)
+            (curve-point-affine-coordinates
+             (affine-coordinates-fix q-output)))
+     (curve-point-addition-relation-p
+      ab (curve-point-affine-coordinates c) left)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a) bc right))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance secant-relation-implies-output-affine-local
+                 (first a) (second b) (slope p-slope) (output p-output))
+      (:instance doubling-relation-implies-output-affine-local
+                 (input b) (slope t-slope) (output q-output))
+      (:instance addition-relation-transport-fixed-operands-local
+                 (first-a ab) (second-a (curve-point-affine-coordinates c))
+                 (output left)
+                 (first-b (curve-point-affine-coordinates p-output))
+                 (second-b (curve-point-affine-coordinates b)))
+      (:instance addition-relation-transport-fixed-operands-local
+                 (first-a (curve-point-affine-coordinates a)) (second-a bc)
+                 (output right)
+                 (first-b (curve-point-affine-coordinates a))
+                 (second-b (curve-point-affine-coordinates q-output)))
+      (:instance curve-point-addition-relation-affine-case-coverage
+                 (a p-output) (b b) (output left))
+      (:instance secant-relation-transport-fixed-operands-local
+                 (first-a (affine-coordinates-fix p-output))
+                 (second-a (affine-coordinates-fix b))
+                 (first-b p-output) (second-b b)
+                 (slope (field-div
+                   (field-sub
+                    (affine-coordinates-y (affine-coordinates-fix b))
+                    (affine-coordinates-y (affine-coordinates-fix p-output)))
+                   (field-sub
+                    (affine-coordinates-x (affine-coordinates-fix b))
+                    (affine-coordinates-x (affine-coordinates-fix p-output)))))
+                 (output (curve-point-affine-coordinates-get
+                          (curve-point-fix left))))
+      (:instance doubling-relation-transport-fixed-input-local
+                 (input-a (affine-coordinates-fix p-output))
+                 (input-b p-output)
+                 (slope (field-div
+                   (field-add
+                    (field-mul
+                     (field-add (field-add (field-one) (field-one)) (field-one))
+                     (field-mul
+                      (affine-coordinates-x (affine-coordinates-fix p-output))
+                      (affine-coordinates-x (affine-coordinates-fix p-output))))
+                    (field-fix (short-weierstrass-a)))
+                   (field-add
+                    (affine-coordinates-y (affine-coordinates-fix p-output))
+                    (affine-coordinates-y (affine-coordinates-fix p-output)))))
+                 (output (curve-point-affine-coordinates-get
+                          (curve-point-fix left))))
+      (:instance affine-d-t-bounded-left-cases-local
+                 (left-payload
+                  (curve-point-affine-coordinates-get (curve-point-fix left)))
+                 (left-slope
+                  (field-div
+                   (field-sub
+                    (affine-coordinates-y (affine-coordinates-fix b))
+                    (affine-coordinates-y (affine-coordinates-fix p-output)))
+                   (field-sub
+                    (affine-coordinates-x (affine-coordinates-fix b))
+                    (affine-coordinates-x (affine-coordinates-fix p-output)))))
+                 (left-tangent
+                  (field-div
+                   (field-add
+                    (field-mul
+                     (field-add (field-add (field-one) (field-one)) (field-one))
+                     (field-mul
+                      (affine-coordinates-x (affine-coordinates-fix p-output))
+                      (affine-coordinates-x (affine-coordinates-fix p-output))))
+                    (field-fix (short-weierstrass-a)))
+                   (field-add
+                    (affine-coordinates-y (affine-coordinates-fix p-output))
+                    (affine-coordinates-y (affine-coordinates-fix p-output)))))))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(curve-point-fix-of-affine-coordinates
+        affine-coordinates-fix-idempotent
+        affine-distinct-x-secant-relation-p-of-fixes
+        affine-doubling-relation-p-of-fixes
+        affine-opposite-y-infinity-relation-p-of-fixes))))))
+
+; Inner T/D, right outer O, mirrored through the maintained D/T left-O theorem
+; on reversed point order.  Determinacy pair is (tagged P, tagged B).
+(local
+ (defthm affine-t-d-right-o-cell-local
+   (implies
+    (and
+     (affine-doubling-relation-p a t-slope p-output)
+     (affine-distinct-x-secant-relation-p a b p-slope q-output)
+     (affine-opposite-y-infinity-relation-p a q-output right)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates p-output)
+      (curve-point-affine-coordinates b) left))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance affine-distinct-x-secant-relation-p-reverse
+                 (first a) (second b) (slope p-slope) (output q-output))
+      (:instance affine-opposite-y-infinity-relation-p-symmetric
+                 (first a) (second q-output) (output right))
+      (:instance
+       affine-dt-left-output-opposite-y-propagates-to-right-output
+       (a b) (b a) (p-slope p-slope) (p-output q-output)
+       (t-slope t-slope) (q-output p-output) (infinity right))
+      (:instance affine-opposite-y-infinity-relation-p-symmetric
+                 (first b) (second p-output) (output right))
+      (:instance opposite-y-relation-packages-as-full-addition-local
+                 (a p-output) (b b) (output right))
+      (:instance
+       curve-point-addition-relation-output-determinate-under-fixed-operands
+       (first-a (curve-point-affine-coordinates p-output))
+       (second-a (curve-point-affine-coordinates b)) (output-a right)
+       (first-b (curve-point-affine-coordinates p-output))
+       (second-b (curve-point-affine-coordinates b)) (output-b left)))
+     :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm affine-t-d-bounded-right-cases-local
+   (implies
+    (and
+     (affine-doubling-relation-p a t-slope p-output)
+     (affine-distinct-x-secant-relation-p a b p-slope q-output)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates p-output)
+      (curve-point-affine-coordinates b) left)
+     (or
+      (and (equal (curve-point-fix right)
+                  (curve-point-affine-coordinates
+                   (affine-coordinates-fix right-payload)))
+           (affine-distinct-x-secant-relation-p
+            a q-output right-slope right-payload))
+      (affine-opposite-y-infinity-relation-p a q-output right)
+      (and (equal (affine-coordinates-fix a)
+                  (affine-coordinates-fix q-output))
+           (affine-doubling-relation-p a right-tangent right-payload))))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use ((:instance affine-t-d-outer-d-cell-local)
+           (:instance affine-t-d-right-o-cell-local)
+           (:instance affine-td-right-outer-doubling-impossible))
+     :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm curve-point-addition-relation-associative-affine-t-d-cell-local
+   (implies
+    (and
+     (short-weierstrass-affine-point-p a)
+     (short-weierstrass-affine-point-p b)
+     (short-weierstrass-affine-point-p c)
+     (affine-doubling-relation-p a t-slope p-output)
+     (equal (affine-coordinates-fix a) (affine-coordinates-fix b))
+     (equal (curve-point-fix ab)
+            (curve-point-affine-coordinates (affine-coordinates-fix p-output)))
+     (affine-distinct-x-secant-relation-p b c p-slope q-output)
+     (equal (curve-point-fix bc)
+            (curve-point-affine-coordinates (affine-coordinates-fix q-output)))
+     (curve-point-addition-relation-p
+      ab (curve-point-affine-coordinates c) left)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a) bc right))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance doubling-relation-implies-output-affine-local
+                 (input a) (slope t-slope) (output p-output))
+      (:instance secant-relation-implies-output-affine-local
+                 (first b) (second c) (slope p-slope) (output q-output))
+      (:instance secant-relation-transport-fixed-operands-local
+                 (first-a b) (second-a c) (first-b a) (second-b c)
+                 (slope p-slope) (output q-output))
+      (:instance addition-relation-transport-fixed-operands-local
+                 (first-a ab) (second-a (curve-point-affine-coordinates c))
+                 (output left)
+                 (first-b (curve-point-affine-coordinates p-output))
+                 (second-b (curve-point-affine-coordinates c)))
+      (:instance addition-relation-transport-fixed-operands-local
+                 (first-a (curve-point-affine-coordinates a)) (second-a bc)
+                 (output right)
+                 (first-b (curve-point-affine-coordinates a))
+                 (second-b (curve-point-affine-coordinates q-output)))
+      (:instance curve-point-addition-relation-affine-case-coverage
+                 (a a) (b q-output) (output right))
+      (:instance secant-relation-transport-fixed-operands-local
+                 (first-a (affine-coordinates-fix a))
+                 (second-a (affine-coordinates-fix q-output))
+                 (first-b a) (second-b q-output)
+                 (slope
+                  (field-div
+                   (field-sub
+                    (affine-coordinates-y (affine-coordinates-fix q-output))
+                    (affine-coordinates-y (affine-coordinates-fix a)))
+                   (field-sub
+                    (affine-coordinates-x (affine-coordinates-fix q-output))
+                    (affine-coordinates-x (affine-coordinates-fix a)))))
+                 (output (curve-point-affine-coordinates-get
+                          (curve-point-fix right))))
+      (:instance doubling-relation-transport-fixed-input-local
+                 (input-a (affine-coordinates-fix a)) (input-b a)
+                 (slope
+                  (field-div
+                   (field-add
+                    (field-mul
+                     (field-add (field-add (field-one) (field-one)) (field-one))
+                     (field-mul
+                      (affine-coordinates-x (affine-coordinates-fix a))
+                      (affine-coordinates-x (affine-coordinates-fix a))))
+                    (field-fix (short-weierstrass-a)))
+                   (field-add
+                    (affine-coordinates-y (affine-coordinates-fix a))
+                    (affine-coordinates-y (affine-coordinates-fix a)))))
+                 (output (curve-point-affine-coordinates-get
+                          (curve-point-fix right))))
+      (:instance affine-t-d-bounded-right-cases-local
+                 (b c)
+                 (right-payload
+                  (curve-point-affine-coordinates-get (curve-point-fix right)))
+                 (right-slope
+                  (field-div
+                   (field-sub
+                    (affine-coordinates-y (affine-coordinates-fix q-output))
+                    (affine-coordinates-y (affine-coordinates-fix a)))
+                   (field-sub
+                    (affine-coordinates-x (affine-coordinates-fix q-output))
+                    (affine-coordinates-x (affine-coordinates-fix a)))))
+                 (right-tangent
+                  (field-div
+                   (field-add
+                    (field-mul
+                     (field-add (field-add (field-one) (field-one)) (field-one))
+                     (field-mul
+                      (affine-coordinates-x (affine-coordinates-fix a))
+                      (affine-coordinates-x (affine-coordinates-fix a))))
+                    (field-fix (short-weierstrass-a)))
+                   (field-add
+                    (affine-coordinates-y (affine-coordinates-fix a))
+                    (affine-coordinates-y (affine-coordinates-fix a)))))))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(curve-point-fix-of-affine-coordinates
+        affine-coordinates-fix-idempotent
+        affine-distinct-x-secant-relation-p-of-fixes
+        affine-doubling-relation-p-of-fixes
+        affine-opposite-y-infinity-relation-p-of-fixes))))))

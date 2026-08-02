@@ -175,16 +175,12 @@ relations are then packaged as full tagged addition relations.  The full
 relation is unfolded only in these three helpers.  No matrix cell or public
 associativity theorem is retained yet; staged cell composition remains open.
 
-## Mixed-cell bounded-extraction seam
+## Mixed-cell outer-doubling exclusion
 
-The D/T and T/D affine and opposite-y outer subcells package at the tagged
-relation boundary.  Their combined cells additionally expose one nominal
-bounded-extraction branch not consumed by the maintained family APIs: left
-outer T in D/T (respectively right outer T in T/D).  Extraction supplies
-`fix(P)=fix(B)` with a secant witness `A+B=P` (respectively `fix(A)=fix(Q)`
-with `A+B=Q`).  No checked-in classifier-free theorem excludes a secant output
-from being fixed-equal to that operand.  The translation theorems require an
-outer secant, and opposite-y propagation requires an outer opposite-y
-relation, so neither consumes this tangent branch.  Closing it requires a
-narrow semantic exclusion theorem; matrix assembly must not unfold secant
-coordinate equations to manufacture that boundary.
+The nominal outer-T branches are now excluded by the certified boundaries
+`affine-dt-left-outer-doubling-impossible` and
+`affine-td-right-outer-doubling-impossible`.  The scalar proof uses only the
+secant slope and output-y equations, fixed payload equality, and the nonzero
+tangent denominator carried by the doubling relation; the T/D result is a
+secant-reversal instance.  The complete local D/T and T/D matrix cells are now
+certified.  The inverse cells and final Candidate C assembly remain open.
