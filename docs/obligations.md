@@ -149,6 +149,38 @@ named F7/F11 operations.
 - Characteristics two and three, general discriminant/smoothness development,
   and alternative curve models are deferred.
 
+## Executable curve group-law prerequisites
+
+The audit below records literal executable laws separately from their semantic
+bridges.  It does not constitute abstract group packaging.
+
+| Prerequisite | Status | Exact public operation or theorem |
+|---|---|---|
+| Operation | **Certified** | `curve-point-pair-output-point` |
+| Identity | **Certified** | `curve-point-infinity` |
+| Inverse operation | **Certified** | transparent total `curve-point-neg` |
+| Operation closure | **Certified** | `short-weierstrass-curve-point-p-of-curve-point-pair-output-point` |
+| Left identity | **Certified** | `curve-point-pair-output-point-identity-left` |
+| Right identity | **Certified** | `curve-point-pair-output-point-identity-right` |
+| Commutativity | **Certified** | `curve-point-pair-output-point-commutative` |
+| Associativity | **Certified** | `curve-point-pair-output-point-associative` |
+| Inverse closure | **Certified** | `short-weierstrass-curve-point-p-of-neg` |
+| Involution | **Certified** | `curve-point-neg-of-neg`; raw canonical form: `curve-point-neg-involution-when-representation-p` |
+| Right inverse | **Certified** | `curve-point-pair-output-point-with-negate-right` |
+| Left inverse | **Certified** | `curve-point-pair-output-point-with-negate-left` |
+| Left cancellation | **Open** | To be derived algebraically from the public executable laws |
+| Right cancellation | **Open** | To be derived algebraically from the public executable laws |
+| Negation canonical output | **Certified** | `curve-point-fix-of-neg` |
+| Negation fixing congruence | **Certified** | `curve-point-neg-of-fix` and the `equal` congruence for `curve-point-neg` |
+| Addition canonical output/fixing | **Certified** | `curve-point-fix-of-curve-point-pair-output-point`; `curve-point-pair-output-point-of-fixes` |
+
+The semantic inverse bridge is
+`curve-point-addition-relation-p-of-point-and-neg`.  The executable right law
+uses dispatcher soundness and relation output determinacy; the left law follows
+from executable commutativity.  Cancellation and abstract abelian-group
+packaging remain open, and scalar multiplication is deferred until after those
+boundaries.
+
 ## Field-only X-CERT algebra
 
 ### Certified

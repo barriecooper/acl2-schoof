@@ -15,4 +15,8 @@
   (equal (f11-curve-point-pair-output-point
           '(:infinity)
           (f11-curve-point-neg '(:infinity)))
+         '(:infinity))
+  (equal (f11-curve-point-pair-output-point
+          (f11-curve-point-neg '(:affine (2 4)))
+          '(:affine (2 4)))
          '(:infinity))))
