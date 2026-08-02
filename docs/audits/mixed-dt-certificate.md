@@ -214,5 +214,49 @@ The combination proof invokes only the two certified branch translations,
 performs the x-coordinate case split, and uses propositional composition.  It
 replays no coordinate reconstruction, field cancellation, H/S algebra,
 X-CERT step, or final-y proof and adds no characteristic or classifier premise.
-The next mathematical boundary is the structural T/D mirror; finite semantic
-assembly remains later work.
+The oriented-family result is the source certificate for the structural T/D
+mirror recorded below.
+
+## T/D structural mirror
+
+The maintained T/D orientation is `A+A=P` with tangent witness `t`, `A+B=Q`
+with secant witness `p`, and the two outer pairs `P+B` and `A+Q`. Reversing
+the triple sends `A,A,B` to `B,A,A`. In the D/T theorem this is the exact
+substitution `A_dt=B`, `B_dt=A`, `P_dt=Q`, `Q_dt=P`, with `p_dt=p`, `t_dt=t`,
+`q_dt=q`, and the common output and infinity payload unchanged. Thus the
+right T/D outer secant `A+Q=R` is explicitly reversed to the D/T premise
+`Q+A=R`; the D/T conclusion `B+P=R` is explicitly reversed back to `P+B=R`.
+The inner secant `A+B=Q` is likewise explicitly reversed to `B+A=Q`.
+
+The certified D/T witness before substitution is `(p_dt+q_dt)-t_dt`.
+Substitution produces exactly `(p+q)-t`, represented without reassociation as
+`field-sub(field-add(field-fix(p),field-fix(q)),field-fix(t))`. Secant
+reversal preserves the checked witness, so it introduces no field negation.
+`affine-td-d-translation` is the resulting affine boundary. Its outer premise
+is necessarily the right T/D tree: point-order reversal exchanges the two
+associativity trees. This direction is the literal structural mirror of the
+oriented D/T theorem, not a second coordinate certificate.
+
+For O/O, `P=-B` is symmetrized to `B=-P`, and
+`affine-dt-opposite-y-propagates-to-left-output` under the same substitution
+gives `Q=-A`; a final opposite-y symmetry gives `A=-Q` with the identical
+infinity payload. This is exposed by
+`affine-td-left-output-opposite-y-propagates-to-right-output`.
+
+Reversal is a bijection on the exhaustive configurations already enumerated:
+the explicit tuple map is
+`(A,B,P,Q,R,p,t,q,infinity) -> (B,A,Q,P,R,p,t,q,infinity)`, and applying it
+twice is the identity. Applying that map to every enumerated row gives 1,764
+T/D inputs over F7 and 12,100 over F11. Of these, 1,512 and 11,000,
+respectively, have the mirrored affine outer-secant premise, while 252 and
+1,100 are O/O. There are zero mapped failures, and every affine row agrees
+with the exact witness `(p+q)-t`. This exhaustive mapping is finite
+validation, not proof.
+
+Both T/D proofs use only theorem instantiation, certified secant operand
+reversal, and opposite-y symmetry. They unfold no coordinate relation or
+formula and add no cancellation. All multiplication cancellation remains
+encapsulated in the D/T certificate audited above. They add no characteristic,
+classifier, curve-membership, division, inverse, denominator, nonzero, or
+canonicality premise. The next mathematical boundary is finite affine
+semantic assembly, which must add no coordinate algebra.

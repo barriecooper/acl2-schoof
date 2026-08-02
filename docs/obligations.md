@@ -451,7 +451,7 @@ For `P=A+B` and `Q=B+C`, the exact inner-pair matrix is:
 | `T` | `T` | complete structurally | `curve-point-pair-output-point-associative-when-both-inner-doubling`; both premises force fixed `A=B=C`, and outer commutativity closes the trees |
 | `D` | `D` | complete at the affine semantic family level | ordinary outer `D/D` is covered by the X-CERT theorems; outer `O/O` by `affine-dd-opposite-y-propagates-to-other-tree` and its left-tree mirror; an outer `T` and its opposite-tree `D/T` result by `affine-dd-t-translation` and point-order reversal |
 | `D` | `T` | complete at the oriented affine semantic family level | `affine-dt-d-translation` combines the two left-outer-secant outcomes; `affine-dt-left-output-opposite-y-propagates-to-right-output` supplies the witness-free O/O outcome |
-| `T` | `D` | no independent mathematics | reverse `A,B,C`, reverse secant operands with `affine-distinct-x-secant-relation-p-reverse`, use the symmetry of the opposite-y relation, and commute the two outer additions; this is the mirror of `D/T` |
+| `T` | `D` | complete structurally | `affine-td-d-translation` supplies the mirrored affine outcomes and `affine-td-left-output-opposite-y-propagates-to-right-output` supplies O/O; both reverse secants explicitly and reuse the D/T family |
 
 Thus the former phrase “mixed `D/T`” refers **only to the types of the two
 inner additions**, not to an outer pair and not to the DD-T naming convention.
@@ -487,8 +487,8 @@ both inner additions, closure for affine inner outputs, and the matching outer
 relation(s).  Its natural endpoint is
 `curve-point-addition-relation-p` for a common output on each tree, rather than
 a permanently exposed lower-level disjunction: the latter is only the input to
-assembly.  Before assembly, the remaining cell is the structural `T/D` mirror
-of the certified oriented `D/T` family.
+assembly.  All matrix cells are now certified. The remaining task is finite affine
+semantic assembly through the independent relation and case-coverage books.
 
 ### Stage 3 exceptional-secant certificate audit
 
@@ -971,9 +971,9 @@ branch proof is replayed.
 The oriented mixed-inner `D/T` family is now complete at the affine semantic
 boundary: `affine-dt-d-translation` combines its two left-outer-secant
 outcomes, and `affine-dt-left-output-opposite-y-propagates-to-right-output`
-supplies its witness-free O/O outcome.  The T/D mirror, finite affine semantic
-assembly, unrestricted associativity, executable lift, and final group-law
-packaging remain. Detailed current status is maintained below rather than in
+supplies its witness-free O/O outcome. The structural T/D mirror is also
+complete; finite affine semantic assembly, unrestricted associativity,
+executable lift, and final group-law packaging remain. Detailed current status is maintained below rather than in
 this historical D/D audit.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
