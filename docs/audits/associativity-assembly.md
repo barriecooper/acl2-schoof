@@ -174,3 +174,17 @@ the repository-selected quotient slope, and secant, doubling, and opposite-y
 relations are then packaged as full tagged addition relations.  The full
 relation is unfolded only in these three helpers.  No matrix cell or public
 associativity theorem is retained yet; staged cell composition remains open.
+
+## Mixed-cell bounded-extraction seam
+
+The D/T and T/D affine and opposite-y outer subcells package at the tagged
+relation boundary.  Their combined cells additionally expose one nominal
+bounded-extraction branch not consumed by the maintained family APIs: left
+outer T in D/T (respectively right outer T in T/D).  Extraction supplies
+`fix(P)=fix(B)` with a secant witness `A+B=P` (respectively `fix(A)=fix(Q)`
+with `A+B=Q`).  No checked-in classifier-free theorem excludes a secant output
+from being fixed-equal to that operand.  The translation theorems require an
+outer secant, and opposite-y propagation requires an outer opposite-y
+relation, so neither consumes this tangent branch.  Closing it requires a
+narrow semantic exclusion theorem; matrix assembly must not unfold secant
+coordinate equations to manufacture that boundary.

@@ -753,3 +753,189 @@
         affine-distinct-x-secant-relation-p-of-fixes
         affine-doubling-relation-p-of-fixes
         affine-opposite-y-infinity-relation-p-of-fixes))))))
+
+; Inner D/T, left outer D.  Determinacy compares the family-derived tagged
+; left-payload with supplied RIGHT on fixed pair (tagged A, tagged Q).
+(local
+ (defthm affine-d-t-outer-d-cell-local
+   (implies
+    (and
+     (affine-distinct-x-secant-relation-p a b p-slope p-output)
+     (affine-doubling-relation-p b t-slope q-output)
+     (affine-distinct-x-secant-relation-p
+      p-output b left-slope left-payload)
+     (equal (curve-point-fix left)
+            (curve-point-affine-coordinates
+             (affine-coordinates-fix left-payload)))
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a)
+      (curve-point-affine-coordinates q-output) right))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance affine-dt-d-translation
+                 (q-slope left-slope) (r-output left-payload))
+      (:instance secant-relation-packages-as-full-addition-local
+                 (a a) (b q-output)
+                 (slope
+                  (field-sub
+                   (field-add (field-fix p-slope)
+                              (field-fix left-slope))
+                   (field-fix t-slope)))
+                 (output left-payload))
+      (:instance doubling-relation-packages-as-full-addition-local
+                 (a a)
+                 (slope
+                  (field-sub
+                   (field-add (field-fix p-slope)
+                              (field-fix left-slope))
+                   (field-fix t-slope)))
+                 (output left-payload))
+      (:instance
+       curve-point-addition-relation-output-determinate-under-fixed-operands
+       (first-a (curve-point-affine-coordinates a))
+       (second-a (curve-point-affine-coordinates q-output))
+       (output-a (curve-point-affine-coordinates left-payload))
+       (first-b (curve-point-affine-coordinates a))
+       (second-b (curve-point-affine-coordinates q-output))
+       (output-b right))
+      (:instance
+       curve-point-addition-relation-output-determinate-under-fixed-operands
+       (first-a (curve-point-affine-coordinates a))
+       (second-a (curve-point-affine-coordinates a))
+       (output-a (curve-point-affine-coordinates left-payload))
+       (first-b (curve-point-affine-coordinates a))
+       (second-b (curve-point-affine-coordinates q-output))
+       (output-b right)))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(curve-point-fix-of-affine-coordinates
+        affine-coordinates-fix-idempotent))))))
+
+; Inner D/T, left outer O.  Propagation packages LEFT as the derived output on
+; fixed pair (tagged A, tagged Q); supplied output on that pair is RIGHT.
+(local
+ (defthm affine-d-t-outer-o-cell-local
+   (implies
+    (and
+     (affine-distinct-x-secant-relation-p a b p-slope p-output)
+     (affine-doubling-relation-p b t-slope q-output)
+     (affine-opposite-y-infinity-relation-p p-output b left)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a)
+      (curve-point-affine-coordinates q-output) right))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance
+       affine-dt-left-output-opposite-y-propagates-to-right-output
+       (infinity left))
+      (:instance opposite-y-relation-packages-as-full-addition-local
+                 (a a) (b q-output) (output left))
+      (:instance
+       curve-point-addition-relation-output-determinate-under-fixed-operands
+       (first-a (curve-point-affine-coordinates a))
+       (second-a (curve-point-affine-coordinates q-output))
+       (output-a left)
+       (first-b (curve-point-affine-coordinates a))
+       (second-b (curve-point-affine-coordinates q-output))
+       (output-b right)))
+     :in-theory (theory 'minimal-theory)))))
+
+; Inner T/D, right outer D.  Determinacy compares the family-derived tagged
+; right-payload with supplied LEFT on fixed pair (tagged P, tagged B).
+(local
+ (defthm affine-t-d-outer-d-cell-local
+   (implies
+    (and
+     (affine-doubling-relation-p a t-slope p-output)
+     (affine-distinct-x-secant-relation-p a b p-slope q-output)
+     (affine-distinct-x-secant-relation-p
+      a q-output right-slope right-payload)
+     (equal (curve-point-fix right)
+            (curve-point-affine-coordinates
+             (affine-coordinates-fix right-payload)))
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates p-output)
+      (curve-point-affine-coordinates b) left))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance affine-td-d-translation
+                 (q-slope right-slope) (r-output right-payload))
+      (:instance secant-relation-packages-as-full-addition-local
+                 (a p-output) (b b)
+                 (slope
+                  (field-sub
+                   (field-add (field-fix p-slope)
+                              (field-fix right-slope))
+                   (field-fix t-slope)))
+                 (output right-payload))
+      (:instance doubling-relation-packages-as-full-addition-local
+                 (a b)
+                 (slope
+                  (field-sub
+                   (field-add (field-fix p-slope)
+                              (field-fix right-slope))
+                   (field-fix t-slope)))
+                 (output right-payload))
+      (:instance
+       curve-point-addition-relation-output-determinate-under-fixed-operands
+       (first-a (curve-point-affine-coordinates p-output))
+       (second-a (curve-point-affine-coordinates b))
+       (output-a (curve-point-affine-coordinates right-payload))
+       (first-b (curve-point-affine-coordinates p-output))
+       (second-b (curve-point-affine-coordinates b))
+       (output-b left))
+      (:instance
+       curve-point-addition-relation-output-determinate-under-fixed-operands
+       (first-a (curve-point-affine-coordinates b))
+       (second-a (curve-point-affine-coordinates b))
+       (output-a (curve-point-affine-coordinates right-payload))
+       (first-b (curve-point-affine-coordinates p-output))
+       (second-b (curve-point-affine-coordinates b))
+       (output-b left)))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(curve-point-fix-of-affine-coordinates
+        affine-coordinates-fix-idempotent))))))
+
+; Inner T/D, left outer O.  The checked-in propagation theorem derives RIGHT
+; as an opposite-y output.  Determinacy pair is (tagged A, tagged Q).
+(local
+ (defthm affine-t-d-outer-o-cell-local
+   (implies
+    (and
+     (affine-doubling-relation-p a t-slope p-output)
+     (affine-distinct-x-secant-relation-p a b p-slope q-output)
+     (affine-opposite-y-infinity-relation-p p-output b left)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a)
+      (curve-point-affine-coordinates q-output) right))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance
+       affine-td-left-output-opposite-y-propagates-to-right-output
+       (infinity left))
+      (:instance opposite-y-relation-packages-as-full-addition-local
+                 (a a) (b q-output) (output left))
+      (:instance
+       curve-point-addition-relation-output-determinate-under-fixed-operands
+       (first-a (curve-point-affine-coordinates a))
+       (second-a (curve-point-affine-coordinates q-output))
+       (output-a left)
+       (first-b (curve-point-affine-coordinates a))
+       (second-b (curve-point-affine-coordinates q-output))
+       (output-b right)))
+     :in-theory (theory 'minimal-theory)))))

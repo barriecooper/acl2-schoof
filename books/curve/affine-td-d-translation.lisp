@@ -25,13 +25,16 @@
                  (field-fix q-slope))
       (field-fix t-slope))
      r-output)
-    (affine-doubling-relation-p
-     b
-     (field-sub
-      (field-add (field-fix p-slope)
-                 (field-fix q-slope))
-      (field-fix t-slope))
-     r-output)))
+    (and
+     (equal (affine-coordinates-fix p-output)
+            (affine-coordinates-fix b))
+     (affine-doubling-relation-p
+      b
+      (field-sub
+       (field-add (field-fix p-slope)
+                  (field-fix q-slope))
+       (field-fix t-slope))
+      r-output))))
   :rule-classes nil
   :hints
   (("Goal"

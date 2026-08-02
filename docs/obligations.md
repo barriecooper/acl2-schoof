@@ -501,8 +501,12 @@ Finite affine semantic assembly remains open. Proof-engineering branch
 extraction is complete: the certified theorem
 `curve-point-addition-relation-affine-case-coverage` exposes one tagged affine
 relation as D/O/T, and public fixed-operands determinacy supports representation
-alignment. The remaining work is the staged nine-cell composition; no
-affine-family mathematics or structural predecessor is missing.
+alignment. The remaining work is the staged nine-cell composition.  D/D is assembled,
+and the mixed D/T and T/D affine/opposite-y subcells are certified.  Their
+nominal outer-tangent extraction branches still require a classifier-free
+semantic exclusion stating that the relevant secant output cannot be
+fixed-equal to its operand; no coordinate proof should be replayed in the
+assembly book.
 
 ### Stage 3 exceptional-secant certificate audit
 

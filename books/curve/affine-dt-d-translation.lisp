@@ -24,18 +24,25 @@
                  (field-fix q-slope))
       (field-fix t-slope))
      r-output)
-    (affine-doubling-relation-p
-     a
-     (field-sub
-      (field-add (field-fix p-slope)
-                 (field-fix q-slope))
-      (field-fix t-slope))
-     r-output)))
+    (and
+     (equal (affine-coordinates-fix a)
+            (affine-coordinates-fix q-output))
+     (affine-doubling-relation-p
+      a
+      (field-sub
+       (field-add (field-fix p-slope)
+                  (field-fix q-slope))
+       (field-fix t-slope))
+      r-output))))
   :rule-classes nil
   :hints
   (("Goal"
     :use ((:instance affine-dt-d-coincident-x-translation)
+          (:instance affine-dt-d-coincident-x-implies-ordinate-equality)
           (:instance affine-dt-d-outer-distinct-x-translation))
     :cases ((equal (affine-coordinates-x q-output)
                    (affine-coordinates-x a)))
-    :in-theory (theory 'minimal-theory))))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(affine-coordinates-fix affine-coordinates-make)))))
