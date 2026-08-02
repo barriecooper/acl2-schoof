@@ -138,6 +138,12 @@ gives the left inverse.  No dispatcher branch tree, secant algebra, or tangent
 algebra is expanded in this lift.  Concrete F11 inverse checks are execution
 regressions, not the proof of these laws.
 
+Executable left cancellation is derived purely by translating an equality by
+the executable negation, reassociating, and applying the executable inverse
+and identity laws.  Right cancellation is then derived by executable
+commutativity.  These algebraic proofs do not revisit the semantic addition
+relation, dispatcher branches, classifiers, or affine/field proofs.
+
 ## Guard and termination boundaries
 
 Recursive polynomial division uses a certified strict decrease of the

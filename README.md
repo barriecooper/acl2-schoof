@@ -28,8 +28,9 @@ The repository currently certifies these subsystem-level foundations:
   dispatchers, with independent semantic relations for the geometric branches
   and for full tagged-point addition; and
 - executable output closure, literal left/right infinity identity,
-  commutativity, associativity, and a transparent point inverse with literal
-  left/right inverse laws for full tagged-point addition.
+  commutativity, associativity, a transparent point inverse with literal
+  left/right inverse laws, and literal left/right cancellation for full
+  tagged-point addition.
 
 Concrete F7 and F11 books are focused executable and instantiation regressions.
 They demonstrate particular computations; they do not by themselves establish
@@ -38,9 +39,11 @@ a generic theorem. The detailed proved/open ledger is
 case matrix is [`docs/status-associativity.md`](docs/status-associativity.md).
 
 The full tagged executable curve-point dispatcher now has independently public
-closure, identity, commutativity, associativity, and inverse laws for valid
-curve points.  The curve development is **not** yet a packaged group law:
-cancellation, group packaging, and scalar multiplication remain unproved.
+closure, identity, commutativity, associativity, inverse, and cancellation laws
+for valid curve points.  These executable abelian-group laws and cancellation
+are independently certified, but the curve development is **not** yet a
+packaged group law: the abstract group packaging event and scalar
+multiplication remain open.
 There is no certified Hasse theorem, point-count correctness theorem,
 division-polynomial theory, Frobenius machinery for Schoof, or Schoof
 algorithm.
@@ -136,8 +139,9 @@ Full tagged semantic associativity is certified, including infinity-input
 reductions and the complete affine D/O/T case assembly.  Executable dispatcher
 associativity and both executable inverse orientations for valid tagged inputs
 are certified through the independent relation using soundness, determinacy,
-closure, and canonical fixing. Algebraic cancellation from the public
-executable laws is the next boundary; group packaging follows it. There is
+closure, and canonical fixing. Algebraic left and right cancellation from the
+public executable laws is also certified. Abstract abelian-group packaging is
+the next boundary, followed by scalar multiplication. There is
 still no Hasse theorem and no
 certified Schoof algorithm. See the [current matrix](docs/status-associativity.md) and
 [forward proof plan](docs/proof-plan.md) for the maintained boundaries.

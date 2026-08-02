@@ -20,7 +20,8 @@ irreducible fixed-modulus quotient fields, short-Weierstrass representations,
 and the executable and independent semantic layers for full tagged-point
 addition. Executable output closure, literal left/right infinity identity,
 transparent point negation, involution, literal left/right inverse,
-commutativity, and associativity are complete. Concrete F7, F7X2, and F11
+commutativity, associativity, and algebraic left/right cancellation are
+complete. Concrete F7, F7X2, and F11
 books supply focused instantiation and execution regressions rather than
 additional generic scope.
 
@@ -47,12 +48,9 @@ dispatcher witnesses to `curve-point-addition-relation-associative`, and
 canonical output turns its fixed-output equality into literal executable
 equality. Proceed with one bounded boundary per proof change:
 
-1. **Algebraic cancellation.** Derive left and right cancellation only from
-   executable associativity, identity, inverse, commutativity, and congruence.
-   Do not reopen affine geometry or dispatcher classification.
-2. **Group packaging.** After cancellation has its own public regressions,
+1. **Group packaging.** With cancellation and its public regressions complete,
    package the certified laws behind an abstract abelian-group interface.
-3. **Scalar multiplication.** Specify and certify repeated addition only after
+2. **Scalar multiplication.** Specify and certify repeated addition only after
    the group boundary is complete.
 
 The stopping conditions prevent semantic assembly from hiding unfinished
