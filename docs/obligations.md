@@ -1110,8 +1110,17 @@ All entries use the orientation `A+B=P` by secant `p`, `B+B=Q` by doubling
   public theorem `short-weierstrass-curve-point-non-infinity-representation`;
   original infinity is discharged by the existing structural theorem and the
   remaining case by the certified affine semantic theorem.
-- **Open:** semantic-to-executable dispatcher associativity.  Group packaging
-  remains deferred until that lift certifies.
+- **Certified:** `curve-point-pair-output-point-satisfies-addition-relation`
+  supplies the four executable relation witnesses, while
+  `short-weierstrass-curve-point-p-of-curve-point-pair-output-point` supplies
+  closure for the two inner outputs.  Instantiating the semantic theorem gives
+  `curve-point-pair-output-point-associative-fixed`.
+- **Certified:** `curve-point-fix-of-curve-point-pair-output-point` packages the
+  existing unconditional representation invariant as canonical-output
+  equality.  It removes both output fixers to give the exact public executable
+  theorem `curve-point-pair-output-point-associative` for valid tagged inputs.
+  No dispatcher branch or affine algebra is unfolded in this lift.
+- **Open:** abstract group packaging and its prerequisite cancellation laws.
 
 ### Candidate C finite semantic assembly interface
 

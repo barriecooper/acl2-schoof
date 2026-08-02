@@ -114,6 +114,8 @@
 (include-book "curve/curve-point-non-infinity-representation-regression")
 (include-book "curve/curve-point-addition-relation-associativity")
 (include-book "curve/curve-point-addition-relation-associativity-regression")
+(include-book "curve/curve-point-pair-output-point-associativity")
+(include-book "curve/curve-point-pair-output-point-associativity-regression")
 (include-book "curve/affine-inverse-tangent-translation")
 (include-book "curve/affine-inverse-tangent-translation-regression")
 (include-book "curve/affine-dd-opposite-y-propagation")

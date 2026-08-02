@@ -40,16 +40,15 @@ countermodel, and endpoint derivations are preserved in the
 
 ### Forward boundaries and completion criteria
 
-Proceed in this dependency order, with one bounded boundary per proof change:
+The executable dispatcher lift is complete: soundness and closure provide four
+dispatcher witnesses to `curve-point-addition-relation-associative`, and
+canonical output turns its fixed-output equality into literal executable
+equality. Proceed with one bounded boundary per proof change:
 
-1. **Executable dispatcher lift.** Full tagged semantic associativity is now
-   certified by `curve-point-addition-relation-associative`. Use semantic soundness, fixed-output
-   determinacy, closure, and canonical representation to prove unrestricted
-   `curve-point-pair-output-point` associativity. Completion keeps guard and
-   execution evidence distinct from semantic correctness.
-2. **Group packaging.** Only after unrestricted associativity certifies,
-   package the curve law, cancellation consequences, and scalar
-   multiplication behind an abstract abelian-group interface.
+1. **Group packaging.** Package the now-associative curve law, the required
+   cancellation consequences, and later scalar multiplication behind an
+   abstract abelian-group interface. Keep each prerequisite law independently
+   certified rather than hiding it inside the packaging event.
 
 The stopping conditions prevent semantic assembly from hiding unfinished
 coordinate work and prevent dispatcher expansion from replacing the
