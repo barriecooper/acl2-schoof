@@ -1248,3 +1248,272 @@
         affine-distinct-x-secant-relation-p-of-fixes
         affine-doubling-relation-p-of-fixes
         affine-opposite-y-infinity-relation-p-of-fixes))))))
+
+; Ordered infinity consequences used by the four inverse cells.  These are the
+; only inverse-cell helpers that open the full relation, solely to construct
+; its ordered identity witness; determinacy then aligns the supplied output.
+(local
+ (defthm addition-relation-left-infinity-witness-local
+   (implies
+    (and (curve-point-addition-relation-p first second output)
+         (equal (curve-point-fix first) (curve-point-infinity)))
+    (curve-point-addition-relation-p first second second))
+   :rule-classes nil
+   :hints (("Goal" :in-theory
+            (enable curve-point-addition-relation-p
+                    curve-point-left-infinity-identity-relation-p)))))
+
+(local
+ (defthm addition-relation-left-infinity-output-local
+   (implies
+    (and (curve-point-addition-relation-p first second output)
+         (equal (curve-point-fix first) (curve-point-infinity)))
+    (equal (curve-point-fix output) (curve-point-fix second)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use (addition-relation-left-infinity-witness-local
+           (:instance curve-point-addition-relation-output-determinate
+                      (output-a output) (output-b second)))
+     :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm addition-relation-right-infinity-witness-local
+   (implies
+    (and (curve-point-addition-relation-p first second output)
+         (equal (curve-point-fix second) (curve-point-infinity)))
+    (curve-point-addition-relation-p first second first))
+   :rule-classes nil
+   :hints (("Goal" :in-theory
+            (enable curve-point-addition-relation-p
+                    curve-point-right-infinity-identity-relation-p)))))
+
+(local
+ (defthm addition-relation-right-infinity-output-local
+   (implies
+    (and (curve-point-addition-relation-p first second output)
+         (equal (curve-point-fix second) (curve-point-infinity)))
+    (equal (curve-point-fix output) (curve-point-fix first)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use (addition-relation-right-infinity-witness-local
+           (:instance curve-point-addition-relation-output-determinate
+                      (output-a output) (output-b first)))
+     :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm affine-o-t-derived-right-relation-local
+   (implies
+    (and (affine-opposite-y-infinity-relation-p a b infinity)
+         (affine-doubling-relation-p b tangent u))
+    (curve-point-addition-relation-p
+     (curve-point-affine-coordinates a)
+     (curve-point-affine-coordinates u)
+     (curve-point-affine-coordinates b)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance affine-inverse-tangent-translation)
+      (:instance secant-relation-packages-as-full-addition-local
+                 (a a) (b u) (slope (field-neg tangent)) (output b))
+      (:instance doubling-relation-packages-as-full-addition-local
+                 (a a) (slope (field-neg tangent)) (output b))
+      (:instance addition-relation-transport-fixed-operands-local
+                 (first-a (curve-point-affine-coordinates a))
+                 (second-a (curve-point-affine-coordinates a))
+                 (output (curve-point-affine-coordinates b))
+                 (first-b (curve-point-affine-coordinates a))
+                 (second-b (curve-point-affine-coordinates u))))
+     :in-theory
+     (union-theories (theory 'minimal-theory)
+                     '(curve-point-fix-of-affine-coordinates))))))
+
+; O/T principal determinacy pair: (tagged A, tagged U).  Family output is
+; tagged B and the supplied output is RIGHT; LEFT is the ordered infinity
+; identity output on (AB, tagged B).
+(local
+ (defthm curve-point-addition-relation-associative-affine-o-t-cell-local
+   (implies
+    (and
+     (affine-opposite-y-infinity-relation-p a b ab)
+     (affine-doubling-relation-p b tangent u)
+     (equal (curve-point-fix bc)
+            (curve-point-affine-coordinates (affine-coordinates-fix u)))
+     (curve-point-addition-relation-p
+      ab (curve-point-affine-coordinates b) left)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a) bc right))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance addition-relation-left-infinity-output-local
+                 (first ab) (second (curve-point-affine-coordinates b))
+                 (output left))
+      (:instance affine-o-t-derived-right-relation-local
+                 (infinity ab))
+      (:instance addition-relation-transport-fixed-operands-local
+                 (first-a (curve-point-affine-coordinates a))
+                 (second-a bc) (output right)
+                 (first-b (curve-point-affine-coordinates a))
+                 (second-b (curve-point-affine-coordinates u)))
+      (:instance
+       curve-point-addition-relation-output-determinate-under-fixed-operands
+       (first-a (curve-point-affine-coordinates a))
+       (second-a (curve-point-affine-coordinates u))
+       (output-a (curve-point-affine-coordinates b))
+       (first-b (curve-point-affine-coordinates a))
+       (second-b (curve-point-affine-coordinates u))
+       (output-b right)))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(affine-opposite-y-infinity-relation-p
+        curve-point-fix-of-affine-coordinates
+        affine-coordinates-fix-idempotent))))))
+
+(local
+ (defthm affine-o-d-derived-right-relation-local
+   (implies
+    (and (short-weierstrass-characteristic-p)
+         (affine-opposite-y-infinity-relation-p a b infinity)
+         (affine-distinct-x-secant-relation-p b c slope u))
+    (curve-point-addition-relation-p
+     (curve-point-affine-coordinates a)
+     (curve-point-affine-coordinates u)
+     (curve-point-affine-coordinates c)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance affine-inverse-secant-translation (r slope))
+      (:instance secant-relation-packages-as-full-addition-local
+                 (a a) (b u) (slope (field-neg (field-fix slope)))
+                 (output c))
+      (:instance doubling-relation-packages-as-full-addition-local
+                 (a a) (slope (field-neg (field-fix slope))) (output c))
+      (:instance addition-relation-transport-fixed-operands-local
+                 (first-a (curve-point-affine-coordinates a))
+                 (second-a (curve-point-affine-coordinates a))
+                 (output (curve-point-affine-coordinates c))
+                 (first-b (curve-point-affine-coordinates a))
+                 (second-b (curve-point-affine-coordinates u))))
+     :in-theory
+     (union-theories (theory 'minimal-theory)
+                     '(curve-point-fix-of-affine-coordinates))))))
+
+; O/D principal determinacy pair: (tagged A, tagged U).  Family output is
+; tagged C and supplied output is RIGHT; LEFT is infinity+C.
+(local
+ (defthm curve-point-addition-relation-associative-affine-o-d-cell-local
+   (implies
+    (and
+     (short-weierstrass-characteristic-p)
+     (affine-opposite-y-infinity-relation-p a b ab)
+     (affine-distinct-x-secant-relation-p b c slope u)
+     (equal (curve-point-fix bc)
+            (curve-point-affine-coordinates (affine-coordinates-fix u)))
+     (curve-point-addition-relation-p
+      ab (curve-point-affine-coordinates c) left)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a) bc right))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance addition-relation-left-infinity-output-local
+                 (first ab) (second (curve-point-affine-coordinates c))
+                 (output left))
+      (:instance affine-o-d-derived-right-relation-local (infinity ab))
+      (:instance addition-relation-transport-fixed-operands-local
+                 (first-a (curve-point-affine-coordinates a))
+                 (second-a bc) (output right)
+                 (first-b (curve-point-affine-coordinates a))
+                 (second-b (curve-point-affine-coordinates u)))
+      (:instance
+       curve-point-addition-relation-output-determinate-under-fixed-operands
+       (first-a (curve-point-affine-coordinates a))
+       (second-a (curve-point-affine-coordinates u))
+       (output-a (curve-point-affine-coordinates c))
+       (first-b (curve-point-affine-coordinates a))
+       (second-b (curve-point-affine-coordinates u))
+       (output-b right)))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(affine-opposite-y-infinity-relation-p
+        curve-point-fix-of-affine-coordinates
+        affine-coordinates-fix-idempotent))))))
+
+; T/O is the point-order mirror of O/T.  Principal comparison in the invoked
+; cell is (tagged B, tagged P), semantically reversed from supplied P+B.
+(local
+ (defthm curve-point-addition-relation-associative-affine-t-o-cell-local
+   (implies
+    (and
+     (affine-doubling-relation-p a tangent p)
+     (equal (curve-point-fix ab)
+            (curve-point-affine-coordinates (affine-coordinates-fix p)))
+     (affine-opposite-y-infinity-relation-p a b bc)
+     (curve-point-addition-relation-p
+      ab (curve-point-affine-coordinates b) left)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a) bc right))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance affine-opposite-y-infinity-relation-p-symmetric
+                 (first a) (second b) (output bc))
+      (:instance curve-point-addition-relation-p-commutative
+                 (first ab) (second (curve-point-affine-coordinates b))
+                 (output left))
+      (:instance curve-point-addition-relation-p-commutative
+                 (first (curve-point-affine-coordinates a)) (second bc)
+                 (output right))
+      (:instance curve-point-addition-relation-associative-affine-o-t-cell-local
+                 (a b) (b a) (ab bc)
+                 (tangent tangent) (u p) (bc ab)
+                 (left right) (right left)))
+     :in-theory (theory 'minimal-theory)))))
+
+; D/O is the point-order mirror of O/D.  The invoked determinacy pair is
+; (tagged C, tagged P), the semantic reversal of supplied P+C.
+(local
+ (defthm curve-point-addition-relation-associative-affine-d-o-cell-local
+   (implies
+    (and
+     (short-weierstrass-characteristic-p)
+     (affine-distinct-x-secant-relation-p a b slope p)
+     (equal (curve-point-fix ab)
+            (curve-point-affine-coordinates (affine-coordinates-fix p)))
+     (affine-opposite-y-infinity-relation-p b c bc)
+     (curve-point-addition-relation-p
+      ab (curve-point-affine-coordinates c) left)
+     (curve-point-addition-relation-p
+      (curve-point-affine-coordinates a) bc right))
+    (equal (curve-point-fix left) (curve-point-fix right)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance affine-distinct-x-secant-relation-p-reverse
+                 (first a) (second b) (slope slope) (output p))
+      (:instance affine-opposite-y-infinity-relation-p-symmetric
+                 (first b) (second c) (output bc))
+      (:instance curve-point-addition-relation-p-commutative
+                 (first ab) (second (curve-point-affine-coordinates c))
+                 (output left))
+      (:instance curve-point-addition-relation-p-commutative
+                 (first (curve-point-affine-coordinates a)) (second bc)
+                 (output right))
+      (:instance curve-point-addition-relation-associative-affine-o-d-cell-local
+                 (a c) (b b) (ab bc) (c a)
+                 (slope slope) (u p) (bc ab)
+                 (left right) (right left)))
+     :in-theory (theory 'minimal-theory)))))

@@ -307,6 +307,35 @@
        field-element-p-of-affine-coordinates-x
        field-element-p-of-affine-coordinates-y)))))
 
+(local
+ (defthm inverse-tangent-coincident-x-implies-fixed-equal-local
+   (implies
+    (and (affine-opposite-y-infinity-relation-p a b infinity)
+         (affine-doubling-relation-p b tangent u)
+         (equal (affine-coordinates-x u)
+                (affine-coordinates-x a)))
+    (equal (affine-coordinates-fix a)
+           (affine-coordinates-fix u)))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :use
+     ((:instance inverse-tangent-y-coincidence-local
+                 (ya (affine-coordinates-y a))
+                 (yb (affine-coordinates-y b))
+                 (yu (affine-coordinates-y u))
+                 (xa (affine-coordinates-x a))
+                 (xu (affine-coordinates-x u))
+                 (slope (field-fix tangent))))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(affine-opposite-y-infinity-relation-p
+        affine-doubling-relation-p
+        affine-coordinates-fix affine-coordinates-make
+        field-element-p-of-affine-coordinates-x
+        field-element-p-of-affine-coordinates-y))))))
+
 ; Stable classifier-free Stage 3 boundary.  The disjunction is exhaustive on
 ; fixed x equality, so an outer opposite-y outcome is not a premise and cannot
 ; occur: the relation is derived as either D or T.
@@ -316,12 +345,16 @@
         (affine-doubling-relation-p b tangent u))
    (or (affine-distinct-x-secant-relation-p
         a u (field-neg tangent) b)
-       (affine-doubling-relation-p
-        a (field-neg tangent) b)))
+       (and
+        (equal (affine-coordinates-fix a)
+               (affine-coordinates-fix u))
+        (affine-doubling-relation-p
+         a (field-neg tangent) b))))
   :rule-classes nil
   :hints
   (("Goal"
-    :use (affine-inverse-tangent-translation-outer-distinct-x
+    :use (inverse-tangent-coincident-x-implies-fixed-equal-local
+          affine-inverse-tangent-translation-outer-distinct-x
           affine-inverse-tangent-translation-outer-doubling)
     :cases ((equal (affine-coordinates-x u)
                    (affine-coordinates-x a)))

@@ -183,4 +183,8 @@ The nominal outer-T branches are now excluded by the certified boundaries
 secant slope and output-y equations, fixed payload equality, and the nonzero
 tangent denominator carried by the doubling relation; the T/D result is a
 secant-reversal instance.  The complete local D/T and T/D matrix cells are now
-certified.  The inverse cells and final Candidate C assembly remain open.
+certified.  The O/D, D/O, O/T, and T/O inverse cells are also certified through
+the strengthened inverse translation interfaces, ordered infinity identity,
+packaging, and same-operand determinacy.  All nine affine matrix cells are now
+certified locally; only final propositional Candidate C assembly and its
+regression remain open.

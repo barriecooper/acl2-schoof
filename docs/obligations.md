@@ -506,8 +506,9 @@ and the complete mixed D/T and T/D cells are certified.  Their nominal
 outer-tangent branches are excluded by
 `affine-dt-left-outer-doubling-impossible` and
 `affine-td-right-outer-doubling-impossible`, using only the secant line
-relations versus the tangent-domain nonzero condition.  The inverse cells and
-final Candidate C assembly remain open.
+relations versus the tangent-domain nonzero condition.  The four inverse cells
+are now certified locally as well.  All nine affine matrix cells are complete;
+final propositional Candidate C assembly and its regression remain open.
 
 ### Stage 3 exceptional-secant certificate audit
 
