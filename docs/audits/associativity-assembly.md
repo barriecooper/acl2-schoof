@@ -156,3 +156,12 @@ and 876 cases applicable to the new theorem had zero associativity failures,
 and exhaustive enumeration of semantic slope/output witnesses for each of the
 four operand pairs had zero deviations from its canonical output. This finite
 check is validation only. Candidate C matrix assembly remains open.
+
+The proof-engineering seam for that assembly is now certified:
+`curve-point-addition-relation-affine-case-coverage` unfolds one full relation
+on tagged affine operands into a bounded D/O/T disjunction, preserving the
+fixed tagged affine payload for D and T and the original infinity witness for
+O. `curve-point-addition-relation-output-determinate-under-fixed-operands`
+promotes the general fixed-operand alignment used by the structural proofs.
+The next task is the staged nine-cell composition; no associativity cell is
+claimed by these interface theorems.

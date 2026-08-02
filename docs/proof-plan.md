@@ -44,7 +44,10 @@ Proceed in this dependency order, with one bounded boundary per proof change:
 
 1. **Assemble Candidate C finite affine semantic associativity.** The missing
    arbitrary-witness D/D secant/secant bridge is now certified, so all required
-   family and structural predecessors exist. Combine O, T, D/D, D/T, and T/D
+   family and structural predecessors exist. The certified one-relation
+   `curve-point-addition-relation-affine-case-coverage` interface now extracts
+   a bounded D/O/T disjunction, and public fixed-operands determinacy avoids
+   duplicating the structural helper. Combine O, T, D/D, D/T, and T/D
    through case coverage into fixed equality of explicit final witnesses for
    the two independent semantic-relation trees. Completion must add no
    coordinate algebra and does not unfold the executable dispatcher. The exact
