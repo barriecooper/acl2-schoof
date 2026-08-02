@@ -16,6 +16,7 @@ boundaries. Detailed obligations remain in [the ledger](obligations.md).
 | D/D outer coincident-x/doubling | Two inner secants; opposite tree closes by doubling | **Certified** | `affine-dd-t-coincident-x-translation` | None | Included in complete D/D family |
 | D/D outer O/O | Two inner secants; opposite-y propagates to the other tree | **Certified** | `affine-dd-opposite-y-propagates-to-other-tree` and `affine-dd-opposite-y-propagates-to-left-tree` | None | Included in complete D/D family |
 | Complete D/D family | All derived outer outcomes for the two-inner-secant family | **Certified** | `affine-dd-t-translation`, together with the two `affine-dd-opposite-y-propagates-*` boundaries | None | Later semantic assembly |
+| D/D arbitrary-witness outer secant/secant | Four arbitrary secant-relation witnesses aligned with the canonical all-distinct-x trees | **Certified semantically** | `affine-dd-secant-relation-associative-when-all-distinct-x` | None | Candidate C matrix assembly |
 | Oriented D/T outer distinct-x | `A+B=P`, `B+B=Q`, `P+B=R`; `A+Q` is a secant | **Certified** | `affine-dt-d-outer-distinct-x-translation` | None | Included in `affine-dt-d-translation` |
 | Oriented D/T coincident-x | Same orientation; `xQ=xA`, so `A+Q` doubles | **Certified** | `affine-dt-d-coincident-x-translation` | None | Included in `affine-dt-d-translation` |
 | Oriented D/T outer O/O | Same orientation; outer opposite-y degeneration | **Certified** | `affine-dt-left-output-opposite-y-propagates-to-right-output` | None | Included in complete oriented D/T family |

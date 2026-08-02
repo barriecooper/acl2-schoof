@@ -134,3 +134,25 @@ unchanged: all 1,000 and 1,728 affine triples respectively have zero failures,
 with the nine cell counts recorded above.  Candidate C remains open pending a
 narrow semantic outer-secant/outer-secant D/D boundary (or an explicitly
 approved semantic wrapper around the existing canonical X-CERT equality).
+
+## D/D outer-secant/outer-secant interface resolution
+
+The missing arbitrary-witness boundary is now certified as
+`affine-dd-secant-relation-associative-when-all-distinct-x`. It uses the
+canonical outputs `xcert-ab`, `xcert-bc`, `xcert-left`, and `xcert-right`.
+Relation fixing congruence transports the supplied outer relations after the
+inner outputs have been aligned. The four determinacy instances compare only
+the same operand pairs: `(a,b)` aligns `ab` with `xcert-ab`; `(b,c)` aligns
+`bc` with `xcert-bc`; `(xcert-ab,c)` aligns `left` with `xcert-left`; and
+`(a,xcert-bc)` aligns `right` with `xcert-right`. The sole cross-tree equality
+is the opaque public theorem `xcert-untagged-outputs-equal`. No X-CERT
+definition, coordinate identity, field expression, classifier definition, or
+dispatcher was unfolded to establish that equality.
+
+Exhaustive validation on the existing affine triples partitions the 640 F7
+D/D cases into 430 outer secant/secant, 140 tangent-related, and 70 O/O cases;
+the 1,200 F11 D/D cases partition into 876, 216, and 108 respectively. All 430
+and 876 cases applicable to the new theorem had zero associativity failures,
+and exhaustive enumeration of semantic slope/output witnesses for each of the
+four operand pairs had zero deviations from its canonical output. This finite
+check is validation only. Candidate C matrix assembly remains open.
