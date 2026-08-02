@@ -174,7 +174,7 @@ named F7/F11 operations.
   `C=((p+q)-r)+tt` have exact curve specializations, and the curve composition
   consumes `xcert-composition` opaquely.
 
-### Open
+### Certified continuations
 
 - The H/S audit found no directly available zero result.  The smallest missing
   bridge, formerly proof-local, is now certified publicly as
@@ -208,8 +208,6 @@ named F7/F11 operations.
   and E8.  The `(B,C)` classification also supplies the sole nonzero premise
   `xc-xb != field-zero`.  E2 is not used.  The result is the existing
   specialized `xcert-h` expression equal to `field-zero`.
-- `H` has not been used in composition, and composition simplification, `S`,
-  coordinate equality, exceptional cases, and associativity were not attempted.
 - The field-only theorem `xcert-s-scalar-reconstruction` now certifies the
   exact `S=(p+q)-(r+tt)=0` reconstruction.  Direct S algebra consumes the
   ordered `q` and `r` slope equations, AB/BC output-x equations, the BC
@@ -489,8 +487,8 @@ both inner additions, closure for affine inner outputs, and the matching outer
 relation(s).  Its natural endpoint is
 `curve-point-addition-relation-p` for a common output on each tree, rather than
 a permanently exposed lower-level disjunction: the latter is only the input to
-assembly.  Before assembly, the sole missing cells are oriented inner `D/T`
-and its structural `T/D` mirror.
+assembly.  Before assembly, the remaining cells are the oriented inner `D/T` outer O/O
+degeneration and branch combination, followed by its structural `T/D` mirror.
 
 ### Stage 3 exceptional-secant certificate audit
 
@@ -970,9 +968,11 @@ result.  Both disjuncts use the syntactically identical witness
 no classifier, division, inverse, or independent denominator premise; neither
 branch proof is replayed.
 
-Still open are the oriented mixed-inner `D/T` family and its mirror, finite
-affine semantic assembly, unrestricted associativity, lifting to the full curve-point
-relations, executable correctness, and final group-law packaging.
+The distinct-x and coincident-x branches of oriented mixed-inner `D/T` are now
+certified; its outer O/O degeneration and combined theorem remain open, followed
+by the T/D mirror, finite affine semantic assembly, unrestricted associativity,
+the executable lift, and final group-law packaging. Detailed current status is
+maintained below rather than in this historical D/D audit.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
 requested endpoint.  Take
@@ -1063,245 +1063,44 @@ new orientation: inner `D/T`; inner `T/D` is its structural mirror.  Finite
 assembly, unrestricted associativity, cancellation, and group packaging remain
 later stages.
 
-### Selected next bounded theorem: mixed-inner `D/T`, left outer secant
+### Associativity status
 
-The next PR should certify one theorem, provisionally named
-`affine-dt-d-translation`.  Its exact oriented point equations are
+The at-a-glance family matrix and public boundaries are maintained in
+[associativity status](status-associativity.md). The detailed mixed D/T
+reconstruction, including residuals, cancellations, finite validation, and the
+field-only countermodel, is preserved in the
+[mixed D/T certificate audit](audits/mixed-dt-certificate.md).
 
-```text
-A+B=P       (distinct-x secant, witness p),
-B+B=Q       (doubling, witness t; hence C=B in A,B,C notation),
-P+B=R       (distinct-x secant, witness q),
-A+Q=R       (desired distinct-x secant or doubling, witness s=p+q-t).
-```
+#### Certified mixed-inner D/T boundaries
 
-The public premises should therefore be exactly
+All entries use the orientation `A+B=P` by secant `p`, `B+B=Q` by doubling
+`t`, and `P+B=R` by secant `q`; the reconstructed opposite-tree witness is
+`s=(p+q)-t`.
 
-```lisp
-(affine-distinct-x-secant-relation-p a b p-slope p)
-(affine-doubling-relation-p b t-slope q)
-(affine-distinct-x-secant-relation-p p b q-slope r)
-```
+| Boundary | Public theorem | Exact semantic scope | New cancellation at this boundary | Detail |
+|---|---|---|---|---|
+| Confluent H field bridge | `xcert-confluent-h-scalar-reconstruction` | Common-curve scalar reconstruction for the two oriented secants and the tangent at B | `xB-xA`, `xB-xP` | [Audit](audits/mixed-dt-certificate.md) |
+| Factored S bridge | `xcert-s-factored-reconstruction-from-h` | Field-only factorization of the S balance once confluent H holds | None; factor retained | [Audit](audits/mixed-dt-certificate.md) |
+| Outer distinct-x slope | `affine-dt-d-outer-distinct-x-slope-equation` | Four semantic premises plus `xQ != xA`; identifies the canonical A/Q secant slope with s | `xQ-xA` | [Audit](audits/mixed-dt-certificate.md) |
+| Outer distinct-x output x | `affine-dt-d-outer-distinct-x-output-x-equation` | Same premises; proves the secant output-x equation for R | No new premise; locally reuses slope identification | [Audit](audits/mixed-dt-certificate.md) |
+| Outer distinct-x output y | `affine-dt-d-outer-distinct-x-output-y-equation` | Same premises; proves the secant output-y equation for R | None beyond inherited slope work | [Audit](audits/mixed-dt-certificate.md) |
+| Outer distinct-x secant package | `affine-dt-d-outer-distinct-x-translation` | Packages the preceding clauses as `affine-distinct-x-secant-relation-p(A,Q,s,R)` | None | [Audit](audits/mixed-dt-certificate.md) |
+| Opposite-y propagation | `affine-dt-opposite-y-propagates-to-left-output` | From A+B=P, B+B=Q, and A opposite Q, derives P opposite B | `xB-xA` internally | [Audit](audits/mixed-dt-certificate.md) |
+| Coincident-x ordinate equality | `affine-dt-d-coincident-x-implies-ordinate-equality` | Four semantic premises plus `xQ=xA`; proves `yQ=yA` | None | [Audit](audits/mixed-dt-certificate.md) |
+| Tangent domain | `affine-dt-d-coincident-x-excludes-self-inverse` | Same coincident-x scope; proves `yA != -yA` | None beyond inherited propagation | [Audit](audits/mixed-dt-certificate.md) |
+| Tangent numerator | `affine-dt-d-coincident-x-tangent-equation` | Same coincident-x scope; proves the tangent numerator equation at A for s | None beyond inherited confluent H | [Audit](audits/mixed-dt-certificate.md) |
+| Coincident-x output x | `affine-dt-d-coincident-x-output-x-equation` | Same scope; proves the doubling output-x equation for R | `yA+yA` for canonical slope identification | [Audit](audits/mixed-dt-certificate.md) |
+| Coincident-x output y | `affine-dt-d-coincident-x-output-y-equation` | Same scope; proves the doubling output-y equation for R | None beyond inherited slope identification | [Audit](audits/mixed-dt-certificate.md) |
+| Coincident-x doubling package | `affine-dt-d-coincident-x-translation` | Packages the domain and scalar clauses as `affine-doubling-relation-p(A,s,R)` | None | [Audit](audits/mixed-dt-certificate.md) |
 
-and the conclusion should be the disjunction
+#### Open
 
-```lisp
-(or (affine-distinct-x-secant-relation-p a q s r)
-    (affine-doubling-relation-p a s r))
-```
-
-with the single syntactically fixed witness
-
-```lisp
-s = (field-sub (field-add (field-fix p-slope)
-                          (field-fix q-slope))
-               (field-fix t-slope)).
-```
-
-This bounded theorem covers the observed outer `D/D` and `D/T` outcomes.  The
-outer `O/O` degeneration is a separate endpoint to derive, not an assumed
-classifier exclusion; no left-outer `T` case was observed in the exhaustive
-checks below.  The mirror inner `T/D` family is expected to require only point
-order reversal, secant-relation reversal, opposite-y symmetry, and outer
-commutativity after this oriented family and its `O/O` endpoint exist.
-
-The semantic relations already supply the nonzero factors `xb-xa`, `xb-xp`,
-and `yb+yb` needed respectively by the two secant witnesses and the tangent
-witness.  No independent denominator hypothesis should be public.  X-CERT's
-H/S/telescope organization is the likely reusable algebra, but its existing
-four-secants theorem is not directly instantiable because one inner line is a
-tangent.  Characteristic assumptions are not presently indicated: the public
-doubling relation itself supplies `yb != -yb`, and both F7 and F11 validation
-work in the existing generic field scope.  A characteristic predicate must not
-be added unless a later certified cancellation identifies a genuinely new
-factor.
-
-A field-only interface consisting only of the three displayed relation-equation
-groups is insufficient.  Modulo 11 the scalar assignment
-
-```text
-a=2, A=(8,3), B=(5,5), P=(7,0), Q=(1,6), R=(8,8),
-p=3, t=0, q=3, s=p+q-t=6
-```
-
-satisfies the two secant equation groups, the tangent equation group, both
-secant nonzero differences, and the tangent domain, but the desired outer slope
-residual is `s*(xQ-xA)-(yQ-yA)=10`, not zero.  The points do not share one
-short-Weierstrass curve.  Consequently the new reconstruction needs an
-explicit common-curve bridge (or a scalar consequence proved from the curve
-memberships already contained in the semantic relations); a field-only theorem
-must not omit it.
-
-The first confluent X-CERT specialization narrows the missing bridge further.
-Put `xa,ya=A`, `xb,yb=B`, and `xp,yp=P`.  The two X-CERT input slots are the
-ordered secant identities for `(A,B,p)` and `(P,B,q)`; the ordinary `B,C`
-input is replaced by the tangent numerator at `B` with witness `t`.  Together
-with the first secant output equations, these inputs give the factored
-confluent H residual
-
-```text
-(xb-xa)*(xb-xp)*((p-t)*(p+q)-(xa-xb))=0.
-```
-
-Both factors are necessary at this interface: polynomial reduction leaves a
-nonzero residual if only `xb-xa` is retained, but reduces identically to zero
-when both factors are retained.  Their nonzeroness is already supplied by the
-two semantic secant relations, so neither is a new public premise.  Cancelling
-them yields `(p-t)*(p+q)=xa-xb`.  The remaining X-CERT S substitution is
-`xab=P`, `xbc=Q`, `r=t`, and `tt=u`, where `u` is the canonical outer slope
-for `(A,Q)`, and its expected residual is
-
-```text
-(xQ-xA)*(p+q-(t+u))=0.
-```
-
-Only `xQ-xA`, supplied by the outer distinct-x premise, is then cancelled.
-This common-curve input excludes the recorded F11 field-only countermodel,
-whose coordinates do not supply these identities.  The field bridge is now certified in
-`xcert-confluent-h-factored-reconstruction` and
-`xcert-confluent-h-scalar-reconstruction`.  Their public interface retains
-exactly seven equations: the two ordered common-curve secant identities, the
-B tangent numerator, both ordered secant line equations, and the first
-secant's output-x and output-y equations.  The second common-curve identity is
-retained for the audited semantic interface although the staged proof does not
-consume it directly.
-
-The proof first obtains `(xb-xp)*(p+q)=yb+yb` from both line equations and the
-output-y equation.  It transports this telescope through `p-tangent`, scales
-the first line equation to obtain the dimensionally correct bridge
-`p*(yb+yb)-p*(p*(xb-xa))=p*(yb+ya)`, subtracts the tangent numerator from the
-first common-curve identity to obtain
-`xa^2+xa*xb-(xb^2+xb^2)`, and uses the output-x equation in the bounded
-quadratic identity
-`p^2*(xb-xa)+(xa^2+xa*xb-(xb^2+xb^2))=
--(xb-xa)*(xb-xp)`.  These checkpoints give the one-factor residual
-`(xb-xp)*((p-tangent)*(p+q)-(xa-xb))=0`, then multiplication by `xb-xa`
-gives the exact public two-factor residual above.  The scalar theorem cancels
-`xb-xa` first and `xb-xp` second, in separate kernel cancellation steps.
-No characteristic, curve predicate, classifier, division, inverse, or trust
-mechanism is used.
-
-The mixed-inner D/T outer-distinct-x slope endpoint is now certified as
-`affine-dt-d-outer-distinct-x-slope-equation`, for the semantic inputs
-`A+B=P` (slope `p`), `B+B=Q` (tangent `t`), and `P+B=R` (slope `q`), with
-witness `(p+q)-t`.  Its confluent H specialization uses exactly: the ordered
-input identities for `(A,B,p)` and `(P,B,q)`; the tangent numerator at `B`;
-the ordered line equations for those two secants; and the output-x and
-output-y equations of the first secant.  The conclusion is
-`(p-t)*(p+q)=xA-xB`.  The reusable field S bridge
-`xcert-s-factored-reconstruction-from-h` is specialized with `xc=xb`,
-`xab=P`, `xbc=Q`, `r=t`, and `tt=u`, where
-`u=affine-distinct-x-slope(A,Q)`.  Its remaining inputs are the first secant
-line/output equations, the second secant line equation, the vacuous tangent
-line equation at `(B,B)`, the tangent output equations for `Q`, and the
-canonical outer equation `u*(xQ-xA)=yQ-yA`.  It yields exactly
-`(xQ-xA)*(p+q-(t+u))=0`.
-
-The three and only three cancellations are `xB-xA` (first secant) and
-`xB-xP` (second secant) inside confluent H, followed by `xQ-xA` from the
-public outer disequality in the S stage.  Thus `p+q=t+u`, bounded additive
-normalization gives `(p+q)-t=u`, and canonical slope reconstruction gives the
-public slope equation.  The recorded F11 countermodel is excluded because it
-does not satisfy the two common-curve input identities consumed by confluent
-H.  Outer distinct-x output-x, output-y, semantic packaging, coincident-x D/T,
-O/O degeneration, complete D/T translation, the T/D mirror, finite semantic
-assembly, and unrestricted associativity remain open.
-
-The mixed-inner D/T outer-distinct-x output-x endpoint is now certified as
-`affine-dt-d-outer-distinct-x-output-x-equation`, with the same four semantic
-premises and witness `(p+q)-t`.  Internally, `u` and `E` are the canonical
-secant slope and output for `(A,Q)`.  The equality `(p+q)-t=u` is obtained
-compactly from the public slope equation and canonical slope reconstruction by
-cancelling `xQ-xA`; this repeats the same semantic factor already cancelled by
-the slope proof and introduces no new premise.
-
-The confluent X-CERT assignment is `xab=P`, `xbc=Q`, `xc=xb`, left outer
-slope/output `q/R`, and right outer slope/output `u/E`.  H zero comes from the
-certified confluent H scalar reconstruction, namely
-`(p-t)*(p+q)=xA-xB`; S zero comes from `p+q=t+u`.  Telescope zero uses exactly
-`xP+xA+xB=p^2`, `xQ+xB+xB=t^2`, `xR+xP+xB=q^2`, and the canonical equation
-`xE+xA+xQ=u^2`.  `xcert-composition` then gives `xR-xE=0`, hence `xE=xR`,
-and the canonical output-x rearrangement yields the public equation
-`xR+xA+xQ=((p+q)-t)^2` with the repository's fixed association.
-
-The complete cancellation inventory remains `xB-xA` and `xB-xP` inside the
-confluent H reconstruction, plus `xQ-xA` in the slope reconstruction (reused
-once locally to identify the canonical slope).  Composition adds no
-cancellation.  No output-coordinate denominator, division, inverse,
-characteristic assumption, classifier premise, or independent nonzero
-hypothesis is used.  Outer distinct-x output-y and semantic secant packaging,
-coincident-x D/T analysis, O/O degeneration, complete D/T translation, the T/D
-mirror, finite semantic assembly, and unrestricted associativity remain open.
-
-The mixed-inner D/T outer-distinct-x output-y endpoint is now certified as
-`affine-dt-d-outer-distinct-x-output-y-equation`, with exactly the same four
-semantic premises and witness `(p+q)-t`.  Put `u` for the canonical slope of
-`(A,Q)` and `E` for its canonical output.  The proof reuses the public slope
-endpoint to establish `(p+q)-t=u`, and recovers `x(E)=xR` by additive
-cancellation between the public output-x equation and the canonical output-x
-rearrangement.  Both equalities remain local.
-
-The exact `xcert-field-only-final-y-equal` specialization is `xab=P`, `xbc=Q`,
-`xc=B`, with left outer slope/output `q/R` and right outer slope/output `u/E`:
-`xl=xR`, `yl=yR`, `yr=yE`, `p=p`, `q=q`, `r=t`, and `tt=u`.  Its nine inputs
-are the output-x equations for `P`, `R`, the confluent H equation
-`(p-t)*(p+q)=xA-xB`, the balance `p+q=t+u`, the line equations for `A+B=P`,
-`B+B=Q` (whose difference is zero), and `P+B=R`, the output-y equation for
-`P+B=R`, and the canonical output-y equation for `A+Q=E`.  The canonical
-output-x equality is consumed in both outer output equations by setting the
-shared final abscissa to `xR=xE`.
-
-Before its bounded simplification, the exact specialized field residual is
-
-```text
-(yR-yE) - ((p-t)*(xR-xB) + (t-q)*(xA-xB)).
-```
-
-Equivalently, the two coefficients multiplying `xR-xB` and `xA-xB` are
-respectively `p-t` and `t-q`.  The final-y bridge derives
-`xR-xB=(q-t)*(p+q)` from the left output-x equation and H, substitutes
-`xA-xB=(p-t)*(p+q)` from H, and the two products cancel.  Its six-residual
-decomposition also consumes S as the zero coefficient
-`p+q-(t+u)` multiplying `xA-xR`; thus final-y introduces no cancellation.
-It concludes `y(E)=yR`.  Finally the canonical equation
-`y(E)+yA=u*(xA-x(E))`, together with `y(E)=yR`, `x(E)=xR`, and `u=(p+q)-t`,
-gives the public theorem in its required orientation.
-
-The complete inherited cancellation inventory is unchanged: `xB-xA` and
-`xB-xP` inside confluent H, and `xQ-xA` in slope reconstruction and the compact
-local recovery of `u`.  There is no output-coordinate denominator, new
-nonzero x-difference, division, inverse, characteristic assumption, classifier
-premise, or independent nonzero hypothesis.
-
-The outer-distinct-x mixed-inner D/T semantic branch is now complete as
-`affine-dt-d-outer-distinct-x-translation`.  Its exact premises are the secant
-relations `A+B=P` with witness `p`, and `P+B=R` with witness `q`, the doubling
-relation `B+B=Q` with witness `t`, and only the outer disequality `xQ != xA`.
-Its exact secant witness is
-`(field-sub (field-add (field-fix p-slope) (field-fix q-slope))
-(field-fix t-slope))`.  Direct relation unfolding takes curve membership of
-`A` from the first secant, membership of `Q` from doubling, and membership of
-`R` from the second secant; the premise supplies distinct x.  The slope,
-output-x, and output-y clauses come respectively and exclusively from
-`affine-dt-d-outer-distinct-x-slope-equation`,
-`affine-dt-d-outer-distinct-x-output-x-equation`, and
-`affine-dt-d-outer-distinct-x-output-y-equation`; existing field fixing closes
-the witness.  No coordinate or X-CERT reconstruction is replayed.  The result
-is characteristic-independent and has no classifier, division, inverse, or
-independent denominator premise.
-
-Coincident-x D/T analysis, outer O/O degeneration, the complete oriented D/T
-theorem, the T/D structural mirror, finite semantic assembly, unrestricted
-associativity, full-point lifting, and executable correctness remain open.
-
-Exhaustive enumeration over every short-Weierstrass equation
-`y^2=x^3+a*x+b` over F7 and F11, every non-self-inverse `B`, and every affine
-`A` with `xA != xB` found respectively 1,764 and 12,100 oriented `D/T` inputs.
-The paired outer outcomes were F7: 1,296 `D/D`, 216 `D/T`, and 252 `O/O`; F11:
-10,000 `D/D`, 1,000 `D/T`, and 1,100 `O/O`.  Every affine case used
-`s=p+q-t` and produced the same output on both trees.  These checks are
-validation, not proof; focused F7/F11 regressions should include one `D/D`, one
-`D/T`, and one `O/O` witness.
+- Mixed D/T outer O/O degeneration.
+- Complete oriented D/T theorem.
+- T/D structural mirror.
+- Finite affine semantic assembly.
+- Semantic-to-executable dispatcher lift.
+- Unrestricted associativity.
 
 ## Hasse and Schoof tracks
 
@@ -1319,184 +1118,3 @@ validation, not proof; focused F7/F11 regressions should include one `D/D`, one
 - Performance optimization is deferred until a correct executable boundary
   exists. Benchmarks and execution regressions will remain distinct from
   logical correctness.
-
-### Mixed-inner D/T coincident-x ordinate endpoint
-
-The coincident-x ordinate endpoint is certified as
-`affine-dt-d-coincident-x-implies-ordinate-equality`, with exactly the semantic
-premises `A+B=P` (secant `p`), `B+B=Q` (doubling `t`), `P+B=R` (secant `q`),
-and `xQ=xA`.  Curve membership of `A` comes from the first secant and membership
-of `Q` from doubling.  Therefore
-`short-weierstrass-equal-x-implies-equal-or-neg-y` gives the common-curve
-dichotomy `yQ=yA` or `yQ=-yA`.
-
-The opposite alternative is packaged as the public opposite-y relation and
-rejected structurally by the reusable mixed propagation theorem
-`affine-dt-opposite-y-propagates-to-left-output`: from `A+B=P`, `B+B=Q`, and
-`A=-Q`, it derives `P=-B`.  The latter relation supplies `xP=xB`, contradicting
-exactly the distinct-x conjunct of the existing second secant relation
-`P+B=R`.  The propagation cancels only the nonzero x difference already
-provided by the first secant.  It needs no characteristic, classifier,
-non-self-inverse alternative for `A`, division, inverse, or independent
-nonzero premise, so it also covers self-inverse ordinates under the relation's
-priority convention.
-
-The tangent-domain endpoint is now also certified as
-`affine-dt-d-coincident-x-excludes-self-inverse`.  Assuming `yA=-yA`, the
-certified ordinate equality `yQ=yA` supplies `yQ=-yA`.  Curve membership of
-`A` from the first secant, curve membership of `Q` from doubling, the premise
-`xQ=xA`, and canonical infinity fixing package the temporary relation
-`affine-opposite-y-infinity-relation-p(A,Q,infinity)`.  Reusing
-`affine-dt-opposite-y-propagates-to-left-output` produces
-`affine-opposite-y-infinity-relation-p(P,B,infinity)`, hence `xP=xB`, which
-contradicts the distinct-x clause of the second secant `P+B=R`.  This theorem
-introduces no cancellation of its own and has no characteristic assumption;
-the propagation theorem's earlier internal cancellation remains confined to
-the first secant's certified nonzero x difference.
-
-The tangent numerator at `A` is now certified as
-`affine-dt-d-coincident-x-tangent-equation`, with the same four exact semantic
-premises and witness `s=(p+q)-t`.  Writing `d=xB-xA` and `L=p+q`, the extracted
-line equations are `p*d=yB-yA` and `t*d=yA+yB`; the generic two-line telescope
-therefore gives `yA+yA=(t-p)*d`.  Confluent H supplies
-`(p-t)*L=xA-xB`, oriented locally as `(t-p)*L=d`, while the definition of the
-witness gives the cancellation-free balance `L=t+s`.
-The H wrapper's exact inherited scalar interface is the ordered secant input
-identities for `(A,B,p)` and `(P,B,q)`, the tangent numerator at `(B,t)`, the
-two ordered secant line equations, and the first secant output-x and output-y
-equations.  Its two secant relations also provide the nonzero differences
-`xB-xA` and `xB-xP`; these are consumed only inside confluent H.
-
-The residual is staged rather than normalized with all curve equations at
-once.  Multiplication first gives `s*(yA+yA)=(s*(t-p))*d`; balance and H rewrite
-this to `d^2-t*(yA+yA)`.  The second line and the tangent numerator at `B`
-rewrite `t*(yA+yA)` to `2*t^2*d-(3*xB^2+a)`.  The only remaining scalar input
-is doubling output x, `t^2=xA+2*xB`; neither secant output-x equation nor the
-second secant input identity is needed by this final stage.  The exact bounded
-polynomial residual is
-`d^2-2*(xA+2*xB)*d+3*xB^2+a=3*xA^2+a`, for `d=xB-xA`.
-Thus the exact fixed witness satisfies
-`s*(yA+yA)=3*xA^2+a` without cancelling `yA+yA`.
-
-No cancellation is introduced by the numerator reconstruction.  Its only
-inherited cancellations are `xB-xA` and `xB-xP`, both internal to the certified
-confluent-H theorem; the earlier opposite-y propagation cancellation is not
-used.  There is no characteristic or classifier premise, division, inverse,
-independent denominator, or new public nonzero hypothesis.  Exhaustive
-validation over the already counted coincident-x configurations confirms the
-exact witness in all 216 F7 cases and all 1,000 F11 cases, with no
-counterexamples; this enumeration is validation rather than proof.
-
-The coincident-x output-x endpoint is now certified as
-`affine-dt-d-coincident-x-output-x-equation`, with the same four semantic
-premises and exact witness `s=(p+q)-t`.  Its canonical tangent slope is
-`u=affine-same-point-non-opposite-slope(A)`.  The tangent-domain theorem gives
-`yA != -yA`, hence the local bridge `yA+yA != 0`; cancelling exactly this
-doubled ordinate between the public tangent equation for `s` and the canonical
-tangent-numerator reconstruction proves `s=u`.  This is the only new local
-cancellation in the output-x book.
-
-For canonical tangent output x
-`xD=affine-same-point-non-opposite-output-x(A)`, the canonical scalar
-rearrangement is `xD+2*xA=u^2`; the public theorem preserves the repository's
-left-associated doubling convention `(xD+xA)+xA=u^2`.  Confluent H supplies
-`(p-t)*(p+q)=xA-xB`, which is only converted to the zero orientation required
-by `xcert-h`.  The equality `s=u` and the witness balance give `p+q=t+u`, hence
-`xcert-s=0` without cancellation.  The telescope specializes `xl=xR`, `xr=xD`,
-`xab=xP`, `xbc=xQ`, `xc=xB`, with outer slopes `q/u`; its four equations are
-the three semantic output-x equations and the canonical tangent rearrangement,
-aligned by `xQ=xA`.  `xcert-composition` yields `xR-xD=0`, hence `xD=xR`, with
-no composition-stage cancellation.  Substitution proves `xR+xA+xA=s^2`.
-
-The complete cancellation inventory is `xB-xA` and `xB-xP`, internal to the
-certified confluent-H reconstruction, plus `yA+yA` solely for local canonical
-slope uniqueness.  No characteristic or classifier premise, division,
-inverse, output denominator, or independent public nonzero hypothesis is used.
-Exhaustive validation of the exact target passes all 216 applicable F7 and all
-1,000 applicable F11 configurations, with no counterexamples.  The focused
-minimal-theory regression invokes only the public output-x theorem.
-Semantic doubling packaging, outer O/O degeneration,
-combined oriented D/T, the T/D mirror, finite semantic assembly, and
-unrestricted associativity remain open.
-
-The mixed-inner D/T coincident-x output-y endpoint is now certified as
-`affine-dt-d-coincident-x-output-y-equation`, under exactly `A+B=P` by secant
-`p`, `B+B=Q` by tangent `t`, `P+B=R` by secant `q`, and `xQ=xA`, with witness
-`s=(p+q)-t` and orientation `yR+yA=s*(xA-xR)`.  Set
-`u=affine-same-point-non-opposite-slope(A)` and let `D` be its canonical
-same-point-non-opposite output.  The tangent-domain and tangent-equation
-endpoints, canonical tangent-numerator reconstruction, and cancellation of
-the nonzero `yA+yA` prove `s=u`.  The public coincident-x output-x equation and
-canonical rearrangement `xD+xA+xA=u^2` then give `xD=xR` by two additive
-cancellations, without replaying H, S, the telescope, or composition.
-
-The exact `xcert-field-only-final-y-equal` specialization is `xl=xR`, `yl=yR`,
-`yr=yD`, `p=p`, `q=q`, `r=t`, `tt=u`, `xa=xA`, `ya=yA`, `xb=xc=xB`,
-`yb=yc=yB`, and `xab=xP`, `yab=yP`.  Its nine hypotheses are, in order: the
-left outer output-x equation `xR+xP+xB=q^2`; first secant output x
-`xP+xA+xB=p^2`; confluent H `(p-t)*(p+q)=xA-xB`; balance
-`(p+q)-(t+u)=0`; the first secant line equation; the vacuous tangent line at
-`B,B`; the second secant line equation; second secant output y; and canonical
-tangent output y `yD+yA=u*(xA-xR)`, associated using `xD=xR`.
-
-Before H/S simplification the specialized residual is
-`yR-yD=(p-t)*(xR-xB)+(t-q)*(xA-xB)`: its coefficients are respectively `p-t`
-and `t-q`.  Confluent H removes the second term; H and the left output-x
-equation transform the first; balance is exactly the consumed S-zero equation.
-With `xD=xR` consumed in the canonical right output-y equation, final-y proves
-`yR=yD`.  Substituting `yD=yR`, `xD=xR`, and `u=s` in the canonical tangent
-output-y rearrangement gives the public theorem.
-
-The complete multiplication-cancellation inventory remains `xB-xA` and
-`xB-xP` inside confluent H, plus `yA+yA` solely for `s=u`; final-y adds no
-multiplication cancellation.  The additive cancellations proving `xD=xR`
-need no nonzero premise.  No characteristic or classifier premise, division,
-inverse, output-coordinate denominator, new nonzero difference, or independent
-public nonzero hypothesis is used.  Exhaustive validation covers all 216
-applicable F7 and 1,000 applicable F11 configurations with no counterexamples.
-Semantic doubling packaging, outer O/O degeneration, combined oriented D/T,
-the T/D mirror, finite semantic assembly, and unrestricted associativity remain
-open.
-
-The coincident-x semantic doubling branch is now complete.
-`affine-dt-d-coincident-x-translation` assumes exactly the four relations
-`A+B=P` (distinct-x secant `p`), `B+B=Q` (doubling `t`), `P+B=R`
-(distinct-x secant `q`), and `xQ=xA`, and returns the public doubling relation
-from `A` to `R` with the exact fixed witness
-`(field-sub (field-add (field-fix p-slope) (field-fix q-slope))
-(field-fix t-slope))`.  Unfolding only the semantic relation interfaces and
-the field fixing interface discharges every doubling clause directly: curve
-membership of `A` comes from the first secant, curve membership of `R` from
-the second secant, tangent domain from
-`affine-dt-d-coincident-x-excludes-self-inverse`, tangent numerator from
-`affine-dt-d-coincident-x-tangent-equation`, output x from
-`affine-dt-d-coincident-x-output-x-equation`, and output y from
-`affine-dt-d-coincident-x-output-y-equation`.  Existing field subtraction and
-fixing lemmas close the witness form.  The already-certified ordinate equality
-is not needed separately by this packaging theorem.
-
-This direct packaging replays no opposite-y propagation, confluent H,
-doubled-ordinate telescope, tangent-numerator reconstruction, canonical
-tangent-slope uniqueness, X-CERT telescope or composition, or final-y
-reconstruction.  It inherits, but does not repeat or extend, the complete
-endpoint cancellation inventory: `xB-xA` inside the earlier opposite-y
-propagation, `xB-xA` and `xB-xP` inside confluent H, and `yA+yA` solely in
-canonical slope uniqueness.  These cancellations remain internal to their
-certified endpoints; final-y adds no multiplication cancellation, while its
-additive cancellations need no nonzero premise.  The
-public theorem has no characteristic or classifier premise, division,
-inverse, independent denominator, or independent public nonzero premise.  Its
-focused minimal-theory regression invokes only the translation theorem.
-Outer O/O degeneration, the complete oriented D/T theorem combining branches,
-the T/D structural mirror, finite affine semantic assembly, unrestricted
-associativity, full-point lifting, and executable correctness remain open.
-
-Exhaustive F7/F11 validation of the existing semantic data finds respectively
-216 and 1,000 applicable coincident-x configurations with a left outer secant;
-all have `yQ=yA`.  No configuration in either field satisfies the four semantic
-premises together with `yQ=-yA` (0 and 0).  These counts are validation, not
-proof.
-
-The same enumeration confirms the tangent-domain conclusion: among the 216 F7
-and 1,000 F11 configurations satisfying the four premises, respectively 0 and
-0 have `yA=-yA`.  This finite check is validation rather than proof.
