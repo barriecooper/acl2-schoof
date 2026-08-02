@@ -450,7 +450,7 @@ For `P=A+B` and `Q=B+C`, the exact inner-pair matrix is:
 | `O` | `T` | complete; reverse point order gives `T/O` | `affine-inverse-tangent-translation`, whose conclusion is outer `D` or `T` with output `B` and witness `-t` |
 | `T` | `T` | complete structurally | `curve-point-pair-output-point-associative-when-both-inner-doubling`; both premises force fixed `A=B=C`, and outer commutativity closes the trees |
 | `D` | `D` | complete at the affine semantic family level | ordinary outer `D/D` is covered by the X-CERT theorems; outer `O/O` by `affine-dd-opposite-y-propagates-to-other-tree` and its left-tree mirror; an outer `T` and its opposite-tree `D/T` result by `affine-dd-t-translation` and point-order reversal |
-| `D` | `T` | **open** | the genuinely mixed inner secant/tangent family described below |
+| `D` | `T` | complete at the oriented affine semantic family level | `affine-dt-d-translation` combines the two left-outer-secant outcomes; `affine-dt-left-output-opposite-y-propagates-to-right-output` supplies the witness-free O/O outcome |
 | `T` | `D` | no independent mathematics | reverse `A,B,C`, reverse secant operands with `affine-distinct-x-secant-relation-p-reverse`, use the symmetry of the opposite-y relation, and commute the two outer additions; this is the mirror of `D/T` |
 
 Thus the former phrase “mixed `D/T`” refers **only to the types of the two
@@ -487,8 +487,8 @@ both inner additions, closure for affine inner outputs, and the matching outer
 relation(s).  Its natural endpoint is
 `curve-point-addition-relation-p` for a common output on each tree, rather than
 a permanently exposed lower-level disjunction: the latter is only the input to
-assembly.  Before assembly, the remaining cells are the oriented inner `D/T` outer O/O
-degeneration and branch combination, followed by its structural `T/D` mirror.
+assembly.  Before assembly, the remaining cell is the structural `T/D` mirror
+of the certified oriented `D/T` family.
 
 ### Stage 3 exceptional-secant certificate audit
 
@@ -968,11 +968,13 @@ result.  Both disjuncts use the syntactically identical witness
 no classifier, division, inverse, or independent denominator premise; neither
 branch proof is replayed.
 
-The distinct-x and coincident-x branches of oriented mixed-inner `D/T` are now
-certified; its outer O/O degeneration and combined theorem remain open, followed
-by the T/D mirror, finite affine semantic assembly, unrestricted associativity,
-the executable lift, and final group-law packaging. Detailed current status is
-maintained below rather than in this historical D/D audit.
+The oriented mixed-inner `D/T` family is now complete at the affine semantic
+boundary: `affine-dt-d-translation` combines its two left-outer-secant
+outcomes, and `affine-dt-left-output-opposite-y-propagates-to-right-output`
+supplies its witness-free O/O outcome.  The T/D mirror, finite affine semantic
+assembly, unrestricted associativity, executable lift, and final group-law
+packaging remain. Detailed current status is maintained below rather than in
+this historical D/D audit.
 
 The field-only audit is stopped by a concrete F11 countermodel to the first
 requested endpoint.  Take
@@ -1093,10 +1095,10 @@ All entries use the orientation `A+B=P` by secant `p`, `B+B=Q` by doubling
 | Coincident-x output y | `affine-dt-d-coincident-x-output-y-equation` | Same scope; proves the doubling output-y equation for R | None beyond inherited slope identification | [Audit](audits/mixed-dt-certificate.md) |
 | Coincident-x doubling package | `affine-dt-d-coincident-x-translation` | Packages the domain and scalar clauses as `affine-doubling-relation-p(A,s,R)` | None | [Audit](audits/mixed-dt-certificate.md) |
 | Outer O/O propagation | `affine-dt-left-output-opposite-y-propagates-to-right-output` | From A+B=P, B+B=Q, and P opposite B, derives A opposite Q with the same infinity payload | `xB-xA` inside the reused inverse/secant tangent equation; `yB+yB` for slope identification | [Audit](audits/mixed-dt-certificate.md) |
+| Left-outer-secant family combination | `affine-dt-d-translation` | Splits on `xQ=xA` and derives right outer secant or doubling with the single witness `(p+q)-t` | None; inherits the branch certificates | [Audit](audits/mixed-dt-certificate.md) |
 
 #### Open
 
-- Complete oriented D/T theorem.
 - T/D structural mirror.
 - Finite affine semantic assembly.
 - Semantic-to-executable dispatcher lift.

@@ -195,8 +195,24 @@ all 216 F7 and 1,000 F11 cases satisfied the ordinate equality and tangent
 domain conclusions. These exhaustive finite checks are validation and
 regression guidance, **not proof** of the generic theorems.
 
-## Open boundary
+## Oriented family combination
 
-All three oriented mixed D/T outer outcomes are now individually certified.
-The next boundary is their complete oriented branch combination; the T/D
-mirror and finite semantic assembly follow later.
+`affine-dt-d-translation` combines the two left-outer-secant branches by
+splitting only on `xQ=xA`.  Both conclusions use the syntactically identical
+witness `field-sub(field-add(field-fix(p),field-fix(q)),field-fix(t))`, i.e.
+`(p+q)-t`.  The witness-free O/O outcome remains the separate, clean public
+boundary `affine-dt-left-output-opposite-y-propagates-to-right-output`; no
+dummy slope or affine output is imposed on its infinity payload.
+
+The left-secant boundary covers all 1,512 F7 and 11,000 F11 enumerated
+left-secant configurations.  The O/O boundary covers all 252 F7 and 1,100 F11
+O/O configurations.  Together they cover all 1,764 F7 and 12,100 F11
+enumerated oriented D/T inputs; these counts validate coverage but do not
+assert generic exhaustiveness from the inner relations alone.
+
+The combination proof invokes only the two certified branch translations,
+performs the x-coordinate case split, and uses propositional composition.  It
+replays no coordinate reconstruction, field cancellation, H/S algebra,
+X-CERT step, or final-y proof and adds no characteristic or classifier premise.
+The next mathematical boundary is the structural T/D mirror; finite semantic
+assembly remains later work.

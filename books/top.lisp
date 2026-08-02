@@ -129,6 +129,8 @@
 (include-book "curve/affine-dt-d-outer-distinct-x-output-y-regression")
 (include-book "curve/affine-dt-d-outer-distinct-x-translation")
 (include-book "curve/affine-dt-d-outer-distinct-x-translation-regression")
+(include-book "curve/affine-dt-d-translation")
+(include-book "curve/affine-dt-d-translation-regression")
 (include-book "curve/affine-dt-opposite-y-propagation")
 (include-book "curve/affine-dt-opposite-y-propagation-regression")
 (include-book "curve/affine-dt-left-output-opposite-y-propagation")

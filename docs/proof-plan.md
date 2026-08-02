@@ -28,8 +28,10 @@ instantiation and execution regressions rather than additional generic scope.
 
 The certified semantic base includes original-infinity reductions,
 opposite/opposite, repeated triples, inverse/secant, inverse/tangent, the
-complete D/D family, and all three oriented mixed-inner D/T outer branches:
-distinct-x, coincident-x, and O/O. These results establish the intended division-free
+complete D/D family, and the complete oriented mixed-inner D/T family.  Its
+left-outer-secant boundary combines the distinct-x and coincident-x outcomes,
+while its separate O/O boundary preserves the witness-free infinity result.
+These results establish the intended division-free
 certificate workflow; their exact current coverage is maintained in the
 [associativity status matrix](status-associativity.md). The mixed D/T residuals,
 countermodel, and endpoint derivations are preserved in the
@@ -39,23 +41,19 @@ countermodel, and endpoint derivations are preserved in the
 
 Proceed in this dependency order, with one bounded boundary per proof change:
 
-1. **Complete oriented D/T theorem.** Split only on the exhaustive derived
-   outer outcomes and combine the certified distinct-x, coincident-x, and O/O
-   branches with the common witness. Completion replays no coordinate or
-   residual proof.
-2. **T/D mirror.** Derive the reversed mixed-inner family structurally using
+1. **T/D mirror.** Derive the reversed mixed-inner family structurally using
    operand reversal, semantic symmetry, and commutativity. Completion adds no
    new scalar certificate unless the attempted mirror exposes a documented
    mathematical gap.
-3. **Finite affine semantic assembly.** Combine the infinity, O, T, D/D, D/T,
+2. **Finite affine semantic assembly.** Combine the infinity, O, T, D/D, D/T,
    and T/D families through case coverage into associativity of the independent
    semantic relation. Completion adds no coordinate algebra and does not
    unfold the executable dispatcher.
-4. **Executable dispatcher lift.** Use semantic soundness, fixed-output
+3. **Executable dispatcher lift.** Use semantic soundness, fixed-output
    determinacy, closure, and canonical representation to prove unrestricted
    `curve-point-pair-output-point` associativity. Completion keeps guard and
    execution evidence distinct from semantic correctness.
-5. **Group packaging.** Only after unrestricted associativity certifies,
+4. **Group packaging.** Only after unrestricted associativity certifies,
    package the curve law, cancellation consequences, and scalar
    multiplication behind an abstract abelian-group interface.
 
