@@ -43,6 +43,28 @@
          (raw-derivative-aux poly index))
   :hints (("Goal" :induct (raw-derivative-aux poly index))))
 
+(defthm raw-derivative-aux-successor
+  (equal (raw-derivative-aux poly (+ 1 (nfix index)))
+         (raw-add (raw-derivative-aux poly index)
+                  (fix-coefficients poly)))
+  :hints (("Goal" :induct (raw-derivative-aux poly index)
+           :in-theory (enable gfield::field-nat-mul-successor-total))))
+
+(defthm raw-derivative-aux-of-zero-prefix
+  (equal (raw-derivative-aux
+          (cons (gfield::field-zero) poly) index)
+         (cons (gfield::field-zero)
+               (raw-derivative-aux poly (+ 1 (nfix index)))))
+  :hints (("Goal" :in-theory (enable gfield::field-nat-mul-of-zero))))
+
+(local
+ (defthm raw-derivative-aux-of-raw-scale
+   (equal (raw-derivative-aux (raw-scale a poly) index)
+          (raw-scale a (raw-derivative-aux poly index)))
+   :hints (("Goal" :induct (raw-derivative-aux poly index)
+            :in-theory (enable gfield::field-nat-mul-of-mul-right
+                               gfield::field-mul-commutative)))))
+
 (local
  (defthm normalize-raw-derivative-aux-of-trim-trailing-zeros
    (equal (normalize
@@ -112,7 +134,7 @@
           (raw-add (raw-derivative-aux x index)
                    (raw-derivative-aux y index)))
    :hints (("Goal" :induct (raw-derivative-add-induct x y index)
-            :in-theory (enable gfield::field-nat-mul-of-add)))))
+           :in-theory (enable gfield::field-nat-mul-of-add)))))
 
 (local
  (defthm raw-derivative-aux-of-raw-neg
