@@ -82,6 +82,7 @@ not logical/executable splits. Important examples include:
 
 - PFIELD adapters and named F7/F11 field operations;
 - generic and F7 polynomial division, GCD, XGCD, and modular inverse;
+- generic field natural scaling and canonical polynomial differentiation;
 - generic fixed-modulus operations and F7X2 arithmetic;
 - affine and tagged-point fixers, constructors, accessors, and negation;
 - affine classifiers, branch slopes and outputs; and
@@ -89,6 +90,10 @@ not logical/executable splits. Important examples include:
 
 Verified guards and transparent definitions explain how these functions run.
 Their semantic theorems, not transparency alone, justify mathematical claims.
+
+`field-nat-mul`, `raw-derivative-aux`, and `poly-derivative` are transparent,
+total, guard-verified definitions.  They have no alternate optimized branch or
+logical/executable correspondence boundary.
 
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes

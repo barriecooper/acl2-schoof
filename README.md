@@ -17,9 +17,10 @@ The repository currently certifies these subsystem-level foundations:
 - a field-only X-CERT algebra layer with explicit residual generators, an
   output telescope, a factored remainder identity, and their composition, plus
   a curve-semantic specialization for the two ordered nested distinct-x trees;
-- canonical dense polynomials (`GPOLY`) with arithmetic, evaluation, degree,
-  division with remainder, Euclidean GCD, extended GCD, modular inversion,
-  irreducibility, and reduced arithmetic;
+- canonical dense polynomials (`GPOLY`) with arithmetic, evaluation, formal
+  differentiation and its additive laws, degree, division with remainder,
+  Euclidean GCD, extended GCD, modular inversion, irreducibility, and reduced
+  arithmetic;
 - a generic fixed-modulus quotient-field construction for an irreducible
   polynomial, plus concrete PFIELD/F7 clients and an F7X2 proving instance;
 - short-Weierstrass coordinates, canonical affine coordinates, tagged curve
@@ -145,9 +146,11 @@ associativity and both executable inverse orientations for valid tagged inputs
 are certified through the independent relation using soundness, determinacy,
 closure, and canonical fixing. Algebraic left and right cancellation from the
 public executable laws is also certified, and the resulting abstract
-abelian-group package retains the characteristic premise. Scalar
-natural multiplication by linear repeated addition is also certified; fast
-scalar multiplication is the next execution boundary. There is
+abelian-group package retains the characteristic premise. Scalar natural
+multiplication by linear repeated addition is also certified; its fast variant
+remains a later execution optimization. Generic formal differentiation is now
+certified through its additive laws, with the product rule and then
+square-free/separability theory next. There is
 still no Hasse theorem and no
 certified Schoof algorithm. See the [current matrix](docs/status-associativity.md) and
 [forward proof plan](docs/proof-plan.md) for the maintained boundaries.
