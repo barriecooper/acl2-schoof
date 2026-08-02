@@ -179,8 +179,33 @@ executable associativity, inverse, identity, and commutativity laws; they do
 not use the semantic relation or reopen dispatcher branches.  The semantic inverse bridge is
 `curve-point-addition-relation-p-of-point-and-neg`.  The executable right law
 uses dispatcher soundness and relation output determinacy; the left law follows
-from executable commutativity.  Abstract abelian-group packaging remains open,
-and scalar multiplication is deferred until after that boundary.
+from executable commutativity.
+
+Abstract abelian-group packaging is **certified**.  The selected interface is
+the repository-style contextual functional-instantiation interface in
+`books/algebra/abelian-group.lisp`: its carrier is explicit, equality is
+ordinary ACL2 equality, identity is a constrained nullary operation, and
+inverse and the binary operation are constrained function symbols that map to
+the curve's executable functions.  Its
+independent axioms are identity membership, operation and inverse closure,
+associativity, left identity, left inverse, and commutativity, all under a
+nullary context.  The existing Community Books alternatives were rejected:
+`kestrel/algebra/groups-encap` has the right carrier/equality/operation shape
+but no commutativity or contextual premise, while `projects/groups` represents
+finite groups by explicit operation tables and imposes irrelevant finiteness.
+The repository's generic field kernel established the closest reusable
+`encapsulate` plus functional-instantiation pattern.
+
+The curve instance maps the carrier to
+`short-weierstrass-curve-point-p`, the operation to
+`curve-point-pair-output-point`, identity to `curve-point-infinity`, inverse to
+`curve-point-neg`, and the context to
+`short-weierstrass-characteristic-p`.  Its exact public generated-theorem
+endpoint is `def-curve-point-abelian-group-theorem`; the exported
+`curve-point-abelian-group-inverse-of-identity` demonstrates a generic
+consequence without replaying a curve proof.  Cancellation remains a certified
+consequence rather than an axiom. Scalar multiplication/repeated addition is
+the next open boundary.
 
 ## Field-only X-CERT algebra
 
@@ -1153,9 +1178,9 @@ All entries use the orientation `A+B=P` by secant `p`, `B+B=Q` by doubling
   equality.  It removes both output fixers to give the exact public executable
   theorem `curve-point-pair-output-point-associative` for valid tagged inputs.
   No dispatcher branch or affine algebra is unfolded in this lift.
-- **Open:** abstract abelian-group packaging.  Its cancellation prerequisites
-  are certified by `curve-point-pair-output-point-cancel-left` and
-  `curve-point-pair-output-point-cancel-right`.
+- **Certified:** abstract abelian-group packaging through
+  `def-curve-point-abelian-group-theorem`, retaining
+  `short-weierstrass-characteristic-p`; cancellation is not an interface axiom.
 
 ### Candidate C finite semantic assembly interface
 

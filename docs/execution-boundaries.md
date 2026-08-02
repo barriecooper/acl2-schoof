@@ -144,6 +144,16 @@ and identity laws.  Right cancellation is then derived by executable
 commutativity.  These algebraic proofs do not revisit the semantic addition
 relation, dispatcher branches, classifiers, or affine/field proofs.
 
+Abstract abelian-group packaging introduces no new geometric operation and no
+new executable boundary.  The contextual generic interface is instantiated
+with the already executable tagged-point operation, infinity, and negation;
+its obligations are discharged solely by the independently certified public
+closure, identity, inverse, associativity, and commutativity laws.  The
+nullary context maps to `short-weierstrass-characteristic-p`, so functional
+instances retain that hypothesis rather than asserting an unconditional group
+law.  The packaging regression is logical reuse evidence, not a new execution
+or performance claim.
+
 ## Guard and termination boundaries
 
 Recursive polynomial division uses a certified strict decrease of the
