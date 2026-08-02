@@ -168,20 +168,15 @@ full relation for curve-point inputs. Fixed-output determinacy proves that two
 semantic witnesses have equal fixed outputs. These theorems are the semantic
 bridge to execution; guard verification alone is not that bridge.
 
-## Present algebraic-law layer
+## Algebraic-law architecture
 
-For full tagged-point addition, the certified layer includes output closure,
-left and right infinity identity, addition of a point and its negation to
-infinity, semantic operand-reversal commutativity, and raw dispatcher
-commutativity. The raw dispatcher theorem is possible because executable
-outputs are canonical; semantic statements otherwise use fixer-level equality.
+The independent addition relation is the proof interface for geometric laws.
+The executable dispatcher is connected to those laws through soundness,
+determinacy, closure, and canonical fixing. Associativity therefore crosses
+the same semantic-to-executable boundary as commutativity and inverse; it is
+not established by expanding nested dispatcher branches.
 
-Associativity, cancellation, contextual abelian-group packaging, and natural
-scalar multiplication by transparent linear recursion are certified. The
-scalar specification is intentionally distinct from any future fast
-double-and-add implementation.
-
-### Associativity certificate boundary
+### Associativity certificate organization
 
 Associativity is organized by semantic geometry rather than a Cartesian
 product of dispatcher tags. For valid affine inputs, equal-x curve points have
@@ -198,19 +193,41 @@ executable formulas. X-CERT remains a field-only algebra layer; curve books
 supply the common-curve hypotheses that make its residual certificates
 semantically applicable.
 
-D/D and the certified branches of oriented D/T demonstrate this architecture:
-small scalar endpoints are reconstructed first, then packaged into a semantic
-relation without replaying algebra. The complete current boundary matrix is in
-[associativity status](status-associativity.md), and the mixed D/T derivation,
-cancellation inventory, and countermodel are in the
-[mixed D/T audit](audits/mixed-dt-certificate.md). These changeable completion
-details are deliberately not architecture.
+Certificate families reconstruct small scalar endpoints and then package them
+into semantic relations without replaying their algebra. The family matrix is
+maintained in [associativity status](status-associativity.md); residual
+derivations and historical proof-engineering evidence remain in the
+[associativity audits](audits/).
 
-Semantic associativity must be assembled before any unrestricted executable
-claim. The final dispatcher theorem is a representation lift through semantic
-soundness, determinacy, closure, and canonical fixing; it is not a proof by
-expanding branch formulas. Guard verification and execution regressions remain
-separate evidence under [execution boundaries](execution-boundaries.md).
+### Contextual abelian-group and scalar architecture
+
+The generic abelian-group interface uses an explicit carrier predicate,
+ordinary ACL2 equality, constrained identity, inverse, and binary operations,
+and a nullary context predicate. Functional instantiation preserves the curve
+context `short-weierstrass-characteristic-p` while reusing the executable
+tagged-point operations. This avoids an unconditional group claim and avoids
+the irrelevant finite operation-table representation of finite-group
+libraries.
+
+Natural repeated addition follows the same generic-to-curve path:
+
+```text
+abelian-group-nat-mul
+    generic transparent specification
+             ↓ functional instantiation
+curve-point-nat-mul
+    executable curve reference specification
+             ↓ future correspondence theorem
+curve-point-fast-nat-mul
+    future optimized implementation
+```
+
+The reference specification is intentionally linear. Its simple recursion is
+the logical baseline for algebraic laws and functional instantiation, while a
+future double-and-add operation remains a separate implementation rather than
+a redefinition of the specification. Totalisation, recursion orientation,
+guards, and correspondence evidence belong in
+[execution boundaries](execution-boundaries.md#natural-scalar-multiplication).
 
 ## Design constraints for later work
 
