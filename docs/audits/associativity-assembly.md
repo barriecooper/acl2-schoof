@@ -95,3 +95,42 @@ nested executable outputs only as validation, not as proof. The counts were:
 
 The theorem premises intentionally exclude malformed tagged values and
 off-curve affine coordinates. The temporary script was not committed.
+
+## Candidate C assembly attempt at `5952b4b`
+
+The requested public endpoint was attempted with tagged affine constructors for
+`a`, `b`, and `c`, the four explicit relation witnesses `ab`, `bc`, `left`, and
+`right`, the single `short-weierstrass-characteristic-p` premise, and fixed
+output equality.  The exact semantic coverage interface remains
+`curve-point-addition-case-coverage`: for two curve points it returns original
+infinity, distinct x, opposite ordinates, or equal non-opposite affine
+coordinates.  A proof-local extraction from the full relation reduces affine
+inputs to the corresponding secant, opposite-y, or doubling relation witness.
+
+Assembly stopped at the D/D cell before any production theorem was admitted.
+The advertised complete-D/D map does not contain a relation-level boundary for
+the outer secant/secant subcase with arbitrary semantic witnesses.  In detail,
+`affine-dd-t-translation` requires a doubling relation at the first inner
+output; the two `affine-dd-opposite-y-propagates-*` theorems require an outer
+opposite-y relation.  None consumes two inner secants plus supplied secant
+relations on both outer trees.  The only checked-in equality for that remaining
+subcase is `xcert-untagged-outputs-equal`, whose premises and conclusion name
+canonical classifier-selected coordinate outputs rather than the four supplied
+semantic relation witnesses.  Using it would require a new semantic bridge
+from arbitrary secant witnesses to those canonical outputs; it is not one of
+the audited principal family boundaries.
+
+The mismatch is therefore a genuinely missing family-semantic interface, not
+branch extraction, representation, orientation, infinity handling, fixing,
+or characteristic scope.  The determinacy instance that would follow such a
+bridge is well-typed: compare the supplied and derived outputs separately on
+operand pairs `(ab,c)` and `(a,bc)`, after fixing determinacy has aligned each
+inner secant witness with its derived tagged affine output.  Determinacy cannot
+itself prove equality between those different outer operand pairs.
+
+No coordinate, field, X-CERT, classifier, or executable dispatcher definition
+was unfolded or added.  The prior exhaustive F7/F11 validation remains
+unchanged: all 1,000 and 1,728 affine triples respectively have zero failures,
+with the nine cell counts recorded above.  Candidate C remains open pending a
+narrow semantic outer-secant/outer-secant D/D boundary (or an explicitly
+approved semantic wrapper around the existing canonical X-CERT equality).
