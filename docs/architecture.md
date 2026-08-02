@@ -66,6 +66,15 @@ Euclidean and extended Euclidean GCD; logical irreducibility and modular
 inverse. The HS/PFIELD polynomial layer is retained for concrete/root-count
 bridges, not as a parallel home for new algorithms.
 
+Formal differentiation also belongs to `GPOLY`.  `field-nat-mul` interprets a
+natural coefficient index by total additive scaling in `GFIELD`, and the
+transparent `poly-derivative` fixes coefficients, discards malformed atomic
+tails, and normalizes its constant-first result.  Derivatives are canonical and
+obey the additive, negation, and subtraction laws.  Exact degree decrement is
+characteristic-sensitive: a leading natural multiplier can vanish, and in
+positive characteristic a zero derivative does not imply that a polynomial is
+constant.
+
 ### Fixed-modulus quotient fields
 
 The generic fixed-modulus construction constrains a nullary, canonical,

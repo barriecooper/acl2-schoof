@@ -27,28 +27,35 @@ books supply focused instantiation and execution regressions rather than
 additional generic scope.
 
 The certified curve boundary is a contextual abelian group with a transparent
-linear natural repeated-addition operation. The next open formalization
-boundary is **fast natural scalar multiplication with correspondence to
-`curve-point-nat-mul`**.
+linear natural repeated-addition operation.  The generic polynomial boundary
+also includes transparent formal differentiation with canonical output,
+additivity, negation, subtraction, and a characteristic-safe length bound. The
+next open formalization boundary is the **indexed raw-convolution bridge and
+public product rule for `poly-derivative`**; it is the smallest prerequisite
+discovered before square-free and separability theory.
 
 ## Immediate sequence
 
 Proceed with one bounded mathematical or execution boundary per proof change:
 
-1. Define a separate double-and-add natural scalar operation and certify its
-   correspondence to `curve-point-nat-mul`, verified guards, and focused
-   execution evidence.
-2. Certify the generic nested natural-scalar theorem
-   `m • (n • P) = (mn) • P` unless step 1 establishes it as a required
-   supporting theorem.
-3. Extend the generic and curve interfaces to signed scalar multiplication.
-4. Return to the common Hasse/Schoof dependency plan below.
+1. Certify the generic formal-derivative product rule through a small reusable
+   indexed-convolution interface; add the natural power rule only after that
+   boundary is clean.
+2. Develop generic square-free and separability theory using the derivative
+   and the existing monic GCD.
+3. Add finite-field cardinality/enumeration metadata and connect actual field
+   size to the Frobenius equation.
+4. Complete nested natural and then signed scalar algebra before torsion and
+   trace-equation packaging.
+5. Add fast natural scalar multiplication when an executable quotient-
+   coordinate or trace-test consumer makes it more than premature
+   optimization.
 
-Stop step 1 unless the optimized operation remains separate from the linear
-specification and has a semantic correspondence theorem. Stop steps 2 and 3
-unless their group context and totalisation behavior are explicit. Guard
-verification and concrete evaluation never substitute for these mathematical
-endpoints.
+Keep the product-rule bridge bounded to reusable index/shift/convolution
+lemmas; do not replace it with a broad list-algebra project.  Any later fast
+scalar operation must remain separate from the linear specification and have a
+semantic correspondence theorem. Guard verification and concrete evaluation
+never substitute for these mathematical endpoints.
 
 ## Phase 2: common curve and function-field infrastructure
 
