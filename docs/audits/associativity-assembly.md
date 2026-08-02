@@ -79,8 +79,8 @@ outer pair. Each ordered original-infinity proof uses determinacy only after
 an infinity identity fixes an inner witness and thereby aligns the relevant
 outer operand pair. The combined theorem packages the three positions.
 
-Candidate C and the case map above are unchanged. Finite affine matrix
-assembly, rather than any structural interface, is now the open task.
+Candidate C and the case map above are unchanged. The finite affine matrix
+assembly is certified below; full tagged representation reduction remains open.
 
 ## Finite validation
 
@@ -96,72 +96,35 @@ nested executable outputs only as validation, not as proof. The counts were:
 The theorem premises intentionally exclude malformed tagged values and
 off-curve affine coordinates. The temporary script was not committed.
 
-## Candidate C assembly attempt at `5952b4b`
+## Certified Candidate C assembly
 
-The requested public endpoint was attempted with tagged affine constructors for
-`a`, `b`, and `c`, the four explicit relation witnesses `ab`, `bc`, `left`, and
-`right`, the single `short-weierstrass-characteristic-p` premise, and fixed
-output equality.  The exact semantic coverage interface remains
-`curve-point-addition-case-coverage`: for two curve points it returns original
-infinity, distinct x, opposite ordinates, or equal non-opposite affine
-coordinates.  A proof-local extraction from the full relation reduces affine
-inputs to the corresponding secant, opposite-y, or doubling relation witness.
+The public endpoint is certified as
+`curve-point-addition-relation-associative-for-affine-inputs`.  Its final proof
+instantiates `curve-point-addition-relation-affine-case-coverage` exactly twice,
+for the inner outputs `ab` and `bc`, preserves the selected payload and slope
+terms opaquely, and combines the resulting product with the nine local cells:
 
-Assembly stopped at the D/D cell before any production theorem was admitted.
-The advertised complete-D/D map does not contain a relation-level boundary for
-the outer secant/secant subcase with arbitrary semantic witnesses.  In detail,
-`affine-dd-t-translation` requires a doubling relation at the first inner
-output; the two `affine-dd-opposite-y-propagates-*` theorems require an outer
-opposite-y relation.  None consumes two inner secants plus supplied secant
-relations on both outer trees.  The only checked-in equality for that remaining
-subcase is `xcert-untagged-outputs-equal`, whose premises and conclusion name
-canonical classifier-selected coordinate outputs rather than the four supplied
-semantic relation witnesses.  Using it would require a new semantic bridge
-from arbitrary secant witnesses to those canonical outputs; it is not one of
-the audited principal family boundaries.
+| first inner | second D | second O | second T |
+| --- | --- | --- | --- |
+| D | D/D | D/O | D/T |
+| O | O/D | O/O | O/T |
+| T | T/D | T/O | T/T |
 
-The mismatch is therefore a genuinely missing family-semantic interface, not
-branch extraction, representation, orientation, infinity handling, fixing,
-or characteristic scope.  The determinacy instance that would follow such a
-bridge is well-typed: compare the supplied and derived outputs separately on
-operand pairs `(ab,c)` and `(a,bc)`, after fixing determinacy has aligned each
-inner secant witness with its derived tagged affine output.  Determinacy cannot
-itself prove equality between those different outer operand pairs.
+The matrix combination is propositional under `minimal-theory`.  It introduces
+no relation unfolding, dispatcher reasoning, classifier expansion, coordinate
+identity, or field algebra.  A small proof-local fixing normalization connects
+the exact fixed operands returned by extraction to the already-certified cell
+interfaces; it changes no witness expression.
 
-No coordinate, field, X-CERT, classifier, or executable dispatcher definition
-was unfolded or added.  The prior exhaustive F7/F11 validation remains
-unchanged: all 1,000 and 1,728 affine triples respectively have zero failures,
-with the nine cell counts recorded above.  Candidate C remains open pending a
-narrow semantic outer-secant/outer-secant D/D boundary (or an explicitly
-approved semantic wrapper around the existing canonical X-CERT equality).
+Only O/D and D/O use `short-weierstrass-characteristic-p`, inherited from
+`affine-inverse-secant-translation`.  D/D, D/T, T/D, O/T, T/O, O/O, and T/T
+are characteristic-independent, so Candidate C has exactly one characteristic
+premise.
 
-## D/D outer-secant/outer-secant interface resolution
-
-The missing arbitrary-witness boundary is now certified as
-`affine-dd-secant-relation-associative-when-all-distinct-x`. It uses the
-canonical outputs `xcert-ab`, `xcert-bc`, `xcert-left`, and `xcert-right`.
-Relation fixing congruence transports the supplied outer relations after the
-inner outputs have been aligned. The four determinacy instances compare only
-the same operand pairs: `(a,b)` aligns `ab` with `xcert-ab`; `(b,c)` aligns
-`bc` with `xcert-bc`; `(xcert-ab,c)` aligns `left` with `xcert-left`; and
-`(a,xcert-bc)` aligns `right` with `xcert-right`. The sole cross-tree equality
-is the opaque public theorem `xcert-untagged-outputs-equal`. No X-CERT
-definition, coordinate identity, field expression, classifier definition, or
-dispatcher was unfolded to establish that equality.
-
-Exhaustive validation on the existing affine triples partitions the 640 F7
-D/D cases into 430 outer secant/secant, 140 tangent-related, and 70 O/O cases;
-the 1,200 F11 D/D cases partition into 876, 216, and 108 respectively. All 430
-and 876 cases applicable to the new theorem had zero associativity failures,
-and exhaustive enumeration of semantic slope/output witnesses for each of the
-four operand pairs had zero deviations from its canonical output. This finite
-check is validation only. Candidate C matrix assembly remains open.
-
-The proof-engineering seam for that assembly is now certified:
-`curve-point-addition-relation-affine-case-coverage` unfolds one full relation
-on tagged affine operands into a bounded D/O/T disjunction, preserving the
-fixed tagged affine payload for D and T and the original infinity witness for
-O. `curve-point-addition-relation-output-determinate-under-fixed-operands`
-promotes the general fixed-operand alignment used by the structural proofs.
-The next task is the staged nine-cell composition; no associativity cell is
-claimed by these interface theorems.
+The exhaustive validation above was rerun after certification: all 1,000 F7
+and 1,728 F11 affine triples retained the displayed matrix partition and had
+zero failures.  This validation is evidence, not proof.  The focused public
+regression invokes only Candidate C under `minimal-theory`.  The next bounded
+boundary is the full tagged semantic wrapper; no clean public non-infinity
+representation reduction was available without adding a substantial new
+interface.

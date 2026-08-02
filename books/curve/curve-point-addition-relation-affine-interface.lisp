@@ -60,6 +60,8 @@
       (and
        (equal (curve-point-fix output)
               (curve-point-affine-coordinates (affine-coordinates-fix payload)))
+       (equal (affine-coordinates-fix a)
+              (affine-coordinates-fix b))
        (affine-doubling-relation-p (affine-coordinates-fix a) tangent payload)))))
   :rule-classes nil
   :hints

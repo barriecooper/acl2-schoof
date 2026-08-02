@@ -42,17 +42,7 @@ countermodel, and endpoint derivations are preserved in the
 
 Proceed in this dependency order, with one bounded boundary per proof change:
 
-1. **Assemble Candidate C finite affine semantic associativity.** The missing
-   arbitrary-witness D/D secant/secant bridge is now certified, so all required
-   family and structural predecessors exist. The certified one-relation
-   `curve-point-addition-relation-affine-case-coverage` interface now extracts
-   a bounded D/O/T disjunction, and public fixed-operands determinacy avoids
-   duplicating the structural helper. Combine O, T, D/D, D/T, and T/D
-   through case coverage into fixed equality of explicit final witnesses for
-   the two independent semantic-relation trees. Completion must add no
-   coordinate algebra and does not unfold the executable dispatcher. The exact
-   mismatch and selected endpoint are in the
-   [assembly audit](audits/associativity-assembly.md).
+1. **Wrap certified Candidate C as full tagged semantic associativity.** The public theorem `curve-point-addition-relation-associative-for-affine-inputs` now certifies all finite affine inputs through two bounded D/O/T extractions and the nine local cells. The next bounded task is a representation-only split between an original infinity input and three tagged affine inputs; it must use the structural infinity theorem and introduce no dispatcher or coordinate algebra.
 2. **Executable dispatcher lift.** Use semantic soundness, fixed-output
    determinacy, closure, and canonical representation to prove unrestricted
    `curve-point-pair-output-point` associativity. Completion keeps guard and

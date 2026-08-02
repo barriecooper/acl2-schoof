@@ -23,5 +23,6 @@
   :rule-classes nil
   :hints
   (("Goal"
-    :use ((:instance affine-dd-opposite-y-propagates-to-left-tree))
+    :use ((:instance affine-dd-opposite-y-propagates-to-left-tree
+                (p c)))
     :in-theory (theory 'minimal-theory))))

@@ -25,6 +25,8 @@
     :use
     ((:instance affine-dd-t-coincident-x-implies-ordinate-equality)
      (:instance affine-dd-opposite-y-propagates-to-left-tree
+                (a a) (b b) (p-slope p-slope) (p c)
+                (c c) (r-slope r-slope) (q q)
                 (infinity (curve-point-infinity))))
     :in-theory
     (union-theories

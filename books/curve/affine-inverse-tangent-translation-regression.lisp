@@ -9,7 +9,10 @@
         (affine-doubling-relation-p q witness result))
    (or (affine-distinct-x-secant-relation-p
         p result (field-neg witness) q)
-       (affine-doubling-relation-p p (field-neg witness) q)))
+       (and
+        (equal (affine-coordinates-fix p)
+               (affine-coordinates-fix result))
+        (affine-doubling-relation-p p (field-neg witness) q))))
   :rule-classes nil
   :hints
   (("Goal"

@@ -106,7 +106,9 @@
            (:instance field-neg-mul-right-local
                       (x r) (y (field-sub x y)))
            (:instance field-neg-sub-local (x x) (y y)))
-     :in-theory (theory 'minimal-theory)))))
+     :in-theory
+    (union-theories (theory 'minimal-theory)
+                    '(affine-coordinates-fix affine-coordinates-make))))))
 
 (local
  (defthm field-neg-product-of-difference-local
@@ -308,13 +310,19 @@
    (or
     (affine-distinct-x-secant-relation-p
      a u (field-neg (field-fix r)) c)
-    (affine-doubling-relation-p
-     a (field-neg (field-fix r)) c)))
+    (and
+     (equal (affine-coordinates-fix a)
+            (affine-coordinates-fix u))
+     (affine-doubling-relation-p
+      a (field-neg (field-fix r)) c))))
   :rule-classes nil
   :hints
   (("Goal"
-    :use (affine-inverse-secant-translation-outer-distinct-x
+    :use (affine-inverse-secant-coincident-x-implies-ordinate-equality
+          affine-inverse-secant-translation-outer-distinct-x
           affine-inverse-secant-translation-outer-doubling)
     :cases ((equal (affine-coordinates-x u)
                    (affine-coordinates-x a)))
-    :in-theory (theory 'minimal-theory))))
+    :in-theory
+    (union-theories (theory 'minimal-theory)
+                    '(affine-coordinates-fix affine-coordinates-make)))))
