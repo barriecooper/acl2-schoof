@@ -497,8 +497,12 @@ The structural semantic predecessor ledger is complete:
 | T/T | certified | `curve-point-addition-relation-associative-when-both-inner-doubling` |
 | Original-input infinity | certified | `curve-point-addition-relation-associative-when-original-infinity` |
 
-Finite affine semantic assembly remains open. No affine-family mathematics or
-structural predecessor is missing.
+Finite affine semantic assembly remains open. Proof-engineering branch
+extraction is complete: the certified theorem
+`curve-point-addition-relation-affine-case-coverage` exposes one tagged affine
+relation as D/O/T, and public fixed-operands determinacy supports representation
+alignment. The remaining work is the staged nine-cell composition; no
+affine-family mathematics or structural predecessor is missing.
 
 ### Stage 3 exceptional-secant certificate audit
 
