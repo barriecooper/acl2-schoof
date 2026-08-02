@@ -7,6 +7,15 @@ This audit was performed on branch `work` at
 for PR #265. The checkout had no configured remotes and the working tree was
 clean before this audit.
 
+## Candidate C continuation baseline
+
+The Candidate C continuation was inspected on branch `work` at
+`10d2ebf35045ad15c902c675f09b516327ccd077`.  The checkout had no configured
+remotes and its working tree was clean.  PR #269 is present as merge commit
+`10d2ebf`; its second parent contributes the certified arbitrary-witness D/D
+outer-secant/outer-secant interface described below.  No uncertified assembly
+book or experimental proof was restored.
+
 ## Selected endpoint
 
 The intended public endpoint is candidate C: if `ab`, `bc`, `left`, and
