@@ -137,6 +137,90 @@
            :in-theory (enable gfield::field-nat-mul-of-add)))))
 
 (local
+ (defthm raw-add-zero-scale-before-scaled-derivative
+   (implies (consp g)
+            (equal (raw-add
+                    (raw-scale (gfield::field-zero) g)
+                    (raw-scale a (raw-derivative-aux g 0)))
+                   (raw-scale a (raw-derivative-aux g 0))))
+   :hints
+   (("Goal"
+     :use ((:instance raw-add-of-zero-scale-left
+                      (x (fix-coefficients g))
+                      (y (raw-scale a (raw-derivative-aux g 0))))
+           (:instance len-of-raw-derivative-aux (poly g) (index 0))
+           (:instance len-of-raw-scale
+                      (a a) (x (raw-derivative-aux g 0)))
+           (:instance len-of-fix-coefficients (xs g)))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(coefficient-list-p-of-raw-scale
+        coefficient-list-p-of-raw-derivative-aux
+        coefficient-list-p-of-fix-coefficients
+        raw-scale-of-fix-coefficients))))))
+
+(local
+ (defthm coefficient-list-p-of-zero-prefix
+   (equal (coefficient-list-p (cons (gfield::field-zero) x))
+          (coefficient-list-p x))))
+
+(local
+ (defthm consp-of-raw-derivative-aux
+   (equal (consp (raw-derivative-aux x index)) (consp x))))
+
+(defthm raw-derivative-horner-step-alignment
+   (implies
+    (consp g)
+    (equal
+    (raw-add
+     (raw-scale a (raw-derivative-aux g 0))
+     (cons (gfield::field-zero)
+           (raw-add
+            (raw-mul (raw-derivative-aux f 1) g)
+            (raw-mul f (raw-derivative-aux g 0)))))
+    (raw-add
+     (raw-mul
+      (cons (gfield::field-zero) (raw-derivative-aux f 1)) g)
+     (raw-mul (cons a f) (raw-derivative-aux g 0)))))
+   :hints
+   (("Goal"
+     :use
+     ((:instance raw-add-interchange
+       (a (raw-scale (gfield::field-zero) g))
+       (b (cons (gfield::field-zero)
+                (raw-mul (raw-derivative-aux f 1) g)))
+       (c (raw-scale a (raw-derivative-aux g 0)))
+       (d (cons (gfield::field-zero)
+                (raw-mul f (raw-derivative-aux g 0)))))
+      (:instance raw-add-zero-scale-before-scaled-derivative)
+      (:instance raw-add-of-zero-prefixes
+       (x (raw-mul (raw-derivative-aux f 1) g))
+       (y (raw-mul f (raw-derivative-aux g 0))))
+      (:instance coefficient-list-p-of-raw-scale
+       (a (gfield::field-zero)) (x g))
+      (:instance coefficient-list-p-of-raw-scale
+       (a a) (x (raw-derivative-aux g 0)))
+      (:instance raw-add-associative
+       (x (raw-scale a (raw-derivative-aux g 0)))
+       (y (cons (gfield::field-zero)
+                (raw-mul (raw-derivative-aux f 1) g)))
+       (z (cons (gfield::field-zero)
+                (raw-mul f (raw-derivative-aux g 0))))))
+     :in-theory
+     (union-theories
+      (theory 'minimal-theory)
+      '(raw-mul-of-cons
+        raw-mul-when-atom-right
+        coefficient-list-p
+        coefficient-list-p-of-raw-scale
+        coefficient-list-p-of-raw-mul
+        coefficient-list-p-of-raw-derivative-aux
+        coefficient-list-p-of-zero-prefix
+        consp-of-raw-derivative-aux
+        gfield::field-element-p-of-zero)))))
+
+(local
  (defthm raw-derivative-aux-of-raw-neg
    (equal (raw-derivative-aux (raw-neg x) index)
           (raw-neg (raw-derivative-aux x index)))
