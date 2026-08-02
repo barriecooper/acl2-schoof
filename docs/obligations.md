@@ -1116,12 +1116,10 @@ All entries use the orientation `A+B=P` by secant `p`, `B+B=Q` by doubling
 
 ### Candidate C finite semantic assembly interface
 
-- **Open:** add a certified D/D outer-secant/outer-secant semantic boundary for
-  arbitrary relation witnesses (or a narrow certified wrapper from those
-  witnesses to `xcert-untagged-outputs-equal`) before assembling the nine-cell
-  affine Candidate C theorem.  The tangent and opposite-y D/D alternatives are
-  already covered; determinacy alone cannot bridge the two outer operand pairs.
-  See the assembly audit for the exact interface mismatch.
+- **Certified:** `affine-dd-secant-relation-associative-when-all-distinct-x`
+  packages four arbitrary secant witnesses around the canonical
+  `xcert-untagged-outputs-equal` result by four same-operand-pair determinacy
+  instances.  Candidate C nine-cell assembly remains open.
 
 ## Hasse and Schoof tracks
 
