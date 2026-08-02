@@ -98,6 +98,7 @@
 (include-book "curve/curve-point-addition-relation")
 (include-book "curve/f11-curve-point-addition-relation")
 (include-book "curve/curve-point-addition-inverse")
+(include-book "curve/curve-point-addition-inverse-regression")
 (include-book "curve/f11-curve-point-addition-inverse")
 (include-book "curve/curve-point-addition-commutativity")
 (include-book "curve/f11-curve-point-addition-commutativity")

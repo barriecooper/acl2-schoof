@@ -90,6 +90,14 @@ not logical/executable splits. Important examples include:
 Verified guards and transparent definitions explain how these functions run.
 Their semantic theorems, not transparency alone, justify mathematical claims.
 
+Tagged point negation is the transparent total data transformation
+`curve-point-neg`: it fixes its input once, preserves infinity, and changes
+only the affine ordinate by `field-neg`.  It calls neither the curve classifier
+nor an addition dispatcher.  `curve-point-fix-of-neg` and
+`curve-point-neg-of-fix` state its canonical-output and fixing contracts;
+closure and involution are separately certified.  Malformed inputs therefore
+inherit the tagged-point fixer's canonical-infinity convention.
+
 ## Curve-addition correspondence
 
 The executable dispatcher is intentionally not the logical specification.
@@ -120,6 +128,15 @@ the canonical-output theorem
 classifier case split or affine branch algebra.  Concrete F11 triples and
 finite F7/F11 enumeration validate execution separately; they do not establish
 semantic correctness.
+
+Inverse correctness uses the same semantic separation.  The narrow theorem
+`curve-point-addition-relation-p-of-point-and-neg` splits only the tagged
+infinity/affine representation and establishes the independent opposite-y
+relation with infinity output.  Dispatcher soundness and fixed-output
+determinacy then give the executable right inverse; executable commutativity
+gives the left inverse.  No dispatcher branch tree, secant algebra, or tangent
+algebra is expanded in this lift.  Concrete F11 inverse checks are execution
+regressions, not the proof of these laws.
 
 ## Guard and termination boundaries
 

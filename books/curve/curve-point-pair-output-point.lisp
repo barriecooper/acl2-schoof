@@ -26,6 +26,28 @@
   (equal (curve-point-pair-output-point point (curve-point-infinity))
          (curve-point-fix point)))
 
+(defthm curve-point-pair-output-point-identity-left
+  (implies (short-weierstrass-curve-point-p point)
+           (equal (curve-point-pair-output-point
+                   (curve-point-infinity) point)
+                  point))
+  :rule-classes nil
+  :hints (("Goal" :in-theory
+           (enable curve-point-pair-output-point-of-infinity-left
+                   short-weierstrass-curve-point-p
+                   curve-point-representation-p))))
+
+(defthm curve-point-pair-output-point-identity-right
+  (implies (short-weierstrass-curve-point-p point)
+           (equal (curve-point-pair-output-point
+                   point (curve-point-infinity))
+                  point))
+  :rule-classes nil
+  :hints (("Goal" :in-theory
+           (enable curve-point-pair-output-point-of-infinity-right
+                   short-weierstrass-curve-point-p
+                   curve-point-representation-p))))
+
 (defthm curve-point-infinity-p-of-affine-coordinates
   (not (curve-point-infinity-p
         (curve-point-affine-coordinates coordinates))))

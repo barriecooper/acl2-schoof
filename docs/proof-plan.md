@@ -18,9 +18,11 @@ The current certified base includes the generic field kernel, canonical dense
 polynomial arithmetic, Euclidean division, GCD and XGCD, modular inversion,
 irreducible fixed-modulus quotient fields, short-Weierstrass representations,
 and the executable and independent semantic layers for full tagged-point
-addition. Output closure, infinity identity, inverse-to-infinity, and full
-commutativity are complete. Concrete F7, F7X2, and F11 books supply focused
-instantiation and execution regressions rather than additional generic scope.
+addition. Executable output closure, literal left/right infinity identity,
+transparent point negation, involution, literal left/right inverse,
+commutativity, and associativity are complete. Concrete F7, F7X2, and F11
+books supply focused instantiation and execution regressions rather than
+additional generic scope.
 
 ## Phase 1: complete associativity
 
@@ -45,10 +47,13 @@ dispatcher witnesses to `curve-point-addition-relation-associative`, and
 canonical output turns its fixed-output equality into literal executable
 equality. Proceed with one bounded boundary per proof change:
 
-1. **Group packaging.** Package the now-associative curve law, the required
-   cancellation consequences, and later scalar multiplication behind an
-   abstract abelian-group interface. Keep each prerequisite law independently
-   certified rather than hiding it inside the packaging event.
+1. **Algebraic cancellation.** Derive left and right cancellation only from
+   executable associativity, identity, inverse, commutativity, and congruence.
+   Do not reopen affine geometry or dispatcher classification.
+2. **Group packaging.** After cancellation has its own public regressions,
+   package the certified laws behind an abstract abelian-group interface.
+3. **Scalar multiplication.** Specify and certify repeated addition only after
+   the group boundary is complete.
 
 The stopping conditions prevent semantic assembly from hiding unfinished
 coordinate work and prevent dispatcher expansion from replacing the

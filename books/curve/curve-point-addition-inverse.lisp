@@ -1,6 +1,7 @@
 (in-package "GFIELD")
 
 (include-book "curve-point-addition-relation")
+(include-book "curve-point-addition-commutativity")
 (include-book "point-negation")
 
 ; The inverse law is first established at the independent semantic boundary.
@@ -63,3 +64,31 @@
                 (point point)))
     :in-theory
     (enable curve-point-fix-when-representation-p))))
+
+; Public executable group-law prerequisites.  The right orientation retains
+; the semantic proof above; the left orientation is purely algebraic and uses
+; executable commutativity rather than a second relation proof.
+(defthm curve-point-pair-output-point-with-negate-right
+  (implies
+   (short-weierstrass-curve-point-p point)
+   (equal (curve-point-pair-output-point
+           point (curve-point-neg point))
+          (curve-point-infinity)))
+  :rule-classes nil
+  :hints (("Goal" :use curve-point-pair-output-point-of-point-and-neg)))
+
+(defthm curve-point-pair-output-point-with-negate-left
+  (implies
+   (short-weierstrass-curve-point-p point)
+   (equal (curve-point-pair-output-point
+           (curve-point-neg point) point)
+          (curve-point-infinity)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance curve-point-pair-output-point-commutative
+                     (first (curve-point-neg point))
+                     (second point))
+          (:instance short-weierstrass-curve-point-p-of-neg)
+          (:instance curve-point-pair-output-point-with-negate-right))
+    :in-theory (theory 'minimal-theory))))

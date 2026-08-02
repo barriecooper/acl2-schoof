@@ -18,6 +18,14 @@
 (defthm curve-point-representation-p-of-neg
   (curve-point-representation-p (curve-point-neg point)))
 
+(defthm curve-point-fix-of-neg
+  (equal (curve-point-fix (curve-point-neg point))
+         (curve-point-neg point))
+  :hints (("Goal"
+           :use ((:instance curve-point-fix-when-representation-p
+                            (point (curve-point-neg point))))
+           :in-theory (disable curve-point-fix-when-representation-p))))
+
 (defthm curve-point-neg-of-infinity
   (equal (curve-point-neg (curve-point-infinity))
          (curve-point-infinity)))
@@ -26,6 +34,12 @@
   (equal (curve-point-affine-coordinates-get
           (curve-point-neg (curve-point-affine x y)))
          (affine-coordinates-make x (field-neg y))))
+
+(defthm curve-point-neg-of-affine
+  (equal (curve-point-neg (curve-point-affine x y))
+         (curve-point-affine x (field-neg y)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable curve-point-neg))))
 
 (defthm affine-coordinates-x-of-curve-point-neg-affine
   (equal (affine-coordinates-x
@@ -42,6 +56,8 @@
 (defthm curve-point-neg-of-fix
   (equal (curve-point-neg (curve-point-fix point))
          (curve-point-neg point)))
+
+(defcong equal equal (curve-point-neg point) 1)
 
 (defthm curve-point-neg-of-neg
   (equal (curve-point-neg (curve-point-neg point))
