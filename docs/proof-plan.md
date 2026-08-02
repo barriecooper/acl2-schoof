@@ -148,7 +148,7 @@ PR boundaries:
    Stop an implementation PR after one subdivision certifies; stop earlier if
    the opposite-tree outcome cannot be derived without an additional nonzero
    assumption or an independent outer classifier premise.
-4. **Mixed-inner secant/tangent certificate (next: semantic doubling packaging).**
+4. **Mixed-inner secant/tangent certificate (next: outer O/O degeneration).**
    The field-only confluent H reconstructions and the public
    `affine-dt-d-outer-distinct-x-slope-equation` and the corresponding public
    outer distinct-x output-x and output-y equations are complete.  The public
@@ -169,9 +169,17 @@ PR boundaries:
    output x.  The coincident-x output-x equation is now certified by canonical tangent
    reconstruction and confluent X-CERT composition.  The coincident-x output-y
    equation is also certified through the canonical tangent output and the
-   field-only final-y interface.  Next package only the semantic doubling
-   relation; outer O/O degeneration, branch combination, and the T/D mirror
-   remain separate later tasks.
+   field-only final-y interface.  `affine-dt-d-coincident-x-translation` now
+   packages these public domain and scalar endpoints directly into the public
+   doubling relation from the same exact four premises, with exact fixed
+   witness `(field-sub (field-add (field-fix p-slope) (field-fix q-slope))
+   (field-fix t-slope))`.  Curve membership comes directly from the two secant
+   premises, and the tangent-domain, tangent-numerator, output-x, and output-y
+   clauses come from their named public endpoints.  The packaging replays no
+   coordinate, H, doubled-ordinate, X-CERT, or final-y proof and adds no
+   characteristic, classifier, division, inverse, denominator, or public
+   nonzero premise.  Outer O/O degeneration, branch combination, and the T/D
+   mirror remain separate later tasks.
    Here `D/T` means that `A+B=P` is a distinct-x secant and `B+B=Q` is a
    doubling; it does not describe an outer pair.  The bounded left-outer-secant
    translation from the three public premises `(A,B,p,P)`, `(B,t,Q)`, and

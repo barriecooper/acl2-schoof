@@ -141,6 +141,8 @@
 (include-book "curve/affine-dt-d-coincident-x-output-x-regression")
 (include-book "curve/affine-dt-d-coincident-x-output-y")
 (include-book "curve/affine-dt-d-coincident-x-output-y-regression")
+(include-book "curve/affine-dt-d-coincident-x-translation")
+(include-book "curve/affine-dt-d-coincident-x-translation-regression")
 (include-book "curve/affine-dd-t-outer-distinct-x-output-x")
 (include-book "curve/affine-dd-t-outer-distinct-x-output-x-regression")
 (include-book "curve/affine-dd-t-outer-distinct-x-output-y")
