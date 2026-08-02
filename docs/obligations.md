@@ -20,8 +20,8 @@ Status labels have the following meanings:
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|
 | Registered certification tree | Certified | `books/top.lisp` | Certification is the definition of done. |
-| Prohibited proof escapes | Certified | `scripts/check-trust.py`; `scripts/check-execution-policy.py` | Repository scans reject skipped proofs, project axioms, trust tags, raw Lisp, and equivalent escapes. |
-| Documentation and policy checks | Certified | `scripts/check-docs.py`; `scripts/check-policy.py` | Maintained links, ledger structure, trust, and execution policy are checked together. |
+| Prohibited proof escapes | Certified | `scripts/check-trust.sh`; `scripts/check-execution-policy.sh` | Repository scans reject skipped proofs, project axioms, trust tags, raw Lisp, and equivalent escapes. |
+| Documentation and policy checks | Certified | `scripts/check-docs.py`; `Makefile` | Maintained links, ledger structure, trust, and execution policy are checked together. |
 
 Concrete execution and finite enumeration are evidence, not generic proof.
 Guard verification establishes execution admissibility, not semantic
@@ -47,7 +47,7 @@ correctness. The full evidence model is maintained in
 | Canonical dense representation | Certified | `normalize`; `canonical-polynomial-p` | Constant-first coefficients; `nil` is canonical zero. |
 | Ring arithmetic | Certified | `poly-add`; `poly-neg`; `poly-sub`; `poly-mul` | Public results are canonical representatives. |
 | Evaluation and powers | Certified | `eval`; `poly-pow` | Evaluation and ring compatibility are certified. |
-| Degree and leading coefficient | Certified | `degree`; `leading-coefficient` | Defined over normalized dense polynomials. |
+| Degree and leading coefficient | Certified | `poly-degree`; `poly-leading-coefficient` | Defined over normalized dense polynomials. |
 | Derivative and separability theory | Open | — | Required by later function-field and Schoof work. |
 | Rational-function algebra | Open | — | Requires equality, cancellation, and degree theory. |
 | Further HS/PFIELD bridges | Deferred | — | Add only when a downstream theorem requires them. |
@@ -77,7 +77,7 @@ correctness. The full evidence model is maintained in
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|
 | Short-Weierstrass equation and scope | Certified | `short-weierstrass-affine-point-p`; `short-weierstrass-characteristic-p` | Initial model assumes the maintained nonzero discriminant and characteristic scope. |
-| Canonical affine coordinates | Certified | `affine-coordinate-fix`; `affine-coordinate-representation-p`; `short-weierstrass-affine-point-p` | Structural representation remains separate from curve membership. |
+| Canonical affine coordinates | Certified | `affine-coordinates-fix`; `affine-coordinates-p`; `short-weierstrass-affine-point-p` | Structural representation remains separate from curve membership. |
 | Tagged points and infinity | Certified | `curve-point-fix`; `curve-point-representation-p`; `short-weierstrass-curve-point-p`; `curve-point-infinity` | Malformed tagged inputs fix to infinity. |
 | Point negation | Certified | `curve-point-neg`; `curve-point-neg-of-neg` | Closure and canonical-input involution are certified. |
 | Total affine classification | Certified | `affine-pair-classify` | Valid affine pairs cannot reach the `:same-x-other` fallback. |
