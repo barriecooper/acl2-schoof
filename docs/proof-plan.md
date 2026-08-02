@@ -49,10 +49,10 @@ dispatcher witnesses to `curve-point-addition-relation-associative`, and
 canonical output turns its fixed-output equality into literal executable
 equality. Proceed with one bounded boundary per proof change:
 
-1. **Scalar multiplication.** Specify and certify repeated addition using the
-   completed abstract abelian-group boundary. Keep its logical specification,
-   executable implementation, correspondence, guards, and focused execution
-   evidence distinct.
+1. **Fast natural scalar multiplication.** Add double-and-add only as a
+   separate implementation of the certified linear natural repeated-addition
+   specification, with correspondence, guard, and execution evidence. Signed
+   scalar multiplication remains a later mathematical extension.
 
 The stopping conditions prevent semantic assembly from hiding unfinished
 coordinate work and prevent dispatcher expansion from replacing the

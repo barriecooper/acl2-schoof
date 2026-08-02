@@ -154,6 +154,13 @@ instances retain that hypothesis rather than asserting an unconditional group
 law.  The packaging regression is logical reuse evidence, not a new execution
 or performance claim.
 
+Natural scalar multiplication is a transparent, guard-verified linear
+recursive specification.  Both generic and curve operations totalise the
+scalar with `nfix`, return identity/infinity at zero, and add the point on the
+left at each successor.  It is deliberately not double-and-add; a future fast
+implementation requires a distinct function and a certified correspondence
+theorem.
+
 ## Guard and termination boundaries
 
 Recursive polynomial division uses a certified strict decrease of the
