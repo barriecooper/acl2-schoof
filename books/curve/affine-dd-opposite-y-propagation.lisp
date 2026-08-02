@@ -397,16 +397,16 @@
 ; point order C,B,A.  No coordinate algebra is replayed here.
 (defthm affine-dd-opposite-y-propagates-to-left-tree
   (implies
-   (and (affine-distinct-x-secant-relation-p a b p-slope c)
+   (and (affine-distinct-x-secant-relation-p a b p-slope p)
         (affine-distinct-x-secant-relation-p b c r-slope q)
         (affine-opposite-y-infinity-relation-p a q infinity))
-   (affine-opposite-y-infinity-relation-p c c infinity))
+   (affine-opposite-y-infinity-relation-p p c infinity))
   :rule-classes nil
   :hints
   (("Goal"
     :use
     ((:instance affine-distinct-x-secant-relation-p-reverse
-                (first a) (second b) (slope p-slope) (output c))
+                (first a) (second b) (slope p-slope) (output p))
      (:instance affine-distinct-x-secant-relation-p-reverse
                 (first b) (second c) (slope r-slope) (output q))
      (:instance affine-opposite-y-infinity-relation-p-symmetric
@@ -414,5 +414,7 @@
      (:instance affine-dd-opposite-y-propagates-to-other-tree
                 (a c) (b b) (c a)
                 (p-slope r-slope) (p q)
-                (r-slope p-slope) (q c)))
+                (r-slope p-slope) (q p))
+     (:instance affine-opposite-y-infinity-relation-p-symmetric
+                (first c) (second p) (output infinity)))
     :in-theory (theory 'minimal-theory))))

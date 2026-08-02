@@ -24,6 +24,8 @@
     ((:instance short-weierstrass-equal-x-implies-equal-or-neg-y
                 (p a) (q q))
      (:instance affine-dd-opposite-y-propagates-to-left-tree
+                (a a) (b b) (p-slope p-slope) (p c)
+                (c c) (r-slope r-slope) (q q)
                 (infinity (curve-point-infinity))))
     :in-theory
     (union-theories
