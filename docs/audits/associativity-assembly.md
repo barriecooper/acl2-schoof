@@ -125,6 +125,18 @@ The exhaustive validation above was rerun after certification: all 1,000 F7
 and 1,728 F11 affine triples retained the displayed matrix partition and had
 zero failures.  This validation is evidence, not proof.  The focused public
 regression invokes only Candidate C under `minimal-theory`.  The next bounded
-boundary is the full tagged semantic wrapper; no clean public non-infinity
-representation reduction was available without adding a substantial new
-interface.
+boundary was the full tagged semantic wrapper.
+
+## Final tagged representation wrapper
+
+`short-weierstrass-curve-point-non-infinity-representation` now provides the
+small public representation interface: a valid non-infinity fixed point has a
+valid affine payload and reconstructs exactly from that payload.  The certified
+theorem `curve-point-addition-relation-associative` splits only on original
+infinity, transports the four supplied relations through fixing, and invokes
+Candidate C once on the three extracted payloads.  No addition relation,
+classifier, field operation, or executable dispatcher is unfolded.  Exhaustive
+validation retained zero failures over all 1,331 valid F7 tagged triples and
+all 2,197 valid F11 tagged triples; the original-infinity/affine partitions
+were 331/1,000 and 469/1,728 respectively.  These counts are validation, not
+proof.  The next boundary is the semantic-to-executable dispatcher lift.

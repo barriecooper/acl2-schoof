@@ -129,14 +129,10 @@ question and explain how it was resolved, but must label it as history.
 
 ## Roadmap and limitations
 
-Certified semantic associativity work now covers infinity-input reductions,
-opposite/opposite and repeated-triple configurations, inverse/secant and
-inverse/tangent translations, every D/D outcome, and both the outer distinct-x
-and coincident-x doubling branches of the oriented mixed-inner D/T family.
-The principal remaining affine semantic tasks are the mixed D/T outer O/O
-degeneration, the T/D structural mirror, and finite semantic case assembly;
-the semantic result must then be lifted separately to the executable
-dispatcher.
+Full tagged semantic associativity is certified, including infinity-input
+reductions and the complete affine D/O/T case assembly.  The next boundary is
+to lift that independent semantic theorem to the executable dispatcher using
+soundness, determinacy, closure, and canonical fixing.
 
 Unrestricted associativity is not yet certified. Consequently there is no
 certified group packaging. There is also no Hasse theorem and no certified

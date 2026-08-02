@@ -1103,19 +1103,23 @@ All entries use the orientation `A+B=P` by secant `p`, `B+B=Q` by doubling
 | Outer O/O propagation | `affine-dt-left-output-opposite-y-propagates-to-right-output` | From A+B=P, B+B=Q, and P opposite B, derives A opposite Q with the same infinity payload | `xB-xA` inside the reused inverse/secant tangent equation; `yB+yB` for slope identification | [Audit](audits/mixed-dt-certificate.md) |
 | Left-outer-secant family combination | `affine-dt-d-translation` | Splits on `xQ=xA` and derives right outer secant or doubling with the single witness `(p+q)-t` | None; inherits the branch certificates | [Audit](audits/mixed-dt-certificate.md) |
 
-#### Open
+#### Full tagged semantic boundary
 
-- T/D structural mirror.
-- Finite affine semantic assembly.
-- Semantic-to-executable dispatcher lift.
-- Unrestricted associativity.
+- **Certified:** `curve-point-addition-relation-associative` proves fixed-output
+  equality for all valid tagged inputs.  Its representation reduction uses the
+  public theorem `short-weierstrass-curve-point-non-infinity-representation`;
+  original infinity is discharged by the existing structural theorem and the
+  remaining case by the certified affine semantic theorem.
+- **Open:** semantic-to-executable dispatcher associativity.  Group packaging
+  remains deferred until that lift certifies.
 
 ### Candidate C finite semantic assembly interface
 
 - **Certified:** `affine-dd-secant-relation-associative-when-all-distinct-x`
   packages four arbitrary secant witnesses around the canonical
   `xcert-untagged-outputs-equal` result by four same-operand-pair determinacy
-  instances.  Candidate C nine-cell assembly remains open.
+  instances.  Candidate C and its full tagged representation wrapper are now
+  certified.
 
 ## Hasse and Schoof tracks
 
