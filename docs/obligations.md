@@ -482,33 +482,19 @@ inverse/tangent translation supplies the non-infinity tree.  Malformed ACL2
 objects matter only to the later total executable lift through the fixers; they
 are not extra semantic cases for the finite valid-curve-point theorem.
 
-Finite affine semantic assembly must consume the `D`, `O`, or `T` relation for
-both inner additions, closure for affine inner outputs, and the matching outer
-relation(s).  Its natural endpoint is
-`curve-point-addition-relation-p` for a common output on each tree, rather than
-a permanently exposed lower-level disjunction: the latter is only the input to
-assembly.  All matrix cells are now certified. The remaining task is finite affine
-semantic assembly through the independent relation and case-coverage books.
-The structural semantic predecessor ledger is complete:
+Finite affine semantic assembly is certified by
+`curve-point-addition-relation-associative-for-affine-inputs`.  Its proof uses
+exactly two bounded `curve-point-addition-relation-affine-case-coverage`
+instances and dispatches propositionally to the nine local D/O/T cells.  The
+only characteristic premise is inherited by O/D and D/O; no executable
+relation or dispatcher is unfolded.  The remaining associativity obligation
+is the full tagged semantic wrapper, followed separately by the executable
+lift.
 
-| predecessor | status | relation-level theorem |
-| --- | --- | --- |
-| O/O | certified | `curve-point-addition-relation-associative-when-both-inner-opposite-y` |
-| T/T | certified | `curve-point-addition-relation-associative-when-both-inner-doubling` |
-| Original-input infinity | certified | `curve-point-addition-relation-associative-when-original-infinity` |
-
-Finite affine semantic assembly remains open. Proof-engineering branch
-extraction is complete: the certified theorem
-`curve-point-addition-relation-affine-case-coverage` exposes one tagged affine
-relation as D/O/T, and public fixed-operands determinacy supports representation
-alignment. The remaining work is the staged nine-cell composition.  D/D is assembled,
-and the complete mixed D/T and T/D cells are certified.  Their nominal
-outer-tangent branches are excluded by
+The narrow mixed-family exclusions
 `affine-dt-left-outer-doubling-impossible` and
-`affine-td-right-outer-doubling-impossible`, using only the secant line
-relations versus the tangent-domain nonzero condition.  The four inverse cells
-are now certified locally as well.  All nine affine matrix cells are complete;
-final propositional Candidate C assembly and its regression remain open.
+`affine-td-right-outer-doubling-impossible` remain certified support
+boundaries; they use only secant line relations versus tangent-domain nonzero.
 
 ### Stage 3 exceptional-secant certificate audit
 

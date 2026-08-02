@@ -110,6 +110,7 @@
 (include-book "curve/affine-mixed-outer-doubling-impossibility")
 (include-book "curve/affine-mixed-outer-doubling-impossibility-regression")
 (include-book "curve/curve-point-addition-relation-associativity-affine")
+(include-book "curve/curve-point-addition-relation-associativity-affine-regression")
 (include-book "curve/affine-inverse-tangent-translation")
 (include-book "curve/affine-inverse-tangent-translation-regression")
 (include-book "curve/affine-dd-opposite-y-propagation")
