@@ -12,7 +12,7 @@ polynomial, curve, rational-function, and Frobenius foundations. Beyond that
 shared seam they are parallel: Hasse is not an implementation prerequisite for
 Schoof.
 
-## Completed foundations
+## Current formalization boundary
 
 The current certified base includes the generic field kernel, canonical dense
 polynomial arithmetic, Euclidean division, GCD and XGCD, modular inversion,
@@ -26,39 +26,29 @@ curve functional instance are also complete. Concrete F7, F7X2, and F11
 books supply focused instantiation and execution regressions rather than
 additional generic scope.
 
-## Phase 1: complete associativity
+The certified curve boundary is a contextual abelian group with a transparent
+linear natural repeated-addition operation. The next open formalization
+boundary is **fast natural scalar multiplication with correspondence to
+`curve-point-nat-mul`**.
 
-### Completed boundaries
+## Immediate sequence
 
-The certified semantic base includes relation-witness original-infinity,
-opposite/opposite, and repeated-triple structural predecessors, inverse/secant, inverse/tangent, the
-complete D/D family, and the complete oriented mixed-inner D/T family.  Its
-left-outer-secant boundary combines the distinct-x and coincident-x outcomes,
-while its separate O/O boundary preserves the witness-free infinity result.
-These results establish the intended division-free
-certificate workflow. The reversed T/D family is also certified as a purely
-structural mirror; exact current coverage is maintained in the
-[associativity status matrix](status-associativity.md). The mixed D/T residuals,
-countermodel, and endpoint derivations are preserved in the
-[mixed D/T audit](audits/mixed-dt-certificate.md), not repeated here.
+Proceed with one bounded mathematical or execution boundary per proof change:
 
-### Forward boundaries and completion criteria
+1. Define a separate double-and-add natural scalar operation and certify its
+   correspondence to `curve-point-nat-mul`, verified guards, and focused
+   execution evidence.
+2. Certify the generic nested natural-scalar theorem
+   `m • (n • P) = (mn) • P` unless step 1 establishes it as a required
+   supporting theorem.
+3. Extend the generic and curve interfaces to signed scalar multiplication.
+4. Return to the common Hasse/Schoof dependency plan below.
 
-The executable dispatcher lift is complete: soundness and closure provide four
-dispatcher witnesses to `curve-point-addition-relation-associative`, and
-canonical output turns its fixed-output equality into literal executable
-equality. Proceed with one bounded boundary per proof change:
-
-1. **Fast natural scalar multiplication.** Add double-and-add only as a
-   separate implementation of the certified linear natural repeated-addition
-   specification, with correspondence, guard, and execution evidence. Signed
-   scalar multiplication remains a later mathematical extension.
-
-The stopping conditions prevent semantic assembly from hiding unfinished
-coordinate work and prevent dispatcher expansion from replacing the
-independent semantic proof. New characteristic premises must be justified by a
-real degeneration; existing characteristic-independent certificates must not
-be weakened.
+Stop step 1 unless the optimized operation remains separate from the linear
+specification and has a semantic correspondence theorem. Stop steps 2 and 3
+unless their group context and totalisation behavior are explicit. Guard
+verification and concrete evaluation never substitute for these mathematical
+endpoints.
 
 ## Phase 2: common curve and function-field infrastructure
 
