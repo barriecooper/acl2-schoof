@@ -45,6 +45,7 @@ correctness. The full evidence model is maintained in
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|
 | Canonical dense representation | Certified | `normalize`; `canonical-polynomial-p` | Constant-first coefficients; `nil` is canonical zero. |
+| Coefficient projection and canonical extensionality | Certified | `poly-coefficient`; `canonical-polynomial-extensionality` | Total coefficientwise interface for canonical dense polynomials. |
 | Ring arithmetic | Certified | `poly-add`; `poly-neg`; `poly-sub`; `poly-mul` | Public results are canonical representatives. |
 | Evaluation and powers | Certified | `eval`; `poly-pow` | Evaluation and ring compatibility are certified. |
 | Degree and leading coefficient | Certified | `poly-degree`; `poly-leading-coefficient` | Defined over normalized dense polynomials. |

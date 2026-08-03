@@ -30,9 +30,9 @@ The certified curve boundary is a contextual abelian group with a transparent
 linear natural repeated-addition operation.  The generic polynomial boundary
 also includes transparent formal differentiation with canonical output,
 additivity, negation, subtraction, and a characteristic-safe length bound. The
-next open formalization boundary is the **indexed raw-convolution bridge and
-public product rule for `poly-derivative`**; it is the smallest prerequisite
-discovered before square-free and separability theory.
+next open formalization boundary is **coefficient laws for arithmetic, finite
+convolution semantics, and the derivative product rule**; it is the smallest
+prerequisite before square-free and separability theory.
 
 ## Immediate sequence
 
