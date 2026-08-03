@@ -31,6 +31,29 @@
 (defthm raw-scale-of-fix-coefficients
   (equal (raw-scale a (fix-coefficients x)) (raw-scale a x)))
 
+(defthm poly-coefficient-of-raw-scale
+  (equal (poly-coefficient n (raw-scale scalar polynomial))
+         (gfield::field-mul scalar
+                            (poly-coefficient n polynomial)))
+  :hints (("Goal" :induct (poly-coefficient n polynomial)
+           :in-theory (enable raw-scale poly-coefficient))))
+
+(defthm poly-coefficient-of-poly-scale
+  (equal (poly-coefficient n (poly-scale scalar polynomial))
+         (gfield::field-mul scalar
+                            (poly-coefficient n polynomial)))
+  :hints (("Goal"
+           :use ((:instance poly-coefficient-of-normalize
+                            (polynomial
+                             (raw-scale scalar (normalize polynomial))))
+                 (:instance poly-coefficient-of-raw-scale
+                            (polynomial (normalize polynomial)))
+                 (:instance poly-coefficient-of-normalize
+                            (polynomial polynomial)))
+           :in-theory (e/d (poly-scale)
+                           (poly-coefficient-of-normalize
+                            poly-coefficient-of-raw-scale)))))
+
 (defthm raw-leading-coefficient-of-raw-scale
   (implies (and (coefficient-list-p x)
                 (consp x))

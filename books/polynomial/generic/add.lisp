@@ -28,6 +28,42 @@
   (equal (raw-add (fix-coefficients x) (fix-coefficients y))
          (raw-add x y)))
 
+(local
+ (defun raw-add-coefficient-induct (n first second)
+   (if (zp (nfix n))
+       (list first second)
+     (raw-add-coefficient-induct
+      (1- (nfix n))
+      (if (consp first) (cdr first) nil)
+      (if (consp second) (cdr second) nil)))))
+
+(defthm poly-coefficient-of-raw-add
+  (equal (poly-coefficient n (raw-add first second))
+         (gfield::field-add (poly-coefficient n first)
+                            (poly-coefficient n second)))
+  :hints (("Goal" :induct (raw-add-coefficient-induct n first second)
+           :in-theory (enable raw-add poly-coefficient))))
+
+(defthm poly-coefficient-of-poly-add
+  (equal (poly-coefficient n (poly-add first second))
+         (gfield::field-add (poly-coefficient n first)
+                            (poly-coefficient n second)))
+  :hints (("Goal"
+           :use ((:instance poly-coefficient-of-normalize
+                            (polynomial
+                             (raw-add (normalize first)
+                                      (normalize second))))
+                 (:instance poly-coefficient-of-raw-add
+                            (first (normalize first))
+                            (second (normalize second)))
+                 (:instance poly-coefficient-of-normalize
+                            (polynomial first))
+                 (:instance poly-coefficient-of-normalize
+                            (polynomial second)))
+           :in-theory (e/d (poly-add)
+                           (poly-coefficient-of-normalize
+                            poly-coefficient-of-raw-add)))))
+
 (defthm true-listp-of-raw-neg
   (true-listp (raw-neg x)))
 

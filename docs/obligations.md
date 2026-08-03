@@ -46,11 +46,14 @@ correctness. The full evidence model is maintained in
 |---|---|---|---|
 | Canonical dense representation | Certified | `normalize`; `canonical-polynomial-p` | Constant-first coefficients; `nil` is canonical zero. |
 | Coefficient projection and canonical extensionality | Certified | `poly-coefficient`; `canonical-polynomial-extensionality` | Total coefficientwise interface for canonical dense polynomials. |
+| Arithmetic coefficient laws | Certified | `poly-coefficient-of-poly-add`; `poly-coefficient-of-poly-scale` | Exact unconditional addition and scaling coefficient semantics. |
+| Multiplication convolution semantics | Certified | `poly-convolution-sum`; `poly-coefficient-of-poly-mul` | Finite convolution through the totalized requested index. |
+| Derivative coefficient semantics | Certified | `poly-coefficient-of-poly-derivative` | Shifted natural scaling of the next input coefficient. |
 | Ring arithmetic | Certified | `poly-add`; `poly-neg`; `poly-sub`; `poly-mul` | Public results are canonical representatives. |
 | Evaluation and powers | Certified | `eval`; `poly-pow` | Evaluation and ring compatibility are certified. |
 | Degree and leading coefficient | Certified | `poly-degree`; `poly-leading-coefficient` | Defined over normalized dense polynomials. |
 | Formal derivative operation and additive laws | Certified | `poly-derivative`; `canonical-polynomial-p-of-poly-derivative`; `poly-derivative-of-poly-add`; `poly-derivative-of-poly-neg`; `poly-derivative-of-poly-sub` | Uses generic `field-nat-mul`; a characteristic-safe length upper bound is certified. |
-| Derivative product and power rules | Open | `raw-derivative-aux-successor`; `raw-derivative-aux-of-zero-prefix`; `raw-derivative-horner-step-alignment` | The exact index-zero Horner list alignment now certifies.  The index-zero induction then exposes `raw-derivative-aux` at index 1 on the recursive product, so its same-index induction hypothesis is insufficient.  The generalized identity `D_i(fg) = D_i(f)g + fD_0(g)` is mathematically correct, including malformed atomic tails, but its induction must increment `i`; the next proof obligation is the corresponding indexed Horner alignment, including `a D_i(g) = (i a)g + aD_0(g)`.  The public product rule and power rule remain open. |
+| Derivative product and power rules | Open | — | It remains to certify the common-index finite-sum identity splitting `N` times each convolution term into its `j` and `N-j` natural scalings, then lift coefficient equality canonically. The power rule remains open. |
 | Square-free and separability theory | Open | — | Required by later function-field and Schoof work. |
 | Rational-function algebra | Open | — | Requires equality, cancellation, and degree theory. |
 | Further HS/PFIELD bridges | Deferred | — | Add only when a downstream theorem requires them. |

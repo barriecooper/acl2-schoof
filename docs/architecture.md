@@ -65,6 +65,11 @@ represented values are field-fixed, and absent coefficients or coefficients
 beyond a malformed dotted tail are field zero.  Normalization preserves every
 coefficient.  Canonical dense polynomials are therefore literally equal when
 their represented coefficients agree through the maximum of their lengths.
+Polynomial addition and scaling have unconditional coefficient laws, while
+`poly-mul` is characterized coefficientwise by the transparent finite
+convolution `poly-convolution-sum`.  `poly-derivative` is characterized by
+shifted natural coefficient scaling.  Canonical extensionality is the boundary
+for lifting such coefficient identities to literal polynomial equality.
 
 The certified stack is layered: arithmetic and evaluation; degree and leading
 coefficient; division and remainder; congruence and reduced operations;
