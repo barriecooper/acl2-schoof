@@ -6,6 +6,73 @@
 (def-mul-instance raw-mul poly-mul raw-add raw-scale normalize
                   gfield::field-zero)
 
+; POLY-CONVOLUTION-SUM is the finite coefficient convolution from 0 through
+; NFIX(N).  The auxiliary keeps the total index fixed while its endpoint
+; decreases.
+(defun poly-convolution-sum-aux (count total first second)
+  (declare (xargs :measure (nfix count)))
+  (if (zp (nfix count))
+      (gfield::field-mul (poly-coefficient 0 first)
+                         (poly-coefficient (nfix total) second))
+    (gfield::field-add
+     (poly-convolution-sum-aux (1- (nfix count)) total first second)
+     (gfield::field-mul
+      (poly-coefficient (nfix count) first)
+      (poly-coefficient (- (nfix total) (nfix count)) second)))))
+
+(defun poly-convolution-sum (n first second)
+  (poly-convolution-sum-aux (nfix n) (nfix n) first second))
+
+(defthm poly-convolution-sum-of-nfix
+  (equal (poly-convolution-sum (nfix n) first second)
+         (poly-convolution-sum n first second)))
+
+(defthm field-element-p-of-poly-convolution-sum
+  (gfield::field-element-p (poly-convolution-sum n first second)))
+
+(defthm poly-convolution-sum-zero
+  (equal (poly-convolution-sum 0 first second)
+         (gfield::field-mul (poly-coefficient 0 first)
+                            (poly-coefficient 0 second))))
+
+(local
+ (defthm poly-convolution-sum-aux-of-normalize-left
+   (equal (poly-convolution-sum-aux count total (normalize first) second)
+          (poly-convolution-sum-aux count total first second))
+   :hints (("Goal" :induct (poly-convolution-sum-aux
+                             count total first second)
+            :in-theory (e/d (poly-convolution-sum-aux)
+                            (normalize trim-trailing-zeros
+                             fix-coefficients))))))
+
+(local
+ (defthm poly-convolution-sum-aux-of-normalize-right
+   (equal (poly-convolution-sum-aux count total first (normalize second))
+          (poly-convolution-sum-aux count total first second))
+   :hints (("Goal" :induct (poly-convolution-sum-aux
+                             count total first second)
+            :in-theory (e/d (poly-convolution-sum-aux)
+                            (normalize trim-trailing-zeros
+                             fix-coefficients))))))
+
+(defthm poly-convolution-sum-of-normalize-left
+  (equal (poly-convolution-sum n (normalize first) second)
+         (poly-convolution-sum n first second))
+  :hints (("Goal"
+           :use ((:instance poly-convolution-sum-aux-of-normalize-left
+                            (count (nfix n)) (total (nfix n))))
+           :in-theory (e/d (poly-convolution-sum)
+                           (poly-convolution-sum-aux normalize)))))
+
+(defthm poly-convolution-sum-of-normalize-right
+  (equal (poly-convolution-sum n first (normalize second))
+         (poly-convolution-sum n first second))
+  :hints (("Goal"
+           :use ((:instance poly-convolution-sum-aux-of-normalize-right
+                            (count (nfix n)) (total (nfix n))))
+           :in-theory (e/d (poly-convolution-sum)
+                           (poly-convolution-sum-aux normalize)))))
+
 (defthm raw-mul-when-atom-left
   (implies (atom x) (equal (raw-mul x y) nil)))
 
@@ -537,3 +604,78 @@
                             (x (normalize x))
                             (y (raw-mul (normalize y) (normalize z)))))
            :in-theory (enable poly-mul))))
+
+(local
+ (defthm poly-convolution-sum-aux-of-cons
+   (implies (<= (nfix count) (nfix total))
+            (equal
+             (poly-convolution-sum-aux count total (cons a first) second)
+             (gfield::field-add
+              (gfield::field-mul a (poly-coefficient total second))
+              (if (zp (nfix count))
+                  (gfield::field-zero)
+                (poly-convolution-sum-aux
+                 (1- (nfix count)) (1- (nfix total)) first second)))))
+   :hints (("Goal" :induct (poly-convolution-sum-aux
+                             count total first second)
+            :in-theory (enable poly-convolution-sum-aux
+                               gfield::field-add-associative
+                               gfield::field-add-commutative)))))
+
+(defthm poly-convolution-sum-of-cons
+  (equal (poly-convolution-sum n (cons a first) second)
+         (gfield::field-add
+          (gfield::field-mul a (poly-coefficient n second))
+          (if (zp (nfix n))
+              (gfield::field-zero)
+            (poly-convolution-sum (1- (nfix n)) first second))))
+  :hints (("Goal"
+           :use ((:instance poly-convolution-sum-aux-of-cons
+                            (count (nfix n)) (total (nfix n))))
+           :in-theory (enable poly-convolution-sum))))
+
+(local
+ (defun raw-mul-coefficient-induct (n first second)
+   (if (atom first)
+       (list n second)
+     (raw-mul-coefficient-induct
+      (if (zp (nfix n)) 0 (1- (nfix n)))
+      (cdr first) second))))
+
+(local
+ (defthm poly-convolution-sum-aux-when-atom-left
+   (implies (not (consp first))
+            (equal (poly-convolution-sum-aux count total first second)
+                   (gfield::field-zero)))
+   :hints (("Goal" :induct (poly-convolution-sum-aux
+                             count total first second)
+            :in-theory (enable poly-convolution-sum-aux)))))
+
+(defthm poly-coefficient-of-raw-mul
+  (equal (poly-coefficient n (raw-mul first second))
+         (poly-convolution-sum n first second))
+  :hints (("Goal" :induct (raw-mul-coefficient-induct n first second)
+           :in-theory (enable raw-mul poly-coefficient
+                              poly-convolution-sum-of-cons))))
+
+(defthm poly-coefficient-of-poly-mul
+  (equal (poly-coefficient n (poly-mul first second))
+         (poly-convolution-sum n first second))
+  :hints (("Goal"
+           :use ((:instance poly-coefficient-of-normalize
+                            (polynomial
+                             (raw-mul (normalize first)
+                                      (normalize second))))
+                 (:instance poly-coefficient-of-raw-mul
+                            (first (normalize first))
+                            (second (normalize second)))
+                 (:instance poly-convolution-sum-of-normalize-left
+                            (first first) (second (normalize second)))
+                 (:instance poly-convolution-sum-of-normalize-right
+                            (first first) (second second)))
+           :in-theory (e/d (poly-mul)
+                           (normalize trim-trailing-zeros fix-coefficients
+                            poly-coefficient-of-normalize
+                            poly-coefficient-of-raw-mul
+                            poly-convolution-sum-of-normalize-left
+                            poly-convolution-sum-of-normalize-right)))))

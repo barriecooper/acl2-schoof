@@ -122,6 +122,80 @@
   :hints (("Goal" :in-theory (enable poly-derivative))))
 
 (local
+ (defun raw-derivative-coefficient-induct (n poly index)
+   (if (zp (nfix n))
+       (list poly index)
+     (raw-derivative-coefficient-induct
+      (1- (nfix n))
+      (if (consp poly) (cdr poly) nil)
+      (+ 1 (nfix index))))))
+
+(local
+ (defthm consp-of-fix-coefficients-for-coefficients
+   (equal (consp (fix-coefficients x)) (consp x))))
+
+(local
+ (defthm raw-derivative-aux-of-nfix-index
+   (equal (raw-derivative-aux polynomial (nfix index))
+          (raw-derivative-aux polynomial index))
+   :hints (("Goal" :induct (raw-derivative-aux polynomial index)))))
+
+(local
+ (defthm poly-coefficient-of-raw-derivative-aux-natural
+   (implies (and (natp n) (natp index))
+            (equal
+             (poly-coefficient n (raw-derivative-aux polynomial index))
+             (gfield::field-nat-mul
+              (+ index n) (poly-coefficient n polynomial))))
+   :hints (("Goal"
+            :induct (raw-derivative-coefficient-induct n polynomial index)
+            :in-theory (enable raw-derivative-aux poly-coefficient)))))
+
+(local
+ (defthm poly-coefficient-of-raw-derivative-aux
+   (equal
+    (poly-coefficient n (raw-derivative-aux polynomial index))
+    (gfield::field-nat-mul
+     (+ (nfix index) (nfix n))
+     (poly-coefficient n polynomial)))
+   :hints (("Goal"
+            :use ((:instance poly-coefficient-of-raw-derivative-aux-natural
+                             (n (nfix n)) (index (nfix index))))
+            :in-theory (disable
+                        poly-coefficient-of-raw-derivative-aux-natural)))))
+
+(defthm poly-coefficient-of-poly-derivative
+  (equal
+   (poly-coefficient n (poly-derivative polynomial))
+   (gfield::field-nat-mul
+    (+ 1 (nfix n))
+    (poly-coefficient (+ 1 (nfix n)) polynomial)))
+  :hints (("Goal"
+           :cases ((consp (fix-coefficients polynomial)))
+           :do-not-induct t
+           :use ((:instance poly-coefficient-of-normalize
+                            (polynomial
+                             (if (atom (fix-coefficients polynomial))
+                                 nil
+                               (raw-derivative-aux
+                                (cdr (fix-coefficients polynomial)) 1))))
+                 (:instance poly-coefficient-of-raw-derivative-aux
+                            (polynomial
+                             (cdr (fix-coefficients polynomial)))
+                            (index 1))
+                 (:instance poly-coefficient-of-successor
+                            (polynomial (fix-coefficients polynomial)))
+                 (:instance poly-coefficient-of-fix-coefficients
+                            (n (+ 1 (nfix n)))
+                            (polynomial polynomial)))
+           :in-theory (e/d (poly-derivative
+                            poly-coefficient-of-successor)
+                           (normalize trim-trailing-zeros
+                            poly-coefficient
+                            poly-coefficient-of-normalize
+                            poly-coefficient-of-raw-derivative-aux)))))
+
+(local
  (defun raw-derivative-add-induct (x y index)
    (if (and (consp x) (consp y))
        (raw-derivative-add-induct (cdr x) (cdr y)

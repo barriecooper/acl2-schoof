@@ -1,5 +1,5 @@
 (in-package "GPOLY")
-(include-book "coefficient")
+(include-book "derivative")
 
 (defthm coefficient-interface-regressions
   (and (equal (poly-coefficient 0 nil) (gfield::field-zero))
@@ -12,6 +12,36 @@
               (poly-coefficient n polynomial))
        (same-polynomial-coefficients-p count polynomial polynomial))
   :rule-classes nil)
+
+(defthm coefficient-addition-regression
+  (equal (poly-coefficient n (poly-add first second))
+         (gfield::field-add (poly-coefficient n first)
+                            (poly-coefficient n second)))
+  :hints (("Goal" :use poly-coefficient-of-poly-add
+           :in-theory (disable poly-add))))
+
+(defthm coefficient-scaling-regression
+  (equal (poly-coefficient n (poly-scale scalar polynomial))
+         (gfield::field-mul scalar (poly-coefficient n polynomial)))
+  :hints (("Goal" :use poly-coefficient-of-poly-scale
+           :in-theory (disable poly-scale))))
+
+(defthm coefficient-product-regression
+  (equal (poly-coefficient n (poly-mul first second))
+         (poly-convolution-sum n first second))
+  :hints (("Goal" :use poly-coefficient-of-poly-mul
+           :in-theory (disable poly-mul))))
+
+(defthm convolution-two-term-regression
+  (equal (poly-convolution-sum 1 first second)
+         (gfield::field-add
+          (gfield::field-mul (poly-coefficient 0 first)
+                             (poly-coefficient 1 second))
+          (gfield::field-mul (poly-coefficient 1 first)
+                             (poly-coefficient 0 second))))
+  :hints (("Goal" :in-theory (enable poly-convolution-sum
+                                      poly-convolution-sum-aux))))
+
 
 (defthm canonical-equality-reconstruction-regression
   (implies (and (canonical-polynomial-p first)
