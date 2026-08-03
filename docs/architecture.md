@@ -41,6 +41,23 @@ cardinality generically, or establish generic or extension-field cardinality.
 The actual-cardinality Frobenius theorem remains a separate open boundary, as
 does the older, weaker `field-frobenius-exponent` interface.
 
+### Bounded finite-bijection evidence
+
+The field-independent bounded finite-bijection context constrains only a
+fixer, rank, unrank, and positive bound.  Natural bounded ranks, fixed unrank
+outputs, and the two inverse laws on the fixed carrier and bounded natural
+indices make that bound sound cardinality evidence.  The theory transparently
+maps unrank over a neutral half-open natural range, derives an exhaustive
+duplicate-free carrier, and defines cardinality as the length of that carrier
+before proving that the length equals the bound.
+
+PFIELD and F7X2 are proving clients without changing their existing executable
+carriers or total semantics.  In particular, only bounded rank-after-unrank is
+generic: arbitrary-input unrank totalisation remains client-specific.  The
+context is independent of `GFIELD` operations despite sharing the project
+package, and adds no field, characteristic, polynomial, or Frobenius premise.
+Generic coefficient reconstruction and extension cardinality remain open.
+
 ### Field-only X-CERT algebra
 
 `books/field/xcert-algebra.lisp` defines total field expressions for the output

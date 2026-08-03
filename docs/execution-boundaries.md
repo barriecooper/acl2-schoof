@@ -127,6 +127,17 @@ length theorems establish the semantics; focused evaluations establish
 execution evidence.  All five functions are guard verified and introduce no
 alternate executable branch.
 
+The field-independent finite-bijection theory uses an ordinary transparent
+half-open range with `nfix` start/count semantics, a transparent unrank-list
+map, and transparent derived carrier and cardinality definitions.  Cardinality
+is the carrier length, and its equality to the positive bound follows from the
+bounded inverse laws and list proofs.  The generic contract requires rank after
+unrank only for natural indices below the bound; arbitrary-input totalisation
+is deliberately client-specific.  PFIELD continues to use its existing fixer
+semantics and direct carrier, while F7X2 retains its stronger modulo-49 theorem
+and existing carrier.  Their proving-instance regressions add no alternate
+execution branch and do not replace the semantic inverse and carrier proofs.
+
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes
 only the affine ordinate by `field-neg`.  It calls neither the curve classifier
