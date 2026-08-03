@@ -60,6 +60,12 @@ canonical polynomials, while raw helpers exist only to support definitions and
 proofs. Polynomial equality in the generic layer is literal equality of
 canonical representatives, not merely agreement under evaluation.
 
+`poly-coefficient` is a total projection: indices are totalized with `nfix`,
+represented values are field-fixed, and absent coefficients or coefficients
+beyond a malformed dotted tail are field zero.  Normalization preserves every
+coefficient.  Canonical dense polynomials are therefore literally equal when
+their represented coefficients agree through the maximum of their lengths.
+
 The certified stack is layered: arithmetic and evaluation; degree and leading
 coefficient; division and remainder; congruence and reduced operations;
 Euclidean and extended Euclidean GCD; logical irreducibility and modular

@@ -1,5 +1,5 @@
 (in-package "GPOLY")
-(include-book "base")
+(include-book "coefficient")
 
 ; Missing coefficients are field zero.  Atomic tails terminate recursion and
 ; are discarded by FIX-COEFFICIENTS, consistently with the foundation.

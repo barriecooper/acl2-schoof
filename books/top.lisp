@@ -204,6 +204,8 @@
 (include-book "polynomial/generic/euclidean")
 (include-book "polynomial/generic/derivative")
 (include-book "polynomial/generic/derivative-regression")
+(include-book "polynomial/generic/coefficient")
+(include-book "polynomial/generic/coefficient-regression")
 (include-book "polynomial/generic/irreducibility")
 (include-book "polynomial/generic/quadratic-irreducibility")
 (include-book "polynomial/generic/f7-quadratic-irreducibility")
