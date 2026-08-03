@@ -70,6 +70,7 @@ Polynomial addition and scaling have unconditional coefficient laws, while
 convolution `poly-convolution-sum`.  `poly-derivative` is characterized by
 shifted natural coefficient scaling.  Canonical extensionality is the boundary
 for lifting such coefficient identities to literal polynomial equality.
+The derivative product rule is proved coefficientwise through finite convolution and canonical extensionality.
 
 The certified stack is layered: arithmetic and evaluation; degree and leading
 coefficient; division and remainder; congruence and reduced operations;
