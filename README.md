@@ -149,8 +149,8 @@ public executable laws is also certified, and the resulting abstract
 abelian-group package retains the characteristic premise. Scalar natural
 multiplication by linear repeated addition is also certified; its fast variant
 remains a later execution optimization. Generic formal differentiation is now
-certified through its additive laws, with the product rule and then
-square-free/separability theory next. There is
+certified with additive and product laws, with square-free/separability theory
+next. There is
 still no Hasse theorem and no
 certified Schoof algorithm. See the [current matrix](docs/status-associativity.md) and
 [forward proof plan](docs/proof-plan.md) for the maintained boundaries.

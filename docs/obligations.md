@@ -53,8 +53,9 @@ correctness. The full evidence model is maintained in
 | Evaluation and powers | Certified | `eval`; `poly-pow` | Evaluation and ring compatibility are certified. |
 | Degree and leading coefficient | Certified | `poly-degree`; `poly-leading-coefficient` | Defined over normalized dense polynomials. |
 | Formal derivative operation and additive laws | Certified | `poly-derivative`; `canonical-polynomial-p-of-poly-derivative`; `poly-derivative-of-poly-add`; `poly-derivative-of-poly-neg`; `poly-derivative-of-poly-sub` | Uses generic `field-nat-mul`; a characteristic-safe length upper bound is certified. |
-| Derivative product and power rules | Open | — | It remains to certify the common-index finite-sum identity splitting `N` times each convolution term into its `j` and `N-j` natural scalings, then lift coefficient equality canonically. The power rule remains open. |
-| Square-free and separability theory | Open | — | Required by later function-field and Schoof work. |
+| Derivative product rule | Certified | `poly-derivative-of-poly-mul` | Coefficientwise finite convolution and canonical extensionality. |
+| Derivative power rule | Open | — | Requires a polynomial natural-scaling interface and induction on the exponent. |
+| Square-free and separability theory | Open | — | Next principal boundary. |
 | Rational-function algebra | Open | — | Requires equality, cancellation, and degree theory. |
 | Further HS/PFIELD bridges | Deferred | — | Add only when a downstream theorem requires them. |
 

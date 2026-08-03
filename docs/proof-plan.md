@@ -29,20 +29,19 @@ additional generic scope.
 The certified curve boundary is a contextual abelian group with a transparent
 linear natural repeated-addition operation.  The generic polynomial boundary
 also includes transparent formal differentiation with canonical output,
-additivity, negation, subtraction, and a characteristic-safe length bound. The
-next open formalization boundary is **coefficient laws for arithmetic, finite
-convolution semantics, and the derivative product rule**; it is the smallest
-prerequisite before square-free and separability theory.
+additivity, negation, subtraction, the product rule, and a characteristic-safe
+length bound. The next principal formalization boundary is **square-free and
+separability theory**; the derivative power rule is not a prerequisite for
+starting it.
 
 ## Immediate sequence
 
 Proceed with one bounded mathematical or execution boundary per proof change:
 
-1. Certify the generic formal-derivative product rule through a small reusable
-   indexed-convolution interface; add the natural power rule only after that
-   boundary is clean.
-2. Develop generic square-free and separability theory using the derivative
+1. Develop generic square-free and separability theory using the derivative
    and the existing monic GCD.
+2. Add a polynomial natural-scaling interface when the derivative power rule
+   or another concrete client requires it.
 3. Add finite-field cardinality/enumeration metadata and connect actual field
    size to the Frobenius equation.
 4. Complete nested natural and then signed scalar algebra before torsion and
@@ -51,8 +50,8 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    coordinate or trace-test consumer makes it more than premature
    optimization.
 
-Keep the product-rule bridge bounded to reusable index/shift/convolution
-lemmas; do not replace it with a broad list-algebra project.  Any later fast
+Keep future derivative bridges bounded to their concrete coefficient laws; do
+not replace them with a broad list-algebra project. Any later fast
 scalar operation must remain separate from the linear specification and have a
 semantic correspondence theorem. Guard verification and concrete evaluation
 never substitute for these mathematical endpoints.

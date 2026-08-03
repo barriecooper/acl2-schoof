@@ -408,5 +408,408 @@
                  (:instance len-of-fix-coefficients (xs poly)))
            :in-theory (enable poly-derivative))))
 
+; These two sums are deliberately local proof devices.  TOTAL stays fixed
+; while COUNT is the decreasing upper endpoint.
+(local
+ (defun product-rule-left-weighted-sum (total count f g)
+   (declare (xargs :measure (nfix count)))
+   (if (zp (nfix count))
+       (gfield::field-nat-mul
+        0 (gfield::field-mul (poly-coefficient 0 f)
+                             (poly-coefficient (nfix total) g)))
+     (gfield::field-add
+      (product-rule-left-weighted-sum total (1- (nfix count)) f g)
+      (gfield::field-nat-mul
+       (nfix count)
+       (gfield::field-mul
+        (poly-coefficient (nfix count) f)
+        (poly-coefficient (- (nfix total) (nfix count)) g)))))))
+
+(local
+ (defun product-rule-right-weighted-sum (total count f g)
+   (declare (xargs :measure (nfix count)))
+   (if (zp (nfix count))
+       (gfield::field-nat-mul
+        (nfix total)
+        (gfield::field-mul (poly-coefficient 0 f)
+                           (poly-coefficient (nfix total) g)))
+     (gfield::field-add
+      (product-rule-right-weighted-sum total (1- (nfix count)) f g)
+      (gfield::field-nat-mul
+       (- (nfix total) (nfix count))
+       (gfield::field-mul
+        (poly-coefficient (nfix count) f)
+        (poly-coefficient (- (nfix total) (nfix count)) g)))))))
+
+(local
+ (defthm natural-index-split
+   (implies (and (natp total) (natp j) (<= j total))
+            (equal total (+ j (- total j))))
+   :rule-classes nil))
+
+(local
+ (defthm product-rule-pointwise-split
+   (implies
+    (and (natp total) (natp j) (<= j total))
+    (equal
+     (gfield::field-nat-mul
+      total
+      (gfield::field-mul (poly-coefficient j f)
+                         (poly-coefficient (- total j) g)))
+     (gfield::field-add
+      (gfield::field-nat-mul
+       j (gfield::field-mul (poly-coefficient j f)
+                            (poly-coefficient (- total j) g)))
+      (gfield::field-nat-mul
+       (- total j)
+       (gfield::field-mul (poly-coefficient j f)
+                          (poly-coefficient (- total j) g))))))
+   :rule-classes nil
+   :hints (("Goal"
+            :use (natural-index-split
+                  (:instance gfield::field-nat-mul-of-sum
+                             (m j) (n (- total j))
+                             (x (gfield::field-mul
+                                 (poly-coefficient j f)
+                                 (poly-coefficient (- total j) g)))))
+            :in-theory (disable gfield::field-nat-mul-of-sum)))))
+
+(local
+ (defthm product-rule-exact-reassociation
+   (equal (gfield::field-add
+           (gfield::field-add a b)
+           (gfield::field-add c d))
+          (gfield::field-add
+           (gfield::field-add a c)
+           (gfield::field-add b d)))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance gfield::field-add-associative (x a) (y b)
+                             (z (gfield::field-add c d)))
+                  (:instance gfield::field-add-associative (x a) (y c)
+                             (z (gfield::field-add b d)))
+                  (:instance gfield::field-add-associative (x b) (y c) (z d))
+                  (:instance gfield::field-add-commutative (x b) (y c)))
+            :in-theory (disable gfield::field-add-associative
+                                gfield::field-add-commutative)))))
+
+(local
+ (defthm product-rule-pointwise-split-rewrite
+   (implies
+    (and (natp total) (natp j) (<= j total))
+    (equal
+     (gfield::field-nat-mul
+      total
+      (gfield::field-mul (poly-coefficient j f)
+                         (poly-coefficient (- total j) g)))
+     (gfield::field-add
+      (gfield::field-nat-mul
+       j (gfield::field-mul (poly-coefficient j f)
+                            (poly-coefficient (- total j) g)))
+      (gfield::field-nat-mul
+       (- total j)
+       (gfield::field-mul (poly-coefficient j f)
+                          (poly-coefficient (- total j) g))))))
+   :hints (("Goal" :use product-rule-pointwise-split))))
+
+(local
+ (defthm product-rule-exact-reassociation-rewrite
+   (equal (gfield::field-add
+           (gfield::field-add a b)
+           (gfield::field-add c d))
+          (gfield::field-add
+           (gfield::field-add a c)
+           (gfield::field-add b d)))
+   :hints (("Goal" :use product-rule-exact-reassociation))))
+
+(local
+ (defthm field-nat-mul-over-convolution-aux
+   (implies (and (natp total) (natp count) (<= count total))
+            (equal
+             (gfield::field-nat-mul
+              total (poly-convolution-sum-aux count total f g))
+             (gfield::field-add
+              (product-rule-left-weighted-sum total count f g)
+              (product-rule-right-weighted-sum total count f g))))
+   :hints (("Goal"
+            :induct (poly-convolution-sum-aux count total f g)
+            :in-theory
+            (e/d (poly-convolution-sum-aux
+                  product-rule-left-weighted-sum
+                  product-rule-right-weighted-sum
+                  product-rule-pointwise-split-rewrite
+                  product-rule-exact-reassociation-rewrite)
+                 (gfield::field-nat-mul-of-mul-left
+                  gfield::field-nat-mul
+                  gfield::field-nat-mul-of-mul-right
+                  gfield::field-nat-mul-successor
+                  gfield::field-nat-mul-successor-total
+                  gfield::field-mul-commutative)))
+           ("Subgoal *1/2"
+            :use ((:instance gfield::field-nat-mul-of-add
+                             (n total)
+                             (x (poly-convolution-sum-aux
+                                 (1- count) total f g))
+                             (y (gfield::field-mul
+                                 (poly-coefficient count f)
+                                 (poly-coefficient (- total count) g))))
+                  (:instance product-rule-pointwise-split (j count))
+                  (:instance product-rule-exact-reassociation
+                             (a (product-rule-left-weighted-sum
+                                 total (1- count) f g))
+                             (b (product-rule-right-weighted-sum
+                                 total (1- count) f g))
+                             (c (gfield::field-nat-mul
+                                 count
+                                 (gfield::field-mul
+                                  (poly-coefficient count f)
+                                  (poly-coefficient (- total count) g))))
+                             (d (gfield::field-nat-mul
+                                 (- total count)
+                                 (gfield::field-mul
+                                  (poly-coefficient count f)
+                                  (poly-coefficient (- total count) g))))))
+            :in-theory
+            (e/d (product-rule-pointwise-split-rewrite
+                  product-rule-exact-reassociation-rewrite)
+                 (gfield::field-nat-mul-of-add
+                  gfield::field-nat-mul
+                  gfield::field-nat-mul-of-mul-left
+                  gfield::field-nat-mul-of-mul-right
+                  gfield::field-nat-mul-successor
+                  gfield::field-nat-mul-successor-total
+                  gfield::field-mul-commutative))))))
+
+(local
+ (defthm field-nat-mul-over-convolution
+   (equal
+    (gfield::field-nat-mul total (poly-convolution-sum total f g))
+    (gfield::field-add
+     (product-rule-left-weighted-sum (nfix total) (nfix total) f g)
+     (product-rule-right-weighted-sum (nfix total) (nfix total) f g)))
+   :rule-classes nil
+   :hints (("Goal" :use ((:instance field-nat-mul-over-convolution-aux
+                                    (total (nfix total))
+                                    (count (nfix total))))
+            :in-theory (enable poly-convolution-sum)))))
+
+(local
+ (defthm derivative-first-convolution-alignment-aux
+   (implies (and (natp total) (natp count) (<= count total))
+            (equal
+             (poly-convolution-sum-aux count total (poly-derivative f) g)
+             (product-rule-left-weighted-sum
+              (+ 1 total) (+ 1 count) f g)))
+   :hints (("Goal"
+            :induct (poly-convolution-sum-aux count total
+                                               (poly-derivative f) g)
+            :in-theory
+            (e/d (poly-convolution-sum-aux
+                  product-rule-left-weighted-sum
+                  poly-coefficient-of-poly-derivative)
+                 (poly-derivative raw-derivative-aux normalize
+                  trim-trailing-zeros fix-coefficients
+                  gfield::field-nat-mul
+                  gfield::field-nat-mul-successor
+                  gfield::field-nat-mul-successor-total
+                  gfield::field-nat-mul-of-mul-right
+                  gfield::field-mul-commutative))))))
+
+(local
+ (defthm derivative-first-convolution-alignment
+   (equal
+    (poly-convolution-sum n (poly-derivative f) g)
+    (product-rule-left-weighted-sum
+     (+ 1 (nfix n)) (+ 1 (nfix n)) f g))
+   :rule-classes nil
+   :hints (("Goal" :use ((:instance derivative-first-convolution-alignment-aux
+                                    (total (nfix n)) (count (nfix n))))
+            :in-theory (enable poly-convolution-sum)))))
+
+(local
+ (defthm derivative-second-convolution-alignment-aux
+   (implies (and (natp total) (natp count) (<= count total))
+            (equal
+             (poly-convolution-sum-aux count total f (poly-derivative g))
+             (product-rule-right-weighted-sum (+ 1 total) count f g)))
+   :hints (("Goal"
+            :induct (poly-convolution-sum-aux count total
+                                               f (poly-derivative g))
+            :in-theory
+            (e/d (poly-convolution-sum-aux
+                  product-rule-right-weighted-sum
+                  poly-coefficient-of-poly-derivative)
+                 (poly-derivative raw-derivative-aux normalize
+                  trim-trailing-zeros fix-coefficients
+                  gfield::field-nat-mul
+                  gfield::field-nat-mul-successor
+                  gfield::field-nat-mul-successor-total
+                  gfield::field-nat-mul-of-mul-left
+                  gfield::field-mul-commutative))))))
+
+(local
+ (defthm right-weighted-sum-zero-endpoint-extension
+   (equal (product-rule-right-weighted-sum
+           (+ 1 (nfix n)) (+ 1 (nfix n)) f g)
+          (product-rule-right-weighted-sum
+           (+ 1 (nfix n)) (nfix n) f g))
+   :hints (("Goal" :in-theory (enable product-rule-right-weighted-sum)))))
+
+(local
+ (defthm derivative-second-convolution-alignment
+   (equal
+    (poly-convolution-sum n f (poly-derivative g))
+    (product-rule-right-weighted-sum
+     (+ 1 (nfix n)) (+ 1 (nfix n)) f g))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance derivative-second-convolution-alignment-aux
+                             (total (nfix n)) (count (nfix n)))
+                  right-weighted-sum-zero-endpoint-extension)
+            :in-theory (enable poly-convolution-sum)))))
+
+(local
+ (defthm derivative-product-coefficient-convolution-identity
+   (equal
+    (gfield::field-nat-mul
+     (+ 1 (nfix n))
+     (poly-convolution-sum (+ 1 (nfix n)) f g))
+    (gfield::field-add
+     (poly-convolution-sum n (poly-derivative f) g)
+     (poly-convolution-sum n f (poly-derivative g))))
+   :rule-classes nil
+   :hints (("Goal"
+            :use ((:instance field-nat-mul-over-convolution
+                             (total (+ 1 (nfix n))))
+                  derivative-first-convolution-alignment
+                  derivative-second-convolution-alignment)
+            :in-theory
+            (union-theories (theory 'minimal-theory)
+                            '(nfix natp))))))
+
+(defthm poly-coefficient-of-derivative-product-rule-sides
+  (equal
+   (poly-coefficient n (poly-derivative (poly-mul f g)))
+   (poly-coefficient
+    n (poly-add (poly-mul (poly-derivative f) g)
+                (poly-mul f (poly-derivative g)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use derivative-product-coefficient-convolution-identity
+           :in-theory '(poly-coefficient-of-poly-derivative
+                        poly-coefficient-of-poly-mul
+                        poly-coefficient-of-poly-add))))
+
+(local
+ (defun bounded-coefficient-agreement-p (count first second)
+   (declare (xargs :measure (nfix count)))
+   (if (zp (nfix count))
+       t
+     (and (equal (poly-coefficient (1- (nfix count)) first)
+                 (poly-coefficient (1- (nfix count)) second))
+          (bounded-coefficient-agreement-p
+           (1- (nfix count)) first second)))))
+
+(local
+ (defthm product-rule-coefficient-equality-rewrite
+   (equal
+    (poly-coefficient n (poly-derivative (poly-mul f g)))
+    (poly-coefficient
+     n (poly-add (poly-mul (poly-derivative f) g)
+                 (poly-mul f (poly-derivative g)))))
+   :hints (("Goal"
+            :use poly-coefficient-of-derivative-product-rule-sides))))
+
+(local
+ (defthm bounded-product-rule-coefficients-agree
+   (bounded-coefficient-agreement-p
+    count
+    (poly-derivative (poly-mul f g))
+    (poly-add (poly-mul (poly-derivative f) g)
+              (poly-mul f (poly-derivative g))))
+   :hints (("Goal" :induct (bounded-coefficient-agreement-p count nil nil)
+            :in-theory
+            (e/d (bounded-coefficient-agreement-p
+                  product-rule-coefficient-equality-rewrite)
+                 (poly-derivative poly-mul poly-add raw-derivative-aux
+                  raw-mul raw-add normalize trim-trailing-zeros
+                  fix-coefficients canonical-polynomial-p))))))
+
+(local
+ (defthm coefficient-zero-equal-from-bounded-agreement
+   (implies (and (posp count)
+                 (bounded-coefficient-agreement-p count first second))
+            (equal (poly-coefficient 0 first)
+                   (poly-coefficient 0 second)))
+   :hints (("Goal" :induct (bounded-coefficient-agreement-p
+                              count first second)
+            :in-theory (enable bounded-coefficient-agreement-p)))))
+
+(local
+ (defthm bounded-agreement-of-tails
+   (implies
+    (bounded-coefficient-agreement-p (+ 1 (nfix count)) first second)
+    (bounded-coefficient-agreement-p
+     count
+     (if (consp first) (cdr first) nil)
+     (if (consp second) (cdr second) nil)))
+   :hints (("Goal" :induct (bounded-coefficient-agreement-p
+                              count first second)
+            :in-theory (enable bounded-coefficient-agreement-p
+                               poly-coefficient-of-successor)))))
+
+(local
+ (defthm same-coefficients-from-bounded-agreement
+   (implies (bounded-coefficient-agreement-p count first second)
+            (same-polynomial-coefficients-p count first second))
+   :hints (("Goal" :induct (same-polynomial-coefficients-p
+                              count first second)
+            :in-theory (enable same-polynomial-coefficients-p
+                               coefficient-zero-equal-from-bounded-agreement
+                               bounded-agreement-of-tails)))))
+
+(local
+ (defthm same-coefficients-of-product-rule-sides
+   (same-polynomial-coefficients-p
+    count
+    (poly-derivative (poly-mul f g))
+    (poly-add (poly-mul (poly-derivative f) g)
+              (poly-mul f (poly-derivative g))))
+   :rule-classes nil
+   :hints (("Goal"
+            :use (bounded-product-rule-coefficients-agree
+                  (:instance same-coefficients-from-bounded-agreement
+                             (first (poly-derivative (poly-mul f g)))
+                             (second
+                              (poly-add
+                               (poly-mul (poly-derivative f) g)
+                               (poly-mul f (poly-derivative g))))))))))
+
+(defthm poly-derivative-of-poly-mul
+  (equal
+   (poly-derivative (poly-mul f g))
+   (poly-add (poly-mul (poly-derivative f) g)
+             (poly-mul f (poly-derivative g))))
+  :hints
+  (("Goal"
+    :use ((:instance canonical-polynomial-extensionality
+                     (first (poly-derivative (poly-mul f g)))
+                     (second
+                      (poly-add (poly-mul (poly-derivative f) g)
+                                (poly-mul f (poly-derivative g)))))
+          (:instance same-coefficients-of-product-rule-sides
+                     (count
+                      (max (len (poly-derivative (poly-mul f g)))
+                           (len
+                            (poly-add
+                             (poly-mul (poly-derivative f) g)
+                             (poly-mul f (poly-derivative g))))))))
+    :in-theory
+    (union-theories
+     (theory 'minimal-theory)
+     '(canonical-polynomial-p-of-poly-derivative
+       canonical-polynomial-p-of-poly-mul
+       canonical-polynomial-p-of-poly-add)))))
+
 (verify-guards raw-derivative-aux)
 (verify-guards poly-derivative)
