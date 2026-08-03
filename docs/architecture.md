@@ -129,6 +129,13 @@ F7X2, representing `F7[x]/(x^2+1)`, is a concrete proving instance. It should
 not be confused with the reusable constructor or treated as an arbitrary
 finite-field package.
 
+F7X2 has a presentation-specific mixed-radix finite bijection.  Rank reads the
+fixed constant and linear coefficients as radix-7 digits, while unrank decodes
+`mod(nfix(k),49)`.  Mapping unrank over the indices 0 through 48 gives a
+certified exhaustive duplicate-free executable carrier; F7X2 cardinality is
+definitionally its length.  The resulting order is an execution convention,
+not a semantic property.  Generic extension cardinality remains open.
+
 ## Curve representations
 
 The initial curve layer uses constrained short-Weierstrass coefficients and

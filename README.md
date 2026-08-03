@@ -26,6 +26,8 @@ The repository currently certifies these subsystem-level foundations:
   arithmetic;
 - a generic fixed-modulus quotient-field construction for an irreducible
   polynomial, plus concrete PFIELD/F7 clients and an F7X2 proving instance;
+- a certified executable 49-element carrier and exact cardinality for the
+  concrete presentation `F7[X]/(X^2+1)` (not generic extension cardinality);
 - short-Weierstrass coordinates, canonical affine coordinates, tagged curve
   points (affine or infinity), and point negation;
 - total affine branch classification and executable affine/tagged-point

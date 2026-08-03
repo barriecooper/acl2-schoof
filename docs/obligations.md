@@ -41,7 +41,9 @@ correctness. The full evidence model is maintained in
 | Initial curve characteristic scope | Certified | `short-weierstrass-characteristic-p` | States nonzero two and three in the field operations. |
 | PFIELD/F7/F11 finite-carrier cardinality | Certified | `pfield-elements`; `member-equal-of-pfield-fix-and-pfield-elements`; `pfield-cardinality-equals-modulus` | Cardinality is grounded by an exhaustive duplicate-free canonical enumeration. |
 | Generic finite-field cardinality | Open | — | Requires a later reusable carrier-evidence abstraction. |
-| F7X2 and generic extension cardinality | Open | — | Requires coefficient-vector enumeration or rank/unrank. |
+| F7X2 finite-carrier cardinality | Certified | `f7x2-unrank-of-f7x2-rank`; `member-equal-of-f7x2-fix-and-f7x2-elements`; `f7x2-cardinality-equals-49` | Presentation-specific mixed-radix bijection and exhaustive duplicate-free carrier. |
+| Generic extension cardinality | Open | — | Requires reusable coefficient-vector and mixed-radix infrastructure. |
+| Prime-power metadata | Open | — | The characteristic/cardinality relationship remains separate. |
 | Cardinality Frobenius | Open | — | Must use actual cardinality, not `field-frobenius-exponent`. |
 | Characteristics two and three for curves | Deferred | — | Require separate curve models and downstream formula scopes. |
 

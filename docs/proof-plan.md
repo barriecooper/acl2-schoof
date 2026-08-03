@@ -47,12 +47,14 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    predicate.
 2. Add a polynomial natural-scaling interface when the derivative power rule
    or another concrete client requires it.
-3. Build on the certified PFIELD/F7/F11 finite-carrier base case with either a
-   reusable carrier-witness and uniqueness abstraction or an F7X2 finite
-   bijection/cardinality proof.  Generic finite-field cardinality remains open.
+3. Build on the certified PFIELD/F7/F11 and F7X2 finite-carrier results by
+   auditing either a reusable carrier/bijection evidence abstraction, generic
+   fixed-modulus coefficient-vector reconstruction, or generic extension
+   mixed-radix cardinality.  Generic finite-field cardinality remains open;
+   alternatively select another separately audited Hasse/Schoof boundary.
 4. Only after actual cardinality evidence is available for the intended
    context, connect that cardinality (not `field-frobenius-exponent`) to the
-   Frobenius equation.  Add extension-field cardinality and prime-power
+   Frobenius equation.  Add generic extension-field cardinality and prime-power
    metadata before the Hasse/Schoof Frobenius clients that need them;
    alternatively select a
    Schoof torsion/division-polynomial boundary or an exact Hasse
