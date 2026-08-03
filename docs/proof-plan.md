@@ -47,13 +47,14 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    predicate.
 2. Add a polynomial natural-scaling interface when the derivative power rule
    or another concrete client requires it.
-3. Add finite-field cardinality/enumeration metadata and connect actual field
-   size to the Frobenius equation and later finite-field/root separability.
-4. Select the next larger shared or track-specific boundary from finite-field
-   cardinality/characteristic/Frobenius metadata, a Schoof torsion/division-
-   polynomial boundary, or an exact Hasse source/dependency audit.  Do not make
-   signed scalar multiplication the default merely because natural scalar
-   composition is complete.
+3. Build on the certified contextual least-characteristic boundary by adding
+   certified finite-carrier evidence and actual field cardinality, then connect
+   that cardinality (not `field-frobenius-exponent`) to the Frobenius equation.
+4. Add extension-field cardinality and prime-power metadata before the
+   Hasse/Schoof Frobenius clients that need them; alternatively select a
+   Schoof torsion/division-polynomial boundary or an exact Hasse
+   source/dependency audit.  Do not make signed scalar multiplication the
+   default merely because natural scalar composition is complete.
 5. Add fast natural scalar multiplication only when an executable quotient-
    coordinate or trace-test consumer makes it more than premature
    optimization.
