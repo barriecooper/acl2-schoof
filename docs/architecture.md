@@ -87,6 +87,15 @@ characteristic-sensitive: a leading natural multiplier can vanish, and in
 positive characteristic a zero derivative does not imply that a polynomial is
 constant.
 
+`poly-square-free-p` is the total derivative-coprime predicate: it compares
+the monic GCD of a polynomial and its formal derivative with canonical
+polynomial one.  It rejects represented zero, accepts nonzero constants, and
+inherits normalization semantics on arbitrary ACL2 inputs.  The explicit
+relation `poly-has-square-divisor-p` records a supplied positive-degree square
+divisor, and square-free polynomials are certified to admit no such divisor in
+any characteristic.  The converse repeated-factor characterization and
+root-based separability are not yet certified.
+
 ### Fixed-modulus quotient fields
 
 The generic fixed-modulus construction constrains a nullary, canonical,

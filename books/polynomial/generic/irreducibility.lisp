@@ -228,20 +228,6 @@
            :use ((:instance normalize-when-poly-unit-p))
            :in-theory (enable poly-monic-normalize const polynomial-one))))
 
-; POLY-DIVIDES-P remains remainder-defined.  Its existing division quotient
-; is the multiplication witness, with quotient on the left and normalized
-; divisor on the right.
-(defthm poly-divides-p-multiplication-witness
-  (implies (poly-divides-p divisor dividend)
-           (equal (normalize dividend)
-                  (poly-mul (mv-nth 0 (poly-divmod dividend divisor))
-                            (normalize divisor))))
-  :rule-classes nil
-  :hints (("Goal"
-           :use ((:instance poly-divmod-exact-division
-                            (f dividend) (g divisor)))
-           :in-theory (enable poly-divides-p poly-remainder))))
-
 (local
  (defthm poly-mul-when-left-unit
    (implies (poly-unit-p quotient)

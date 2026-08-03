@@ -55,7 +55,10 @@ correctness. The full evidence model is maintained in
 | Formal derivative operation and additive laws | Certified | `poly-derivative`; `canonical-polynomial-p-of-poly-derivative`; `poly-derivative-of-poly-add`; `poly-derivative-of-poly-neg`; `poly-derivative-of-poly-sub` | Uses generic `field-nat-mul`; a characteristic-safe length upper bound is certified. |
 | Derivative product rule | Certified | `poly-derivative-of-poly-mul` | Coefficientwise finite convolution and canonical extensionality. |
 | Derivative power rule | Open | — | Requires a polynomial natural-scaling interface and induction on the exponent. |
-| Square-free and separability theory | Open | — | Next principal boundary. |
+| Derivative-coprime square-free predicate | Certified | `poly-square-free-p` | Total; represented zero is false and nonzero constants are true. |
+| Supplied square-divisor obstruction | Certified | `poly-square-free-p-implies-not-poly-has-square-divisor-p` | Characteristic-independent explicit divisor relation. |
+| Square-divisor/repeated-factor converse | Open | — | Requires irreducible-divisor existence and factor extraction or Euclid theory. |
+| Root-based separability | Deferred | — | Requires extension-field roots and multiplicity. |
 | Rational-function algebra | Open | — | Requires equality, cancellation, and degree theory. |
 | Further HS/PFIELD bridges | Deferred | — | Add only when a downstream theorem requires them. |
 
