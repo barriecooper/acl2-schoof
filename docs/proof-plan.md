@@ -47,11 +47,13 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    predicate.
 2. Add a polynomial natural-scaling interface when the derivative power rule
    or another concrete client requires it.
-3. Build on the certified PFIELD/F7/F11 and F7X2 finite-carrier results by
-   auditing either a reusable carrier/bijection evidence abstraction, generic
-   fixed-modulus coefficient-vector reconstruction, or generic extension
-   mixed-radix cardinality.  Generic finite-field cardinality remains open;
-   alternatively select another separately audited Hasse/Schoof boundary.
+3. Build on the certified field-independent bounded finite-bijection seam and
+   its PFIELD and F7X2 proving instances with a separately audited generic
+   fixed-length coefficient reconstruction and zero-padding boundary.  Only
+   after that representation theorem should generic extension mixed-radix
+   cardinality consume the finite-bijection theory.  Generic finite-field
+   cardinality remains open; alternatively select another separately audited
+   Hasse/Schoof boundary.
 4. Only after actual cardinality evidence is available for the intended
    context, connect that cardinality (not `field-frobenius-exponent`) to the
    Frobenius equation.  Add generic extension-field cardinality and prime-power

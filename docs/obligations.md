@@ -40,9 +40,11 @@ correctness. The full evidence model is maintained in
 | PFIELD characteristic | Certified | `pfield-modulus-is-field-characteristic`; transported characteristic laws | Functional instance of the generic theory, with inherited F7/F11 regressions. |
 | Initial curve characteristic scope | Certified | `short-weierstrass-characteristic-p` | States nonzero two and three in the field operations. |
 | PFIELD/F7/F11 finite-carrier cardinality | Certified | `pfield-elements`; `member-equal-of-pfield-fix-and-pfield-elements`; `pfield-cardinality-equals-modulus` | Cardinality is grounded by an exhaustive duplicate-free canonical enumeration. |
-| Generic finite-field cardinality | Open | — | Requires a later reusable carrier-evidence abstraction. |
+| Reusable bounded finite-bijection evidence | Certified | `finite-unrank-of-finite-rank`; `member-equal-of-finite-fix-and-finite-elements`; `finite-cardinality-equals-bound` | Field-free constructive carrier/cardinality theory with PFIELD and F7X2 proving instances. |
+| Generic finite-field cardinality | Open | — | Requires a field-facing client that supplies the certified bounded-bijection evidence; the reusable field-free consequence layer is complete. |
 | F7X2 finite-carrier cardinality | Certified | `f7x2-unrank-of-f7x2-rank`; `member-equal-of-f7x2-fix-and-f7x2-elements`; `f7x2-cardinality-equals-49` | Presentation-specific mixed-radix bijection and exhaustive duplicate-free carrier. |
 | Generic extension cardinality | Open | — | Requires reusable coefficient-vector and mixed-radix infrastructure. |
+| Carrier-witness cardinality uniqueness | Open | — | Compare independent exhaustive duplicate-free witnesses only when a client requires it. |
 | Prime-power metadata | Open | — | The characteristic/cardinality relationship remains separate. |
 | Cardinality Frobenius | Open | — | Must use actual cardinality, not `field-frobenius-exponent`. |
 | Characteristics two and three for curves | Deferred | — | Require separate curve models and downstream formula scopes. |
