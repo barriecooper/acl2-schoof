@@ -116,6 +116,17 @@ fixer-aware coverage, and exact-length theorems.  Literal F7/F11 list
 evaluation and malformed-input checks are execution regressions, not
 substitutes for those universal facts.
 
+F7X2 finite-carrier functions are likewise ordinary transparent definitions.
+`f7x2-rank` obtains total malformed-input semantics through the fixing constant
+and linear coefficient projections.  `f7x2-unrank` decodes
+`mod(nfix(k),49)`, so every input produces a fixed F7X2 representative and the
+operation is periodic on natural indices modulo 49.  `f7x2-elements` maps this
+decoder over indices 0 through 48, and `f7x2-cardinality` is definitionally the
+length of that list.  The certified inverse, coverage, no-duplicates, and
+length theorems establish the semantics; focused evaluations establish
+execution evidence.  All five functions are guard verified and introduce no
+alternate executable branch.
+
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes
 only the affine ordinate by `field-neg`.  It calls neither the curve classifier
