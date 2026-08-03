@@ -36,8 +36,11 @@ correctness. The full evidence model is maintained in
 | Natural powers | Certified | `field-pow`; `field-pow-correct`; `field-pow-fast-correct` | Generic fast/spec correspondence is certified. |
 | Minimal Frobenius exponent | Certified | `field-frobenius-exponent`; `field-pow-instance-of-field-frobenius-exponent` | This is not a cardinality or least-exponent theorem. |
 | Prime-field clients | Certified | PFIELD adapter and named F2, F7, and F11 operations | Concrete clients supply instantiation and execution evidence. |
+| Contextual field characteristic | Certified | `field-characteristic-p`; `field-characteristic-unique` | Transparent bounded least-positive additive period; does not imply finiteness. |
+| PFIELD characteristic | Certified | `pfield-modulus-is-field-characteristic`; transported characteristic laws | Functional instance of the generic theory, with inherited F7/F11 regressions. |
 | Initial curve characteristic scope | Certified | `short-weierstrass-characteristic-p` | States nonzero two and three in the field operations. |
-| Finite-field cardinality and enumeration | Open | — | Connect field size and enumeration to Frobenius metadata. |
+| Finite-field cardinality and enumeration | Open | — | Requires certified finite-carrier evidence. |
+| Cardinality Frobenius | Open | — | Must use actual cardinality, not `field-frobenius-exponent`. |
 | Characteristics two and three for curves | Deferred | — | Require separate curve models and downstream formula scopes. |
 
 ## 3. Dense polynomial arithmetic

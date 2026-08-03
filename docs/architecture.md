@@ -16,6 +16,16 @@ power, generated power correspondence, characteristic exclusions, and the
 minimal Frobenius-exponent certificate extend this kernel without asserting a
 field cardinality or an executable enumeration.
 
+Field characteristic is a separate transparent contextual boundary.
+`field-characteristic-p` combines annihilation of field one with a bounded
+recursive check of every smaller positive scalar; no Skolem witness is used.
+PFIELD is a functional instance of this generic theory, with
+`pfield-modulus` as the least additive period, and F7/F11 inherit that PFIELD
+boundary.  No independent parallel characteristic predicates are part of the
+architecture.  This boundary does not strengthen the `GFIELD` encapsulate and
+implies neither finiteness nor cardinality; it remains distinct from field
+enumeration and `field-frobenius-exponent`.
+
 PFIELD supplies canonical prime-field representatives. Named F2, F7, and F11
 clients provide executable instances and regression evidence. Concrete
 instances validate functional instantiation and execution, but generic claims
