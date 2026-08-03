@@ -30,20 +30,24 @@ The certified curve boundary is a contextual abelian group with a transparent
 linear natural repeated-addition operation.  The generic polynomial boundary
 also includes transparent formal differentiation with canonical output,
 additivity, negation, subtraction, the product rule, and a characteristic-safe
-length bound. The next principal formalization boundary is **square-free and
-separability theory**; the derivative power rule is not a prerequisite for
-starting it.
+length bound.  The first square-free boundary is complete: the total
+derivative-coprime predicate has certified zero, constant, and normalization
+semantics, and it excludes every supplied positive-degree square divisor.
+Repeated-factor characterization and root-based separability remain distinct
+later boundaries.
 
 ## Immediate sequence
 
 Proceed with one bounded mathematical or execution boundary per proof change:
 
-1. Develop generic square-free and separability theory using the derivative
-   and the existing monic GCD.
+1. Audit the next downstream polynomial requirement before selecting between
+   repeated-factor characterization and another shared Hasse/Schoof boundary;
+   do not build factorization theory solely to strengthen the square-free
+   predicate.
 2. Add a polynomial natural-scaling interface when the derivative power rule
    or another concrete client requires it.
 3. Add finite-field cardinality/enumeration metadata and connect actual field
-   size to the Frobenius equation.
+   size to the Frobenius equation and later finite-field/root separability.
 4. Complete nested natural and then signed scalar algebra before torsion and
    trace-equation packaging.
 5. Add fast natural scalar multiplication when an executable quotient-

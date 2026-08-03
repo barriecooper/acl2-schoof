@@ -368,6 +368,20 @@
           (:instance poly-divides-p-zero (divisor divisor)))
     :in-theory (disable poly-divides-p poly-remainder))))
 
+; POLY-DIVIDES-P remains remainder-defined.  Its existing division quotient
+; is the multiplication witness, with quotient on the left and normalized
+; divisor on the right.
+(defthm poly-divides-p-multiplication-witness
+  (implies (poly-divides-p divisor dividend)
+           (equal (normalize dividend)
+                  (poly-mul (mv-nth 0 (poly-divmod dividend divisor))
+                            (normalize divisor))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance poly-divmod-exact-division
+                            (f dividend) (g divisor)))
+           :in-theory (enable poly-divides-p poly-remainder))))
+
 ; These two local facts expose the mutual-divisibility construction used by
 ; divisor scaling.  The reverse direction reuses the inverse reasoning already
 ; sealed inside dividend-scaling invariance.
@@ -813,6 +827,8 @@
       (poly-euclidean-gcd second (poly-remainder first second))
     (normalize first)))
 
+(verify-guards poly-euclidean-gcd)
+
 (defthm poly-euclidean-gcd-zero-second
   (implies (not (consp (normalize second)))
            (equal (poly-euclidean-gcd first second)
@@ -836,6 +852,35 @@
     :in-theory (e/d (poly-euclidean-gcd)
                     (normalize poly-remainder canonical-polynomial-p)))))
 
+(defthm poly-euclidean-gcd-of-normalize-first
+  (equal (poly-euclidean-gcd (normalize first) second)
+         (poly-euclidean-gcd first second))
+  :hints
+  (("Goal"
+    :induct (poly-euclidean-gcd first second)
+    :in-theory (e/d (poly-euclidean-gcd)
+                    (normalize poly-remainder)))
+   ("Subgoal *1/1"
+    :use ((:instance poly-remainder-of-normalize-dividend
+                     (dividend first) (modulus second)))
+    :in-theory (disable poly-remainder normalize))))
+
+(defthm poly-euclidean-gcd-of-normalize-second
+  (equal (poly-euclidean-gcd first (normalize second))
+         (poly-euclidean-gcd first second))
+  :hints
+  (("Goal"
+    :induct (poly-euclidean-gcd first second)
+    :in-theory (e/d (poly-euclidean-gcd)
+                    (normalize poly-remainder)))
+   ("Subgoal *1/1"
+    :use ((:instance poly-remainder-of-normalize-modulus
+                     (dividend first) (modulus second))
+          (:instance poly-euclidean-gcd-of-normalize-first
+                     (first second)
+                     (second (poly-remainder first second))))
+    :in-theory (disable poly-remainder normalize))))
+
 (defthm normalize-of-poly-euclidean-gcd
   (equal (normalize (poly-euclidean-gcd first second))
          (poly-euclidean-gcd first second))
@@ -854,10 +899,28 @@
 (defund poly-monic-euclidean-gcd (first second)
   (poly-monic-normalize (poly-euclidean-gcd first second)))
 
+(verify-guards poly-monic-euclidean-gcd)
+
 (defthm poly-monic-euclidean-gcd-is-monic-normalize
   (equal (poly-monic-euclidean-gcd first second)
          (poly-monic-normalize (poly-euclidean-gcd first second)))
   :hints (("Goal" :in-theory (enable poly-monic-euclidean-gcd))))
+
+(defthm poly-monic-euclidean-gcd-of-normalize-first
+  (equal (poly-monic-euclidean-gcd (normalize first) second)
+         (poly-monic-euclidean-gcd first second))
+  :hints
+  (("Goal"
+    :use ((:instance poly-euclidean-gcd-of-normalize-first))
+    :in-theory (enable poly-monic-euclidean-gcd-is-monic-normalize))))
+
+(defthm poly-monic-euclidean-gcd-of-normalize-second
+  (equal (poly-monic-euclidean-gcd first (normalize second))
+         (poly-monic-euclidean-gcd first second))
+  :hints
+  (("Goal"
+    :use ((:instance poly-euclidean-gcd-of-normalize-second))
+    :in-theory (enable poly-monic-euclidean-gcd-is-monic-normalize))))
 
 (defthm normalize-of-poly-monic-euclidean-gcd
   (equal (normalize (poly-monic-euclidean-gcd first second))

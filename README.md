@@ -148,9 +148,11 @@ closure, and canonical fixing. Algebraic left and right cancellation from the
 public executable laws is also certified, and the resulting abstract
 abelian-group package retains the characteristic premise. Scalar natural
 multiplication by linear repeated addition is also certified; its fast variant
-remains a later execution optimization. Generic formal differentiation is now
-certified with additive and product laws, with square-free/separability theory
-next. There is
+remains a later execution optimization. Generic formal differentiation is
+certified with additive and product laws. Generic derivative-coprime
+square-freeness and its nonconstant-square-divisor obstruction are also
+certified; repeated-factor equivalence and root-based separability remain open.
+There is
 still no Hasse theorem and no
 certified Schoof algorithm. See the [current matrix](docs/status-associativity.md) and
 [forward proof plan](docs/proof-plan.md) for the maintained boundaries.
