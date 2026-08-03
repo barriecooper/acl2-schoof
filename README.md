@@ -14,6 +14,9 @@ The repository currently certifies these subsystem-level foundations:
   total fixing, natural powers, and a Frobenius-exponent assumption, plus an
   explicit curve-level predicate for the initial characteristic-greater-than-
   three short-Weierstrass scope;
+- an executable PFIELD finite carrier and exact cardinality grounded in its
+  certified exhaustive duplicate-free canonical residue enumeration, with F7
+  and F11 specializations (not a generic finite-field cardinality theorem);
 - a field-only X-CERT algebra layer with explicit residual generators, an
   output telescope, a factored remainder identity, and their composition, plus
   a curve-semantic specialization for the two ordered nested distinct-x trees;

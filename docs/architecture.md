@@ -31,6 +31,16 @@ clients provide executable instances and regression evidence. Concrete
 instances validate functional instantiation and execution, but generic claims
 come only from the generic certified books.
 
+PFIELD also supplies a transparent executable enumeration of its canonical
+integer residues.  Its cardinality is defined as the length of that named
+carrier list, whose true-list shape, canonical membership, absence of
+duplicates, and unconditional coverage through `pfield-fix` are certified.
+F7 and F11 inherit this evidence and execute as the expected lists of seven and
+eleven residues.  This does not change `GFIELD`, identify characteristic with
+cardinality generically, or establish generic or extension-field cardinality.
+The actual-cardinality Frobenius theorem remains a separate open boundary, as
+does the older, weaker `field-frobenius-exponent` interface.
+
 ### Field-only X-CERT algebra
 
 `books/field/xcert-algebra.lisp` defines total field expressions for the output
