@@ -47,11 +47,14 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    predicate.
 2. Add a polynomial natural-scaling interface when the derivative power rule
    or another concrete client requires it.
-3. Build on the certified contextual least-characteristic boundary by adding
-   certified finite-carrier evidence and actual field cardinality, then connect
-   that cardinality (not `field-frobenius-exponent`) to the Frobenius equation.
-4. Add extension-field cardinality and prime-power metadata before the
-   Hasse/Schoof Frobenius clients that need them; alternatively select a
+3. Build on the certified PFIELD/F7/F11 finite-carrier base case with either a
+   reusable carrier-witness and uniqueness abstraction or an F7X2 finite
+   bijection/cardinality proof.  Generic finite-field cardinality remains open.
+4. Only after actual cardinality evidence is available for the intended
+   context, connect that cardinality (not `field-frobenius-exponent`) to the
+   Frobenius equation.  Add extension-field cardinality and prime-power
+   metadata before the Hasse/Schoof Frobenius clients that need them;
+   alternatively select a
    Schoof torsion/division-polynomial boundary or an exact Hasse
    source/dependency audit.  Do not make signed scalar multiplication the
    default merely because natural scalar composition is complete.

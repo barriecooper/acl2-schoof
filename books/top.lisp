@@ -7,6 +7,8 @@
 (include-book "field/characteristic")
 (include-book "field/characteristic-pfield")
 (include-book "field/characteristic-regression")
+(include-book "field/pfield-cardinality")
+(include-book "field/pfield-cardinality-regression")
 (include-book "field/difference-of-squares")
 (include-book "field/common-summand-subtraction")
 (include-book "field/common-summand-subtraction-regression")

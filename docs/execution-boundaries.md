@@ -105,6 +105,17 @@ The generic and PFIELD characteristic predicates are transparent bounded
 logical checks.  Their recursion checks only smaller scalar annihilation; it
 does not enumerate field elements or certify field cardinality.
 
+`pfield-natural-range-from-count` is the small project-local transparent range
+used by PFIELD cardinality; it avoids importing the broad VL utility closure
+for elementary list facts.  `pfield-elements` executes as the ascending
+half-open range `[0,pfield-modulus)`, and `pfield-cardinality` is definitionally
+`len(pfield-elements)`.  All three definitions are guard verified and have no
+alternate executable branch.  Semantic cardinality follows from the
+certified true-list, canonical-member, no-duplicates, unconditional
+fixer-aware coverage, and exact-length theorems.  Literal F7/F11 list
+evaluation and malformed-input checks are execution regressions, not
+substitutes for those universal facts.
+
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes
 only the affine ordinate by `field-neg`.  It calls neither the curve classifier

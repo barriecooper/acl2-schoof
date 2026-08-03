@@ -39,7 +39,9 @@ correctness. The full evidence model is maintained in
 | Contextual field characteristic | Certified | `field-characteristic-p`; `field-characteristic-unique` | Transparent bounded least-positive additive period; does not imply finiteness. |
 | PFIELD characteristic | Certified | `pfield-modulus-is-field-characteristic`; transported characteristic laws | Functional instance of the generic theory, with inherited F7/F11 regressions. |
 | Initial curve characteristic scope | Certified | `short-weierstrass-characteristic-p` | States nonzero two and three in the field operations. |
-| Finite-field cardinality and enumeration | Open | — | Requires certified finite-carrier evidence. |
+| PFIELD/F7/F11 finite-carrier cardinality | Certified | `pfield-elements`; `member-equal-of-pfield-fix-and-pfield-elements`; `pfield-cardinality-equals-modulus` | Cardinality is grounded by an exhaustive duplicate-free canonical enumeration. |
+| Generic finite-field cardinality | Open | — | Requires a later reusable carrier-evidence abstraction. |
+| F7X2 and generic extension cardinality | Open | — | Requires coefficient-vector enumeration or rank/unrank. |
 | Cardinality Frobenius | Open | — | Must use actual cardinality, not `field-frobenius-exponent`. |
 | Characteristics two and three for curves | Deferred | — | Require separate curve models and downstream formula scopes. |
 
@@ -82,7 +84,6 @@ correctness. The full evidence model is maintained in
 | Generic irreducible quotient field | Certified | `fixed-modulus-field-fix`; `fixed-modulus-field-add`; `fixed-modulus-field-neg`; `fixed-modulus-field-mul`; `fixed-modulus-field-inv` | Canonical remainder representation with two-sided nonzero inverse law. |
 | Concrete F7X2 instance | Certified | F7X2 operations and fixed-modulus functional instance | Uses the irreducible modulus `x^2+1` over F7. |
 | F7X2 public `GFIELD` packaging | Open | — | Promote the inverse result and package the concrete operations. |
-| F7X2 cardinality and Frobenius metadata | Open | — | Depends on finite-field enumeration infrastructure. |
 | Generic executable finite-field constructor | Deferred | — | The fixed-modulus logical constructor is the current reusable boundary. |
 
 ## 6. Curve representations and executable addition
