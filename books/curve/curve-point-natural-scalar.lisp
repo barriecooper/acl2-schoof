@@ -113,6 +113,10 @@
   abelian-group-nat-mul-of-sum)
 
 (def-curve-point-natural-scalar-theorem
+  curve-point-nat-mul-of-nat-mul
+  abelian-group-nat-mul-of-nat-mul)
+
+(def-curve-point-natural-scalar-theorem
   curve-point-nat-mul-distributes-over-addition
   abelian-group-nat-mul-distributes-over-op)
 

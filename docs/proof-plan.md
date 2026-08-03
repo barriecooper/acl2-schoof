@@ -27,7 +27,8 @@ books supply focused instantiation and execution regressions rather than
 additional generic scope.
 
 The certified curve boundary is a contextual abelian group with a transparent
-linear natural repeated-addition operation.  The generic polynomial boundary
+linear natural repeated-addition operation whose scalar action satisfies
+`m • (n • P) = (mn) • P`.  The generic polynomial boundary
 also includes transparent formal differentiation with canonical output,
 additivity, negation, subtraction, the product rule, and a characteristic-safe
 length bound.  The first square-free boundary is complete: the total
@@ -48,9 +49,12 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    or another concrete client requires it.
 3. Add finite-field cardinality/enumeration metadata and connect actual field
    size to the Frobenius equation and later finite-field/root separability.
-4. Complete nested natural and then signed scalar algebra before torsion and
-   trace-equation packaging.
-5. Add fast natural scalar multiplication when an executable quotient-
+4. Select the next larger shared or track-specific boundary from finite-field
+   cardinality/characteristic/Frobenius metadata, a Schoof torsion/division-
+   polynomial boundary, or an exact Hasse source/dependency audit.  Do not make
+   signed scalar multiplication the default merely because natural scalar
+   composition is complete.
+5. Add fast natural scalar multiplication only when an executable quotient-
    coordinate or trace-test consumer makes it more than premature
    optimization.
 

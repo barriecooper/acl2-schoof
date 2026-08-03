@@ -68,6 +68,38 @@
                             abelian-group-associativity)
                            (abelian-group-commutativity)))))
 
+(local
+ (defthm nonzero-times-right
+   (implies (and (natp m) (natp n) (not (zp m)))
+            (equal (+ n (* (1- m) n))
+                   (* m n)))
+   :rule-classes nil))
+
+(local
+ (defthm natp-of-predecessor-times-right
+   (implies (and (natp m) (natp n) (not (zp m)))
+            (natp (* (1- m) n)))
+   :rule-classes :type-prescription))
+
+(defthm abelian-group-nat-mul-of-nat-mul
+  (implies
+   (and (abelian-group-context-p)
+        (natp m)
+        (natp n)
+        (abelian-group-element-p x))
+   (equal
+    (abelian-group-nat-mul m (abelian-group-nat-mul n x))
+    (abelian-group-nat-mul (* m n) x)))
+  :hints
+  (("Goal"
+    :induct (abelian-group-nat-mul m x)
+   :in-theory (enable abelian-group-nat-mul-of-sum))
+   ("Subgoal *1/2"
+    :use ((:instance nonzero-times-right)
+          (:instance natp-of-predecessor-times-right)
+          (:instance abelian-group-nat-mul-of-sum
+                     (m n) (n (* (1- m) n)))))))
+
 (defthm abelian-group-swap-first-two
   (implies (and (abelian-group-context-p)
                 (abelian-group-element-p y)

@@ -147,10 +147,9 @@ described in [architecture](architecture.md#contextual-abelian-group-and-scalar-
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|
 | Generic natural repeated addition | Certified | `abelian-group-nat-mul` | `nfix`-totalised linear reference specification. |
-| Generic closure and laws | Certified | `abelian-group-element-p-of-nat-mul`; `abelian-group-nat-mul-one`; `abelian-group-nat-mul-of-sum`; `abelian-group-nat-mul-distributes-over-op` | — |
-| Curve natural scalar operation | Certified | `curve-point-nat-mul`; `def-curve-point-natural-scalar-theorem` | Functional instance of the contextual abelian-group theory. |
+| Generic closure and laws | Certified | `abelian-group-element-p-of-nat-mul`; `abelian-group-nat-mul-one`; `abelian-group-nat-mul-of-sum`; `abelian-group-nat-mul-distributes-over-op`; `abelian-group-nat-mul-of-nat-mul` | Includes nested scalar composition. |
+| Curve natural scalar operation | Certified | `curve-point-nat-mul`; `def-curve-point-natural-scalar-theorem`; `curve-point-nat-mul-of-nat-mul` | Functional instance of the contextual abelian-group theory, including nested scalar composition. |
 | Fast natural scalar implementation | Open | — | Separate double-and-add function with correspondence to `curve-point-nat-mul`. |
-| Nested natural scalar multiplication | Deferred | — | Generic theorem `m • (n • P) = (mn) • P` is not certified. |
 | Signed scalar multiplication | Deferred | — | Build after the natural theory. |
 
 Totalisation, recursion orientation, guard assurance, and the future optimized

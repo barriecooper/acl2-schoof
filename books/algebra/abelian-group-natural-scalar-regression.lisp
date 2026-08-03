@@ -41,7 +41,34 @@
                          (abelian-group-inverse boolean-scalar-inverse)
                          (abelian-group-nat-mul boolean-scalar-nat-mul)))))
 
+(defthm boolean-scalar-nat-mul-of-nat-mul-from-generic
+  (implies (and (boolean-scalar-context-p)
+                (natp m)
+                (natp n)
+                (boolean-scalar-element-p x))
+           (equal (boolean-scalar-nat-mul
+                   m (boolean-scalar-nat-mul n x))
+                  (boolean-scalar-nat-mul (* m n) x)))
+  :hints (("Goal" :by (:functional-instance
+                         abelian-group-nat-mul-of-nat-mul
+                         (abelian-group-context-p boolean-scalar-context-p)
+                         (abelian-group-element-p boolean-scalar-element-p)
+                         (abelian-group-op boolean-scalar-op)
+                         (abelian-group-identity boolean-scalar-identity)
+                         (abelian-group-inverse boolean-scalar-inverse)
+                         (abelian-group-nat-mul boolean-scalar-nat-mul)))))
+
 (assert-event (and (equal (boolean-scalar-nat-mul 0 t) nil)
                    (equal (boolean-scalar-nat-mul 1 t) t)
                    (equal (boolean-scalar-nat-mul 6 t) nil)
                    (equal (boolean-scalar-nat-mul 7 t) t)))
+
+(assert-event
+ (and (equal (boolean-scalar-nat-mul 0 (boolean-scalar-nat-mul 7 t))
+             (boolean-scalar-nat-mul 0 t))
+      (equal (boolean-scalar-nat-mul 6 (boolean-scalar-nat-mul 0 t))
+             (boolean-scalar-nat-mul 0 t))
+      (equal (boolean-scalar-nat-mul 1 (boolean-scalar-nat-mul 7 t))
+             (boolean-scalar-nat-mul 7 t))
+      (equal (boolean-scalar-nat-mul 6 (boolean-scalar-nat-mul 1 t))
+             (boolean-scalar-nat-mul 6 t))))
