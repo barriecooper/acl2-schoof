@@ -22,4 +22,7 @@
       (equal (f11-curve-point-nat-mul 5 '(:affine (2 4)))
              (f11-curve-point-pair-output-point
               (f11-curve-point-nat-mul 2 '(:affine (2 4)))
-              (f11-curve-point-nat-mul 3 '(:affine (2 4)))))))
+              (f11-curve-point-nat-mul 3 '(:affine (2 4)))))
+      (equal (f11-curve-point-nat-mul
+              3 (f11-curve-point-nat-mul 4 '(:affine (2 4))))
+             (f11-curve-point-nat-mul 12 '(:affine (2 4))))))
