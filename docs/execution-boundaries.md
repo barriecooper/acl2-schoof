@@ -101,6 +101,10 @@ canonical modular product.  Its closed form on field one supports the logical
 least-characteristic proof; it is not field enumeration or cardinality
 metadata.
 
+The generic and PFIELD characteristic predicates are transparent bounded
+logical checks.  Their recursion checks only smaller scalar annihilation; it
+does not enumerate field elements or certify field cardinality.
+
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes
 only the affine ordinate by `field-neg`.  It calls neither the curve classifier
