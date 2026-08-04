@@ -80,6 +80,7 @@
   (poly-division-step-next f7-poly-division-step-next)
   (poly-divmod-core f7-poly-divmod-core)
   (poly-divmod f7-poly-divmod))
+ f7-poly-divmod-core-functional-instance-equation
  (("Subgoal 29.2" :use gfield::f7-mul-inverse-right)
   ("Subgoal 26.9"
    :use ((:instance f7-mul-fixed-congruence-for-divmod-instantiation
@@ -103,8 +104,6 @@
   ("Subgoal 22.2.1'''" :in-theory (enable mod))
   ("Subgoal 22.2.1'" :in-theory (enable mod))
   ("Subgoal 21.2.1'" :in-theory (enable mod))
-  ("Subgoal 9.9.1'" :use ((:instance f7-poly-divmod-core)))
-  ("Subgoal 6.9.1'" :use ((:instance f7-poly-divmod-core)))
   ("Subgoal 2.3'"
    :use f7-trim-change-implies-last-zero-for-divmod-instantiation)
   ("Subgoal 2.1"

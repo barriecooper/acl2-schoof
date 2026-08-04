@@ -754,8 +754,10 @@
 ; is the measure; each active iteration computes and reuses exactly one step.
 (defmacro def-divmod-instance
   (core divmod canonical degree step-core poly-add normalize termination-theorem)
-  `(progn
-     (defun ,core (quotient remainder divisor)
+  (let ((equation-name
+         (acl2::packn (list core '-functional-instance-equation))))
+    `(progn
+       (defun ,core (quotient remainder divisor)
        (declare
         (xargs :measure (len remainder)
                :hints (("Goal" :use ((:instance ,termination-theorem))
@@ -768,10 +770,23 @@
                   (next (cdr step)))
              (,core (,poly-add quotient term) next divisor))
          (cons quotient remainder)))
-     (defun ,divmod (f g)
-       (let ((f (,normalize f)) (g (,normalize g)))
-         (let ((result (,core nil f g)))
-           (mv (car result) (cdr result)))))))
+       (defthm ,equation-name
+         (equal
+          (,core quotient remainder divisor)
+          (if (and (,canonical quotient) (,canonical remainder)
+                   (,canonical divisor) (consp remainder) (consp divisor)
+                   (<= (,degree divisor) (,degree remainder)))
+              (let* ((step (,step-core remainder divisor))
+                     (term (car step))
+                     (next (cdr step)))
+                (,core (,poly-add quotient term) next divisor))
+            (cons quotient remainder)))
+         :rule-classes nil
+         :hints (("Goal" :by (:instance ,core))))
+       (defun ,divmod (f g)
+         (let ((f (,normalize f)) (g (,normalize g)))
+           (let ((result (,core nil f g)))
+             (mv (car result) (cdr result))))))))
 
 ; Public projections deliberately call DIVMOD once and contain no recursion.
 (defmacro def-divmod-projections-instance (quotient remainder divmod)
@@ -796,7 +811,8 @@
 (defmacro def-divmod-public-interface-instance
   (prefix canonical-polynomial-p normalize poly-add poly-mul poly-degree
           poly-divmod field-substitution polynomial-substitution
-          division-substitution obligation-hints)
+          division-substitution core-functional-instance-equation
+          obligation-hints)
   (let ((interface-name
          (acl2::packn (list prefix '-public-interface-from-generic)))
         (quotient-canonical-name
@@ -808,7 +824,9 @@
          (acl2::packn (list prefix '-final-remainder-degree-bound)))
         (functional-substitution
          (append field-substitution polynomial-substitution
-                 division-substitution)))
+                 division-substitution))
+        (target-core
+         (cadr (assoc 'poly-divmod-core division-substitution))))
     `(progn
        (defthm ,interface-name
          (and (,canonical-polynomial-p (mv-nth 0 (,poly-divmod f g)))
@@ -827,6 +845,12 @@
          (("Goal"
            :by (:functional-instance poly-divmod-public-interface
                                      ,@functional-substitution))
+          (and stable-under-simplificationp
+               (list :use
+                     (list (list :instance
+                                 ',core-functional-instance-equation))
+                     :in-theory
+                     (list 'disable ',target-core)))
           ,@obligation-hints))
        (defthm ,quotient-canonical-name
          (,canonical-polynomial-p (mv-nth 0 (,poly-divmod f g)))

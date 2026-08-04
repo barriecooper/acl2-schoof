@@ -20,6 +20,11 @@ XGCD, and modular inverse. Focused exact executions cover their intended
 runtime paths. The earlier inverse/division guard failure was resolved by the
 named F7 field boundary and is historical, not a current blocker.
 
+Generated recursive divmod cores expose a named, non-rewriting one-step
+equation theorem solely for functional-instantiation constraints. It changes
+no executable body, measure, or guard. Recursive targets remain transparent
+but need not be broadly unfolded, and field-specific residuals remain separate.
+
 The generic remainder is the canonical representative operation. Reduced
 addition, negation, subtraction, and multiplication compose an existing
 polynomial operation with that remainder. F7X2 fixes representatives modulo

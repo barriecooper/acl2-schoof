@@ -113,6 +113,11 @@ canonical polynomials, while raw helpers exist only to support definitions and
 proofs. Polynomial equality in the generic layer is literal equality of
 canonical representatives, not merely agreement under evaluation.
 
+Generated recursive divmod instances expose a named, non-rewriting one-step
+equation theorem for functional-instantiation constraints. The public divmod
+interface consumes it without globally unfolding the recursive core; generic
+GPOLY remains the source of division semantics.
+
 `poly-coefficient` is a total projection: indices are totalized with `nfix`,
 represented values are field-fixed, and absent coefficients or coefficients
 beyond a malformed dotted tail are field zero.  Normalization preserves every
