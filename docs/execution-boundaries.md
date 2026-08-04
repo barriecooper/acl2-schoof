@@ -278,3 +278,14 @@ Lisp inclusion, skipped proof, project axiom, or trust tag. Future changes to
 this inventory must update this document and satisfy the evidence model above.
 
 The finite-field monomial/scalar-division support layer adds only transparent logical definitions and theorems over constrained finite-field operations. It does not add MBE, DEFEXEC, attachments, raw Lisp, coding/cardinality calls, recursive divmod, quotient, or remainder operations.
+
+## Finite-field division-step substrate
+
+The finite-field-prefixed one-step polynomial division substrate is certified.
+It uses transparent generated definitions for the core step and public term/next
+projections, with verified guards, reconstruction, strict degree decrease, and a
+strict core length theorem suitable for the future recursive divmod measure.  The
+decisive cancellation proof is length/leading-coefficient based, not
+coefficient-vector or coding based.  Recursive finite-field divmod, public
+quotient/remainder APIs, fixed-modulus representations, and coding/cardinality
+operations remain open and are not introduced here.

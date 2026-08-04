@@ -85,3 +85,14 @@ guidance. Generic modular reduction is likewise already certified and is not a
 future mathematical PR.
 
 The finite-field monomial/scalar-division support book consists of ordinary transparent target definitions over constrained `finite-field-*` operations. It is a logical target layer; concrete execution evidence remains in F7 regressions, and no alternate executable branch is introduced.
+
+## Finite-field division-step substrate
+
+The finite-field-prefixed one-step polynomial division substrate is certified.
+It uses transparent generated definitions for the core step and public term/next
+projections, with verified guards, reconstruction, strict degree decrease, and a
+strict core length theorem suitable for the future recursive divmod measure.  The
+decisive cancellation proof is length/leading-coefficient based, not
+coefficient-vector or coding based.  Recursive finite-field divmod, public
+quotient/remainder APIs, fixed-modulus representations, and coding/cardinality
+operations remain open and are not introduced here.

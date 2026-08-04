@@ -106,4 +106,15 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-Next boundary: certify the finite-field division-step substrate using the certified finite-field monomial/scalar-division support, without adding recursive divmod or public quotient/remainder yet.
+Next boundary: generate and certify finite-field recursive divmod and projections using the certified one-step length-decrease theorem and the standardized recursive equation seam.
+
+## Finite-field division-step substrate
+
+The finite-field-prefixed one-step polynomial division substrate is certified.
+It uses transparent generated definitions for the core step and public term/next
+projections, with verified guards, reconstruction, strict degree decrease, and a
+strict core length theorem suitable for the future recursive divmod measure.  The
+decisive cancellation proof is length/leading-coefficient based, not
+coefficient-vector or coding based.  Recursive finite-field divmod, public
+quotient/remainder APIs, fixed-modulus representations, and coding/cardinality
+operations remain open and are not introduced here.

@@ -220,3 +220,13 @@ The core strict length theorem now has the exact shape needed by a future
 under canonical active-case hypotheses.  No recursive division was introduced,
 and the staged book remains unregistered pending the public wrapper interface
 and regression/documentation boundary.
+
+## 2026-08-04 production finalization
+
+The finite-field division-step substrate is now production-certified and
+registered.  The final proof path is length/leading-coefficient based:
+term properties imply product properties; product degree equality plus canonical
+nonzero degree facts yield equal product/remainder length; product leading
+coefficient equality supplies the strict subtraction-length theorem; strict
+active length yields core degree decrease and core length decrease.  Recursive
+divmod remains the next boundary and is intentionally absent from this book.
