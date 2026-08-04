@@ -157,3 +157,41 @@ properties, the generic length-of-subtraction theorem instance, and disabled the
 finite-field core and `finite-field-poly-sub-definition`; it was removed.
 Classification: missing division-step degree theorem / ordinary target proof
 remains likely after a separate finite-field leading-cancellation theorem.
+
+
+## 2026-08-04 finite-field length cancellation checkpoint
+
+| Group | Last certified event | First failing event | Result |
+| --- | --- | --- | --- |
+| Coefficient of subtraction | `finite-field-poly-division-step-core-reconstruction` | — | Not required by inspected generic proof |
+| Coefficient at degree | `finite-field-poly-division-step-core-reconstruction` | — | Not required by inspected generic proof |
+| Product top coefficient | `finite-field-poly-division-step-core-product-properties` | — | Already certified as leading coefficient equality |
+| Leading cancellation | `finite-field-len-of-poly-sub-strict-when-equal-len-and-leading-equal` | — | Certified in source-equivalent length form |
+| Canonical degree consequence | `finite-field-len-of-poly-sub-strict-when-equal-len-and-leading-equal` | — | Still needed |
+| Core degree decrease | `finite-field-len-of-poly-sub-strict-when-equal-len-and-leading-equal` | `finite-field-poly-division-step-core-degree-decreases` | Deferred |
+| Core length decrease | `finite-field-len-of-poly-sub-strict-when-equal-len-and-leading-equal` | — | Not attempted |
+| Public interface | `finite-field-len-of-poly-sub-strict-when-equal-len-and-leading-equal` | — | Not attempted |
+
+Source inventory: the checked-in generic `poly-division-step-core-degree-decreases`
+does not use a coefficient-level cancellation theorem.  It uses
+`poly-division-step-core-product-properties`,
+`len-of-poly-sub-strict-when-equal-len-and-leading-equal`, and
+`poly-degree-when-canonical-nonzero` for the current remainder and next
+remainder.  The decisive cancellation theorem is therefore the length-form
+leading-coefficient subtraction theorem, not a coefficient theorem.
+
+Certified target counterpart retained:
+
+* `finite-field-len-of-poly-sub-strict-when-equal-len-and-leading-equal`.
+
+The removed `finite-field-poly-division-step-core-degree-decreases` attempt used
+product properties, `finite-field-poly-division-step-core-next-active`,
+`finite-field-poly-division-step-core-next-canonical`, the new finite-field
+length-form cancellation theorem, and disabled the finite-field core and
+`finite-field-poly-sub-definition`.  ACL2 still left a residual shape relating
+`finite-field-poly-degree` of the normalized `cdr` to the raw `len` decrease,
+so the missing next reusable theorem is a focused finite-field degree-from-length
+consequence for canonical next remainders.
+
+Classification: missing finite-field degree theorem / ordinary target proof
+remains likely.

@@ -429,3 +429,35 @@
                  finite-field-poly-add finite-field-poly-monomial
                  finite-field-poly-normalize finite-field-poly-raw-mul
                  finite-field-poly-raw-add finite-field-poly-sub-definition)))))
+
+(defthm finite-field-len-of-poly-sub-strict-when-equal-len-and-leading-equal
+  (implies (and (finite-field-canonical-polynomial-p x)
+                (finite-field-canonical-polynomial-p y)
+                (consp x) (consp y)
+                (equal (len x) (len y))
+                (equal (finite-field-poly-leading-coefficient x)
+                       (finite-field-poly-leading-coefficient y)))
+           (< (len (finite-field-poly-sub x y)) (len x)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (theory 'minimal-theory)
+           :by (:functional-instance len-of-poly-sub-strict-when-equal-len-and-leading-equal
+                 (gfield::field-element-p gfield::finite-field-element-p)
+                 (gfield::field-fix gfield::finite-field-fix)
+                 (gfield::field-zero gfield::finite-field-zero)
+                 (gfield::field-one gfield::finite-field-one)
+                 (gfield::field-add gfield::finite-field-add)
+                 (gfield::field-mul gfield::finite-field-mul)
+                 (gfield::field-neg gfield::finite-field-neg)
+                 (gfield::field-inv gfield::finite-field-inv)
+                 (coefficient-list-p finite-field-coefficient-list-p)
+                 (canonical-polynomial-p finite-field-canonical-polynomial-p)
+                 (fix-coefficients finite-field-poly-fix-coefficients)
+                 (trim-trailing-zeros finite-field-poly-trim-trailing-zeros)
+                 (normalize finite-field-poly-normalize)
+                 (raw-add finite-field-poly-raw-add)
+                 (raw-neg finite-field-poly-raw-neg)
+                 (poly-neg finite-field-poly-neg)
+                 (poly-add finite-field-poly-add)
+                 (poly-sub finite-field-poly-sub)
+                 (poly-degree finite-field-poly-degree)
+                 (poly-leading-coefficient finite-field-poly-leading-coefficient)))))
