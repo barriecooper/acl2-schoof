@@ -47,14 +47,12 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    predicate.
 2. Add a polynomial natural-scaling interface when the derivative power rule
    or another concrete client requires it.
-3. Canonical-vector recovery for the generic fixed-length coefficient
-   representation is complete. The exact next task is a read-only
-   architectural audit of generic mixed-radix coefficient coding and
-   fixed-modulus rank/unrank. That audit must decide the base-field
-   finite-bijection interface and the `(q^n)` arithmetic boundary before any
-   implementation, finite-bijection instantiation, or generic extension
-   cardinality claim. Generic finite-field cardinality remains open;
-   alternatively select another separately audited Hasse/Schoof boundary.
+3. The separate finite-field coding context is complete, with coherent field
+   operations and bounded rank/unrank evidence validated by PFIELD and F7.  The
+   exact next boundary is a read-only audit and certification plan for connecting
+   the renamed `finite-field-*` operations to the GPOLY/fixed-modulus stack.
+   Only after that bridge should generic mixed-radix rank/unrank resume; generic
+   finite-field and extension cardinality remain open.
 4. Only after actual cardinality evidence is available for the intended
    context, connect that cardinality (not `field-frobenius-exponent`) to the
    Frobenius equation.  Add generic extension-field cardinality and prime-power

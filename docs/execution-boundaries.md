@@ -144,6 +144,13 @@ length theorems establish the semantics; focused evaluations establish
 execution evidence.  All five functions are guard verified and introduce no
 alternate executable branch.
 
+The generic `finite-field-*` coding context consists of constrained logical
+symbols admitted with local Boolean field/coding definitions as consistency
+witnesses only.  It adds no public Boolean runtime. PFIELD and F7 are ordinary
+executable clients: explicit functional-instance evidence establishes semantics,
+while focused evaluations establish execution only.  No generic carrier,
+cardinality, attachment, or alternate executable branch is introduced.
+
 The field-independent finite-bijection theory uses an ordinary transparent
 half-open range with `nfix` start/count semantics, a transparent unrank-list
 map, and transparent derived carrier and cardinality definitions.  Cardinality
