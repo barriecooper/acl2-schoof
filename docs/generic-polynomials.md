@@ -771,3 +771,7 @@ modulus, and wrappers, and records focused canonical, noncanonical, atomic, and
 improper-list executions. It is regression evidence, not a public F7 quotient
 field. Finiteness, cardinality, characteristic inheritance, Frobenius, and a
 general interface for reducible quotient rings are not claimed.
+
+### Finite-field monomial/scalar-division support
+
+`books/polynomial/generic/finite-field-monomial-division-support.lisp` certifies the staged finite-field-prefixed zero-prefix, shift, and monomial support layer plus narrow scalar division facts (`finite-field-div-nonzero` and `finite-field-div-mul-denominator`). This is support for the later finite-field division-step bridge; it does not introduce recursive divmod, quotient, or remainder targets.

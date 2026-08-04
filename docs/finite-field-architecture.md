@@ -291,3 +291,5 @@ interface and prove equivalence without changing curve theorems.
 
 Open mathematics remains open in `docs/obligations.md`; this decision marks no
 division, extension-field, Hasse, or Schoof obligation proved.
+
+Current finite-field polynomial dependency chain: finite-field context → finite-field polynomial core → finite-field monomial/scalar-division support. The finite-field division-step substrate, recursive division/remainder bridge, fixed-modulus coefficient representation, mixed-radix rank/unrank, and carrier/cardinality layers remain open.

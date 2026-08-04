@@ -83,3 +83,5 @@ it was superseded when the named F7 guard architecture, recursive division,
 XGCD, and modular inverse certified. It must not be used as current planning
 guidance. Generic modular reduction is likewise already certified and is not a
 future mathematical PR.
+
+The finite-field monomial/scalar-division support book consists of ordinary transparent target definitions over constrained `finite-field-*` operations. It is a logical target layer; concrete execution evidence remains in F7 regressions, and no alternate executable branch is introduced.

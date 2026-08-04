@@ -190,3 +190,7 @@ boundary are maintained in
 | Schoof point-count correctness | Open | — | Compose trace congruences with CRT reconstruction. |
 | Executable Schoof algorithm | Open | — | Each optimized boundary requires specification, correspondence, guards, and execution evidence. |
 | Performance optimization and benchmarking | Deferred | — | Performance evidence remains separate from logical correctness. |
+
+- Finite-field monomial/scalar-division support — Certified (`finite-field-poly-monomial`, `finite-field-poly-degree-of-monomial`, `finite-field-div-nonzero`, `finite-field-div-mul-denominator`).
+- Finite-field division-step substrate — Open.
+- Finite-field recursive division/remainder bridge — Open.
