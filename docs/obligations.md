@@ -192,5 +192,16 @@ boundary are maintained in
 | Performance optimization and benchmarking | Deferred | — | Performance evidence remains separate from logical correctness. |
 
 - Finite-field monomial/scalar-division support — Certified (`finite-field-poly-monomial`, `finite-field-poly-degree-of-monomial`, `finite-field-div-nonzero`, `finite-field-div-mul-denominator`).
-- Finite-field division-step substrate — Open.
+- Finite-field division-step substrate — Certified (`finite-field-poly-division-step-core-reconstruction`, `finite-field-poly-division-step-core-degree-decreases`, `finite-field-poly-division-step-core-length-decreases`).
 - Finite-field recursive division/remainder bridge — Open.
+
+## Finite-field division-step substrate
+
+The finite-field-prefixed one-step polynomial division substrate is certified.
+It uses transparent generated definitions for the core step and public term/next
+projections, with verified guards, reconstruction, strict degree decrease, and a
+strict core length theorem suitable for the future recursive divmod measure.  The
+decisive cancellation proof is length/leading-coefficient based, not
+coefficient-vector or coding based.  Recursive finite-field divmod, public
+quotient/remainder APIs, fixed-modulus representations, and coding/cardinality
+operations remain open and are not introduced here.

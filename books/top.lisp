@@ -206,6 +206,8 @@
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/divmod-instantiation-regression")
 (include-book "polynomial/generic/finite-field-monomial-division-support-regression")
+(include-book "polynomial/generic/finite-field-division-step")
+(include-book "polynomial/generic/finite-field-division-step-regression")
 (include-book "polynomial/generic/f7x2-representation")
 (include-book "polynomial/generic/f7-reduced-arithmetic")
 (include-book "polynomial/generic/f7x2-arithmetic")

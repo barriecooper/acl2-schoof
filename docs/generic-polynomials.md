@@ -775,3 +775,14 @@ general interface for reducible quotient rings are not claimed.
 ### Finite-field monomial/scalar-division support
 
 `books/polynomial/generic/finite-field-monomial-division-support.lisp` certifies the staged finite-field-prefixed zero-prefix, shift, and monomial support layer plus narrow scalar division facts (`finite-field-div-nonzero` and `finite-field-div-mul-denominator`). This is support for the later finite-field division-step bridge; it does not introduce recursive divmod, quotient, or remainder targets.
+
+## Finite-field division-step substrate
+
+The finite-field-prefixed one-step polynomial division substrate is certified.
+It uses transparent generated definitions for the core step and public term/next
+projections, with verified guards, reconstruction, strict degree decrease, and a
+strict core length theorem suitable for the future recursive divmod measure.  The
+decisive cancellation proof is length/leading-coefficient based, not
+coefficient-vector or coding based.  Recursive finite-field divmod, public
+quotient/remainder APIs, fixed-modulus representations, and coding/cardinality
+operations remain open and are not introduced here.
