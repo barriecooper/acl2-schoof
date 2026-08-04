@@ -63,3 +63,47 @@ Attempted route: direct target proof by enabling
 `poly-division-step-core-next-canonical` hint.  Outcome: ACL2 failed with the
 checkpoint above.  The uncertified tail was removed and the last certifying
 source state was retained.
+
+
+## 2026-08-04 next canonicality checkpoint
+
+| Group | Last certified event | First failing event | Result |
+| --- | --- | --- | --- |
+| Next canonicality | `finite-field-poly-division-step-core-next-canonical` | — | Certified |
+| Projection equations | `finite-field-poly-division-step-core-next-canonical` | `finite-field-poly-division-step-core-next-polynomial` | Deferred |
+| Leading cancellation | `finite-field-poly-division-step-core-next-canonical` | — | Not attempted after retained failure |
+| Degree consequence | `finite-field-poly-division-step-core-next-canonical` | `finite-field-poly-division-step-core-degree-decreases` | Deferred |
+| Reconstruction | `finite-field-poly-add-left-to-poly-sub` | `finite-field-poly-division-step-core-reconstruction` | Deferred |
+| Core degree decrease | `finite-field-poly-division-step-core-next-canonical` | `finite-field-poly-division-step-core-degree-decreases` | Deferred |
+| Core length decrease | `finite-field-poly-division-step-core-next-canonical` | — | Not attempted after retained failure |
+| Public interface | `finite-field-poly-division-step-core-next-canonical` | — | Not attempted after retained failure |
+
+Additional certified support retained in the staged book:
+
+* `finite-field-poly-division-step-core-next-canonical`.
+* `finite-field-poly-sub-definition`.
+* `finite-field-poly-add-left-to-poly-sub`.
+
+Attempted but removed uncertified tails:
+
+1. `finite-field-poly-division-step-core-next-polynomial` using only
+   `finite-field-poly-division-step-core-next-canonical`; ACL2 did not derive
+   the coefficient-list component from canonicality without reopening the core.
+2. `finite-field-poly-division-step-core-degree-decreases` by mirroring the
+   generic proof and enabling the finite-field core; this unfolded too far into
+   normalization/multiplication and reduced to an impossible strict inequality
+   checkpoint after branch/product facts were not used in the required shape.
+3. `finite-field-poly-division-step-core-reconstruction` using
+   `finite-field-poly-add-left-to-poly-sub`; ACL2 reduced an inactive/product
+   side condition to:
+
+```lisp
+(IMPLIES
+  (NOT (FINITE-FIELD-COEFFICIENT-LIST-P (FINITE-FIELD-POLY-MUL NIL DIVISOR)))
+  (NOT (FINITE-FIELD-POLY-MUL NIL DIVISOR)))
+```
+
+Classification: ordinary target proof remains likely; the immediate seam is a
+narrow projection/branch equation for the generated core that keeps inactive and
+active products in source-equivalent shape without unfolding raw polynomial
+operations.

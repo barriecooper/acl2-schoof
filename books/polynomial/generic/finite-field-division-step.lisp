@@ -259,3 +259,54 @@
            (disable finite-field-poly-mul finite-field-poly-monomial
                     finite-field-poly-normalize finite-field-poly-raw-mul
                     finite-field-poly-raw-add gfield::finite-field-mul-commutative))))
+
+(defthm finite-field-poly-division-step-core-next-canonical
+  (implies (finite-field-canonical-polynomial-p remainder)
+           (finite-field-canonical-polynomial-p
+            (cdr (finite-field-poly-division-step-core remainder divisor))))
+  :hints (("Goal"
+           :cases ((and (finite-field-canonical-polynomial-p divisor)
+                        (consp remainder) (consp divisor)
+                        (<= (finite-field-poly-degree divisor)
+                            (finite-field-poly-degree remainder))))
+           :use ((:instance finite-field-poly-division-step-core-product-properties))
+           :in-theory (e/d (finite-field-poly-division-step-core)
+                           (finite-field-poly-mul
+                            finite-field-poly-sub
+                            finite-field-poly-monomial
+                            finite-field-poly-normalize
+                            finite-field-poly-raw-mul
+                            finite-field-poly-raw-add)))))
+
+
+(defthm finite-field-poly-sub-definition
+  (equal (finite-field-poly-sub x y)
+         (finite-field-poly-add x (finite-field-poly-neg y)))
+  :hints (("Goal" :in-theory (enable finite-field-poly-sub))))
+
+(defthm finite-field-poly-add-left-to-poly-sub
+  (implies (and (finite-field-polynomial-p x)
+                (finite-field-canonical-polynomial-p y))
+           (equal (finite-field-poly-add x (finite-field-poly-sub y x)) y))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable finite-field-poly-sub-definition)
+           :use ((:functional-instance poly-add-left-to-poly-sub
+                 (gfield::field-element-p gfield::finite-field-element-p)
+                 (gfield::field-fix gfield::finite-field-fix)
+                 (gfield::field-zero gfield::finite-field-zero)
+                 (gfield::field-one gfield::finite-field-one)
+                 (gfield::field-add gfield::finite-field-add)
+                 (gfield::field-mul gfield::finite-field-mul)
+                 (gfield::field-neg gfield::finite-field-neg)
+                 (gfield::field-inv gfield::finite-field-inv)
+                 (coefficient-list-p finite-field-coefficient-list-p)
+                 (polynomial-p finite-field-polynomial-p)
+                 (canonical-polynomial-p finite-field-canonical-polynomial-p)
+                 (fix-coefficients finite-field-poly-fix-coefficients)
+                 (trim-trailing-zeros finite-field-poly-trim-trailing-zeros)
+                 (normalize finite-field-poly-normalize)
+                 (raw-add finite-field-poly-raw-add)
+                 (poly-add finite-field-poly-add)
+                 (raw-neg finite-field-poly-raw-neg)
+                 (poly-neg finite-field-poly-neg)
+                 (poly-sub finite-field-poly-sub))))))
