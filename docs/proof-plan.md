@@ -47,13 +47,12 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    predicate.
 2. Add a polynomial natural-scaling interface when the derivative power rule
    or another concrete client requires it.
-3. Build on the certified field-independent bounded finite-bijection seam and
-   its PFIELD and F7X2 proving instances with a separately audited generic
-   fixed-length coefficient reconstruction and zero-padding boundary.  Only
-   after that representation theorem should generic extension mixed-radix
-   cardinality consume the finite-bijection theory.  Generic finite-field
-   cardinality remains open; alternatively select another separately audited
-   Hasse/Schoof boundary.
+3. Build on the certified generic fixed-length coefficient reconstruction and
+   zero-padding boundary with a separately audited generic mixed-radix
+   coefficient codec and fixed-modulus rank/unrank.  Prove its bounded inverse
+   laws before instantiating the finite-bijection theory or claiming generic
+   extension cardinality.  Generic finite-field cardinality remains open;
+   alternatively select another separately audited Hasse/Schoof boundary.
 4. Only after actual cardinality evidence is available for the intended
    context, connect that cardinality (not `field-frobenius-exponent`) to the
    Frobenius equation.  Add generic extension-field cardinality and prime-power

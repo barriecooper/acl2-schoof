@@ -153,6 +153,15 @@ certified exhaustive duplicate-free executable carrier; F7X2 cardinality is
 definitionally its length.  The resulting order is an execution convention,
 not a semantic property.  Generic extension cardinality remains open.
 
+Fixed-modulus representatives also have a generic exact-length coefficient
+representation.  `fixed-modulus-coefficient-vector` fixes its arbitrary input
+once, then emits the modulus degree's coefficients in ascending order, padding
+short representatives with field zero and retaining those final zero slots in
+the vector.  `fixed-modulus-reconstruct` separately normalizes that dense list,
+and reconstruction of an extracted vector is the canonical remainder fixer.
+Equality of vectors implies equality through the fixer; this representation
+boundary is prior to generic mixed-radix coding and extension cardinality.
+
 ## Curve representations
 
 The initial curve layer uses constrained short-Weierstrass coefficients and
