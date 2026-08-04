@@ -41,6 +41,8 @@ correctness. The full evidence model is maintained in
 | Initial curve characteristic scope | Certified | `short-weierstrass-characteristic-p` | States nonzero two and three in the field operations. |
 | PFIELD/F7/F11 finite-carrier cardinality | Certified | `pfield-elements`; `member-equal-of-pfield-fix-and-pfield-elements`; `pfield-cardinality-equals-modulus` | Cardinality is grounded by an exhaustive duplicate-free canonical enumeration. |
 | Reusable bounded finite-bijection evidence | Certified | `finite-unrank-of-finite-rank`; `member-equal-of-finite-fix-and-finite-elements`; `finite-cardinality-equals-bound` | Field-free constructive carrier/cardinality theory with PFIELD and F7X2 proving instances. |
+| Reusable finite-field coding context | Certified | `finite-field-unrank-of-finite-field-rank`; `finite-field-rank-of-finite-field-fix`; `finite-field-bound-greater-than-one` | Separate jointly constrained finite-field model with coherent bounded coding and PFIELD/F7 proving clients; no carrier or cardinality is exposed. |
+| Finite-field-to-fixed-modulus bridge | Open | — | Must connect or generate the GPOLY/fixed-modulus stack, currently written over `field-*`, for the renamed `finite-field-*` context. |
 | Generic finite-field cardinality | Open | — | Requires a field-facing client that supplies the certified bounded-bijection evidence; the reusable field-free consequence layer is complete. |
 | F7X2 finite-carrier cardinality | Certified | `f7x2-unrank-of-f7x2-rank`; `member-equal-of-f7x2-fix-and-f7x2-elements`; `f7x2-cardinality-equals-49` | Presentation-specific mixed-radix bijection and exhaustive duplicate-free carrier. |
 | Generic extension cardinality | Open | — | Requires reusable coefficient-vector and mixed-radix infrastructure. |

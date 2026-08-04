@@ -58,6 +58,15 @@ context is independent of `GFIELD` operations despite sharing the project
 package, and adds no field, characteristic, polynomial, or Frobenius premise.
 Generic coefficient reconstruction and extension cardinality remain open.
 
+A separate `finite-field-*` context jointly constrains a renamed field-shaped
+interface with coherent bounded rank, unrank, and bound operations.  It does not
+extend the unrestricted `field-*` model: instead, its field laws make it a
+functional instance of the generic kernel, while its coding laws specialize the
+field-independent finite-bijection assumptions.  A local Boolean field is only
+a consistency witness; PFIELD and F7 are proving clients.  The context exposes
+no generic carrier or cardinality.  Connecting the renamed operations to the
+GPOLY/fixed-modulus stack remains the next architectural bridge.
+
 ### Field-only X-CERT algebra
 
 `books/field/xcert-algebra.lisp` defines total field expressions for the output

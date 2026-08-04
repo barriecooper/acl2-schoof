@@ -73,6 +73,12 @@ obtained by functional instantiation.  `tests/field-kernel.lisp` executes
 addition, multiplication, negation, nonzero inversion, subtraction, division,
 and exponentiation.
 
+The separately constrained `finite-field-*` coding context uses renamed field
+operations admitted together with bounded coding evidence.  It is not a
+downstream strengthening of this unrestricted model.  This kernel remains the
+source theorem universe, and finite-field results reuse its derived mathematics
+by functional instantiation.
+
 A future PFIELD adapter will close over (or otherwise select at its concrete
 API boundary) an explicit prime modulus and expose matching unary/binary
 wrappers for an instance proof.  The modulus does not become an extra argument
