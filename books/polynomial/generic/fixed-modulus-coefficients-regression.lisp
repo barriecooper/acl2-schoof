@@ -2,6 +2,20 @@
 (include-book "fixed-modulus-coefficients")
 (include-book "f7x2-fixed-modulus-field-regression")
 
+(defthm fixed-modulus-vector-recovery-minimal-theory-client
+  (implies
+   (and (coefficient-list-p coefficients)
+        (equal (len coefficients)
+               (fixed-modulus-coefficient-count)))
+   (equal (fixed-modulus-coefficient-vector
+           (fixed-modulus-reconstruct coefficients))
+          coefficients))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use fixed-modulus-coefficient-vector-of-reconstruct
+    :in-theory (theory 'minimal-theory))))
+
 ; Concrete F7X2 proving client for the generic representation.  These local
 ; functions are the direct F7 images required by functional instantiation; the
 ; public concrete API remains the existing F7X2 projection pair.
@@ -156,5 +170,20 @@
       (equal (f7x2-coefficient-vector-for-regression '(1 2 . bad-tail)) '(1 2))
       (equal (f7x2-coefficient-vector-for-regression '(3 0 0)) '(3 0))
       (equal (f7x2-coefficient-vector-for-regression 'malformed) '(0 0))
-      (equal (f7x2-reconstruct-for-regression '(3 0)) '(3))))
+      (equal (f7x2-reconstruct-for-regression '(3 0)) '(3))
+      (equal (f7x2-coefficient-vector-for-regression
+              (f7x2-reconstruct-for-regression '(0 0)))
+             '(0 0))
+      (equal (f7x2-coefficient-vector-for-regression
+              (f7x2-reconstruct-for-regression '(1 0)))
+             '(1 0))
+      (equal (f7x2-coefficient-vector-for-regression
+              (f7x2-reconstruct-for-regression '(3 4)))
+             '(3 4))
+      (equal (f7x2-coefficient-vector-for-regression
+              (f7x2-reconstruct-for-regression '(3 0)))
+             '(3 0))
+      (equal (f7x2-coefficient-vector-for-regression
+              (f7x2-reconstruct-for-regression '(0 6)))
+             '(0 6))))
 )

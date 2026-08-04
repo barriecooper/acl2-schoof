@@ -86,7 +86,7 @@ correctness. The full evidence model is maintained in
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|
 | Generic irreducible quotient field | Certified | `fixed-modulus-field-fix`; `fixed-modulus-field-add`; `fixed-modulus-field-neg`; `fixed-modulus-field-mul`; `fixed-modulus-field-inv` | Canonical remainder representation with two-sided nonzero inverse law. |
-| Generic fixed-modulus coefficient reconstruction | Certified | `fixed-modulus-reconstruct-of-coefficient-vector`; `fixed-modulus-fix-coefficient-vector-extensionality` | Exact modulus-degree zero-padded coefficient vectors reconstruct canonical quotient remainders; arbitrary canonical-vector recovery remains open. |
+| Generic fixed-modulus coefficient representation | Certified | `fixed-modulus-reconstruct-of-coefficient-vector`; `fixed-modulus-coefficient-vector-of-reconstruct`; `fixed-modulus-fix-coefficient-vector-extensionality` | Two-way correspondence between canonical quotient representatives and proper, exact-length fixed-entry vectors, including literal recovery of trailing zero slots. |
 | Concrete F7X2 instance | Certified | F7X2 operations and fixed-modulus functional instance | Uses the irreducible modulus `x^2+1` over F7. |
 | F7X2 public `GFIELD` packaging | Open | — | Promote the inverse result and package the concrete operations. |
 | Generic executable finite-field constructor | Deferred | — | The fixed-modulus logical constructor is the current reusable boundary. |

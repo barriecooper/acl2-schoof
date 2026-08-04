@@ -62,8 +62,13 @@ final zero slots remain present.  `fixed-modulus-reconstruct` only normalizes
 its arbitrary dense coefficient list: it fixes encountered coefficients,
 discards a malformed tail, and removes trailing zeroes.  It neither truncates a
 long list nor reduces it modulo the fixed modulus.  Certified reconstruction
-and fixer-level vector extensionality supply logical correctness; focused F7X2
-evaluations cover zero, reduction, malformed values and tails, and padding.
+and fixer-level vector extensionality supply one inverse direction. The reverse
+theorem requires a proper `coefficient-list-p` list of fixed entries whose
+length is exactly the coefficient count. Reconstruction may remove its trailing
+polynomial zeroes, but exact-length extraction restores those vector zero slots
+literally. No arbitrary-vector fixing or long-input truncation is introduced.
+Focused F7X2 evaluations cover zero, reduction, malformed values and tails,
+padding, nonzero trailing coefficients, and trailing-zero recovery.
 
 ## Power fast/spec boundary
 

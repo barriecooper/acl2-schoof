@@ -159,8 +159,13 @@ once, then emits the modulus degree's coefficients in ascending order, padding
 short representatives with field zero and retaining those final zero slots in
 the vector.  `fixed-modulus-reconstruct` separately normalizes that dense list,
 and reconstruction of an extracted vector is the canonical remainder fixer.
-Equality of vectors implies equality through the fixer; this representation
-boundary is prior to generic mixed-radix coding and extension cardinality.
+Conversely, reconstructing and then extracting any proper coefficient list of
+exactly the modulus degree recovers that list literally. Thus extraction then
+reconstruction equals the quotient fixer, while reconstruction then extraction
+equals the original canonical vector. Re-extraction restores trailing vector
+zero slots removed by polynomial normalization. Equality of vectors implies
+equality through the fixer; generic mixed-radix coding and extension
+cardinality remain open beyond this representation boundary.
 
 ## Curve representations
 
