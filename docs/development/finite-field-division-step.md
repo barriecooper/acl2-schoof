@@ -107,3 +107,53 @@ Classification: ordinary target proof remains likely; the immediate seam is a
 narrow projection/branch equation for the generated core that keeps inactive and
 active products in source-equivalent shape without unfolding raw polynomial
 operations.
+
+
+## 2026-08-04 active equation and reconstruction checkpoint
+
+| Group | Last certified event | First failing event | Result |
+| --- | --- | --- | --- |
+| Active core equation | `finite-field-poly-division-step-core-active` | — | Certified |
+| Core projections | `finite-field-poly-division-step-core-next-polynomial` | — | Certified |
+| Public projections | `finite-field-poly-division-step-core-next-polynomial` | — | Not attempted |
+| Reconstruction | `finite-field-poly-division-step-core-reconstruction` | — | Certified |
+| Leading cancellation | `finite-field-poly-division-step-core-reconstruction` | — | Not attempted |
+| Degree decrease | `finite-field-poly-division-step-core-reconstruction` | `finite-field-poly-division-step-core-degree-decreases` | Deferred |
+| Length decrease | `finite-field-poly-division-step-core-reconstruction` | — | Not attempted |
+| Public semantic interface | `finite-field-poly-division-step-core-reconstruction` | — | Not attempted |
+
+Certified helper theorems added with this checkpoint:
+
+* `finite-field-poly-division-step-core-active`.
+* `finite-field-poly-division-step-core-term-active`.
+* `finite-field-poly-division-step-core-next-active`.
+* `finite-field-poly-division-step-core-next-polynomial`.
+* `finite-field-polynomial-p-of-poly-mul`.
+* `finite-field-poly-mul-of-nil-left`.
+* `finite-field-poly-division-step-core-reconstruction`.
+
+The first removed failing tail was:
+
+```lisp
+(defthm finite-field-poly-division-step-core-degree-decreases
+  (implies (and (finite-field-canonical-polynomial-p remainder)
+                (finite-field-canonical-polynomial-p divisor)
+                (consp remainder) (consp divisor)
+                (<= (finite-field-poly-degree divisor)
+                    (finite-field-poly-degree remainder)))
+           (let ((next (cdr (finite-field-poly-division-step-core remainder divisor))))
+             (or (not (consp next))
+                 (< (finite-field-poly-degree next)
+                    (finite-field-poly-degree remainder)))))
+  :rule-classes nil
+  ...)
+```
+
+The relevant residual checkpoint concluded a nonempty/canonical next remainder
+was impossible after the proof had unfolded subtraction internals, instead of
+using a focused leading-cancellation interface.  The enabled/disabled proof
+route used `finite-field-poly-division-step-core-next-active`, product
+properties, the generic length-of-subtraction theorem instance, and disabled the
+finite-field core and `finite-field-poly-sub-definition`; it was removed.
+Classification: missing division-step degree theorem / ordinary target proof
+remains likely after a separate finite-field leading-cancellation theorem.

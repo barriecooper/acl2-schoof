@@ -310,3 +310,122 @@
                  (raw-neg finite-field-poly-raw-neg)
                  (poly-neg finite-field-poly-neg)
                  (poly-sub finite-field-poly-sub))))))
+
+(defthm finite-field-poly-division-step-core-active
+  (implies (and (consp remainder) (consp divisor)
+                (<= (finite-field-poly-degree divisor)
+                    (finite-field-poly-degree remainder)))
+           (equal (finite-field-poly-division-step-core remainder divisor)
+                  (let* ((k (- (finite-field-poly-degree remainder)
+                               (finite-field-poly-degree divisor)))
+                         (c (finite-field-div
+                             (finite-field-poly-leading-coefficient remainder)
+                             (finite-field-poly-leading-coefficient divisor)))
+                         (term (finite-field-poly-monomial c k)))
+                    (cons term
+                          (finite-field-poly-sub
+                           remainder
+                           (finite-field-poly-mul term divisor))))))
+  :hints (("Goal" :in-theory (enable finite-field-poly-division-step-core))))
+
+(defthm finite-field-poly-division-step-core-term-active
+  (implies (and (consp remainder) (consp divisor)
+                (<= (finite-field-poly-degree divisor)
+                    (finite-field-poly-degree remainder)))
+           (equal (car (finite-field-poly-division-step-core remainder divisor))
+                  (let* ((k (- (finite-field-poly-degree remainder)
+                               (finite-field-poly-degree divisor)))
+                         (c (finite-field-div
+                             (finite-field-poly-leading-coefficient remainder)
+                             (finite-field-poly-leading-coefficient divisor))))
+                    (finite-field-poly-monomial c k))))
+  :hints (("Goal" :use ((:instance finite-field-poly-division-step-core-active))
+           :in-theory (disable finite-field-poly-division-step-core))))
+
+(defthm finite-field-poly-division-step-core-next-active
+  (implies (and (consp remainder) (consp divisor)
+                (<= (finite-field-poly-degree divisor)
+                    (finite-field-poly-degree remainder)))
+           (equal (cdr (finite-field-poly-division-step-core remainder divisor))
+                  (finite-field-poly-sub
+                   remainder
+                   (finite-field-poly-mul
+                    (car (finite-field-poly-division-step-core remainder divisor))
+                    divisor))))
+  :hints (("Goal" :use ((:instance finite-field-poly-division-step-core-active))
+           :in-theory (disable finite-field-poly-division-step-core))))
+
+(defthm finite-field-poly-division-step-core-next-polynomial
+  (implies (finite-field-canonical-polynomial-p remainder)
+           (finite-field-polynomial-p
+            (cdr (finite-field-poly-division-step-core remainder divisor))))
+  :hints (("Goal"
+           :cases ((and (consp remainder) (consp divisor)
+                        (<= (finite-field-poly-degree divisor)
+                            (finite-field-poly-degree remainder))))
+           :use ((:instance finite-field-poly-division-step-core-next-active)
+                 (:instance finite-field-canonical-polynomial-p-of-poly-sub
+                            (x remainder)
+                            (y (finite-field-poly-mul
+                                (car (finite-field-poly-division-step-core remainder divisor))
+                                divisor)))
+                 (:instance finite-field-poly-normalize-when-canonical
+                            (xs remainder)))
+           :in-theory (disable finite-field-poly-division-step-core
+                               finite-field-poly-sub-definition))))
+
+
+
+(defthm finite-field-polynomial-p-of-poly-mul
+  (finite-field-polynomial-p (finite-field-poly-mul x y))
+  :hints (("Goal"
+           :use ((:instance finite-field-canonical-polynomial-p-of-poly-mul
+                            (x x) (y y))))))
+
+
+(defthm finite-field-poly-mul-of-nil-left
+  (equal (finite-field-poly-mul nil x) nil)
+  :hints (("Goal" :in-theory (theory 'minimal-theory)
+           :by (:functional-instance poly-mul-of-nil-left
+                 (gfield::field-element-p gfield::finite-field-element-p)
+                 (gfield::field-fix gfield::finite-field-fix)
+                 (gfield::field-zero gfield::finite-field-zero)
+                 (gfield::field-one gfield::finite-field-one)
+                 (gfield::field-add gfield::finite-field-add)
+                 (gfield::field-mul gfield::finite-field-mul)
+                 (gfield::field-neg gfield::finite-field-neg)
+                 (gfield::field-inv gfield::finite-field-inv)
+                 (fix-coefficients finite-field-poly-fix-coefficients)
+                 (trim-trailing-zeros finite-field-poly-trim-trailing-zeros)
+                 (normalize finite-field-poly-normalize)
+                 (raw-add finite-field-poly-raw-add)
+                 (raw-scale finite-field-poly-raw-scale)
+                 (raw-mul finite-field-poly-raw-mul)
+                 (poly-mul finite-field-poly-mul)))))
+
+
+(defthm finite-field-poly-division-step-core-reconstruction
+  (implies (finite-field-canonical-polynomial-p remainder)
+           (equal (finite-field-poly-add
+                   (finite-field-poly-mul
+                    (car (finite-field-poly-division-step-core remainder divisor))
+                    divisor)
+                   (cdr (finite-field-poly-division-step-core remainder divisor)))
+                  remainder))
+  :rule-classes nil
+  :hints (("Goal"
+           :cases ((and (consp remainder) (consp divisor)
+                        (<= (finite-field-poly-degree divisor)
+                            (finite-field-poly-degree remainder))))
+           :use ((:instance finite-field-poly-division-step-core-next-active)
+                 (:instance finite-field-poly-add-left-to-poly-sub
+                            (x (finite-field-poly-mul
+                                (car (finite-field-poly-division-step-core remainder divisor))
+                                divisor))
+                            (y remainder)))
+           :in-theory
+           (e/d (finite-field-poly-division-step-core)
+                (finite-field-poly-mul finite-field-poly-sub
+                 finite-field-poly-add finite-field-poly-monomial
+                 finite-field-poly-normalize finite-field-poly-raw-mul
+                 finite-field-poly-raw-add finite-field-poly-sub-definition)))))
