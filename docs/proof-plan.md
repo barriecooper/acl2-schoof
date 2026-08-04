@@ -47,11 +47,13 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    predicate.
 2. Add a polynomial natural-scaling interface when the derivative power rule
    or another concrete client requires it.
-3. Build on the certified generic fixed-length coefficient reconstruction and
-   zero-padding boundary with a separately audited generic mixed-radix
-   coefficient codec and fixed-modulus rank/unrank.  Prove its bounded inverse
-   laws before instantiating the finite-bijection theory or claiming generic
-   extension cardinality.  Generic finite-field cardinality remains open;
+3. Canonical-vector recovery for the generic fixed-length coefficient
+   representation is complete. The exact next task is a read-only
+   architectural audit of generic mixed-radix coefficient coding and
+   fixed-modulus rank/unrank. That audit must decide the base-field
+   finite-bijection interface and the `(q^n)` arithmetic boundary before any
+   implementation, finite-bijection instantiation, or generic extension
+   cardinality claim. Generic finite-field cardinality remains open;
    alternatively select another separately audited Hasse/Schoof boundary.
 4. Only after actual cardinality evidence is available for the intended
    context, connect that cardinality (not `field-frobenius-exponent`) to the
