@@ -50,8 +50,9 @@ Proceed with one bounded mathematical or execution boundary per proof change:
 3. The separate finite-field coding context is complete, with coherent field
    operations and bounded rank/unrank evidence validated by PFIELD and F7.  The
    renamed `finite-field-*` operations now drive a certified transparent GPOLY
-   core.  Next audit and certify the finite-field division/remainder representation
-   substrate needed by a later fixed-modulus coefficient-vector instance.
+   core, and generated divmod cores expose a standardized recursive equation
+   theorem. Next certify the finite-field division/remainder bridge using that
+   seam, for the later fixed-modulus coefficient-vector instance.
    Only after that bridge should generic mixed-radix rank/unrank resume; generic
    finite-field and extension cardinality remain open.
 4. Only after actual cardinality evidence is available for the intended

@@ -253,6 +253,10 @@ canonical remainder measure. Concrete F7 recursion and its complete operation
 chain have verified guards. GCD and XGCD reuse that division boundary;
 nonrecursive wrappers do not constitute alternate algorithms.
 
+Generated divmod cores additionally expose a `:RULE-CLASSES NIL` one-step
+equation theorem for functional-instantiation proofs. It changes no executable
+body and does not globally enable recursive unfolding; F7 execution is unchanged.
+
 A `verify-guards` event establishes only guard correctness for the admitted
 logical definition. Any staged `:verify-guards nil` generated for a power
 instance remains acceptable only because the instance later supplies its
