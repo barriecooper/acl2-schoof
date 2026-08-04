@@ -195,3 +195,28 @@ consequence for canonical next remainders.
 
 Classification: missing finite-field degree theorem / ordinary target proof
 remains likely.
+
+## 2026-08-04 core degree and length checkpoint
+
+| Group | Last certified event | First failing event | Result |
+| --- | --- | --- | --- |
+| Equal-degree projection | `finite-field-poly-division-step-core-product-properties` | — | Directly consumable |
+| Equal-degree to equal-length | `finite-field-equal-len-when-canonical-nonzero-and-equal-degree` | — | Certified |
+| Product equal length | `finite-field-poly-division-step-core-product-length-equal` | — | Certified |
+| Product leading equality | `finite-field-poly-division-step-core-product-leading-equal` | — | Certified |
+| Active strict length | `finite-field-poly-division-step-core-active-length-decreases` | — | Certified |
+| Core degree decrease | `finite-field-poly-division-step-core-degree-decreases` | — | Certified |
+| Core length decrease | `finite-field-poly-division-step-core-length-decreases` | — | Certified |
+| Public interface | `finite-field-poly-division-step-core-length-decreases` | — | Not attempted |
+
+The core strict length theorem now has the exact shape needed by a future
+`def-divmod-instance` termination argument:
+
+```lisp
+(< (len (cdr (finite-field-poly-division-step-core remainder divisor)))
+   (len remainder))
+```
+
+under canonical active-case hypotheses.  No recursive division was introduced,
+and the staged book remains unregistered pending the public wrapper interface
+and regression/documentation boundary.

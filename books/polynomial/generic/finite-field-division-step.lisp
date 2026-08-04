@@ -461,3 +461,141 @@
                  (poly-sub finite-field-poly-sub)
                  (poly-degree finite-field-poly-degree)
                  (poly-leading-coefficient finite-field-poly-leading-coefficient)))))
+
+(defthm finite-field-equal-len-when-canonical-nonzero-and-equal-degree
+  (implies (and (finite-field-canonical-polynomial-p first)
+                (finite-field-canonical-polynomial-p second)
+                (consp first) (consp second)
+                (equal (finite-field-poly-degree first)
+                       (finite-field-poly-degree second)))
+           (equal (len first) (len second)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-degree-when-canonical-nonzero
+                            (p first))
+                 (:instance finite-field-poly-degree-when-canonical-nonzero
+                            (p second)))
+           :in-theory (disable finite-field-canonical-polynomial-p
+                               finite-field-poly-degree))))
+
+(defthm finite-field-poly-division-step-core-product-length-equal
+  (implies (and (finite-field-canonical-polynomial-p remainder)
+                (finite-field-canonical-polynomial-p divisor)
+                (consp remainder) (consp divisor)
+                (<= (finite-field-poly-degree divisor)
+                    (finite-field-poly-degree remainder)))
+           (equal (len (finite-field-poly-mul
+                        (car (finite-field-poly-division-step-core remainder divisor))
+                        divisor))
+                  (len remainder)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-division-step-core-product-properties)
+                 (:instance finite-field-equal-len-when-canonical-nonzero-and-equal-degree
+                            (first (finite-field-poly-mul
+                                    (car (finite-field-poly-division-step-core remainder divisor))
+                                    divisor))
+                            (second remainder)))
+           :in-theory (disable finite-field-poly-mul
+                               finite-field-poly-division-step-core))))
+
+(defthm finite-field-poly-division-step-core-product-leading-equal
+  (implies (and (finite-field-canonical-polynomial-p remainder)
+                (finite-field-canonical-polynomial-p divisor)
+                (consp remainder) (consp divisor)
+                (<= (finite-field-poly-degree divisor)
+                    (finite-field-poly-degree remainder)))
+           (equal (finite-field-poly-leading-coefficient
+                   (finite-field-poly-mul
+                    (car (finite-field-poly-division-step-core remainder divisor))
+                    divisor))
+                  (finite-field-poly-leading-coefficient remainder)))
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-division-step-core-product-properties))
+           :in-theory (disable finite-field-poly-mul
+                               finite-field-poly-division-step-core))))
+
+(defthm finite-field-poly-division-step-core-active-length-decreases
+  (implies (and (finite-field-canonical-polynomial-p remainder)
+                (finite-field-canonical-polynomial-p divisor)
+                (consp remainder) (consp divisor)
+                (<= (finite-field-poly-degree divisor)
+                    (finite-field-poly-degree remainder)))
+           (< (len (cdr (finite-field-poly-division-step-core remainder divisor)))
+              (len remainder)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-division-step-core-next-active)
+                 (:instance finite-field-poly-division-step-core-product-properties)
+                 (:instance finite-field-poly-division-step-core-product-length-equal)
+                 (:instance finite-field-poly-division-step-core-product-leading-equal)
+                 (:instance finite-field-len-of-poly-sub-strict-when-equal-len-and-leading-equal
+                            (x remainder)
+                            (y (finite-field-poly-mul
+                                (car (finite-field-poly-division-step-core remainder divisor))
+                                divisor))))
+           :in-theory (disable finite-field-poly-division-step-core
+                               finite-field-poly-mul
+                               finite-field-poly-sub-definition))))
+
+
+(defthm finite-field-degree-less-when-canonical-nonzero-and-len-less
+  (implies (and (finite-field-canonical-polynomial-p x)
+                (finite-field-canonical-polynomial-p y)
+                (consp x) (consp y)
+                (< (len y) (len x)))
+           (< (finite-field-poly-degree y)
+              (finite-field-poly-degree x)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-degree-when-canonical-nonzero
+                            (p x))
+                 (:instance finite-field-poly-degree-when-canonical-nonzero
+                            (p y)))
+           :in-theory (disable finite-field-canonical-polynomial-p
+                               finite-field-poly-degree))))
+
+
+(defthm finite-field-poly-division-step-core-degree-decreases
+  (implies (and (finite-field-canonical-polynomial-p remainder)
+                (finite-field-canonical-polynomial-p divisor)
+                (consp remainder) (consp divisor)
+                (<= (finite-field-poly-degree divisor)
+                    (finite-field-poly-degree remainder)))
+           (let ((next (cdr (finite-field-poly-division-step-core remainder divisor))))
+             (or (not (consp next))
+                 (< (finite-field-poly-degree next)
+                    (finite-field-poly-degree remainder)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :cases ((consp (cdr (finite-field-poly-division-step-core remainder divisor))))
+           :use ((:instance finite-field-poly-division-step-core-active-length-decreases)
+                 (:instance finite-field-poly-division-step-core-next-canonical)
+                 (:instance finite-field-poly-normalize-when-canonical
+                            (xs remainder))
+                 (:instance finite-field-poly-normalize-when-canonical
+                            (xs divisor))
+                 (:instance finite-field-degree-less-when-canonical-nonzero-and-len-less
+                            (x remainder)
+                            (y (cdr (finite-field-poly-division-step-core remainder divisor))))
+                 (:instance finite-field-poly-degree-when-canonical-nonzero
+                            (p remainder))
+                 (:instance finite-field-poly-degree-when-canonical-nonzero
+                            (p (cdr (finite-field-poly-division-step-core remainder divisor)))))
+           :in-theory (disable finite-field-poly-division-step-core
+                               finite-field-poly-division-step-core-active
+                               finite-field-poly-division-step-core-inactive
+                               finite-field-poly-degree))))
+
+(defthm finite-field-poly-division-step-core-length-decreases
+  (implies (and (finite-field-canonical-polynomial-p remainder)
+                (finite-field-canonical-polynomial-p divisor)
+                (consp remainder) (consp divisor)
+                (<= (finite-field-poly-degree divisor)
+                    (finite-field-poly-degree remainder)))
+           (< (len (cdr (finite-field-poly-division-step-core remainder divisor)))
+              (len remainder)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-division-step-core-active-length-decreases))
+           :in-theory (disable finite-field-poly-division-step-core))))
