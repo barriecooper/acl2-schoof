@@ -64,8 +64,15 @@ extend the unrestricted `field-*` model: instead, its field laws make it a
 functional instance of the generic kernel, while its coding laws specialize the
 field-independent finite-bijection assumptions.  A local Boolean field is only
 a consistency witness; PFIELD and F7 are proving clients.  The context exposes
-no generic carrier or cardinality.  Connecting the renamed operations to the
-GPOLY/fixed-modulus stack remains the next architectural bridge.
+no generic carrier or cardinality.  The GPOLY stack now has a
+finite-field-prefixed polynomial core target over the renamed operations.  Its
+recognizers, normalization, evaluation, coefficient projection, degree,
+leading coefficient, and additive/multiplicative operations are ordinary
+transparent definitions generated from the existing component templates where
+available.  Narrow GPOLY semantic theorems are transported by explicit
+functional instantiation; unrestricted GPOLY remains authoritative, and PFIELD
+and F7 remain the executable clients.  Finite-field-prefixed division,
+remainder, and fixed-modulus representation remain open.
 
 ### Field-only X-CERT algebra
 

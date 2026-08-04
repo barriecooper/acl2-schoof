@@ -1,5 +1,19 @@
 # Generic dense polynomials
 
+`generic/finite-field-instance.lisp` supplies the certified renamed core target:
+`finite-field-{coefficient-list-p,polynomial-p,canonical-polynomial-p}` and
+`finite-field-poly-{fix-coefficients,trim-trailing-zeros,normalize,eval,
+coefficient,degree,leading-coefficient,raw-add,add,raw-neg,neg,sub,raw-scale,
+scale,raw-mul,mul}`.  Existing component generators create the operational
+definitions, while explicit functional instances transport a narrow interface
+for normalization, coefficient projection, degree/leading coefficient,
+canonical arithmetic, additive laws, and coefficient semantics.  The
+substitution runs from `field-*`/generic GPOLY symbols to the renamed
+`finite-field-*` target; it asserts no equality between constrained families.
+Rank, unrank, and bound are intentionally absent because field operations
+determine polynomial algebra, while coding supports later enumeration and
+mixed-radix representation.
+
 `books/polynomial/generic/package.lisp` establishes the dedicated `GPOLY`
 namespace, `base.lisp` defines the abstract theory over `GFIELD`, and
 `add.lisp` supplies the additive structure, `scale.lisp` supplies the scalar

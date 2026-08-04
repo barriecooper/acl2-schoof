@@ -15,6 +15,8 @@
 (include-book "field/finite-field-context-regression")
 (include-book "field/pfield-finite-bijection-regression")
 (include-book "field/pfield-finite-field-context-regression")
+(include-book "polynomial/generic/finite-field-instance")
+(include-book "polynomial/generic/finite-field-instance-regression")
 (include-book "field/difference-of-squares")
 (include-book "field/common-summand-subtraction")
 (include-book "field/common-summand-subtraction-regression")

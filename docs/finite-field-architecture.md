@@ -232,6 +232,13 @@ experiment used admission, axioms, trust tags, or raw Lisp.
 
 ## Migration plan and consequences
 
+The certified dependency now includes
+`finite-field context -> finite-field polynomial core`.  The core is the
+ordinary transparent `finite-field-poly-*` target over the field-shaped part of
+the context; polynomial correctness does not use rank, unrank, or bound.
+Finite-field division/remainder, fixed-modulus representation, mixed-radix
+coding, and generic carrier/cardinality remain separate open boundaries.
+
 1. Add a minimal abstract equational field signature and prove only structural
    generic polynomial normalization/carrier facts.
 2. Add an explicit-`p` PFIELD adapter with same-arity wrappers and functional

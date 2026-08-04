@@ -7,6 +7,13 @@ operation interface. Named fields provide ordinary executable operations and
 functional substitutions that transport the generic semantic theorems. A
 concrete layer is complete only to the extent recorded in `obligations.md`.
 
+The finite-field polynomial core is another family of ordinary transparent
+definitions, but its leaves are constrained `finite-field-*` operations, so it
+is a generic logical target rather than a standalone executable field
+constructor.  Functional instantiation supplies its semantics.  PFIELD and F7
+remain the executable realizations, and focused F7 evaluations are execution
+evidence rather than semantic proofs.  No alternate execution branch is added.
+
 For F7, the retained concrete polynomial interface includes guard-verified
 recursive quotient/remainder and projections, raw and monic GCD, raw and monic
 XGCD, and modular inverse. Focused exact executions cover their intended
