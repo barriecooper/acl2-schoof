@@ -53,6 +53,18 @@ guard-verified definition using the existing F7 modular inverse; the certified
 fixed-modulus functional instance supplies semantic inverse evidence. Exact
 F7X2 assertions establish execution only.
 
+The generic fixed-modulus coefficient representation is likewise transparent
+and guard verified.  Its coefficient count applies `nfix` to the normalized
+modulus degree (and equals that positive degree in the certified context).  The
+vector wrapper fixes its arbitrary input once, performs a single-pass traversal,
+has exactly that many entries, and pads missing entries with actual field zero;
+final zero slots remain present.  `fixed-modulus-reconstruct` only normalizes
+its arbitrary dense coefficient list: it fixes encountered coefficients,
+discards a malformed tail, and removes trailing zeroes.  It neither truncates a
+long list nor reduces it modulo the fixed modulus.  Certified reconstruction
+and fixer-level vector extensionality supply logical correctness; focused F7X2
+evaluations cover zero, reduction, malformed values and tails, and padding.
+
 ## Power fast/spec boundary
 
 `DEF-POW-INSTANCE` generates a linear logical specification, a
