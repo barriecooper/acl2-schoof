@@ -49,8 +49,9 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    or another concrete client requires it.
 3. The separate finite-field coding context is complete, with coherent field
    operations and bounded rank/unrank evidence validated by PFIELD and F7.  The
-   exact next boundary is a read-only audit and certification plan for connecting
-   the renamed `finite-field-*` operations to the GPOLY/fixed-modulus stack.
+   renamed `finite-field-*` operations now drive a certified transparent GPOLY
+   core.  Next audit and certify the finite-field division/remainder representation
+   substrate needed by a later fixed-modulus coefficient-vector instance.
    Only after that bridge should generic mixed-radix rank/unrank resume; generic
    finite-field and extension cardinality remain open.
 4. Only after actual cardinality evidence is available for the intended

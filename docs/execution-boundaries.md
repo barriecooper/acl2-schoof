@@ -162,6 +162,15 @@ semantics and direct carrier, while F7X2 retains its stronger modulo-49 theorem
 and existing carrier.  Their proving-instance regressions add no alternate
 execution branch and do not replace the semantic inverse and carrier proofs.
 
+The finite-field-prefixed polynomial core uses ordinary transparent definitions
+generated from the existing GPOLY component templates; its raw helpers remain
+inspectable and it introduces no `MBE`, `DEFEXEC`, attachment, or alternate
+execution branch.  Because the underlying finite-field operations are
+constrained, the family is a logical target.  Explicit functional instances
+provide semantic evidence, while existing PFIELD/F7 functions and focused F7
+evaluations provide execution evidence.  Verified guards do not replace the
+semantic bridge.
+
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes
 only the affine ordinate by `field-neg`.  It calls neither the curve classifier
