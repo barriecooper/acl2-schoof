@@ -105,3 +105,5 @@ policy and its open obligations are updated in the ledger. Concrete examples
 may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
+
+Next boundary: certify the finite-field division-step substrate using the certified finite-field monomial/scalar-division support, without adding recursive divmod or public quotient/remainder yet.

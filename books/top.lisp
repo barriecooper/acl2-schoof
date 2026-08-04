@@ -17,6 +17,7 @@
 (include-book "field/pfield-finite-field-context-regression")
 (include-book "polynomial/generic/finite-field-instance")
 (include-book "polynomial/generic/finite-field-instance-regression")
+(include-book "polynomial/generic/finite-field-monomial-division-support")
 (include-book "field/difference-of-squares")
 (include-book "field/common-summand-subtraction")
 (include-book "field/common-summand-subtraction-regression")
@@ -204,6 +205,7 @@
 
 (include-book "polynomial/generic/f7-division")
 (include-book "polynomial/generic/divmod-instantiation-regression")
+(include-book "polynomial/generic/finite-field-monomial-division-support-regression")
 (include-book "polynomial/generic/f7x2-representation")
 (include-book "polynomial/generic/f7-reduced-arithmetic")
 (include-book "polynomial/generic/f7x2-arithmetic")

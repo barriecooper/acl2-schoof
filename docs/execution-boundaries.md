@@ -276,3 +276,5 @@ The current project source uses `MBE` only through generated power instances
 and contains no `DEFEXEC`, executable attachment, program-mode boundary, raw
 Lisp inclusion, skipped proof, project axiom, or trust tag. Future changes to
 this inventory must update this document and satisfy the evidence model above.
+
+The finite-field monomial/scalar-division support layer adds only transparent logical definitions and theorems over constrained finite-field operations. It does not add MBE, DEFEXEC, attachments, raw Lisp, coding/cardinality calls, recursive divmod, quotient, or remainder operations.
