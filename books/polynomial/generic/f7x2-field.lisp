@@ -112,10 +112,6 @@
 
 ; Exact GFIELD constraint shapes not already exported by the representation and
 ; arithmetic books.  Closure plus the canonical fixer gives the fixing laws.
-(defthm f7x2-field-booleanp-of-element-p
-  (booleanp (f7x2-element-p x))
-  :hints (("Goal" :use ((:instance booleanp-of-f7x2-element-p)))))
-
 (defthm f7x2-fix-of-f7x2-add
   (equal (f7x2-fix (f7x2-add x y)) (f7x2-add x y))
   :hints (("Goal"

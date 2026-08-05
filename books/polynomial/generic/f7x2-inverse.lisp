@@ -33,21 +33,22 @@
 ; Modular inverse is defined by one final remainder.  This concrete wrapper is
 ; deliberately independent of irreducibility and the fixed-modulus field
 ; encapsulate.
-(defthm f7-remainder-of-poly-modular-inverse
-  (equal (f7-poly-remainder
-          (f7-poly-modular-inverse value modulus)
-          modulus)
-         (f7-poly-modular-inverse value modulus))
-  :hints (("Goal"
-           :use ((:instance f7-poly-remainder-idempotent
-                            (dividend
-                             (mv-nth
-                              1
-                              (f7-poly-monic-extended-euclidean-gcd
-                               value modulus))))
-                 (:instance f7-poly-modular-inverse-definition
-                            (first value)))
-           :in-theory (theory 'minimal-theory))))
+(local
+ (defthm f7-remainder-of-poly-modular-inverse
+   (equal (f7-poly-remainder
+           (f7-poly-modular-inverse value modulus)
+           modulus)
+          (f7-poly-modular-inverse value modulus))
+   :hints (("Goal"
+            :use ((:instance f7-poly-remainder-idempotent
+                             (dividend
+                              (mv-nth
+                               1
+                               (f7-poly-monic-extended-euclidean-gcd
+                                value modulus))))
+                  (:instance f7-poly-modular-inverse-definition
+                             (first value)))
+            :in-theory (theory 'minimal-theory)))))
 
 (defthm f7x2-fix-of-f7x2-inv
   (equal (f7x2-fix (f7x2-inv value))
@@ -71,8 +72,9 @@
            (union-theories '(f7x2-element-p)
                            (theory 'minimal-theory)))))
 
-; These ground evaluations are execution evidence only.  Universal closure,
-; fixing, zero, and nonzero inverse laws remain separate proof obligations.
+; These ground equations are execution evidence.  The structural fixing,
+; closure, and zero laws are certified above; the nonzero inverse field law is
+; supplied by f7x2-field.lisp.
 (defthm f7x2-inv-execution-regressions
   (and
    (equal (f7x2-inv (f7x2-zero)) (f7x2-zero))
