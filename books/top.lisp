@@ -212,6 +212,8 @@
 (include-book "polynomial/generic/finite-field-divmod-regression")
 (include-book "polynomial/generic/finite-field-reduction")
 (include-book "polynomial/generic/finite-field-reduction-regression")
+(include-book "polynomial/generic/finite-field-fixed-modulus-coefficients")
+(include-book "polynomial/generic/finite-field-fixed-modulus-coefficients-regression")
 (include-book "polynomial/generic/f7x2-representation")
 (include-book "polynomial/generic/f7-reduced-arithmetic")
 (include-book "polynomial/generic/f7x2-arithmetic")
