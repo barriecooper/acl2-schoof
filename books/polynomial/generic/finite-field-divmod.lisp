@@ -44,5 +44,59 @@
          (mv-nth 1 (finite-field-poly-divmod f g)))
   :hints (("Goal" :in-theory (enable finite-field-poly-remainder))))
 
+(defthm finite-field-poly-normalize-definition-for-divmod
+  (equal (finite-field-poly-normalize poly)
+         (finite-field-poly-trim-trailing-zeros
+          (finite-field-poly-fix-coefficients poly)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable finite-field-poly-normalize))))
 
-; Public divmod interface functional instantiation remains the next boundary.
+
+(defthm finite-field-poly-degree-when-normalize-not-consp
+  (implies (not (consp (finite-field-poly-normalize poly)))
+           (equal (finite-field-poly-degree poly) -1))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-degree-of-poly-normalize
+                            (p poly))
+                 (:instance finite-field-poly-degree-of-nil))
+           :in-theory (enable finite-field-poly-degree))))
+
+(defthm finite-field-poly-degree-when-normalize-consp
+  (implies (consp (finite-field-poly-normalize poly))
+           (equal (finite-field-poly-degree poly)
+                  (+ -1 (len (finite-field-poly-normalize poly)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-degree-when-canonical-nonzero
+                            (p (finite-field-poly-normalize poly)))
+                 (:instance finite-field-canonical-polynomial-p-of-poly-normalize
+                            (xs poly))
+                 (:instance finite-field-poly-degree-of-poly-normalize
+                            (p poly)))
+           :in-theory (disable finite-field-poly-degree
+                               finite-field-poly-normalize))))
+
+(defthm finite-field-poly-degree-when-normalize-consp-expanded
+  (implies (consp (finite-field-poly-normalize poly))
+           (equal (finite-field-poly-degree poly)
+                  (+ -1
+                     (len (finite-field-poly-trim-trailing-zeros
+                           (finite-field-poly-fix-coefficients poly))))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-degree-when-normalize-consp)
+                 (:instance finite-field-poly-normalize-definition-for-divmod))
+           :in-theory (disable finite-field-poly-degree
+                               finite-field-poly-normalize))))
+
+
+(defthm finite-field-poly-degree-definition-for-divmod
+  (equal (finite-field-poly-degree poly)
+         (if (consp (finite-field-poly-normalize poly))
+             (+ -1 (len (finite-field-poly-normalize poly)))
+           -1))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable finite-field-poly-degree))))
+
+; Aggregate public divmod interface remains the next boundary.
