@@ -12,6 +12,20 @@
   :hints (("Goal" :in-theory (theory 'minimal-theory)
            :use finite-field-fixed-modulus-reconstruct-of-coefficient-vector)))
 
+
+(defthm finite-field-fixed-modulus-vector-round-trip-minimal-theory-client
+  (implies
+   (and (consp (finite-field-poly-normalize modulus))
+        (finite-field-coefficient-list-p coefficients)
+        (equal (len coefficients)
+               (finite-field-fixed-modulus-coefficient-count modulus)))
+   (equal (finite-field-fixed-modulus-coefficient-vector
+           (finite-field-fixed-modulus-reconstruct coefficients) modulus)
+          coefficients))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (theory 'minimal-theory)
+           :use finite-field-fixed-modulus-coefficient-vector-of-reconstruct)))
+
 (defthm finite-field-fixed-modulus-zero-modulus-minimal-theory-client
   (implies (equal (finite-field-poly-normalize modulus) nil)
            (equal (finite-field-fixed-modulus-coefficient-vector x modulus)
@@ -54,6 +68,9 @@
       (equal (f7-fixed-modulus-coefficient-vector '(bad 9 also-bad) '(1 0 1)) '(0 2))
       (equal (f7-fixed-modulus-coefficient-vector '(1 2 . bad-tail) '(1 0 1)) '(1 2))
       (equal (f7-fixed-modulus-reconstruct '(3 0)) '(3))
+      (equal (f7-fixed-modulus-coefficient-vector
+              (f7-fixed-modulus-reconstruct '(3 0)) '(1 0 1))
+             '(3 0))
       (equal (f7-fixed-modulus-coefficient-vector 'malformed '(1 0 1)) '(0 0))
       (equal (f7-fixed-modulus-coefficient-vector '(1 2 3) nil) nil)
       (equal (f7-fixed-modulus-reconstruct
