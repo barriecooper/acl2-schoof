@@ -100,3 +100,25 @@
   :hints (("Goal" :in-theory (enable finite-field-poly-degree))))
 
 ; Aggregate public divmod interface remains the next boundary.
+
+(defthm finite-field-poly-divmod-core-accumulator-step-canonical
+  (implies (and (finite-field-canonical-polynomial-p quotient)
+                (finite-field-canonical-polynomial-p remainder)
+                (finite-field-canonical-polynomial-p divisor)
+                (consp remainder) (consp divisor)
+                (<= (finite-field-poly-degree divisor)
+                    (finite-field-poly-degree remainder)))
+           (finite-field-canonical-polynomial-p
+            (finite-field-poly-add
+             quotient
+             (car (finite-field-poly-division-step-core remainder divisor)))))
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-division-step-core-term-properties))
+           :in-theory (disable finite-field-poly-division-step-core
+                               finite-field-poly-add
+                               finite-field-poly-mul
+                               finite-field-poly-raw-mul
+                               finite-field-poly-normalize))))
+
+
+; Direct core output canonicality remains the next checkpoint.
