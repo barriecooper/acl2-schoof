@@ -24,7 +24,7 @@ The repository currently certifies these subsystem-level foundations:
   differentiation and its additive laws, degree, division with remainder,
   Euclidean GCD, extended GCD, modular inversion, irreducibility, and reduced
   arithmetic, plus a finite-field-prefixed recursive divmod and public
-  remainder/reduced-representative interface for the later coding stack;
+  remainder/reduced-representative interface, fixed-modulus coefficient vectors, and exact-width coefficient-vector mixed-radix rank/unrank for the later carrier stack;
 - a generic fixed-modulus quotient-field construction for an irreducible
   polynomial, plus concrete PFIELD/F7 clients and an F7X2 proving instance;
 - a certified executable 49-element carrier and exact cardinality for the

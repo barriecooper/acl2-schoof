@@ -292,7 +292,7 @@ interface and prove equivalence without changing curve theorems.
 Open mathematics remains open in `docs/obligations.md`; this decision marks no
 division, extension-field, Hasse, or Schoof obligation proved.
 
-Current finite-field polynomial dependency chain: finite-field context → finite-field polynomial core → finite-field monomial/scalar-division support → finite-field division-step substrate → recursive divmod and projections → public remainder/reduced representatives → fixed-modulus coefficient representation. Mixed-radix rank/unrank and carrier/cardinality layers remain open.
+Current finite-field polynomial dependency chain: finite-field context → finite-field polynomial core → finite-field monomial/scalar-division support → finite-field division-step substrate → recursive divmod and projections → public remainder/reduced representatives → fixed-modulus coefficient representation. Exact-width coefficient-vector mixed-radix rank/unrank is certified; carrier/cardinality layers remain open.
 
 ## Finite-field division-step substrate
 
@@ -301,4 +301,4 @@ It uses transparent generated definitions for the core step and public term/next
 projections, with verified guards, reconstruction, strict degree decrease, and a
 strict core length theorem suitable for the future recursive divmod measure.  The
 decisive cancellation proof is length/leading-coefficient based, not
-coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are certified; fixed-modulus representations and coding/cardinality operations remain open and are not introduced here.
+coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are certified; fixed-modulus coefficient representation and exact-width coefficient-vector coding are certified; carrier/cardinality operations remain open.
