@@ -50,8 +50,12 @@ The generic fixed-modulus field uses canonical remainder representatives.
 F7X2 operations accept arbitrary ACL2 inputs, fix/reduce them, and return
 canonical representatives. F7X2's inverse is an ordinary transparent,
 guard-verified definition using the existing F7 modular inverse; the certified
-fixed-modulus functional instance supplies semantic inverse evidence. Exact
-F7X2 assertions establish execution only.
+fixed-modulus functional instance supplies semantic inverse evidence.  The
+public F7X2 field book proves the inverse fixing/closure laws directly from
+remainder idempotence and packages these unchanged operations as a complete
+nullary `GFIELD` instance; downstream cancellation and division functional
+instances check that constraint boundary. Exact F7X2 assertions establish
+execution only.
 
 The generic fixed-modulus coefficient representation is likewise transparent
 and guard verified.  Its coefficient count applies `nfix` to the normalized
