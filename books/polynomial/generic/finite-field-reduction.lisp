@@ -2,6 +2,7 @@
 
 (include-book "finite-field-divmod")
 (local (include-book "division"))
+(local (include-book "reduction"))
 
 (local (in-theory (disable finite-field-poly-divmod-core
                            finite-field-poly-divmod
@@ -231,5 +232,56 @@
                                finite-field-poly-normalize
                                finite-field-canonical-polynomial-p
                                finite-field-poly-degree))))
+
+(defthm finite-field-poly-add-definition-for-reduction-instantiation
+  (equal (finite-field-poly-add x y)
+         (finite-field-poly-normalize
+          (finite-field-poly-raw-add (finite-field-poly-normalize x)
+                                     (finite-field-poly-normalize y))))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable finite-field-poly-add))))
+
+(defthm finite-field-poly-add-left-remainder-reconstruction
+  (equal
+   (finite-field-poly-add left right)
+   (finite-field-poly-add
+    (finite-field-poly-add (finite-field-poly-remainder left modulus) right)
+    (finite-field-poly-mul
+     (mv-nth 0 (finite-field-poly-divmod left modulus))
+     (finite-field-poly-normalize modulus))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance finite-field-poly-divmod-reconstruction
+                     (f left) (g modulus))
+          (:instance finite-field-poly-remainder-is-divmod-remainder
+                     (f left) (g modulus))
+          (:instance finite-field-poly-add-associative
+                     (x (finite-field-poly-mul
+                         (mv-nth 0 (finite-field-poly-divmod left modulus))
+                         (finite-field-poly-normalize modulus)))
+                     (y (finite-field-poly-remainder left modulus))
+                     (z (finite-field-poly-normalize right)))
+          (:instance finite-field-poly-add-associative
+                     (x (finite-field-poly-remainder left modulus))
+                     (y (finite-field-poly-normalize right))
+                     (z (finite-field-poly-mul
+                         (mv-nth 0 (finite-field-poly-divmod left modulus))
+                         (finite-field-poly-normalize modulus))))
+          (:instance finite-field-poly-add-commutative
+                     (x (finite-field-poly-mul
+                         (mv-nth 0 (finite-field-poly-divmod left modulus))
+                         (finite-field-poly-normalize modulus)))
+                     (y (finite-field-poly-add
+                         (finite-field-poly-remainder left modulus)
+                         (finite-field-poly-normalize right)))))
+    :in-theory
+    (e/d (finite-field-poly-add)
+         (finite-field-poly-divmod finite-field-poly-remainder
+          finite-field-poly-normalize finite-field-poly-mul
+          finite-field-poly-add-commutative
+          finite-field-canonical-polynomial-p finite-field-polynomial-p)))))
+
+
 
 (verify-guards finite-field-poly-reduced-p)
