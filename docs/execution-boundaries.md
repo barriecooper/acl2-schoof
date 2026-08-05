@@ -66,7 +66,7 @@ and fixer-level vector extensionality supply one inverse direction. The reverse
 theorem requires a proper `coefficient-list-p` list of fixed entries whose
 length is exactly the coefficient count. Reconstruction may remove its trailing
 polynomial zeroes, but exact-length extraction restores those vector zero slots
-literally. No arbitrary-vector fixing or long-input truncation is introduced.
+literally. No arbitrary-vector fixing or long-input truncation is introduced.  The fixed-modulus carrier enumerates all natural codes below the certified mixed-radix coding bound and reconstructs each unranked vector.  Its total zero-normalized-modulus behavior is the singleton `(nil)`, since the coefficient width is zero and the coding bound is one.
 Focused F7X2 evaluations cover zero, reduction, malformed values and tails,
 padding, nonzero trailing coefficients, and trailing-zero recovery.
 
