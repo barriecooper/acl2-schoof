@@ -111,8 +111,8 @@ finite-field division-step core, raw multiplication, normalization internals,
 and lower arithmetic definitions.
 
 The remaining blocked endpoint is reconstruction.  A narrow attempt to import
-the generic accumulator algebra theorem for finite-field polynomials exposed the
-following first source-equivalent residual:
+the generic accumulator algebra theorem for finite-field polynomials first
+exposed the generated public multiplication equation:
 
 ```lisp
 (equal (finite-field-poly-mul x y)
@@ -121,10 +121,22 @@ following first source-equivalent residual:
                                    (finite-field-poly-normalize y))))
 ```
 
-That residual is the generated multiplication definition.  Retaining that proof
-route would require unfolding or supplying raw multiplication semantics, while
-the finite-field public polynomial layer currently exposes addition
-associativity but not the multiplication distributivity theorem needed by the
-one-step accumulator algebra.  The reconstruction boundary is therefore blocked
-on a missing finite-field public polynomial algebra theorem, not on the divmod
-recursion itself.  The uncertified accumulator-algebra tail was removed.
+That first residual is definitional, not by itself evidence that
+multiplication distributivity is missing.  Enabling only
+`finite-field-poly-mul` discharges it, but the next complete ACL2 residual is a
+raw multiplication definition obligation:
+
+```lisp
+(implies (not (consp x))
+         (not (finite-field-poly-raw-mul x y)))
+```
+
+No named finite-field counterpart of the generic raw-multiplication atom facts
+or of `poly-mul-right-distributive` is currently exposed by the finite-field
+polynomial public layer.  Continuing the narrow functional instance would need
+to import or unfold the raw multiplication support chain behind generic
+`poly-mul-right-distributive`.  The uncertified accumulator-algebra tail was
+removed.  The current classification is therefore a missing finite-field
+polynomial algebra interface for the distributivity fragment needed by divmod
+reconstruction, with the first two encountered obligations being the public
+`poly-mul` definition followed by the raw-multiplication atom equation.
