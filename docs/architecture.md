@@ -351,7 +351,7 @@ guards, and correspondence evidence belong in
   field, polynomial, curve, and Frobenius foundations; neither track is a
   prerequisite for the other after that seam.
 
-Finite-field monomial/scalar-division support is now certified in the staged GPOLY target: scalar division, zero-prefix, shift, monomial degree/leading-coefficient facts, and scalar nonzero/division-denominator support are available without using finite-field coding/cardinality operations. The finite-field division-step substrate and recursive divmod/projection bridge are certified; the public remainder/reduced-polynomial layer remains open.
+Finite-field monomial/scalar-division support is now certified in the staged GPOLY target: scalar division, zero-prefix, shift, monomial degree/leading-coefficient facts, and scalar nonzero/division-denominator support are available without using finite-field coding/cardinality operations. The finite-field division-step substrate and recursive divmod/projection bridge are certified; the public remainder/reduced-polynomial layer is certified.
 
 ## Finite-field division-step substrate
 
