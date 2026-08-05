@@ -23,7 +23,8 @@ The repository currently certifies these subsystem-level foundations:
 - canonical dense polynomials (`GPOLY`) with arithmetic, evaluation, formal
   differentiation and its additive laws, degree, division with remainder,
   Euclidean GCD, extended GCD, modular inversion, irreducibility, and reduced
-  arithmetic;
+  arithmetic, plus a finite-field-prefixed recursive divmod and public
+  remainder/reduced-representative interface for the later coding stack;
 - a generic fixed-modulus quotient-field construction for an irreducible
   polynomial, plus concrete PFIELD/F7 clients and an F7X2 proving instance;
 - a certified executable 49-element carrier and exact cardinality for the

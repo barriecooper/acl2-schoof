@@ -44,7 +44,7 @@ canonical-input hypothesis justifies it.
 Dense polynomial raw helpers may construct intermediate lists. Public GPOLY
 operations normalize results, so canonical equality is the stable external
 contract. Division, GCD, XGCD, modular inverse, and reduced arithmetic inherit
-malformed-value behavior from normalization and total field operations.
+malformed-value behavior from normalization and total field operations. The finite-field-prefixed remainder/reduced interface mirrors that transparent totalisation over `finite-field-poly-remainder`: zero normalized modulus returns the normalized dividend, every remainder is canonical and fixed by normalization, and the reduced predicate is exactly the public fixer fixed-point relation.
 
 The generic fixed-modulus field uses canonical remainder representatives.
 F7X2 operations accept arbitrary ACL2 inputs, fix/reduce them, and return
@@ -286,4 +286,4 @@ It uses transparent generated definitions for the core step and public term/next
 projections, with verified guards, reconstruction, strict degree decrease, and a
 strict core length theorem suitable for the future recursive divmod measure.  The
 decisive cancellation proof is length/leading-coefficient based, not
-coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are transparent generated definitions with verified guards and public correctness from accumulator invariants. Fixed-modulus representations and coding/cardinality operations remain open and are not introduced here.
+coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are transparent generated definitions with verified guards and public correctness from accumulator invariants. The finite-field public remainder/reduced representative layer is also transparent and guard verified, adding no alternate executable branch. Fixed-modulus representations and coding/cardinality operations remain open and are not introduced here.
