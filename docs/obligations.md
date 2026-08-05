@@ -43,8 +43,8 @@ correctness. The full evidence model is maintained in
 | Reusable bounded finite-bijection evidence | Certified | `finite-unrank-of-finite-rank`; `member-equal-of-finite-fix-and-finite-elements`; `finite-cardinality-equals-bound` | Field-free constructive carrier/cardinality theory with PFIELD and F7X2 proving instances. |
 | Reusable finite-field coding context | Certified | `finite-field-unrank-of-finite-field-rank`; `finite-field-rank-of-finite-field-fix`; `finite-field-bound-greater-than-one` | Separate jointly constrained finite-field model with coherent bounded coding and PFIELD/F7 proving clients; no carrier or cardinality is exposed. |
 | Finite-field polynomial core bridge | Certified | `finite-field-poly-normalize`; `finite-field-poly-coefficient-of-poly-normalize`; `finite-field-canonical-polynomial-p-of-poly-mul`; `finite-field-poly-degree-of-nil` | Ordinary renamed definitions and explicit GPOLY functional instances; coding operations are not polynomial premises. |
-| Recursive divmod instance equation seam | Certified | `<core>-functional-instance-equation`; `def-divmod-public-interface-instance` | Stable one-step recursive functional-instantiation support without generated subgoal-number hints or broad core unfolding. |
-| Finite-field division/remainder bridge | Open | — | Must instantiate only the recursive division substrate needed by later representation work. |
+| Recursive divmod instance equation seam | Certified | `<core>-functional-instance-equation`; `finite-field-poly-divmod-core-reconstruction-invariant` | Stable recursive equation support; finite-field divmod public semantics are proved by direct accumulator invariants. |
+| Finite-field recursive divmod and projections | Certified | `finite-field-poly-divmod`; `finite-field-poly-quotient`; `finite-field-poly-remainder`; `finite-field-poly-divmod-reconstruction`; `finite-field-poly-divmod-final-remainder-degree-bound` | Direct recursive accumulator invariants certify canonicality, reconstruction, and final degree bound without coding operations. |
 | Finite-field fixed-modulus representation bridge | Open | — | Requires the renamed remainder substrate before exact-length vectors and reconstruction can be instantiated. |
 | Generic finite-field cardinality | Open | — | Requires a field-facing client that supplies the certified bounded-bijection evidence; the reusable field-free consequence layer is complete. |
 | F7X2 finite-carrier cardinality | Certified | `f7x2-unrank-of-f7x2-rank`; `member-equal-of-f7x2-fix-and-f7x2-elements`; `f7x2-cardinality-equals-49` | Presentation-specific mixed-radix bijection and exhaustive duplicate-free carrier. |
@@ -193,7 +193,7 @@ boundary are maintained in
 
 - Finite-field monomial/scalar-division support — Certified (`finite-field-poly-monomial`, `finite-field-poly-degree-of-monomial`, `finite-field-div-nonzero`, `finite-field-div-mul-denominator`).
 - Finite-field division-step substrate — Certified (`finite-field-poly-division-step-core-reconstruction`, `finite-field-poly-division-step-core-degree-decreases`, `finite-field-poly-division-step-core-length-decreases`).
-- Finite-field recursive division/remainder bridge — Open.
+- Finite-field recursive divmod and projections — Certified (`finite-field-poly-divmod-reconstruction`, `finite-field-poly-remainder-degree-bound`).
 
 ## Finite-field division-step substrate
 
@@ -202,6 +202,4 @@ It uses transparent generated definitions for the core step and public term/next
 projections, with verified guards, reconstruction, strict degree decrease, and a
 strict core length theorem suitable for the future recursive divmod measure.  The
 decisive cancellation proof is length/leading-coefficient based, not
-coefficient-vector or coding based.  Recursive finite-field divmod, public
-quotient/remainder APIs, fixed-modulus representations, and coding/cardinality
-operations remain open and are not introduced here.
+coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are certified; fixed-modulus representations and coding/cardinality operations remain open and are not introduced here.

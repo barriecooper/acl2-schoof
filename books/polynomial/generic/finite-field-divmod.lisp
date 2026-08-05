@@ -257,3 +257,129 @@
                            (finite-field-poly-divmod-core
                             finite-field-poly-normalize
                             finite-field-poly-degree)))))
+(defthm finite-field-poly-divmod-accumulator-algebra
+  (implies (and (finite-field-polynomial-p quotient)
+                (finite-field-polynomial-p term)
+                (finite-field-polynomial-p divisor)
+                (finite-field-polynomial-p next)
+                (finite-field-polynomial-p remainder)
+                (equal (finite-field-poly-add
+                        (finite-field-poly-mul term divisor)
+                        next)
+                       remainder))
+           (equal (finite-field-poly-add
+                   (finite-field-poly-mul
+                    (finite-field-poly-add quotient term)
+                    divisor)
+                   next)
+                  (finite-field-poly-add
+                   (finite-field-poly-mul quotient divisor)
+                   remainder)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-mul-right-distributive
+                            (x quotient) (y term) (z divisor))
+                 (:instance finite-field-poly-add-associative
+                            (x (finite-field-poly-mul quotient divisor))
+                            (y (finite-field-poly-mul term divisor))
+                            (z next)))
+           :in-theory (disable finite-field-poly-add
+                               finite-field-poly-mul
+                               finite-field-poly-raw-mul
+                               finite-field-poly-normalize))))
+
+(defthm finite-field-poly-divmod-core-reconstruction-invariant
+  (implies (and (finite-field-canonical-polynomial-p quotient)
+                (finite-field-canonical-polynomial-p remainder)
+                (finite-field-canonical-polynomial-p divisor))
+           (equal (finite-field-poly-add
+                   (finite-field-poly-mul
+                    (car (finite-field-poly-divmod-core quotient remainder divisor))
+                    divisor)
+                   (cdr (finite-field-poly-divmod-core quotient remainder divisor)))
+                  (finite-field-poly-add
+                   (finite-field-poly-mul quotient divisor)
+                   remainder)))
+  :rule-classes nil
+  :hints (("Goal"
+           :induct (finite-field-poly-divmod-core quotient remainder divisor)
+           :in-theory (e/d (finite-field-poly-divmod-core)
+                           (finite-field-poly-division-step-core
+                            finite-field-poly-add finite-field-poly-mul
+                            finite-field-poly-sub finite-field-poly-monomial
+                            finite-field-poly-normalize
+                            finite-field-poly-raw-add
+                            finite-field-poly-raw-mul
+                            finite-field-canonical-polynomial-p
+                            finite-field-poly-degree)))
+          (and stable-under-simplificationp
+               (list :use
+                     (list (list :instance
+                                 'finite-field-poly-division-step-core-reconstruction)
+                           (list :instance
+                                 'finite-field-poly-division-step-core-term-properties)
+                           (list :instance
+                                 'finite-field-poly-division-step-core-next-polynomial)
+                           (list :instance
+                                 'finite-field-poly-divmod-accumulator-algebra
+                                 (list 'term
+                                       '(car (finite-field-poly-division-step-core
+                                              remainder divisor)))
+                                 (list 'next
+                                       '(cdr (finite-field-poly-division-step-core
+                                              remainder divisor)))))
+                     :in-theory
+                     (list 'disable
+                           'finite-field-poly-divmod-core
+                           'finite-field-poly-division-step-core
+                           'finite-field-poly-add
+                           'finite-field-poly-mul
+                           'finite-field-poly-sub
+                           'finite-field-poly-monomial
+                           'finite-field-poly-normalize
+                           'finite-field-poly-raw-add
+                           'finite-field-poly-raw-mul
+                           'finite-field-canonical-polynomial-p
+                           'finite-field-poly-degree)))))
+
+(defthm finite-field-poly-divmod-reconstruction
+  (equal (finite-field-poly-add
+          (finite-field-poly-mul
+           (mv-nth 0 (finite-field-poly-divmod f g))
+           (finite-field-poly-normalize g))
+          (mv-nth 1 (finite-field-poly-divmod f g)))
+         (finite-field-poly-normalize f))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-divmod-core-reconstruction-invariant
+                            (quotient nil)
+                            (remainder (finite-field-poly-normalize f))
+                            (divisor (finite-field-poly-normalize g))))
+           :in-theory (e/d (finite-field-poly-divmod)
+                           (finite-field-poly-divmod-core
+                            finite-field-poly-add
+                            finite-field-poly-mul
+                            finite-field-poly-normalize)))))
+
+(defthm finite-field-canonical-polynomial-p-of-poly-quotient
+  (finite-field-canonical-polynomial-p
+   (finite-field-poly-quotient f g))
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-divmod-quotient-canonical)))))
+
+(defthm finite-field-canonical-polynomial-p-of-poly-remainder
+  (finite-field-canonical-polynomial-p
+   (finite-field-poly-remainder f g))
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-divmod-remainder-canonical)))))
+
+(defthm finite-field-poly-remainder-degree-bound
+  (implies (consp (finite-field-poly-normalize g))
+           (or (equal (finite-field-poly-remainder f g) nil)
+               (< (finite-field-poly-degree
+                   (finite-field-poly-remainder f g))
+                  (finite-field-poly-degree
+                   (finite-field-poly-normalize g)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-divmod-final-remainder-degree-bound)))))

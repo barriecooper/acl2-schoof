@@ -912,6 +912,63 @@
                          finite-field-poly-leading-coefficient-of-nil)
            :in-theory (theory 'minimal-theory))))
 
+
+
+(defthm finite-field-poly-mul-of-nil-left
+  (equal (finite-field-poly-mul nil x) nil)
+  :hints (("Goal"
+           :in-theory (enable finite-field-poly-mul
+                              finite-field-poly-raw-mul
+                              finite-field-poly-normalize
+                              finite-field-poly-trim-trailing-zeros
+                              finite-field-poly-fix-coefficients))))
+
+(defthm finite-field-canonical-polynomial-p-implies-polynomial-p
+  (implies (finite-field-canonical-polynomial-p xs)
+           (finite-field-polynomial-p xs))
+  :hints (("Goal"
+           :in-theory (enable finite-field-canonical-polynomial-p
+                              finite-field-polynomial-p))))
+
+(local
+ (deftheory finite-field-poly-distributivity-instance-theory
+   (union-theories
+    (theory 'finite-field-poly-definition-theory)
+    (theory 'minimal-theory))))
+
+(defthm finite-field-poly-mul-right-distributive
+  (equal (finite-field-poly-mul (finite-field-poly-add x y) z)
+         (finite-field-poly-add (finite-field-poly-mul x z)
+                                (finite-field-poly-mul y z)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (theory 'minimal-theory)
+           :by (:functional-instance poly-mul-right-distributive
+                 (gfield::field-element-p gfield::finite-field-element-p)
+                 (gfield::field-fix gfield::finite-field-fix)
+                 (gfield::field-zero gfield::finite-field-zero)
+                 (gfield::field-one gfield::finite-field-one)
+                 (gfield::field-add gfield::finite-field-add)
+                 (gfield::field-mul gfield::finite-field-mul)
+                 (gfield::field-neg gfield::finite-field-neg)
+                 (gfield::field-inv gfield::finite-field-inv)
+                 (coefficient-list-p finite-field-coefficient-list-p)
+                 (polynomial-p finite-field-polynomial-p)
+                 (canonical-polynomial-p finite-field-canonical-polynomial-p)
+                 (fix-coefficients finite-field-poly-fix-coefficients)
+                 (trim-trailing-zeros finite-field-poly-trim-trailing-zeros)
+                 (normalize finite-field-poly-normalize)
+                 (raw-add finite-field-poly-raw-add)
+                 (poly-add finite-field-poly-add)
+                 (raw-scale finite-field-poly-raw-scale)
+                 (poly-scale finite-field-poly-scale)
+                 (raw-mul finite-field-poly-raw-mul)
+                 (poly-mul finite-field-poly-mul)))
+          (and stable-under-simplificationp
+               (list :use (theory 'gfield::finite-field-context-instance-theory)
+                     :in-theory
+                     (list 'quote
+                           (theory 'finite-field-poly-distributivity-instance-theory))))))
+
 (verify-guards finite-field-coefficient-list-p)
 (verify-guards finite-field-polynomial-p)
 (verify-guards finite-field-canonical-polynomial-p)
