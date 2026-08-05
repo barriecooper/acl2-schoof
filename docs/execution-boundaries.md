@@ -169,7 +169,7 @@ execution branch.  Because the underlying finite-field operations are
 constrained, the family is a logical target.  Explicit functional instances
 provide semantic evidence, while existing PFIELD/F7 functions and focused F7
 evaluations provide execution evidence.  Verified guards do not replace the
-semantic bridge.
+semantic bridge. The staged finite-field-prefixed reduced-ring target operations are likewise transparent operation-then-remainder wrappers with verified guards; their current algebraic evidence stops at reduced-add commutativity, with remainder/add compatibility and reduced-add associativity still open.
 
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes

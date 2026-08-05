@@ -51,6 +51,16 @@
   :rule-classes nil
   :hints (("Goal" :in-theory (enable finite-field-poly-normalize))))
 
+(defthm finite-field-poly-divmod-definition-for-reduction-instantiation
+  (equal (finite-field-poly-divmod f g)
+         (let ((result
+                (finite-field-poly-divmod-core nil
+                                               (finite-field-poly-normalize f)
+                                               (finite-field-poly-normalize g))))
+           (list (car result) (cdr result))))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (enable finite-field-poly-divmod))))
+
 
 (defthm finite-field-poly-degree-when-normalize-not-consp
   (implies (not (consp (finite-field-poly-normalize poly)))
