@@ -51,8 +51,8 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    operations and bounded rank/unrank evidence validated by PFIELD and F7.  The
    renamed `finite-field-*` operations now drive a certified transparent GPOLY
    core, and generated divmod cores expose a standardized recursive equation
-   theorem. The finite-field recursive divmod and projection bridge is now certified by direct accumulator invariants; the public remainder/reduced-polynomial layer is certified; next certify fixed-modulus coefficient-vector work.
-   Only after that bridge should generic mixed-radix rank/unrank resume; generic
+   theorem. The finite-field recursive divmod and projection bridge is now certified by direct accumulator invariants; the public remainder/reduced-polynomial layer and fixed-modulus coefficient-vector extraction/reconstruction boundary are certified.
+   Generic mixed-radix rank/unrank may resume next; generic
    finite-field and extension cardinality remain open.
 4. Only after actual cardinality evidence is available for the intended
    context, connect that cardinality (not `field-frobenius-exponent`) to the
@@ -105,7 +105,7 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-Next boundary: certify the finite-field fixed-modulus coefficient representation over the completed finite-field remainder/reduced-polynomial interface.
+Next boundary: resume generic mixed-radix rank/unrank over the certified finite-field fixed-modulus coefficient representation, keeping generic extension cardinality separate.
 
 ## Finite-field division-step substrate
 
