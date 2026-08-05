@@ -212,6 +212,8 @@
 (include-book "polynomial/generic/finite-field-divmod-regression")
 (include-book "polynomial/generic/finite-field-reduction")
 (include-book "polynomial/generic/finite-field-reduction-regression")
+(include-book "polynomial/generic/finite-field-reduced-ring")
+(include-book "polynomial/generic/finite-field-reduced-ring-regression")
 (include-book "polynomial/generic/finite-field-fixed-modulus-coefficients")
 (include-book "polynomial/generic/finite-field-fixed-modulus-coefficients-regression")
 (include-book "polynomial/generic/finite-field-coefficient-vector-coding")
