@@ -216,6 +216,8 @@
 (include-book "polynomial/generic/finite-field-fixed-modulus-coefficients-regression")
 (include-book "polynomial/generic/finite-field-coefficient-vector-coding")
 (include-book "polynomial/generic/finite-field-coefficient-vector-coding-regression")
+(include-book "polynomial/generic/finite-field-fixed-modulus-carrier")
+(include-book "polynomial/generic/finite-field-fixed-modulus-carrier-regression")
 (include-book "polynomial/generic/f7x2-representation")
 (include-book "polynomial/generic/f7-reduced-arithmetic")
 (include-book "polynomial/generic/f7x2-arithmetic")

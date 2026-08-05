@@ -105,7 +105,7 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-Next boundary: build the finite-field fixed-modulus carrier/cardinality layer on the certified exact-width coefficient-vector mixed-radix coder, keeping generic extension field packaging and Frobenius separate.
+Next boundary: use the certified finite-field fixed-modulus carrier/cardinality layer only when a downstream client needs representative counts; keep generic extension field packaging, Frobenius, and Schoof machinery separate.
 
 ## Finite-field division-step substrate
 
