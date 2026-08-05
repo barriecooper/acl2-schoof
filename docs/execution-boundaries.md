@@ -277,7 +277,7 @@ and contains no `DEFEXEC`, executable attachment, program-mode boundary, raw
 Lisp inclusion, skipped proof, project axiom, or trust tag. Future changes to
 this inventory must update this document and satisfy the evidence model above.
 
-The finite-field monomial/scalar-division support layer adds only transparent logical definitions and theorems over constrained finite-field operations. It does not add MBE, DEFEXEC, attachments, raw Lisp, coding/cardinality calls, recursive divmod, quotient, or remainder operations.
+The finite-field monomial/scalar-division support layer adds only transparent logical definitions and theorems over constrained finite-field operations. It does not add MBE, DEFEXEC, attachments, raw Lisp, or coding/cardinality calls.
 
 ## Finite-field division-step substrate
 
@@ -286,6 +286,4 @@ It uses transparent generated definitions for the core step and public term/next
 projections, with verified guards, reconstruction, strict degree decrease, and a
 strict core length theorem suitable for the future recursive divmod measure.  The
 decisive cancellation proof is length/leading-coefficient based, not
-coefficient-vector or coding based.  Recursive finite-field divmod, public
-quotient/remainder APIs, fixed-modulus representations, and coding/cardinality
-operations remain open and are not introduced here.
+coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are transparent generated definitions with verified guards and public correctness from accumulator invariants. Fixed-modulus representations and coding/cardinality operations remain open and are not introduced here.

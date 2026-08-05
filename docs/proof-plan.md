@@ -51,8 +51,7 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    operations and bounded rank/unrank evidence validated by PFIELD and F7.  The
    renamed `finite-field-*` operations now drive a certified transparent GPOLY
    core, and generated divmod cores expose a standardized recursive equation
-   theorem. Next certify the finite-field division/remainder bridge using that
-   seam, for the later fixed-modulus coefficient-vector instance.
+   theorem. The finite-field recursive divmod and projection bridge is now certified by direct accumulator invariants; next certify the public remainder/reduced-polynomial layer before fixed-modulus coefficient-vector work.
    Only after that bridge should generic mixed-radix rank/unrank resume; generic
    finite-field and extension cardinality remain open.
 4. Only after actual cardinality evidence is available for the intended
@@ -106,7 +105,7 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-Next boundary: generate and certify finite-field recursive divmod and projections using the certified one-step length-decrease theorem and the standardized recursive equation seam.
+Next boundary: certify the finite-field public remainder and reduced-polynomial interface, including strict remainder length, lower-degree identity, idempotence, and reduced characterization.
 
 ## Finite-field division-step substrate
 
@@ -115,6 +114,4 @@ It uses transparent generated definitions for the core step and public term/next
 projections, with verified guards, reconstruction, strict degree decrease, and a
 strict core length theorem suitable for the future recursive divmod measure.  The
 decisive cancellation proof is length/leading-coefficient based, not
-coefficient-vector or coding based.  Recursive finite-field divmod, public
-quotient/remainder APIs, fixed-modulus representations, and coding/cardinality
-operations remain open and are not introduced here.
+coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are certified; fixed-modulus representations and coding/cardinality operations remain open and are not introduced here.

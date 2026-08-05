@@ -351,7 +351,7 @@ guards, and correspondence evidence belong in
   field, polynomial, curve, and Frobenius foundations; neither track is a
   prerequisite for the other after that seam.
 
-Finite-field monomial/scalar-division support is now certified in the staged GPOLY target: scalar division, zero-prefix, shift, monomial degree/leading-coefficient facts, and scalar nonzero/division-denominator support are available without using finite-field coding/cardinality operations. The finite-field division-step substrate is certified; the recursive division/remainder bridge remains open.
+Finite-field monomial/scalar-division support is now certified in the staged GPOLY target: scalar division, zero-prefix, shift, monomial degree/leading-coefficient facts, and scalar nonzero/division-denominator support are available without using finite-field coding/cardinality operations. The finite-field division-step substrate and recursive divmod/projection bridge are certified; the public remainder/reduced-polynomial layer remains open.
 
 ## Finite-field division-step substrate
 
@@ -360,6 +360,4 @@ It uses transparent generated definitions for the core step and public term/next
 projections, with verified guards, reconstruction, strict degree decrease, and a
 strict core length theorem suitable for the future recursive divmod measure.  The
 decisive cancellation proof is length/leading-coefficient based, not
-coefficient-vector or coding based.  Recursive finite-field divmod, public
-quotient/remainder APIs, fixed-modulus representations, and coding/cardinality
-operations remain open and are not introduced here.
+coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are certified by direct accumulator invariants; fixed-modulus representations and coding/cardinality operations remain open and are not introduced here.
