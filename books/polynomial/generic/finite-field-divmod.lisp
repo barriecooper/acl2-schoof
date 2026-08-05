@@ -122,3 +122,138 @@
 
 
 ; Direct core output canonicality remains the next checkpoint.
+
+(defthm finite-field-poly-divmod-core-quotient-canonical
+  (implies (and (finite-field-canonical-polynomial-p quotient)
+                (finite-field-canonical-polynomial-p remainder)
+                (finite-field-canonical-polynomial-p divisor))
+           (finite-field-canonical-polynomial-p
+            (car (finite-field-poly-divmod-core quotient remainder divisor))))
+  :hints (("Goal" :induct (finite-field-poly-divmod-core quotient remainder divisor)
+           :in-theory (e/d (finite-field-poly-divmod-core)
+                           (finite-field-poly-division-step-core
+                            finite-field-poly-add finite-field-poly-sub
+                            finite-field-poly-mul finite-field-poly-monomial
+                            finite-field-poly-normalize
+                            finite-field-poly-raw-add
+                            finite-field-poly-raw-mul
+                            finite-field-canonical-polynomial-p
+                            finite-field-poly-degree)))))
+
+(defthm finite-field-poly-divmod-core-remainder-canonical
+  (implies (and (finite-field-canonical-polynomial-p quotient)
+                (finite-field-canonical-polynomial-p remainder)
+                (finite-field-canonical-polynomial-p divisor))
+           (finite-field-canonical-polynomial-p
+            (cdr (finite-field-poly-divmod-core quotient remainder divisor))))
+  :hints (("Goal" :induct (finite-field-poly-divmod-core quotient remainder divisor)
+           :in-theory (e/d (finite-field-poly-divmod-core)
+                           (finite-field-poly-division-step-core
+                            finite-field-poly-add finite-field-poly-sub
+                            finite-field-poly-mul finite-field-poly-monomial
+                            finite-field-poly-normalize
+                            finite-field-poly-raw-add
+                            finite-field-poly-raw-mul
+                            finite-field-canonical-polynomial-p
+                            finite-field-poly-degree)))))
+(defthm finite-field-canonical-polynomial-atom-is-nil
+  (implies (and (finite-field-canonical-polynomial-p p)
+                (not (consp p)))
+           (equal p nil))
+  :rule-classes nil
+  :hints (("Goal"
+           :in-theory (enable finite-field-canonical-polynomial-p
+                              finite-field-coefficient-list-p))))
+
+(defthm finite-field-poly-divmod-core-final-remainder-degree-bound
+  (implies (and (finite-field-canonical-polynomial-p quotient)
+                (finite-field-canonical-polynomial-p remainder)
+                (finite-field-canonical-polynomial-p divisor)
+                (consp divisor))
+           (let ((final-remainder
+                  (cdr (finite-field-poly-divmod-core quotient remainder divisor))))
+             (or (equal final-remainder nil)
+                 (< (finite-field-poly-degree final-remainder)
+                    (finite-field-poly-degree divisor)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :induct (finite-field-poly-divmod-core quotient remainder divisor)
+           :in-theory (e/d (finite-field-poly-divmod-core)
+                           (finite-field-poly-division-step-core
+                            finite-field-poly-add finite-field-poly-sub
+                            finite-field-poly-mul
+                            finite-field-poly-monomial
+                            finite-field-poly-normalize
+                            finite-field-poly-raw-add
+                            finite-field-poly-raw-mul
+                            finite-field-canonical-polynomial-p
+                            finite-field-poly-degree)))
+          (and stable-under-simplificationp
+               (list :use
+                     (list (list :instance
+                                 'finite-field-canonical-polynomial-atom-is-nil
+                                 (list 'p 'remainder)))
+                     :in-theory
+                     (list 'disable
+                           'finite-field-poly-divmod-core
+                           'finite-field-poly-division-step-core
+                           'finite-field-poly-add
+                           'finite-field-poly-sub
+                           'finite-field-poly-mul
+                           'finite-field-poly-monomial
+                           'finite-field-poly-normalize
+                           'finite-field-poly-raw-add
+                           'finite-field-poly-raw-mul
+                           'finite-field-canonical-polynomial-p
+                           'finite-field-poly-degree)))))
+
+(defthm finite-field-canonical-polynomial-p-of-nil
+  (finite-field-canonical-polynomial-p nil)
+  :hints (("Goal" :in-theory (enable finite-field-canonical-polynomial-p
+                                     finite-field-coefficient-list-p))))
+
+(defthm finite-field-poly-divmod-quotient-canonical
+  (finite-field-canonical-polynomial-p
+   (mv-nth 0 (finite-field-poly-divmod f g)))
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-divmod-core-quotient-canonical
+                            (quotient nil)
+                            (remainder (finite-field-poly-normalize f))
+                            (divisor (finite-field-poly-normalize g))))
+           :in-theory (e/d (finite-field-poly-divmod)
+                           (finite-field-poly-divmod-core
+                            finite-field-poly-normalize
+                            finite-field-canonical-polynomial-p)))))
+
+(defthm finite-field-poly-divmod-remainder-canonical
+  (finite-field-canonical-polynomial-p
+   (mv-nth 1 (finite-field-poly-divmod f g)))
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-divmod-core-remainder-canonical
+                            (quotient nil)
+                            (remainder (finite-field-poly-normalize f))
+                            (divisor (finite-field-poly-normalize g))))
+           :in-theory (e/d (finite-field-poly-divmod)
+                           (finite-field-poly-divmod-core
+                            finite-field-poly-normalize
+                            finite-field-canonical-polynomial-p)))))
+
+(defthm finite-field-poly-divmod-final-remainder-degree-bound
+  (implies (consp (finite-field-poly-normalize g))
+           (or (equal (mv-nth 1 (finite-field-poly-divmod f g)) nil)
+               (< (finite-field-poly-degree
+                   (mv-nth 1 (finite-field-poly-divmod f g)))
+                  (finite-field-poly-degree
+                   (finite-field-poly-normalize g)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-divmod-core-final-remainder-degree-bound
+                            (quotient nil)
+                            (remainder (finite-field-poly-normalize f))
+                            (divisor (finite-field-poly-normalize g)))
+                 (:instance finite-field-poly-degree-when-canonical-nonzero
+                            (p (finite-field-poly-normalize g))))
+           :in-theory (e/d (finite-field-poly-divmod)
+                           (finite-field-poly-divmod-core
+                            finite-field-poly-normalize
+                            finite-field-poly-degree)))))

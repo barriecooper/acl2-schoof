@@ -99,27 +99,32 @@ canonicality theorem.
 ## Current checkpoint
 
 The last certified logical event in this checkpoint is
-`finite-field-poly-divmod-core-accumulator-step-canonical`, which proves that
-adding the one-step term to a canonical quotient accumulator preserves
-canonicality.  The next target checkpoint remains the full core quotient output
-canonicality theorem.
+`finite-field-poly-divmod-final-remainder-degree-bound`.  The certified prefix
+now includes core quotient canonicality, core remainder canonicality, core final
+remainder degree bound, public quotient canonicality, public remainder
+canonicality, and the public final remainder degree bound.
 
-The first attempted full quotient-canonical theorem was:
+The revised permission to use the generic proof pattern locally was necessary:
+the core canonicality and degree-bound proofs enable only
+`finite-field-poly-divmod-core` for induction and continue to disable the
+finite-field division-step core, raw multiplication, normalization internals,
+and lower arithmetic definitions.
+
+The remaining blocked endpoint is reconstruction.  A narrow attempt to import
+the generic accumulator algebra theorem for finite-field polynomials exposed the
+following first source-equivalent residual:
 
 ```lisp
-(defthm finite-field-poly-divmod-core-quotient-canonical
-  (implies (and (finite-field-canonical-polynomial-p quotient)
-                (finite-field-canonical-polynomial-p remainder)
-                (finite-field-canonical-polynomial-p divisor))
-           (finite-field-canonical-polynomial-p
-            (car (finite-field-poly-divmod-core quotient remainder divisor)))))
+(equal (finite-field-poly-mul x y)
+       (finite-field-poly-normalize
+        (finite-field-poly-raw-mul (finite-field-poly-normalize x)
+                                   (finite-field-poly-normalize y))))
 ```
 
-The theorem was not retained.  With the recursive core disabled and only the
-named equation theorem supplied, ACL2 did not simplify the top induction goal.
-Combining `:induct` and `:use` for the equation theorem directly is rejected by
-ACL2, and using a local rewrite copy of the equation theorem did not fire before
-the top-level checkpoint.  No attempt unfolded the recursive core or raw
-multiplication.  The current classification is: direct target proof remains
-likely, but the recursive equation theorem needs to be integrated into the
-induction scheme without an unstable subgoal-number hint.
+That residual is the generated multiplication definition.  Retaining that proof
+route would require unfolding or supplying raw multiplication semantics, while
+the finite-field public polynomial layer currently exposes addition
+associativity but not the multiplication distributivity theorem needed by the
+one-step accumulator algebra.  The reconstruction boundary is therefore blocked
+on a missing finite-field public polynomial algebra theorem, not on the divmod
+recursion itself.  The uncertified accumulator-algebra tail was removed.
