@@ -53,10 +53,12 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    core, and generated divmod cores expose a standardized recursive equation
    theorem. The finite-field recursive divmod and projection bridge is now certified by direct accumulator invariants; the public remainder/reduced-polynomial layer and fixed-modulus coefficient-vector extraction/reconstruction boundary are certified.
    Generic mixed-radix rank/unrank for exact-width coefficient vectors is certified; generic
-   finite-field carriers and extension cardinality remain open.
+   finite-field fixed-modulus carriers and representative-count cardinality are certified.
+   Field-facing generic extension packaging remains open because the existing quotient-field
+   package is still tied to its separate nullary irreducible-modulus construction.
 4. Only after actual cardinality evidence is available for the intended
    context, connect that cardinality (not `field-frobenius-exponent`) to the
-   Frobenius equation.  Add generic extension-field cardinality and prime-power
+   Frobenius equation.  Add field-facing generic extension-field cardinality and prime-power
    metadata before the Hasse/Schoof Frobenius clients that need them;
    alternatively select a
    Schoof torsion/division-polynomial boundary or an exact Hasse
@@ -105,7 +107,7 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-Next boundary: use the certified finite-field fixed-modulus carrier/cardinality layer only when a downstream client needs representative counts; keep generic extension field packaging, Frobenius, and Schoof machinery separate.
+Next boundary: bridge the finite-field-prefixed representative-count layer to a certified quotient-field package only after choosing the parameterization that connects explicit moduli to the existing nullary irreducible fixed-modulus field construction. Keep Frobenius and Schoof machinery separate.
 
 ## Finite-field division-step substrate
 

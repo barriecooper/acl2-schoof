@@ -218,6 +218,8 @@
 (include-book "polynomial/generic/finite-field-coefficient-vector-coding-regression")
 (include-book "polynomial/generic/finite-field-fixed-modulus-carrier")
 (include-book "polynomial/generic/finite-field-fixed-modulus-carrier-regression")
+(include-book "polynomial/generic/finite-field-extension-cardinality")
+(include-book "polynomial/generic/finite-field-extension-cardinality-regression")
 (include-book "polynomial/generic/f7x2-representation")
 (include-book "polynomial/generic/f7-reduced-arithmetic")
 (include-book "polynomial/generic/f7x2-arithmetic")
