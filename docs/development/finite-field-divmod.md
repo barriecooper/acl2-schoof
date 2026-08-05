@@ -51,6 +51,42 @@ finite-field proof needs either a genuinely complete target-interface package
 or a generator seam that accepts the exact source-equivalent equations instead
 of relying on default functional-instance obligation rewriting.
 
+## Final equation-seam design table
+
+The current macro signature is:
+
+```lisp
+(def-divmod-public-interface-instance
+ prefix canonical-polynomial-p normalize poly-add poly-mul poly-degree
+ poly-divmod field-substitution polynomial-substitution division-substitution
+ core-functional-instance-equation obligation-hints)
+```
+
+The audit found that the single explicit recursive-core equation seam is too
+narrow for separately constrained renamed targets, but the reusable seam list is
+not yet bounded to the public operations alone.  The source theorem imports the
+proof surface of its supporting books, so ACL2 can ask for generated equations
+below the public operations unless those equations are intentionally packaged by
+the generator.
+
+| Source operation | Source defining equation surface | Target theorem parameter required? | Existing caller support |
+| --- | --- | ---: | --- |
+| `normalize` | `normalize` as `trim-trailing-zeros` after `fix-coefficients` | Yes | Finite-field book has `finite-field-poly-normalize-definition-for-divmod`; F7 has an executable definition but no macro parameter. |
+| `fix-coefficients` | atomic/cons field-fixing recursion used by `normalize` | Unbounded unless `normalize` can be consumed as an opaque equation | Available only by definition enablement, which expands the constraint surface. |
+| `trim-trailing-zeros` | recursive trimming equation used by `normalize` | Unbounded unless `normalize` can be consumed as an opaque equation | Available only by definition enablement or specialized F7 facts. |
+| `poly-degree` | degree from `len (normalize p)`, with empty/nonempty variants | Yes | Finite-field book has `finite-field-poly-degree-definition-for-divmod` and normalized degree lemmas; F7 relies on definitions and residual hints. |
+| `poly-add` | `poly-add` as `normalize` of `raw-add` over normalized operands | Likely yes if the source constraint reaches addition | Available only by generated definition/theory; no explicit macro parameter. |
+| `raw-add` | recursive coefficient addition | Unbounded unless `poly-add` is accepted as an opaque equation | Available only by definition enablement, which violates the desired opacity. |
+| `poly-mul` | `poly-mul` as `normalize` of `raw-mul` over normalized operands | Yes: observed as a concrete residual | Available only by generated definition/theory; no explicit macro parameter. |
+| `raw-mul` | recursive convolution via `raw-add` and `raw-scale` | Unbounded unless `poly-mul` is accepted as an opaque equation | Candidate A would need raw multiplication unfolding, which is rejected. |
+| `poly-neg`, `poly-sub`, `poly-scale` | generated arithmetic definitions used by division-step support | Not observed as first residuals, but possible if `poly-division-step-core` is opened | Available only by generated definitions and step theorems. |
+| `canonical-polynomial-p` | structural recognizer over `coefficient-list-p` and last nonzero | Needed as structural support, not just a public operation | Partially available by finite-field public facts; definition enablement expands obligations. |
+| `coefficient-list-p` | field-element list recognizer | Needed as structural support when recognizers are opened | Partially available by finite-field public facts; definition enablement expands obligations. |
+| `poly-leading-coefficient` | last coefficient of normalized polynomial | Not observed as a public-interface residual before multiplication | Available by finite-field degree/leading facts and definitions. |
+| `poly-division-step-core` | active/inactive one-step division body | A parameter would be justified only if the constraint is observed before arithmetic raw definitions | Existing finite-field active/inactive theorems exist, but the macro does not accept them. |
+| `poly-divmod-core` | recursive equation | Already required | `finite-field-poly-divmod-core-functional-instance-equation` is explicit and fires while the core is disabled. |
+| `poly-divmod` | wrapper normalizes inputs and returns `mv` from pair result | Likely yes under a fully opaque target interface | Currently only available by generated definition; no explicit macro parameter. |
+
 ## Candidate results
 
 ### Candidate A: complete narrow target theory
@@ -73,39 +109,53 @@ the generated `poly-mul` definition constraint:
            (finite-field-poly-fix-coefficients y))))))
 ```
 
-Closing Candidate A would require adding more generated arithmetic definition
-equations, including raw multiplication, which is outside the desired public
-interface proof discipline.  Candidate A therefore remains incomplete for this
-PR boundary.
+Candidate A therefore does not provide a bounded public-operation interface by
+itself.  It either continues exposing lower generated definitions or unfolds
+raw multiplication, which is outside the desired proof discipline.
 
 ### Candidate B: packaged target constraint bridge
 
-A single local package theorem would need to assert the full generated target
-definition surface for normalization, degree, arithmetic, recognizers,
-division-step, wrapper, and recursive equation constraints.  ACL2 functional
-instantiation does not consume such a package theorem directly unless the
-individual constraints are still supplied or enabled at the obligation point.
-This would either duplicate the source proof surface or become another broad
-hint bundle.  Candidate B is therefore not a clean route without generator
-support.
+A single conjunction theorem can record the target equations, but ACL2
+functional instantiation still needs the individual constraints at their
+obligation points.  The package is not directly consumable without either
+re-expanding the supporting definitions or creating another broad hint bundle.
+Candidate B is therefore not a clean production route.
 
 ### Candidate C: generator seam assessment
 
-The audit indicates that `def-divmod-public-interface-instance` accepts only the
-recursive core equation theorem, but renamed constrained targets can also need
-source-equivalent target definition equations for normalization, degree,
-recognizers, arithmetic, and possibly division-step wrappers.  A reusable
-generator extension would need to accept and apply a complete list of target
-definition-equation theorems under a controlled initial functional-instance
-obligation theory.  That is broader than adding one missing finite-field degree
-fact, and it requires an F7/generic regression before changing
-`instantiate.lisp`.
+The audit supports the direction of a generator seam extension, but the exact
+safe parameter list is larger than the public operations named in the theorem:
+normalization and degree are definitely required, multiplication is observed,
+and addition/divmod-wrapper equations are likely required.  However, the same
+constraint surface also includes generated lower-level recognizer, fixing,
+trimming, and raw arithmetic equations unless the generator can prove that the
+public equations are consumed opaquely.
 
-`instantiate.lisp` was not changed in this checkpoint.
+A production change to `instantiate.lisp` should therefore not simply append
+residual-specific parameters.  The repaired signature must be designed around a
+bounded semantic contract, for example public-operation equations plus a
+controlled target structural package that prevents descent into raw operations.
+That design has not yet been demonstrated by certification or an F7 opaque
+regression, so `instantiate.lisp` remains unchanged in this checkpoint.
+
+## Macro status and call sites
+
+Before this checkpoint the macro accepted one explicit theorem parameter,
+`core-functional-instance-equation`, plus the pre-existing caller residual-hint
+list.  After this checkpoint the macro is unchanged.  The direct call sites are
+`books/polynomial/generic/f7-division.lisp` and
+`books/polynomial/generic/divmod-instantiation-regression.lisp`; no call sites
+were updated because no safe generator signature was certified.
 
 ## Stop state
 
 The retained certifying state keeps the recursive divmod prefix and the exact
 normalization/degree bridge theorems.  The aggregate public interface remains
-blocked by an incomplete public-interface constraint package rather than by the
-recursive equation seam.
+blocked by an incomplete reusable equation-seam design, not by the recursive
+equation seam.  The first stable observed unsatisfied source-equivalent
+constraint after the existing bridges is the `poly-mul` generated definition
+shown above.  The recursive core remained disabled in the retained book, and no
+unstable subgoal-number hints are present in the finite-field book.
+
+Classification: equation-seam list incomplete / source theorem dependency not
+abstractable yet without a broader, certified generator contract.
