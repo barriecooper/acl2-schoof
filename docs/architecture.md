@@ -163,9 +163,11 @@ multiplication use reduced operations; inverse is the total XGCD-derived
 candidate with an explicit zero case. Certified irreducibility results provide
 the nonzero inverse law.
 
-F7X2, representing `F7[x]/(x^2+1)`, is a concrete proving instance. It should
-not be confused with the reusable constructor or treated as an arbitrary
-finite-field package.
+F7X2, representing `F7[x]/(x^2+1)`, is a concrete public `GFIELD` proving
+instance.  Its existing executable operations satisfy the complete nullary
+kernel constraint set, with the nonzero inverse law inherited through the
+fixed-modulus field functional instance.  It should not be confused with the
+reusable constructor or treated as an arbitrary finite-field package.
 
 F7X2 has a presentation-specific mixed-radix finite bijection.  Rank reads the
 fixed constant and linear coefficients as radix-7 digits, while unrank decodes

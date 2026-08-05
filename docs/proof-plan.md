@@ -54,7 +54,12 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    theorem. The finite-field recursive divmod and projection bridge is now certified by direct accumulator invariants; the public remainder/reduced-polynomial layer and fixed-modulus coefficient-vector extraction/reconstruction boundary are certified. A staged finite-field-prefixed explicit-modulus reduced-ring target interface is certified through transparent operation-then-remainder definitions, verified guards, definition equations, and reduced-add commutativity only; finite-field remainder/add compatibility and reduced-add associativity are the next reduced-ring seam.
    Generic mixed-radix rank/unrank for exact-width coefficient vectors is certified; generic
    finite-field fixed-modulus carriers and representative-count cardinality are certified.
-   The full finite-field-prefixed reduced-ring instance, inverse transport, and field-facing generic extension packaging remain open because the existing quotient-field package is still tied to its separate nullary irreducible-modulus construction.
+   Concrete F7X2 is now a certified public nullary `GFIELD` instance, reusing
+   its existing executable operations and the fixed-modulus inverse proof. The
+   full finite-field-prefixed reduced-ring instance, inverse transport, and
+   field-facing generic extension packaging remain open because the existing
+   quotient-field package is still tied to its separate nullary
+   irreducible-modulus construction.
 4. Only after actual cardinality evidence is available for the intended
    context, connect that cardinality (not `field-frobenius-exponent`) to the
    Frobenius equation.  Add field-facing generic extension-field cardinality and prime-power
