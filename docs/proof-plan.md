@@ -8,7 +8,8 @@ status is in the [obligation ledger](obligations.md); stable design is in
 
 The long-term destinations are a Manin-style proof of Hasse's theorem and an
 executable, certified Schoof point-counting algorithm. They share field,
-polynomial, curve, rational-function, and Frobenius foundations. Beyond that
+polynomial, curve, and some Frobenius foundations; whether they should share a
+rational-function or morphism representation remains unresolved. Beyond that
 shared seam they are parallel: Hasse is not an implementation prerequisite for
 Schoof.
 
@@ -41,10 +42,14 @@ later boundaries.
 
 Proceed with one bounded mathematical or execution boundary per proof change:
 
-1. Audit the next downstream polynomial requirement before selecting between
-   repeated-factor characterization and another shared Hasse/Schoof boundary;
-   do not build factorization theory solely to strengthen the square-free
-   predicate.
+1. Use the selected Silverman V.1.1 Frobenius/positive-quadratic-degree route
+   for the first abstract Hasse theorem.  Before implementation, run the
+   bounded ambient/base-field feasibility experiment specified by the
+   [Hasse source and dependency audit](audits/hasse-source-and-dependency.md).
+   It must resolve how non-rational ambient points, a nontrivial `q`-power
+   Frobenius, the base-field embedding, and both fixed-point directions can be
+   stated and realized.  Do not combine finite cardinality, `x^q=x`, the new
+   two-field architecture, and curve Frobenius into one implementation change.
 2. Add a polynomial natural-scaling interface when the derivative power rule
    or another concrete client requires it.
 3. The separate finite-field coding context is complete, with coherent field
@@ -60,14 +65,13 @@ Proceed with one bounded mathematical or execution boundary per proof change:
    field-facing generic extension packaging remain open because the existing
    quotient-field package is still tied to its separate nullary
    irreducible-modulus construction.
-4. Only after actual cardinality evidence is available for the intended
-   context, connect that cardinality (not `field-frobenius-exponent`) to the
-   Frobenius equation.  Add field-facing generic extension-field cardinality and prime-power
-   metadata before the Hasse/Schoof Frobenius clients that need them;
-   alternatively select a
-   Schoof torsion/division-polynomial boundary or an exact Hasse
-   source/dependency audit.  Do not make signed scalar multiplication the
-   default merely because natural scalar composition is complete.
+4. The field-facing bridge between the explicit finite-field representative
+   count and the nullary irreducible fixed-modulus field remains open, but is
+   deferred from the immediate abstract Hasse critical path.  Develop it when
+   a generic quotient-field Hasse instance, an ambient-field realization, or a
+   Schoof client requires it.  Cardinality-based Frobenius must use actual
+   certified cardinality rather than `field-frobenius-exponent`; prime-power
+   and characteristic compatibility remain separate obligations.
 5. Add fast natural scalar multiplication only when an executable quotient-
    coordinate or trace-test consumer makes it more than premature
    optimization.
@@ -80,19 +84,20 @@ never substitute for these mathematical endpoints.
 
 ## Phase 2: common curve and function-field infrastructure
 
-Once the curve laws are adequate for downstream use, develop only the common
-infrastructure demanded by the two tracks: scalar multiplication when its
-specification is clear, polynomial derivatives and separability, rational
-functions and their equality/cancellation theory, and the required Frobenius
-facts. Exact sequencing within this phase depends on the associativity audit
-and on the chosen primary Hasse reference; no completion is implied here.
+Once the ambient/base-field feasibility boundary is resolved, develop only the
+common infrastructure demanded by a concrete client.  No broad
+rational-function, morphism, or isogeny library is authorized yet; a
+purpose-built representation remains a candidate.  Exact sequencing depends
+on the risk-first experiment and no completion is implied here.
 
 ## Phase 3A: Manin-style Hasse track
 
-Select and record the exact primary exposition, then formalize the needed
-function-field or morphism degree theory, Frobenius/dual relationships, and the
-degree inequality from which Hasse's bound follows. Reuse the common polynomial
-and curve layers rather than rebuilding them inside the proof.
+The selected primary route is Silverman, *The Arithmetic of Elliptic Curves*,
+V.1.1, using the positive quadratic degree form of III.6 (especially III.6.3)
+and the required III.4--III.5 isogeny/dual-isogeny results.  After the
+ambient/base-field boundary is resolved, formalize only the function-field or
+morphism degree fragment actually required to derive the preferred first
+endpoint `(q + 1 - N)^2 <= 4q`.  Reuse the common polynomial and curve layers.
 
 ## Phase 3B: executable Schoof track
 
@@ -111,7 +116,11 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-Next boundary: bridge the finite-field-prefixed representative-count layer to a certified quotient-field package only after choosing the parameterization that connects explicit moduli to the existing nullary irreducible fixed-modulus field construction. Keep Frobenius and Schoof machinery separate.
+Next Hasse boundary: perform the bounded ambient/base-field feasibility
+specification from the Hasse audit.  It is a risk-first experiment, not an
+implementation of field Frobenius or curve Frobenius.  Keep the deferred
+extension-field carrier/fixer bridge, broad morphism infrastructure, and Schoof
+machinery separate.
 
 ## Finite-field division-step substrate
 
