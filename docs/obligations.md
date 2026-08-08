@@ -50,7 +50,7 @@ correctness. The full evidence model is maintained in
 | Finite-field fixed-modulus coefficient representation | Certified | `finite-field-fixed-modulus-coefficient-vector`; `finite-field-fixed-modulus-reconstruct`; `finite-field-fixed-modulus-reconstruct-of-coefficient-vector`; `finite-field-fixed-modulus-coefficient-vector-of-reconstruct` | Transparent coefficient vectors over the finite-field remainder fixer. Width is one less than normalized modulus length for nonzero normalized moduli and zero for normalized-zero moduli; coefficient-vector rank/unrank is certified; carrier construction and cardinality are certified by `finite-field-fixed-modulus-elements` and `finite-field-fixed-modulus-cardinality`. |
 | Generic finite-field representative-count cardinality | Certified | `finite-field-extension-representative-count-equals-radix-power`; `finite-field-extension-representative-count-equals-degree-power` | Counts exhaustive fixed-modulus representatives from the certified coding/carrier layer. This is not field packaging and requires no irreducibility. |
 | F7X2 finite-carrier cardinality | Certified | `f7x2-unrank-of-f7x2-rank`; `member-equal-of-f7x2-fix-and-f7x2-elements`; `f7x2-cardinality-equals-49` | Presentation-specific mixed-radix bijection and exhaustive duplicate-free carrier. |
-| Generic extension field cardinality | Open | — | Requires a field-facing bridge from the existing irreducible quotient-field package to the explicit finite-field-prefixed representative carrier/cardinality layer. |
+| Generic extension field cardinality | Open, deferred from immediate Hasse path | — | Requires a field-facing bridge from the existing irreducible quotient-field package to the explicit finite-field-prefixed representative carrier/cardinality layer. It may be needed by generic quotient-field Hasse instances, an ambient-field realization, or Schoof, but is not a premise of the first abstract Hasse statement. |
 | Carrier-witness cardinality uniqueness | Open | — | Compare independent exhaustive duplicate-free witnesses only when a client requires it. |
 | Prime-power metadata | Open | — | The characteristic/cardinality relationship remains separate. |
 | Cardinality Frobenius | Open | — | Must use actual cardinality, not `field-frobenius-exponent`. |
@@ -176,10 +176,11 @@ boundary are maintained in
 
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|
-| Primary Manin-style formal route | Open | — | Select and cite the exact source and required degree framework. |
-| Function-field or morphism degree theory | Open | — | Depends on rational functions, separability, and Frobenius foundations. |
-| Frobenius/dual relationships and degree inequality | Open | — | Establish the ingredients yielding Hasse's bound. |
-| Hasse's theorem | Open | — | Complete the selected Manin-style argument. |
+| Primary Hasse route | Selected; not implemented | [Hasse source and dependency audit](audits/hasse-source-and-dependency.md) | Silverman V.1.1 is the selected Frobenius/positive-quadratic-degree route, using III.6 (especially III.6.3) and the required III.4--III.5 isogeny results. |
+| Ambient/base-field/Frobenius design | Open; next risk-first Hasse boundary | — | Must distinguish finite base points from ambient points, justify the embedding and Frobenius homomorphism laws, and separate embedded-element fixedness from the stronger fixed-point converse. No representation is adopted. |
+| Function-field or morphism degree theory | Open; representation undecided | — | A purpose-built layer may suffice. Pointwise equality on `E(F_q)` cannot support degree; broad rational-function or isogeny infrastructure is not yet authorized. |
+| Frobenius/dual relationships and degree inequality | Open | — | Requires curve closure from ambient Frobenius homomorphism laws, fixed-point/kernel identification, separability and degree facts, and the positive quadratic degree form. |
+| Squared Hasse bound | Open | — | Preferred first endpoint is `(q + 1 - N)^2 <= 4q`; derive the square-root form separately. |
 
 ## 13. Schoof-algorithm track
 
