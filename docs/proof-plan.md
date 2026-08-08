@@ -116,11 +116,14 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-Next Hasse boundary: perform the bounded ambient/base-field feasibility
-specification from the Hasse audit.  It is a risk-first experiment, not an
-implementation of field Frobenius or curve Frobenius.  Keep the deferred
-extension-field carrier/fixer bridge, broad morphism infrastructure, and Schoof
-machinery separate.
+Next Hasse boundary: after the bounded ambient/base-field feasibility experiment
+returned a no-go verdict, certify the concrete F7X2 coefficient formula
+`(a+bX)^7 = a-bX` without unfolding the full divmod implementation across the
+carrier.  Then certify the seven-element fixed-point image over the existing
+49-element carrier and retry the candidate functional instance.  Do not begin
+curve Frobenius before those endpoints, and keep the deferred extension-field
+carrier/fixer bridge, broad morphism infrastructure, and Schoof machinery
+separate.
 
 ## Finite-field division-step substrate
 
