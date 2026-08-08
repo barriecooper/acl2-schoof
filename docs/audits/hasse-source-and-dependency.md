@@ -340,3 +340,88 @@ Frobenius to the identity, assumes the fixed-point converse without a named
 realization path, or requires an algebraic-closure/function-field library whose
 necessity has not been demonstrated.  Record which premise caused the stop
 rather than bundling the remaining field, curve, and Frobenius developments.
+
+## Post-PR #309 bounded feasibility experiment (2026-08-08)
+
+### Authoritative starting state
+
+The experiment began on branch `work` at
+`5a89c513bfb10fd5994453ea820edd33d0b61b17`, the merge commit for PR #309.
+The worktree was clean, no remotes were configured, and the recent merged
+baseline was PR #309 over PR #308.  Thus the F7X2 public `GFIELD` packaging and
+49-element carrier audited by PR #309 were present.
+
+### Candidate interface tested
+
+A deliberately unregistered experimental book tested two independently fixed
+operation families (base zero/one/add/mul/neg and ambient
+zero/one/add/mul/neg), a fixed base embedding, a positive nullary `q`, ambient
+power, ambient Frobenius, a base projection, and an image recognizer.  The
+candidate constraints were:
+
+- embedding stability under the base fixer and ambient-fixer closure;
+- preservation of zero, one, addition, multiplication, and negation;
+- injectivity stated as equality of embedded values iff equality of fixed base
+  values;
+- Frobenius stability under the ambient fixer, positivity of `q`, equality to
+  ambient `q`-power, and preservation of addition and multiplication;
+- fixedness of every embedded base value;
+- image recognition as equality with the embedding of a fixed base projection;
+- Frobenius fixedness iff that image predicate; and
+- fixer stability of Frobenius and the image predicate.
+
+The intended concrete definitions were the natural ones: F7 embeds as the
+constant canonical residue class
+`f7x2-fix(list(f7-fix(x)))`; `q` is 7; ambient power is repeated F7X2
+multiplication; and Frobenius was tested both as seventh power and as the
+coefficient conjugation `(a,b) -> (a,-b)` in
+`F7[X]/(X^2+1)`.  The latter moves `X`, represented by `(0 1)`, to `(0 6)`, so
+the proposed ambient map does not collapse to the identity.
+
+### Outcome and first missing seam
+
+**No certified experimental book is retained.**  The existing representations
+are compatible with the natural constant embedding, and concrete evaluation
+on the 49 canonical representatives agrees with conjugation, embedded-element
+fixedness, and the expected seven-element fixed set.  However, evaluation is
+not a theorem.
+
+The first missing certified seam is a tractable theorem connecting existing
+F7X2 repeated multiplication to the coefficient formula
+
+```text
+(a + bX)^7 = a - bX  (mod X^2+1).
+```
+
+Two bounded proof decompositions were attempted.  Direct exhaustive rewriting
+of the 49 unary seventh-power cases, and a carrier-checker theorem that also
+checked homomorphism laws, both expanded the current polynomial divmod-based
+F7X2 operations without completing certification in repeated bounded runs.
+Splitting the unary cases and replacing Frobenius by transparent coefficient
+conjugation removed the binary seventh-power expansion but did not make the
+seventh-power bridge certify.  No trust escape, unsupported constraint, or
+execution-only replacement was retained.
+
+This is not a representation contradiction: the public coefficient projection
+and reconstruction theorems strongly suggest the smallest next proof is a
+small reusable closed-form multiplication/power lemma for canonical F7X2
+coefficient pairs.  But the present experiment did not certify that lemma, so
+it also could not honestly certify the fixed-point converse or discharge the
+candidate encapsulate by functional instantiation.  The converse therefore
+remains absent rather than being admitted as a constraint.
+
+### Scope verdict
+
+**NO-GO for the first curve-Frobenius slice.**  Do not adopt the candidate as
+architecture and do not register a production book.  The next bounded work
+must first certify the F7X2 coefficient-level seventh-power formula, then use
+the existing exhaustive 49-element carrier to certify (not merely execute)
+the fixed-point/image equivalence, and only then retry the functional instance.
+This verdict does not authorize a generic extension-field constructor, the
+deferred carrier/fixer bridge, or any curve, morphism, or degree theory.
+
+Even a later successful F7/F49 witness would establish only consistency of the
+base/ambient/Frobenius seam.  A single finite ambient extension need not contain
+all geometric kernel points used by the eventual Hasse degree/kernel argument;
+that argument may still require an algebraic closure, a sufficiently rich
+family of extensions, or symbolic function-field semantics.

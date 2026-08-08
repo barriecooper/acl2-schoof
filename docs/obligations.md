@@ -177,7 +177,7 @@ boundary are maintained in
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|
 | Primary Hasse route | Selected; not implemented | [Hasse source and dependency audit](audits/hasse-source-and-dependency.md) | Silverman V.1.1 is the selected Frobenius/positive-quadratic-degree route, using III.6 (especially III.6.3) and the required III.4--III.5 isogeny results. |
-| Ambient/base-field/Frobenius design | Open; next risk-first Hasse boundary | — | Must distinguish finite base points from ambient points, justify the embedding and Frobenius homomorphism laws, and separate embedded-element fixedness from the stronger fixed-point converse. No representation is adopted. |
+| Ambient/base-field/Frobenius design | Experimented; no-go for curve slice | [bounded feasibility experiment](audits/hasse-source-and-dependency.md#post-pr-309-bounded-feasibility-experiment-2026-08-08) | F7/F7X2 representations support the intended executable constant embedding and nonidentity conjugation, but no certified seventh-power coefficient bridge, fixed-point converse, or functional instance was retained. No representation is adopted. |
 | Function-field or morphism degree theory | Open; representation undecided | — | A purpose-built layer may suffice. Pointwise equality on `E(F_q)` cannot support degree; broad rational-function or isogeny infrastructure is not yet authorized. |
 | Frobenius/dual relationships and degree inequality | Open | — | Requires curve closure from ambient Frobenius homomorphism laws, fixed-point/kernel identification, separability and degree facts, and the positive quadratic degree form. |
 | Squared Hasse bound | Open | — | Preferred first endpoint is `(q + 1 - N)^2 <= 4q`; derive the square-root form separately. |
