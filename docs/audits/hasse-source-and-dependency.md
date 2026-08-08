@@ -425,3 +425,18 @@ base/ambient/Frobenius seam.  A single finite ambient extension need not contain
 all geometric kernel points used by the eventual Hasse degree/kernel argument;
 that argument may still require an algebraic closure, a sufficiently rich
 family of extensions, or symbolic function-field semantics.
+
+### Post-PR #310 starting-state confirmation (2026-08-08)
+
+The concrete-witness follow-up began on branch `work` at
+`4efe54640548bb827f0714de588bc793fe7c7624`, the merge commit for PR #310.
+The worktree was clean, no remotes were configured, and PR #310 was therefore
+present as the authoritative merged baseline.  Inspection confirmed that the
+public arbitrary-input multiplication projections are
+`f7x2-constant-coefficient-of-mul` and
+`f7x2-linear-coefficient-of-mul`; whole fixed representatives are compared by
+`f7x2-fix-coefficient-extensionality` and canonical representatives are
+recovered by `f7x2-reconstruct-from-coefficients`.  The same arithmetic book
+exports the addition, negation, and subtraction coefficient projections and
+fixer transport.  No pre-existing F7X2 power instance or retained experimental
+book was present.
