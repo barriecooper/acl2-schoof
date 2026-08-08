@@ -386,7 +386,7 @@ on the 49 canonical representatives agrees with conjugation, embedded-element
 fixedness, and the expected seven-element fixed set.  However, evaluation is
 not a theorem.
 
-The first missing certified seam is a tractable theorem connecting existing
+The first missing certified seam was a tractable theorem connecting existing
 F7X2 repeated multiplication to the coefficient formula
 
 ```text
@@ -402,21 +402,22 @@ conjugation removed the binary seventh-power expansion but did not make the
 seventh-power bridge certify.  No trust escape, unsupported constraint, or
 execution-only replacement was retained.
 
-This is not a representation contradiction: the public coefficient projection
-and reconstruction theorems strongly suggest the smallest next proof is a
-small reusable closed-form multiplication/power lemma for canonical F7X2
-coefficient pairs.  But the present experiment did not certify that lemma, so
-it also could not honestly certify the fixed-point converse or discharge the
-candidate encapsulate by functional instantiation.  The converse therefore
-remains absent rather than being admitted as a constraint.
+The missing seam is now certified by `f7x2-seventh-power-is-conjugate`.  The
+successful proof stays above the public multiplication projections, mirrors the
+named square/fourth/seventh straight-line powers with a local coefficient-pair
+calculation, exhausts the two F7 coefficients in 49 scalar cases, and
+reconstructs the whole fixed value by coefficient extensionality.  Polynomial
+multiplication, remainder, divmod, and the F7X2 fixer remain disabled throughout
+the scalar and whole-value proof.  The fixed-point converse and candidate
+functional instance remain absent rather than being admitted as constraints.
 
 ### Scope verdict
 
-**NO-GO for the first curve-Frobenius slice.**  Do not adopt the candidate as
-architecture and do not register a production book.  The next bounded work
-must first certify the F7X2 coefficient-level seventh-power formula, then use
-the existing exhaustive 49-element carrier to certify (not merely execute)
-the fixed-point/image equivalence, and only then retry the functional instance.
+**NO-GO remains for the first curve-Frobenius slice.**  The certified F7X2
+seventh-power formula resolves the first scalar seam but does not adopt the
+two-field candidate as architecture.  The next bounded work must use the
+existing exhaustive 49-element carrier to certify (not merely execute) the
+fixed-point/image equivalence, and only then retry the functional instance.
 This verdict does not authorize a generic extension-field constructor, the
 deferred carrier/fixer bridge, or any curve, morphism, or degree theory.
 
