@@ -227,6 +227,8 @@
 (include-book "polynomial/generic/f7x2-arithmetic")
 (include-book "polynomial/generic/f7x2-inverse")
 (include-book "polynomial/generic/f7x2-field")
+(include-book "polynomial/generic/f7x2-seventh-power")
+(include-book "polynomial/generic/f7x2-seventh-power-regression")
 (include-book "polynomial/generic/f7x2-fixed-modulus-field-regression")
 (include-book "polynomial/generic/f7x2-cardinality")
 (include-book "polynomial/generic/f7x2-cardinality-regression")

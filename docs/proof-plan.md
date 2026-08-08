@@ -116,11 +116,11 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-Next Hasse boundary: after the bounded ambient/base-field feasibility experiment
-returned a no-go verdict, certify the concrete F7X2 coefficient formula
-`(a+bX)^7 = a-bX` without unfolding the full divmod implementation across the
-carrier.  Then certify the seven-element fixed-point image over the existing
-49-element carrier and retry the candidate functional instance.  Do not begin
+Next Hasse boundary: the concrete, totalized F7X2 coefficient formula
+`(a+bX)^7 = a-bX` is certified through the public coefficient interface and a
+49-case F7 scalar calculation.  Next certify the seven-element fixed-point
+image over the existing 49-element carrier and retry the candidate functional
+instance.  Do not begin
 curve Frobenius before those endpoints, and keep the deferred extension-field
 carrier/fixer bridge, broad morphism infrastructure, and Schoof machinery
 separate.
