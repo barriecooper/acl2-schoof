@@ -297,4 +297,17 @@ coefficient-vector or coding based.  Recursive finite-field divmod and public qu
 
 `finite-field-division-polynomial-base-spec` is the named mathematical base-data specification and `finite-field-division-polynomial-base` is the public transparent implementation.  `finite-field-division-polynomial-base-correct` proves exact equality, independently of concrete execution.  Both fix curve coefficients, use `nfix` on the index, and return zero outside indices zero through four.  Output canonicality and field-polynomial closure are separately certified, as are index and coefficient-fixing compatibility and the exact base equations.  Guards are verified for the coefficient embedding, specification, and implementation.
 
+`finite-field-division-polynomial-recurrence-step` is the transparent partial
+execution boundary for the next entry of an ascending table.  It uses the base
+boundary below five, fixes its index and coefficients, and otherwise selects
+the certified separated-`2y` odd/even formula.  Its C polynomial, square/cube
+helpers, orientation helpers, and public step have verified guards; the public
+closure and fixing theorems hold for arbitrary ACL2 table contents.  The guard
+on the step requires a true list for efficient Common Lisp `nth`, while its
+logical definition remains total.  This boundary has no opaque execution
+branch and makes no performance claim.  A table builder and public evaluator
+remain intentionally absent until a length/access invariant and a mathematical
+correspondence theorem are certified; consequently concrete execution of F5
+and later values is not yet claimed by this boundary.
+
 The boundary contains no `MBE`, `DEFEXEC`, attachment, or alternate executable branch.  Its F11 regression exercises every retained base case on the nonsingular repository golden curve, coefficient normalization, and malformed/unsupported indices.  Those checks are execution assurance only; semantic correspondence is the generic theorem.  No performance claim is made, and no quotient-coordinate operation is used.
