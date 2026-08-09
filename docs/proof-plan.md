@@ -116,11 +116,13 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-Next Hasse boundary: the concrete, totalized F7X2 coefficient formula
-`(a+bX)^7 = a-bX` is certified through the public coefficient interface and a
-49-case F7 scalar calculation.  Next certify the seven-element fixed-point
-image over the existing 49-element carrier and retry the candidate functional
-instance.  Do not begin
+Next Hasse boundary: the concrete F7/F7X2 feasibility witness now certifies the
+constant embedding, nonidentity conjugation homomorphism, seventh-power bridge,
+and universal fixed-point/image equivalence.  A seven-case scalar theorem, not
+49-element ambient exhaustion, proves the fixed-subfield endpoint; exhaustive
+carrier agreement and the exact seven-element fixed set remain regression
+evidence.  Next isolate and certify the experimental abstract two-field
+functional packaging before choosing any stable ambient architecture.  Do not begin
 curve Frobenius before those endpoints, and keep the deferred extension-field
 carrier/fixer bridge, broad morphism infrastructure, and Schoof machinery
 separate.
