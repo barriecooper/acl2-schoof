@@ -279,10 +279,75 @@
                             finite-field-poly-raw-add)))))
 
 
+(defthm finite-field-canonical-polynomial-p-of-raw-neg-when-canonical
+  (implies (finite-field-canonical-polynomial-p x)
+           (finite-field-canonical-polynomial-p
+            (finite-field-poly-raw-neg x)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (theory 'minimal-theory)
+           :by (:functional-instance
+                canonical-polynomial-p-of-raw-neg-when-canonical
+                (gfield::field-element-p gfield::finite-field-element-p)
+                (gfield::field-fix gfield::finite-field-fix)
+                (gfield::field-zero gfield::finite-field-zero)
+                (gfield::field-one gfield::finite-field-one)
+                (gfield::field-add gfield::finite-field-add)
+                (gfield::field-mul gfield::finite-field-mul)
+                (gfield::field-neg gfield::finite-field-neg)
+                (gfield::field-inv gfield::finite-field-inv)
+                (coefficient-list-p finite-field-coefficient-list-p)
+                (canonical-polynomial-p finite-field-canonical-polynomial-p)
+                (raw-neg finite-field-poly-raw-neg)))
+          (and stable-under-simplificationp
+               (list :use (theory 'gfield::finite-field-context-instance-theory)
+                     :in-theory
+                     (list 'quote
+                           '(finite-field-coefficient-list-p
+                             finite-field-canonical-polynomial-p
+                             finite-field-poly-raw-neg))))))
+
+(defthm finite-field-poly-neg-when-canonical
+  (implies (finite-field-canonical-polynomial-p x)
+           (equal (finite-field-poly-neg x)
+                  (finite-field-poly-raw-neg x)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance
+                  finite-field-canonical-polynomial-p-of-raw-neg-when-canonical)
+                 (:instance finite-field-poly-normalize-when-canonical
+                            (xs (finite-field-poly-raw-neg x))))
+           :in-theory (e/d (finite-field-poly-neg)
+                           (finite-field-poly-normalize
+                            finite-field-poly-fix-coefficients
+                            finite-field-poly-trim-trailing-zeros)))))
+
 (defthm finite-field-poly-sub-definition
   (equal (finite-field-poly-sub x y)
          (finite-field-poly-add x (finite-field-poly-neg y)))
   :hints (("Goal" :in-theory (enable finite-field-poly-sub))))
+
+(defthm finite-field-poly-sub-of-canonical-operands
+  (implies (and (finite-field-canonical-polynomial-p x)
+                (finite-field-canonical-polynomial-p y))
+           (equal (finite-field-poly-sub x y)
+                  (finite-field-poly-normalize
+                   (finite-field-poly-raw-add
+                    x (finite-field-poly-raw-neg y)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-sub-definition)
+                 (:instance finite-field-poly-neg-when-canonical (x y))
+                 (:instance finite-field-poly-normalize-when-canonical (xs x))
+                 (:instance finite-field-poly-normalize-when-canonical
+                            (xs (finite-field-poly-raw-neg y)))
+                 (:instance
+                  finite-field-canonical-polynomial-p-of-raw-neg-when-canonical
+                  (x y)))
+           :in-theory (e/d (finite-field-poly-add)
+                           (finite-field-poly-sub
+                            finite-field-poly-neg
+                            finite-field-poly-normalize
+                            finite-field-poly-raw-add)))))
 
 (defthm finite-field-poly-add-left-to-poly-sub
   (implies (and (finite-field-polynomial-p x)

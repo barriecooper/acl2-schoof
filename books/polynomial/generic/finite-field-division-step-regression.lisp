@@ -105,3 +105,28 @@
   :rule-classes nil
   :hints (("Goal"
            :use ((:instance f7-poly-division-step-core-length-decreases)))))
+
+(defthm finite-field-neg-canonical-interface-minimal-theory-client
+  (implies (finite-field-canonical-polynomial-p x)
+           (and (finite-field-canonical-polynomial-p
+                 (finite-field-poly-raw-neg x))
+                (equal (finite-field-poly-neg x)
+                       (finite-field-poly-raw-neg x))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance
+                  finite-field-canonical-polynomial-p-of-raw-neg-when-canonical)
+                 (:instance finite-field-poly-neg-when-canonical))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm finite-field-sub-canonical-operands-minimal-theory-client
+  (implies (and (finite-field-canonical-polynomial-p x)
+                (finite-field-canonical-polynomial-p y))
+           (equal (finite-field-poly-sub x y)
+                  (finite-field-poly-normalize
+                   (finite-field-poly-raw-add
+                    x (finite-field-poly-raw-neg y)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-sub-of-canonical-operands))
+           :in-theory (theory 'minimal-theory))))

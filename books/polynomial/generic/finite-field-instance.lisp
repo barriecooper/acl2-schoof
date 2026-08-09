@@ -969,6 +969,24 @@
                      (list 'quote
                            (theory 'finite-field-poly-distributivity-instance-theory))))))
 
+(defthm finite-field-len-of-poly-fix-coefficients
+  (equal (len (finite-field-poly-fix-coefficients xs)) (len xs))
+  :hints (("Goal" :induct (finite-field-poly-fix-coefficients xs)
+           :in-theory (enable finite-field-poly-fix-coefficients))))
+
+(defthm finite-field-len-of-poly-raw-add
+  (equal (len (finite-field-poly-raw-add x y))
+         (max (len x) (len y)))
+  :hints (("Goal" :induct (finite-field-poly-raw-add x y)
+           :in-theory (enable finite-field-poly-raw-add
+                              finite-field-poly-fix-coefficients))))
+
+(defthm finite-field-len-of-poly-raw-neg
+  (equal (len (finite-field-poly-raw-neg x)) (len x))
+  :rule-classes nil
+  :hints (("Goal" :induct (finite-field-poly-raw-neg x)
+           :in-theory (enable finite-field-poly-raw-neg))))
+
 (verify-guards finite-field-coefficient-list-p)
 (verify-guards finite-field-polynomial-p)
 (verify-guards finite-field-canonical-polynomial-p)
