@@ -233,3 +233,58 @@
                                finite-field-poly-degree))))
 
 (verify-guards finite-field-poly-reduced-p)
+
+; Subtraction cannot create a term above either canonical operand.  This is
+; the finite-field-prefixed degree fact needed for same-coset uniqueness.
+(defthm finite-field-poly-sub-degree-below-common-bound
+  (implies
+   (and (finite-field-canonical-polynomial-p x)
+        (finite-field-canonical-polynomial-p y)
+        (or (not (consp x))
+            (< (finite-field-poly-degree x) bound))
+        (or (not (consp y))
+            (< (finite-field-poly-degree y) bound)))
+   (or (equal (finite-field-poly-sub x y) nil)
+       (< (finite-field-poly-degree
+           (finite-field-poly-sub x y))
+          bound)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance finite-field-poly-sub-of-canonical-operands)
+          (:instance finite-field-len-of-poly-normalize
+                     (xs (finite-field-poly-raw-add
+                          x (finite-field-poly-raw-neg y))))
+          (:instance finite-field-len-of-poly-raw-add
+                     (x x) (y (finite-field-poly-raw-neg y)))
+          (:instance finite-field-len-of-poly-raw-neg (x y))
+          (:instance finite-field-poly-degree-when-canonical-nonzero
+                     (p (finite-field-poly-sub x y)))
+          (:instance finite-field-canonical-polynomial-atom-is-nil (p x))
+          (:instance finite-field-canonical-polynomial-atom-is-nil (p y)))
+    :in-theory
+    (disable finite-field-poly-sub finite-field-poly-raw-add
+          finite-field-poly-raw-neg finite-field-poly-normalize
+          finite-field-canonical-polynomial-p finite-field-poly-degree))))
+
+(defthm finite-field-poly-add-left-cancel-canonical
+  (implies
+   (and (finite-field-canonical-polynomial-p x)
+        (finite-field-canonical-polynomial-p y)
+        (finite-field-polynomial-p z)
+        (equal (finite-field-poly-add z x)
+               (finite-field-poly-add z y)))
+   (equal x y))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance finite-field-poly-add-associative
+                     (x (finite-field-poly-neg z)) (y z) (z x))
+          (:instance finite-field-poly-add-associative
+                     (x (finite-field-poly-neg z)) (y z) (z y))
+          (:instance finite-field-poly-add-commutative
+                     (x (finite-field-poly-neg z)) (y z))
+          (:instance finite-field-poly-add-inverse-right (x z)))
+    :in-theory
+    (disable finite-field-poly-add
+     finite-field-poly-neg finite-field-canonical-polynomial-p))))
