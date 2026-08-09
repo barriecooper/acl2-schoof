@@ -187,7 +187,8 @@ boundary are maintained in
 
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|
-| Division polynomials | Open | — | Requires polynomial derivatives and the selected curve formulas. |
+| Division-polynomial base boundary | Certified through normalized base data | `finite-field-division-polynomial-base-spec`; `finite-field-division-polynomial-base`; `finite-field-division-polynomial-base-correct`; base equations; canonical/field-polynomial closure; fixing compatibility | Dense ascending-order univariate polynomials in `x`; even indices store `psi_n/(2y)`. Covers indices 0--4 and totalizes all other/malformed indices to zero. The recurrence and its general mathematical correspondence remain open. |
+| Division-polynomial recurrence | Open | — | Use the selected separated-`2y` convention. First specify a terminating memoization-friendly recursion and prove its odd/even equations; introduce quotient-coordinate laws only when a recurrence or trace-test client actually needs them. |
 | Quotient-coordinate arithmetic | Open | — | Build on canonical polynomial and modular arithmetic. |
 | Frobenius action and trace tests | Open | — | Requires finite-field metadata and quotient-coordinate semantics. |
 | Bounded CRT reconstruction | Open | — | Specify and certify the point-count reconstruction bound. |

@@ -266,3 +266,5 @@
 (include-book "polynomial/generic/f7x2-fixed-modulus-field-regression")
 (include-book "polynomial/generic/fixed-modulus-coefficients-regression")
 (include-book "curve/f11-golden")
+(include-book "schoof/division-polynomial-base")
+(include-book "schoof/division-polynomial-base-regression")
