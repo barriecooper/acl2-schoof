@@ -268,3 +268,5 @@
 (include-book "curve/f11-golden")
 (include-book "schoof/division-polynomial-base")
 (include-book "schoof/division-polynomial-base-regression")
+(include-book "schoof/division-polynomial-recurrence-step")
+(include-book "schoof/division-polynomial-recurrence-step-regression")

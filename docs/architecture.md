@@ -413,4 +413,22 @@ Natural integer constants are embedded by repeated finite-field addition of one;
 
 These are the standard division-polynomial initial values (Silverman, *The Arithmetic of Elliptic Curves*, division-polynomial formulas), algebraically adjusted only by removing `2y` from the even value.  Their elliptic-curve interpretation is restricted to the repository's short-Weierstrass characteristic-not-two-or-three scope.  The polynomial functions themselves remain total in every constrained finite field: `nfix` handles the index, field fixing handles `a,b`, and unsupported indices return the zero polynomial.
 
+The first recurrence boundary is a transparent step over an ascending list of
+already established entries.  Write `C=(2y)^2=4(x^3+ax+b)`.  Starting from the
+standard identities
+`psi_(2m+1)=psi_(m+2)psi_m^3-psi_(m-1)psi_(m+1)^3` and
+`psi_(2m)=(psi_m/(2y))(psi_(m+2)psi_(m-1)^2-psi_(m-2)psi_(m+1)^2)`, substitute
+`psi_k=F_k` for odd `k` and `psi_k=(2y)F_k` for even `k`.  If `m` is even, the
+first odd product contains four factors of `2y`, giving `C^2` on that product;
+if `m` is odd, the second product contains them instead.  In the even identity
+the common factors cancel to the same stored formula in both parities.  This
+derivation records the source and representation transformation; it is not a
+formal bridge to a bivariate classical definition, which remains open.
+
+The retained step uses `nth` only as a transparent table access.  The intended
+next execution boundary is a sequential list builder that computes each entry
+once.  That builder is not yet public: exact length, stable lower-index lookup,
+and evaluator/specification correspondence must be certified together before
+an all-index evaluator is retained.
+
 The initial base computation needs normalization and coefficient-field arithmetic only.  It does not use quotient coordinates, so it creates no justification for another reduced-ring law.  A future recurrence should use a terminating half-index recursion with explicit sharing/memoization strategy rather than naive overlapping recursion; the exact recurrence specification and general correspondence theorem remain the next boundary.
