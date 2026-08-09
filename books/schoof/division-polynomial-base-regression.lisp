@@ -58,6 +58,66 @@
                  finite-field-division-polynomial-base-correct)
            :in-theory (theory 'minimal-theory))))
 
+(defthm division-polynomial-base-index-3-minimal-theory-client
+  (equal (finite-field-division-polynomial-base 3 a b)
+         (let* ((a (gfield::finite-field-fix a))
+                (b (gfield::finite-field-fix b))
+                (a2 (gfield::finite-field-mul a a)))
+           (finite-field-poly-normalize
+            (list (gfield::finite-field-neg a2)
+                  (gfield::finite-field-mul
+                   (finite-field-natural-coefficient 12) b)
+                  (gfield::finite-field-mul
+                   (finite-field-natural-coefficient 6) a)
+                  (gfield::finite-field-zero)
+                  (finite-field-natural-coefficient 3)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use finite-field-division-polynomial-base-index-3
+           :in-theory (theory 'minimal-theory))))
+
+(defthm division-polynomial-base-index-4-minimal-theory-client
+  (equal
+   (finite-field-division-polynomial-base 4 a b)
+   (let* ((a (gfield::finite-field-fix a))
+          (b (gfield::finite-field-fix b))
+          (a2 (gfield::finite-field-mul a a))
+          (a3 (gfield::finite-field-mul a2 a))
+          (b2 (gfield::finite-field-mul b b))
+          (ab (gfield::finite-field-mul a b)))
+     (finite-field-poly-normalize
+      (list
+       (gfield::finite-field-neg
+        (gfield::finite-field-add
+         (gfield::finite-field-mul
+          (finite-field-natural-coefficient 2) a3)
+         (gfield::finite-field-mul
+          (finite-field-natural-coefficient 16) b2)))
+       (gfield::finite-field-neg
+        (gfield::finite-field-mul
+         (finite-field-natural-coefficient 8) ab))
+       (gfield::finite-field-neg
+        (gfield::finite-field-mul
+         (finite-field-natural-coefficient 10) a2))
+       (gfield::finite-field-mul
+        (finite-field-natural-coefficient 40) b)
+       (gfield::finite-field-mul
+        (finite-field-natural-coefficient 10) a)
+       (gfield::finite-field-zero)
+       (finite-field-natural-coefficient 2)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use finite-field-division-polynomial-base-index-4
+           :in-theory (theory 'minimal-theory))))
+
+(defthm division-polynomial-base-unsupported-index-minimal-theory-client
+  (implies (not (member-equal (nfix n) '(0 1 2 3 4)))
+           (equal (finite-field-division-polynomial-base n a b) nil))
+  :rule-classes nil
+  :hints (("Goal"
+           :use finite-field-division-polynomial-base-when-unsupported-index
+           :in-theory (theory 'minimal-theory))))
+
 ; E: y^2 = x^3 + x + 6 over F11 is the repository's nonsingular golden curve.
 (assert-event (equal (f11-division-polynomial-base 0 1 6) nil))
 (assert-event (equal (f11-division-polynomial-base 1 1 6) '(1)))

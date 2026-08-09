@@ -108,12 +108,66 @@
        (equal (finite-field-division-polynomial-base 1 a b)
               (list (gfield::finite-field-one)))
        (equal (finite-field-division-polynomial-base 2 a b)
-              (list (gfield::finite-field-one)))
-       (equal (finite-field-division-polynomial-base 3 a b)
-              (finite-field-division-polynomial-base-spec 3 a b))
-       (equal (finite-field-division-polynomial-base 4 a b)
-              (finite-field-division-polynomial-base-spec 4 a b)))
+              (list (gfield::finite-field-one))))
   :rule-classes nil)
+
+(defthm finite-field-division-polynomial-base-index-3
+  (equal
+   (finite-field-division-polynomial-base 3 a b)
+   (let* ((a (gfield::finite-field-fix a))
+          (b (gfield::finite-field-fix b))
+          (a2 (gfield::finite-field-mul a a)))
+     (finite-field-poly-normalize
+      (list (gfield::finite-field-neg a2)
+            (gfield::finite-field-mul
+             (finite-field-natural-coefficient 12) b)
+            (gfield::finite-field-mul
+             (finite-field-natural-coefficient 6) a)
+            (gfield::finite-field-zero)
+            (finite-field-natural-coefficient 3)))))
+  :hints (("Goal"
+           :in-theory (enable finite-field-division-polynomial-base
+                              finite-field-division-polynomial-base-spec))))
+
+(defthm finite-field-division-polynomial-base-index-4
+  (equal
+   (finite-field-division-polynomial-base 4 a b)
+   (let* ((a (gfield::finite-field-fix a))
+          (b (gfield::finite-field-fix b))
+          (a2 (gfield::finite-field-mul a a))
+          (a3 (gfield::finite-field-mul a2 a))
+          (b2 (gfield::finite-field-mul b b))
+          (ab (gfield::finite-field-mul a b)))
+     (finite-field-poly-normalize
+      (list
+       (gfield::finite-field-neg
+        (gfield::finite-field-add
+         (gfield::finite-field-mul
+          (finite-field-natural-coefficient 2) a3)
+         (gfield::finite-field-mul
+          (finite-field-natural-coefficient 16) b2)))
+       (gfield::finite-field-neg
+        (gfield::finite-field-mul
+         (finite-field-natural-coefficient 8) ab))
+       (gfield::finite-field-neg
+        (gfield::finite-field-mul
+         (finite-field-natural-coefficient 10) a2))
+       (gfield::finite-field-mul
+        (finite-field-natural-coefficient 40) b)
+       (gfield::finite-field-mul
+        (finite-field-natural-coefficient 10) a)
+       (gfield::finite-field-zero)
+       (finite-field-natural-coefficient 2)))))
+  :hints (("Goal"
+           :in-theory (enable finite-field-division-polynomial-base
+                              finite-field-division-polynomial-base-spec))))
+
+(defthm finite-field-division-polynomial-base-when-unsupported-index
+  (implies (not (member-equal (nfix n) '(0 1 2 3 4)))
+           (equal (finite-field-division-polynomial-base n a b) nil))
+  :hints (("Goal"
+           :in-theory (enable finite-field-division-polynomial-base
+                              finite-field-division-polynomial-base-spec))))
 
 (verify-guards finite-field-natural-coefficient)
 (verify-guards finite-field-division-polynomial-base-spec)
