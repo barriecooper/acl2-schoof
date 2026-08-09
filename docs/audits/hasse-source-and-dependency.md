@@ -446,3 +446,24 @@ and the experimental functional packaging remains to be certified.  In
 particular, F49 is not thereby shown to contain the geometric kernel points
 needed by later degree theory; algebraic-closure, extension-family, or symbolic
 function-field requirements remain unresolved.
+
+
+## Experimental two-field packaging outcome
+
+**GO for interface coherence and the concrete F7/F49 realization.**  The
+context-guarded experimental seam is certified independently of concrete F7X2,
+and functional instantiation maps its base operations to F7, its ambient
+operations to F7X2, `q` to 7, Frobenius to coefficient conjugation, and the
+nonidentity witness to `X = (0 1)`.  The realization reuses the public embedding,
+homomorphism, seventh-power/conjugation, fixed-point/image, and witness theorems.
+Its abstract consequence identifies Frobenius fixedness with equality to the
+embedding of the fixed base projection.
+
+This establishes that the proposed cross-field interface is coherent, is
+nontrivially realizable by F7/F49, and contains the scalar facts needed to state
+coordinatewise curve Frobenius.  It does not make F49 a suitable geometric
+ambient domain, adopt a permanent two-field architecture, define curve
+Frobenius, or supply morphism, kernel, separability, or degree theory.
+Accordingly the experiment is a **NO-GO for selecting the final Hasse ambient
+representation**: the next mathematical boundary is to identify a domain rich
+enough for the later geometric kernel and degree arguments.
