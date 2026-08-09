@@ -19,6 +19,17 @@
            :in-theory (theory 'minimal-theory)
            :use ((:instance finite-field-poly-reduced-add-definition)))))
 
+(defthm finite-field-poly-reduced-add-associative-minimal-theory-client
+  (equal
+   (finite-field-poly-reduced-add
+    (finite-field-poly-reduced-add a b modulus) c modulus)
+   (finite-field-poly-reduced-add
+    a (finite-field-poly-reduced-add b c modulus) modulus))
+  :hints
+  (("Goal"
+    :in-theory (theory 'minimal-theory)
+    :use ((:instance finite-field-poly-reduced-add-associative)))))
+
 ; Concrete F7 execution witnesses use the existing executable F7 reduced-ring
 ; instance.  They supplement, but do not replace, the generic staged theorem.
 (assert-event (equal (f7-poly-reduced-add '(1 2) '(3 4) '(1 0 1))
