@@ -399,3 +399,18 @@ Schoof's critical path.  Schoof may use division polynomials and quotient
 coordinates over finite rings independently.  Shared work ends at finite-field
 metadata, polynomial/fixed-modulus arithmetic, curve formulas, fixing
 contracts, and the particular Frobenius laws demanded by both clients.
+
+
+## Schoof division-polynomial representation
+
+The executable Schoof track uses dense ascending-coefficient univariate polynomials in `x` over the constrained finite field.  For the short-Weierstrass equation `y^2 = x^3 + ax + b`, odd entries represent `psi_n`; even entries represent `psi_n/(2y)`.  Thus `psi_2 = 2y` is stored as the constant one.  This convention avoids a bivariate or rational-function layer while retaining the data needed by the standard odd/even recurrences and later trace tests.  It is the convention used by the certified base boundary through index four.
+
+Natural integer constants are embedded by repeated finite-field addition of one; curve coefficients are fixed before use.  Dense coefficient order is ascending.  The retained formulas are
+
+- `psi_0 = 0`, `psi_1 = 1`, and stored `psi_2/(2y) = 1`;
+- `psi_3 = 3x^4 + 6ax^2 + 12bx - a^2`; and
+- stored `psi_4/(2y) = 2x^6 + 10ax^4 + 40bx^3 - 10a^2x^2 - 8abx - 2a^3 - 16b^2`.
+
+These are the standard division-polynomial initial values (Silverman, *The Arithmetic of Elliptic Curves*, division-polynomial formulas), algebraically adjusted only by removing `2y` from the even value.  Their elliptic-curve interpretation is restricted to the repository's short-Weierstrass characteristic-not-two-or-three scope.  The polynomial functions themselves remain total in every constrained finite field: `nfix` handles the index, field fixing handles `a,b`, and unsupported indices return the zero polynomial.
+
+The initial base computation needs normalization and coefficient-field arithmetic only.  It does not use quotient coordinates, so it creates no justification for another reduced-ring law.  A future recurrence should use a terminating half-index recursion with explicit sharing/memoization strategy rather than naive overlapping recursion; the exact recurrence specification and general correspondence theorem remain the next boundary.

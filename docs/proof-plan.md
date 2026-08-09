@@ -95,8 +95,7 @@ endpoint `(q + 1 - N)^2 <= 4q`.  Reuse the common polynomial and curve layers.
 
 ## Phase 3B: executable Schoof track
 
-Develop division polynomials, quotient-coordinate arithmetic, Frobenius action,
-trace-congruence tests, and bounded incremental CRT reconstruction. Each
+The certified first client represents division-polynomial base data as dense univariate polynomials in `x`, with the conventional `2y` factor removed from even indices. It provides indices 0 through 4, coefficient fixing, canonical output, and a transparent specification/implementation theorem. Next specify the odd/even recurrence with an explicit terminating, memoization-friendly execution strategy; add quotient-coordinate arithmetic only at the first recurrence or trace-test dependency that requires it. Then develop Frobenius action, trace-congruence tests, and bounded incremental CRT reconstruction. Each
 logical/executable boundary needs an independent specification, a certified
 correspondence theorem, verified guards, and focused execution evidence.
 Practical benchmarks are performance evidence, not proof of point-count
