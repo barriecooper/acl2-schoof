@@ -231,6 +231,8 @@
 (include-book "polynomial/generic/f7x2-seventh-power-regression")
 (include-book "polynomial/generic/f7x2-frobenius-witness")
 (include-book "polynomial/generic/f7x2-frobenius-witness-regression")
+(include-book "field/experimental-two-field-context")
+(include-book "polynomial/generic/experimental-two-field-f7x2-regression")
 (include-book "polynomial/generic/f7x2-fixed-modulus-field-regression")
 (include-book "polynomial/generic/f7x2-cardinality")
 (include-book "polynomial/generic/f7x2-cardinality-regression")
