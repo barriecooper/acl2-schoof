@@ -363,3 +363,39 @@ projections, with verified guards, reconstruction, strict degree decrease, and a
 strict core length theorem suitable for the future recursive divmod measure.  The
 decisive cancellation proof is length/leading-coefficient based, not
 coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are certified by direct accumulator invariants; fixed-modulus coefficient representation is now certified; coding/cardinality operations remain open and are not introduced here.
+
+## Hasse ambient-point and degree architecture
+
+The adopted Hasse representation is a narrow hybrid, as justified by the
+[ambient-domain and degree-representation audit](audits/ambient-domain-and-degree-representation.md).
+Geometric point semantics and symbolic morphism semantics are separate
+boundaries:
+
+- Frobenius fixedness and the `ker(1-pi)`/degree bridge use a separate
+  point-level seam.  Its exact carrier remains an open realization question.
+  Once fixed-subfield equivalence is established, the directly counted kernel
+  is the embedded copy of `E(F_q)`; this dependency alone does not require a
+  directed union of extensions.  Such a union or an algebraic closure remains
+  a sufficient candidate if a general geometric-kernel theorem is selected.
+- Equality, composition, separability, and degree use a canonical symbolic
+  representation backed by the rank-two short-Weierstrass function field.
+  Equality on the finite base-field point set is never map equality.
+- An abstract endomorphism/positive-degree package may isolate the arithmetic
+  consumer during development, but public Hasse must instantiate it with the
+  certified symbolic maps and geometric kernel bridge.  A false context guard
+  or the F7/F49 feasibility witness is not such a realization.
+
+The adopted stable decision is the symbolic/point-level representation split,
+not a directed extension family or other specific point carrier.  The
+experimental two-field books remain unchanged evidence.  Their separate scalar
+carriers, embedding, and embedded-image proposition are sound concepts;
+the base projection and explicit nonidentity witness are not required generic
+primitives.  Production `q` must be connected to certified base cardinality,
+characteristic, and prime-power metadata.
+
+This architecture intentionally does not put algebraic closures, general
+geometric points, rational-map degree, or dual-isogeny theory on executable
+Schoof's critical path.  Schoof may use division polynomials and quotient
+coordinates over finite rings independently.  Shared work ends at finite-field
+metadata, polynomial/fixed-modulus arithmetic, curve formulas, fixing
+contracts, and the particular Frobenius laws demanded by both clients.
