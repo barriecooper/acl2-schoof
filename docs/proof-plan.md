@@ -50,10 +50,12 @@ general kernel theorem but is not mandated by the direct fixed-kernel
 calculation.  The experimental F7/F49 context remains feasibility evidence,
 not the generic realization.
 
-1. First certify finite-field remainder/add compatibility and reduced-add
-   associativity for the existing explicit-modulus reduced-ring interface.
-   This is the highest-value shared/Schoof boundary and does not depend on
-   Hasse geometry.
+1. First certify finite-field remainder/add compatibility and unconditional
+   reduced-add associativity for arbitrary ACL2 values, including the zero
+   normalized-modulus case, in the existing explicit-modulus reduced-ring
+   interface.  Proof-local modulus case splits must not become public
+   hypotheses.  This is the highest-value shared/Schoof boundary and does not
+   depend on Hasse geometry.
 2. Complete only the quotient-coordinate reduced-ring laws demanded by a
    Schoof client; keep division-polynomial formulas and trace tests in separate
    changes.

@@ -336,8 +336,9 @@ The recommended dependency order deliberately permits the two tracks to run in
 parallel:
 
 1. **Shared/Schoof reduced-ring law:** certify finite-field remainder/add
-   compatibility and reduced-add associativity for the existing explicit
-   modulus interface.  No extension tower or curve map is involved.
+   compatibility and unconditional, totalized reduced-add associativity for
+   arbitrary values of the existing explicit modulus, including zero normalized
+   modulus.  No extension tower or curve map is involved.
 2. **Schoof quotient-coordinate substrate:** complete the finite-field reduced
    ring instance needed to interpret coordinates modulo a supplied polynomial,
    with fixing and congruence laws.
@@ -364,10 +365,12 @@ policy.
 
 **Task: finite-field reduced-add associativity boundary.**  Using the existing
 `finite-field-poly-remainder` and `finite-field-poly-reduced-add`, certify the
-minimum remainder/add compatibility lemmas and the public theorem
-`finite-field-poly-reduced-add-associative` for arbitrary ACL2 inputs under the
-existing finite-field context and nonzero normalized-modulus hypotheses.
-Preserve current fixing and zero-modulus semantics, add a focused regression
+minimum remainder/add compatibility lemmas and the unconditional public theorem
+`finite-field-poly-reduced-add-associative` for arbitrary ACL2 values of `a`,
+`b`, `c`, and `modulus` under the existing finite-field context.  Supporting
+proofs may split on `consp(finite-field-poly-normalize(modulus))`, but that case
+split must not remain a public hypothesis.  Preserve current fixing and
+zero-normalized-modulus semantics, add a focused regression
 functional instance, register the books in `books/top.lisp`, update only the
 ledger/plan/execution-boundary owners affected, and run the full certification
 policy.  Do not add division polynomials, curve Frobenius, extension towers,
