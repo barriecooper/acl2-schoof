@@ -100,3 +100,19 @@
            :use ((:instance finite-field-poly-add-commutative
                             (x a) (y b)))
            :in-theory (enable finite-field-poly-reduced-add))))
+
+(defthm finite-field-poly-reduced-add-associative
+  (equal
+   (finite-field-poly-reduced-add
+    (finite-field-poly-reduced-add a b modulus) c modulus)
+   (finite-field-poly-reduced-add
+    a (finite-field-poly-reduced-add b c modulus) modulus))
+  :hints
+  (("Goal"
+    :use ((:instance finite-field-poly-remainder-of-poly-add-remainder-left
+                     (left (finite-field-poly-add a b)) (right c))
+          (:instance finite-field-poly-remainder-of-poly-add-remainder-right
+                     (left a) (right (finite-field-poly-add b c)))
+          (:instance finite-field-poly-add-associative
+                     (x a) (y b) (z c)))
+    :in-theory (enable finite-field-poly-reduced-add))))

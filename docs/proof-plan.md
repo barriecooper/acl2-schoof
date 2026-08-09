@@ -50,15 +50,12 @@ general kernel theorem but is not mandated by the direct fixed-kernel
 calculation.  The experimental F7/F49 context remains feasibility evidence,
 not the generic realization.
 
-1. Continue the certified finite-field same-coset support from bounded
-   subtraction degree and canonical additive cancellation through multiplication
-   by polynomial negation, reconstruction differences, bounded representative
-   uniqueness, remainder/add compatibility, and unconditional reduced-add
-   associativity.  All public endpoints must cover arbitrary ACL2 values,
-   including the zero normalized-modulus case; proof-local modulus case splits
-   must not become public hypotheses.  This is the highest-value shared/Schoof
-   boundary and does not
-   depend on Hasse geometry.
+1. Use the now-certified finite-field same-coset uniqueness, unconditional
+   divisor-multiple remainder invariance, remainder/add compatibility, and
+   reduced-add associativity only to complete the additional quotient-coordinate
+   laws demanded by a concrete Schoof client.  Preserve arbitrary-ACL2-value and
+   zero-normalized-modulus coverage at every public totalized endpoint.  This
+   shared/Schoof boundary does not depend on Hasse geometry.
 2. Complete only the quotient-coordinate reduced-ring laws demanded by a
    Schoof client; keep division-polynomial formulas and trace tests in separate
    changes.
@@ -113,11 +110,13 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-The next repository boundary is the shared/Schoof finite-field reduced-add
-associativity theorem specified by the ambient/degree audit.  The next Hasse
-boundary, separately, is only an abstract arithmetic consumer for the quadratic
-degree premises; no public Hasse claim is permitted until the rank-two symbolic
-map and geometric kernel realizations are certified.
+The next shared/Schoof repository boundary is the smallest additional
+finite-field quotient-coordinate law required by a concrete Schoof client;
+unconditional reduced-add associativity is certified and does not authorize
+completion of the entire reduced-ring or field package.  The next Hasse boundary,
+separately, is only an abstract arithmetic consumer for the quadratic degree
+premises; no public Hasse claim is permitted until the rank-two symbolic map and
+geometric kernel realizations are certified.
 
 ## Finite-field division-step substrate
 
