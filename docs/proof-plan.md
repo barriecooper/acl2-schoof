@@ -44,9 +44,10 @@ Proceed with one bounded mathematical or execution boundary per proof change.
 The [ambient-domain and degree-representation audit](audits/ambient-domain-and-degree-representation.md)
 adopts a hybrid split: geometric points are used only for fixed-point and
 kernel-cardinality statements, while morphism equality and degree receive a
-separate symbolic/function-field realization.  A directed root-sufficient
-family is enough at the point seam; a constructed algebraic closure is not a
-prerequisite.  The experimental F7/F49 context remains feasibility evidence,
+separate symbolic/function-field realization.  The exact point carrier for
+`ker(1-pi)` remains open: a directed root-sufficient family is sufficient for a
+general kernel theorem but is not mandated by the direct fixed-kernel
+calculation.  The experimental F7/F49 context remains feasibility evidence,
 not the generic realization.
 
 1. First certify finite-field remainder/add compatibility and reduced-add
@@ -61,8 +62,9 @@ not the generic realization.
    false context guard as realization.
 4. Realize those premises through the narrow rank-two short-Weierstrass
    function-field fragment, starting with canonical map equality and
-   `deg(pi)=q`; add a directed root-sufficient point layer only for the later
-   kernel/separable-degree bridge.
+   `deg(pi)=q`; then determine the weakest point-level realization for the
+   concrete `ker(1-pi)`/separable-degree bridge, adding a directed carrier only
+   if the selected proof genuinely needs arbitrary kernels.
 5. Add polynomial natural scaling, fast scalar multiplication, or the deferred
    extension-field carrier/fixer bridge only when one of these concrete clients
    requires it.
@@ -84,9 +86,10 @@ fixed-point and kernel-cardinality bridge.
 
 The selected primary route is Silverman, *The Arithmetic of Elliptic Curves*,
 V.1.1, using the positive quadratic degree form of III.6 (especially III.6.3)
-and the required III.4--III.6 isogeny/dual-isogeny results.  Formalize only the adopted rank-two function-field/endomorphism degree
-fragment and its root-sufficient kernel bridge required to derive the preferred
-first endpoint `(q + 1 - N)^2 <= 4q`.  Reuse the common polynomial and curve layers.
+and the required III.4--III.6 isogeny/dual-isogeny results.  Formalize only the
+adopted rank-two function-field/endomorphism degree fragment and the weakest
+certified `ker(1-pi)`/degree bridge required to derive the preferred first
+endpoint `(q + 1 - N)^2 <= 4q`.  Reuse the common polynomial and curve layers.
 
 ## Phase 3B: executable Schoof track
 

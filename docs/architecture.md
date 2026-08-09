@@ -371,12 +371,12 @@ The adopted Hasse representation is a narrow hybrid, as justified by the
 Geometric point semantics and symbolic morphism semantics are separate
 boundaries:
 
-- Fixed-point and kernel-cardinality theorems use an abstract carrier equivalent
-  to a coherent directed union of finite extensions.  It must contain every
-  finite kernel required by its client and expose the embedded finite base
-  field as exactly the fixed subfield of `q`-power Frobenius.  A full
-  algebraic-closure construction is sufficient but is not an architectural
-  prerequisite.
+- Frobenius fixedness and the `ker(1-pi)`/degree bridge use a separate
+  point-level seam.  Its exact carrier remains an open realization question.
+  Once fixed-subfield equivalence is established, the directly counted kernel
+  is the embedded copy of `E(F_q)`; this dependency alone does not require a
+  directed union of extensions.  Such a union or an algebraic closure remains
+  a sufficient candidate if a general geometric-kernel theorem is selected.
 - Equality, composition, separability, and degree use a canonical symbolic
   representation backed by the rank-two short-Weierstrass function field.
   Equality on the finite base-field point set is never map equality.
@@ -385,8 +385,10 @@ boundaries:
   certified symbolic maps and geometric kernel bridge.  A false context guard
   or the F7/F49 feasibility witness is not such a realization.
 
-The experimental two-field books remain unchanged evidence.  Their separate
-scalar carriers, embedding, and embedded-image proposition are sound concepts;
+The adopted stable decision is the symbolic/point-level representation split,
+not a directed extension family or other specific point carrier.  The
+experimental two-field books remain unchanged evidence.  Their separate scalar
+carriers, embedding, and embedded-image proposition are sound concepts;
 the base projection and explicit nonidentity witness are not required generic
 primitives.  Production `q` must be connected to certified base cardinality,
 characteristic, and prime-power metadata.

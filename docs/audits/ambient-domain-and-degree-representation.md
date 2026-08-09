@@ -30,29 +30,31 @@ This document uses five deliberately different labels:
 
 **Architecture decision.** Adopt candidate D, a deliberately narrow hybrid:
 
-1. point-level statements use an abstract geometric-point carrier over an
-   algebraic extension of the finite base field, with the base embedding and
-   `q`-Frobenius fixed-subfield property exposed only where fixed points and
-   kernel cardinality require them; and
-2. map equality, composition, the endomorphism group, separability, and degree
-   use a separate symbolic/function-field-backed endomorphism package.  Its
-   first public layer may be abstract, but the public Hasse theorem must be a
-   functional instance of a certified concrete realization.
+1. map equality, composition, the endomorphism group, separability, and degree
+   use a symbolic/function-field-backed endomorphism package; and
+2. Frobenius fixedness and the kernel/degree bridge use a separate point-level
+   seam whose exact carrier and realization remain open.
 
-An algebraic closure is a conventional sufficient realization, not a minimum
-premise of the final inequality.  A directed union of finite extensions (or an
-abstract algebraic geometric-point carrier with equivalent closure and root
-properties) is enough: each finite kernel used in the proof is contained in
-some finite extension.  Conversely, F49 is not uniformly enough.  For example,
-all prime-to-7 torsion kernels `E[ell] = ker([ell])` that underlie general
-isogeny/degree theory need not be rational over F49; as `ell` varies their
-coordinates require extensions of unbounded degree.  Likewise the quadratic
-form is stated for every integer combination `[m] pi + [n]`, not only maps
-whose kernel happens to split over F49.
+An algebraic closure or a directed union of finite extensions is a conventional
+sufficient point realization, but neither is a minimum premise established by
+the final Hasse calculation.  The only kernel cardinality directly used there
+is `ker(1-pi)`; after the fixed-subfield theorem, its points are precisely the
+embedded base-field points `E(F_q)`.  A purpose-built point realization may
+therefore suffice for this bridge.  A richer carrier may still be required if
+the concrete proof instead establishes a general `#ker(phi)=deg_sep(phi)`
+theorem, constructs dual isogenies geometrically, or derives quadraticity by
+counting arbitrary isogeny or torsion kernels.
 
-This is an adopted dependency and representation split, not adoption of a
-particular algebraic-closure encoding, normalized rational-map syntax, or
-isogeny library.  Those remain implementation choices within the stated seam.
+F49 is not a uniform geometric universe for those general constructions: for
+example, prime-to-7 torsion kernels `E[ell]` need not all be rational over F49
+as `ell` varies.  That observation does **not** show F49 is insufficient for
+the particular `ker(1-pi)` cardinality calculation on an F7 curve; the fixed
+points in that kernel are already F7-rational once fixed-subfield equivalence
+is proved.
+
+This adopts the representation split and the rank-two symbolic target, not a
+particular algebraic-closure encoding, directed extension family, point-carrier
+realization, normalized rational-map syntax, or isogeny library.
 
 ## Material inspected
 
@@ -122,11 +124,12 @@ Silverman's route can be cut into the following dependencies, backwards from
    composition, kernels, and equality compatible with degree.  Frobenius
    preserves the curve equation because it is a field homomorphism and fixes
    the embedded coefficients.
-7. **Scalars and points.** The ambient scalar carrier must contain coordinates
-   of every geometric kernel being counted, be closed under field operations
-   and `q`-power, contain an injective base-field image, and satisfy
-   `z^q=z` iff `z` lies in that image.  The tagged infinity point needs no
-   scalar root.
+7. **Scalars and points.** The point-level seam must interpret Frobenius and
+   `ker(1-pi)`, contain an injective base-field image, and satisfy `z^q=z` iff
+   `z` lies in that image.  These facts make the directly counted kernel
+   base-field rational.  Closure or root-existence for arbitrary kernels is an
+   additional premise only if the chosen degree realization uses them.  The
+   tagged infinity point needs no scalar root.
 
 Dual isogenies are not mentioned in the final two-line discriminant argument.
 They are genuinely used by Silverman's proof of the general quadratic-degree
@@ -144,7 +147,7 @@ permanent unsupported axiom.
 | Fixed points equal `E(F_q)` | `z^q=z` iff `z` is in the embedded base image, plus injectivity and infinity handling | Converse quantifies over ambient coordinates | F7/F49 theorem certified only for that finite witness; generic realization open |
 | Form map sums/differences | One geometric curve group and totalized map application | Inputs include non-rational geometric points | Curve group over one `GFIELD` certified; cross-field/geometric instantiation open |
 | Equality of maps | Equality as curve morphisms, implemented by canonical symbolic/function-field equality or extensional equality on all geometric points | A finite base-point test is insufficient | Open |
-| `ker(1-pi)` | All geometric zeros of the morphism on a common point carrier | Kernel points may lie in finite extensions not fixed in advance | Open |
+| `ker(1-pi)` | A point seam on which Frobenius fixedness is meaningful and fixed points are exactly the embedded base points | After fixed-subfield equivalence, these kernel points are in `E(F_q)`; no unbounded extension family follows from this use | Open |
 | `#ker(phi)=deg_sep(phi)` | Algebraically sufficient geometric carrier plus finite-kernel enumeration/cardinality theorem | All roots of the kernel scheme's separable part must be represented | Ordinary mathematics; major realization obligation |
 | `1-pi` separable | Nonzero differential / separable function-field extension | No enumeration, but the function-field notion detects multiplicity | Open |
 | `deg(pi)=q` | Function-field or equivalent morphism-degree semantics; inseparable degree `q`, separable degree `1` | No need to list kernel points | Open |
@@ -163,19 +166,19 @@ permanent unsupported axiom.
 * A **perfect closure** is not sufficient.  The finite base field is already
   perfect, so its perfect closure adds no non-rational torsion or kernel points.
 * **One sufficiently large finite extension per finite kernel** is
-  mathematically enough for each cardinality argument.  To express all maps
-  and integer combinations in one first-order point semantics, however, ACL2
-  needs a coherent directed family/union or an abstract carrier with the same
-  compatibility; unrelated per-theorem fields do not supply extensional map
-  equality or composition.
-* A **single fixed finite extension**, including F49, proves only the kernels
-  that split there.  It cannot uniformly support the unbounded family
-  `ker([m]pi+[n])` or general prime-to-characteristic torsion used in the
-  quadratic-degree development.
-* A **symbolic function field** avoids requiring ambient roots for map equality,
-  composition, inseparable degree, and `deg(pi)`.  It does not by itself count
-  geometric kernels, so a root-sufficient carrier remains necessary at the
-  kernel-cardinality bridge.
+  mathematically enough for a general kernel-cardinality theorem.  A coherent
+  directed family/union becomes attractive if one ACL2 point semantics must
+  compare arbitrary kernels across stages, but the backward analysis of
+  `ker(1-pi)` does not mandate it.
+* A **single fixed finite extension**, including F49, is not a uniform universe
+  for arbitrary `ker([m]pi+[n])` or prime-to-characteristic torsion.  It may
+  nevertheless contain the particular `ker(1-pi)` because fixed-subfield
+  equivalence identifies that kernel with the base-field points.
+* A **symbolic function field** handles map equality, composition, inseparable
+  degree, `deg(pi)`, and quadraticity without representing the roots of general
+  kernels.  A separate point seam is still required for `ker(1-pi)` and its
+  cardinality/degree bridge; whether that seam needs more than a purpose-built
+  fixed-point realization is open.
 * An **abstract endomorphism/degree interface** is acceptable for an
   intermediate arithmetic theorem and cleanly tests the dependency cut.  It
   is not a final Hasse proof until the concrete curve/Frobenius package is a
@@ -232,7 +235,9 @@ The rank-two short-Weierstrass fragment is the narrow target.
 
 ## Degree and kernel certification boundary
 
-Keep six statements separate:
+Keep six statements separate.  Items 1--2 may be proved generally for `phi`,
+but the final Hasse calculation instantiates them only at `phi=1-pi`; a
+purpose-built proof at that instance is therefore an open alternative.
 
 1. a concrete geometric kernel carrier is finite and has cardinality `k`;
 2. `k = deg_sep(phi)` for the supported nonzero isogeny;
@@ -253,10 +258,12 @@ on item 5 without a new certified bridge.
 The narrow concrete realization obligation is substantial but credible:
 normalize the rank-two curve function field; define pullback for the supported
 endomorphisms; define total/separable/inseparable degree; prove the differential
-criterion for this fragment; prove the kernel/separable-degree theorem over a
-root-sufficient directed ambient carrier; then prove quadraticity either via
-narrow duals or directly for the `Z`-span of `1,pi`.  A false-guarded context
-may stage the arithmetic consumer, but all these premises must be discharged
+criterion for this fragment; determine the weakest point realization that
+proves the concrete `ker(1-pi)`/separable-degree bridge; and construct a
+root-sufficient directed carrier only if that theorem or the selected
+quadraticity proof genuinely requires arbitrary geometric kernels.  Then prove
+quadraticity either via narrow duals or directly for the `Z`-span of `1,pi`.
+A false-guarded context may stage the arithmetic consumer, but all these premises must be discharged
 before a public generic Hasse result is claimed.
 
 ## Assessment of the PR #314 seam
@@ -270,7 +277,7 @@ before a public generic Hasse result is claimed.
 | Base projection | Witness-specific, not a minimum final primitive | F7X2 coefficient projection conveniently witnesses membership.  General embeddings need not come with a canonical total retraction; use existential/recognizer plus uniqueness, or add a projection only in a realization. |
 | Nonidentity witness | Redundant for Hasse | `deg(pi)=q>1` supplies nonidentity when needed.  It was valuable for feasibility testing only. |
 | False local context guard | Experimental only | Legitimately checks theorem packaging, but proves no generic inhabited context and cannot occur as the sole realization behind public Hasse. |
-| F7/F49 instance and 49-element regressions | Witness-specific evidence | Certified consistency plus execution/enumeration evidence; not geometric sufficiency. |
+| F7/F49 instance and 49-element regressions | Witness-specific evidence | Certified consistency plus execution/enumeration evidence.  It is not a uniform universe for arbitrary kernels, but this alone does not disqualify it for `ker(1-pi)` on an F7 curve. |
 | Fixed-projection consequence | Witness-oriented derived fact | Sound and certified, but the projection-shaped conclusion should not drive the final abstraction. |
 
 Thus PR #314 survives as an experimental feasibility artifact, unchanged.  Its
@@ -284,14 +291,15 @@ interface is not promoted wholesale.
 | A. Constrained algebraically closed ambient field | Sufficient | Very high: a functional instance needs a certified algebraic closure or equivalent; first-order totalization is possible but root choice/fixing is extensive | Reuses curve operations; little executable Schoof need | Very high | Every nonconstant supported polynomial has a represented root |
 | B. Directed finite-extension family | Sufficient if embeddings are coherent and every finite kernel splits at some stage | High: tower indices, embeddings, common-stage operations, and cardinality transport; constructive finite-field fit is good | Some extension arithmetic may help Schoof, but general colimit does not | High | Every supported nonzero isogeny kernel has a duplicate-free carrier at some coherent stage |
 | C. Symbolic rank-two function field plus ambient only for kernels | Sufficient and close to the source's degree semantics | High but focused: normalization, pullback, degrees, and kernel bridge; good totalized canonical-syntax fit | Polynomial reuse is strong; symbolic pieces may help quotient-coordinate proofs | Medium | Frobenius pullback is normalized and has total degree `q` |
-| D. Hybrid scalar seam plus separate symbolic/abstract endomorphism-degree package | Sufficient, provided the abstract layer receives C/B-style concrete instances | Stages risk well: first-order abstract algebra is easy; concrete discharge remains high and explicit | Best reuse; lets Schoof proceed independently | Medium, controlled by refusing unsupported general maps | A concrete symbolic Frobenius instance satisfies the abstract degree facts, beginning with `deg(pi)=q` |
+| D. Hybrid scalar seam plus separate symbolic/abstract endomorphism-degree package | Sufficient, provided the abstract layer receives concrete symbolic-map and point-bridge instances | Stages risk well: first-order abstract algebra is easy; concrete discharge remains high and explicit | Best reuse; lets Schoof proceed independently | Medium, controlled by refusing unsupported general maps | A concrete symbolic Frobenius instance satisfies the abstract degree facts, beginning with `deg(pi)=q` |
 | E. Formal words generated by `1,pi` with an asserted positive quadratic | Arithmetically sufficient but not logically sufficient alone | Low until realization, then inherits C's hard obligations; excellent ACL2 syntax | Little Schoof benefit | High risk of disguising axioms | Functional instance of word equality/degree from concrete curve maps |
 
 D is selected, with C's rank-two function field as the expected concrete map
-realization and a B-like directed ambient only at the kernel bridge.  This does
-not require constructing a global algebraic closure.  Candidate E is useful
-only as an intermediate consumer theorem; A is unnecessarily broad; B alone
-does not solve symbolic map equality or degree.
+realization.  The exact point-carrier realization is open.  Candidate B is one
+sufficient choice if the kernel bridge is proved through a general geometric
+kernel theorem, but it is not adopted merely from the `ker(1-pi)` calculation.
+Candidate E is useful only as an intermediate consumer theorem; A is
+unnecessarily broad; B alone does not solve symbolic map equality or degree.
 
 ## Hasse versus executable Schoof
 
@@ -301,9 +309,10 @@ formulas; fixing discipline; and finite-field `q`-power laws.  A normalized
 rank-two rational expression layer may later offer lemmas to both tracks, but
 it is not currently a Schoof prerequisite.
 
-**Hasse-only on the selected route:** a geometric-point carrier rich enough for
-all relevant kernels; base embedding into it; general morphism equality;
-geometric kernel cardinality versus separable degree; inseparable degree;
+**Hasse-only on the selected route:** the point-level Frobenius fixedness and
+`ker(1-pi)`/degree bridge, with the carrier strength still open; symbolic
+morphism equality; geometric kernel cardinality versus separable degree where
+the selected bridge requires it; inseparable degree;
 differentials of morphisms; dual isogenies or the replacement proof of degree
 quadraticity; and the positive quadratic degree form.
 
@@ -340,10 +349,11 @@ parallel:
    generic-function representation needed for identity and Frobenius pullback,
    with canonical equality, infinity contract, and composition for that slice;
    certify the first concrete endpoint `deg(pi)=q`.
-5. **Hasse kernel/degree slice:** introduce the directed root-sufficient point
-   realization and certify separability of `1-pi`, fixed-kernel/base-point
-   correspondence, and `#ker(1-pi)=deg(1-pi)` before completing quadraticity
-   and the squared bound.
+5. **Hasse kernel/degree design slice:** determine and certify the weakest
+   point-level realization needed for separability of `1-pi`, the
+   fixed-kernel/base-point correspondence, and
+   `#ker(1-pi)=deg(1-pi)`.  Construct a directed root-sufficient carrier only
+   if this concrete bridge or the chosen quadraticity proof requires it.
 
 Boundaries 1--2 are shared/Schoof; 3--5 are Hasse-only except for incidental
 symbolic lemmas.  Each later logical/executable boundary remains subject to the
