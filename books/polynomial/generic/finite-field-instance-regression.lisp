@@ -54,3 +54,15 @@
                          f7-canonical-polynomial-p-of-poly-neg
                          f7-canonical-polynomial-p-of-poly-sub
                          f7-canonical-polynomial-p-of-poly-mul))))
+
+(defthm finite-field-poly-raw-list-lengths-minimal-theory-client
+  (and (equal (len (finite-field-poly-fix-coefficients xs)) (len xs))
+       (equal (len (finite-field-poly-raw-add x y))
+              (max (len x) (len y)))
+       (equal (len (finite-field-poly-raw-neg x)) (len x)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-len-of-poly-fix-coefficients)
+                 (:instance finite-field-len-of-poly-raw-add)
+                 (:instance finite-field-len-of-poly-raw-neg))
+           :in-theory (theory 'minimal-theory))))
