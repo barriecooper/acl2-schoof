@@ -426,3 +426,23 @@ base/ambient/Frobenius seam.  A single finite ambient extension need not contain
 all geometric kernel points used by the eventual Hasse degree/kernel argument;
 that argument may still require an algebraic closure, a sufficiently rich
 family of extensions, or symbolic function-field semantics.
+
+### Concrete F7/F7X2 witness follow-up
+
+The concrete feasibility seam is now certified in
+`f7x2-frobenius-witness.lisp`.  The book defines the totalized constant
+embedding, constant-coefficient projection, and fixing-compatible image
+predicate.  It proves embedding preservation of the F7 field operations,
+coefficient-conjugation preservation of the F7X2 operations, involution,
+nonidentity on `X`, embedded-element fixedness, and the unconditional
+arbitrary-input equivalence between conjugation fixedness, zero fixed linear
+coefficient, and membership in the embedded image.  The scalar fixed-point
+step exhausts only the seven F7 coefficients.  A separate regression book
+checks all 49 canonical representatives and finds exactly the seven constants.
+
+This establishes consistency and concrete usability of the proposed
+base/ambient/Frobenius seam.  It does not adopt a general two-field interface,
+and the experimental functional packaging remains to be certified.  In
+particular, F49 is not thereby shown to contain the geometric kernel points
+needed by later degree theory; algebraic-closure, extension-family, or symbolic
+function-field requirements remain unresolved.
