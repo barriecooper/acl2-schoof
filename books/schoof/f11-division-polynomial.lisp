@@ -84,6 +84,17 @@
           (f11-poly-mul (nth (- m 2) table)
                         (f11-poly-square (nth (+ m 1) table)))))))))
 
+(defun f11-division-polynomial-table-extend (table value)
+  (declare (xargs :guard (true-listp table)))
+  (if (endp table)
+      (list value)
+    (cons (car table)
+          (f11-division-polynomial-table-extend (cdr table) value))))
+
+(defthm f11-division-polynomial-table-extend-is-append-singleton
+  (equal (f11-division-polynomial-table-extend table value)
+         (append table (list value))))
+
 (defun f11-division-polynomial-table-nat (n a b)
   (declare (xargs :guard (natp n) :verify-guards nil :measure (nfix n)))
   (if (zp n) (list (f11-division-polynomial-base 0 a b))
@@ -132,6 +143,7 @@
 (verify-guards f11-division-polynomial-base)
 (verify-guards f11-division-polynomial-c)
 (verify-guards f11-division-polynomial-recurrence-step)
+(verify-guards f11-division-polynomial-table-extend)
 (verify-guards f11-division-polynomial-table-nat)
 (verify-guards f11-division-polynomial-table)
 (verify-guards f11-division-polynomial)

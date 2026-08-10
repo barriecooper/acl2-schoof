@@ -335,10 +335,12 @@ with the evaluator at every declared index, including the final entry.  This is
 the semantic correspondence for the stored recurrence sequence, not for a
 classical bivariate division-polynomial definition.
 
-The existing F11 regression covers only the certified base boundary F0 through
-F4.  There is no F11 all-index evaluator evidence or generic/F11 all-index
-bridge.  The generic evaluator remains a constrained-field function, and no
-hand-written F11 computation is treated as its instance without a correspondence
-theorem.
+The transparent F11 adapter executes the all-index evaluator and ascending table
+with verified guards.  Its golden-curve regressions cover indices 5, 6, and 7,
+therefore exercising both odd orientations and the even branch, as well as
+coefficient fixing, malformed-index fixing, and table/evaluator consistency.
+This is concrete execution evidence only.  The generic/F11 functional-instance
+correspondence remains open, so the adapter is not yet a certified semantic
+instance of the generic development.
 
 The boundary contains no `MBE`, `DEFEXEC`, attachment, or alternate executable branch.  The base boundary's F11 regression exercises every retained base case on the nonsingular repository golden curve, coefficient normalization, and malformed/unsupported indices.  Those checks are execution assurance only; stored-sequence semantic correspondence is supplied by the generic theorems above.  No performance claim is made, and no quotient-coordinate operation is used.
