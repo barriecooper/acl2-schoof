@@ -95,3 +95,58 @@
                  finite-field-division-polynomial-odd-odd-half
                  finite-field-division-polynomial-even)
            :in-theory (theory 'minimal-theory))))
+
+(defthm division-polynomial-generated-entry-recurrence-minimal-theory-client
+  (implies (and (natp k) (<= k (nfix n)))
+           (equal
+            (nth k (finite-field-division-polynomial-table n a b))
+            (finite-field-division-polynomial-recurrence-step
+             k (finite-field-division-polynomial-table n a b) a b)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use finite-field-division-polynomial-table-entry-recurrence
+           :in-theory (theory 'minimal-theory))))
+
+(defthm division-polynomial-generated-sequence-minimal-theory-client
+  (finite-field-division-polynomial-sequence-p
+   n (finite-field-division-polynomial-table n a b) a b)
+  :rule-classes nil
+  :hints (("Goal"
+           :use finite-field-division-polynomial-table-satisfies-sequence-p
+           :in-theory (theory 'minimal-theory))))
+
+(defthm division-polynomial-specified-entry-agreement-minimal-theory-client
+  (implies (and (finite-field-division-polynomial-sequence-p n table a b)
+                (natp k) (<= k (nfix n)))
+           (equal (nth k table)
+                  (finite-field-division-polynomial k a b)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use finite-field-division-polynomial-specified-table-entry-agreement
+           :in-theory (theory 'minimal-theory))))
+
+(defthm division-polynomial-sequence-correspondence-minimal-theory-client
+  (and
+   (implies (and (finite-field-division-polynomial-sequence-p n table a b)
+                 (natp k) (<= k (nfix n)))
+            (equal (nth k table)
+                   (finite-field-division-polynomial k a b)))
+   (implies (finite-field-division-polynomial-sequence-p n table a b)
+            (equal (nth (nfix n) table)
+                   (finite-field-division-polynomial n a b))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use (finite-field-division-polynomial-sequence-p-entry-correspondence
+                 finite-field-division-polynomial-sequence-p-final-entry-correspondence)
+           :in-theory (theory 'minimal-theory))))
+
+(defthm division-polynomial-generated-correspondence-minimal-theory-client
+  (and (finite-field-division-polynomial-sequence-p
+        n (finite-field-division-polynomial-table n a b) a b)
+       (equal
+        (nth (nfix n) (finite-field-division-polynomial-table n a b))
+        (finite-field-division-polynomial n a b)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use finite-field-division-polynomial-generated-table-correspondence
+           :in-theory (theory 'minimal-theory))))

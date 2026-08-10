@@ -29,7 +29,7 @@ The repository currently certifies these subsystem-level foundations:
   polynomial, plus concrete PFIELD/F7 clients and an F7X2 proving instance;
 - a certified executable 49-element carrier and exact cardinality for the
   concrete presentation `F7[X]/(X^2+1)`, plus regressions connecting that presentation to the generic fixed-modulus representative-count formula;
-- the first division-polynomial client boundary: canonical univariate base data through index four, with the conventional `2y` factor separated at even indices, a transparent base specification/implementation correspondence, base-only F11 execution evidence, a certified separated-`2y` recurrence step, a sequential ascending table with elementary invariants, and a partial all-index relation/evaluator interface with public fixing, closure, base, and recurrence equations;
+- the first division-polynomial client boundary: canonical univariate base data through index four, with the conventional `2y` factor separated at even indices, base-only F11 execution evidence, a certified separated-`2y` recurrence step, and a sequential ascending table/public evaluator satisfying an independent recurrence-and-length specification with entrywise uniqueness, fixing, closure, base, and recurrence equations;
 - short-Weierstrass coordinates, canonical affine coordinates, tagged curve
   points (affine or infinity), and point negation;
 - total affine branch classification and executable affine/tagged-point
@@ -56,7 +56,7 @@ for valid curve points.  The generic functional-instance endpoint
 group under the maintained characteristic hypothesis. Natural scalar
 multiplication is certified as transparent linear repeated addition; an
 optimized scalar algorithm remains open.
-There is no certified Hasse theorem, point-count correctness theorem, completed division-polynomial sequence correspondence or specified-table uniqueness theorem, Frobenius machinery for Schoof, or Schoof algorithm.  The transparent public evaluator exists, but its generated-table satisfaction and relational correspondence remain open.
+There is no certified Hasse theorem, point-count correctness theorem, all-index F11 evaluator adapter, classical bivariate division-polynomial correspondence, Frobenius machinery for Schoof, or Schoof algorithm.
 
 The generic field and polynomial layers intentionally continue to admit F2.
 Curve results that require the initial short-Weierstrass characteristic scope

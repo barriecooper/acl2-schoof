@@ -320,20 +320,25 @@ stable in-range lookup, canonical/field-polynomial entry closure, and index and
 coefficient fixing.  Repeated transparent list extension traverses prefixes;
 the only sharing claim is that each polynomial entry is calculated once.
 
-`finite-field-division-polynomial-sequence-p` is an independent relational
-candidate specification: it requires a true list of exact length
+`finite-field-division-polynomial-sequence-p` is the independent relational
+specification: it requires a true list of exact length
 `nfix(n)+1` and recurrence-step equality at every declared index.  It does not
 mention the executable builder.  The transparent evaluator
 `finite-field-division-polynomial` selects index `nfix(n)` from the generated
 table and has verified guards, index/coefficient fixing, canonical and
 finite-field-polynomial closure, all five base equations, and all three public
-recurrences stated solely with lower evaluator calls.  Generated-table
-satisfaction, specified-table uniqueness/entry agreement, and their evaluator
-correspondence are not yet certified; consequently this remains a partial
-boundary and no semantic correspondence claim is made.
+recurrences stated solely with lower evaluator calls.  A pointwise theorem
+proves every generated entry satisfies the recurrence against the complete
+generated table; bounded induction then proves generated-table satisfaction.
+A separate course-of-values induction proves that every satisfying table agrees
+with the evaluator at every declared index, including the final entry.  This is
+the semantic correspondence for the stored recurrence sequence, not for a
+classical bivariate division-polynomial definition.
 
-No F11 all-index execution is yet claimed.  The generic evaluator remains a
-constrained-field function and no hand-written F11 computation is treated as
-its instance without a correspondence theorem.
+The existing F11 regression covers only the certified base boundary F0 through
+F4.  There is no F11 all-index evaluator evidence or generic/F11 all-index
+bridge.  The generic evaluator remains a constrained-field function, and no
+hand-written F11 computation is treated as its instance without a correspondence
+theorem.
 
-The boundary contains no `MBE`, `DEFEXEC`, attachment, or alternate executable branch.  Its F11 regression exercises every retained base case on the nonsingular repository golden curve, coefficient normalization, and malformed/unsupported indices.  Those checks are execution assurance only; semantic correspondence is the generic theorem.  No performance claim is made, and no quotient-coordinate operation is used.
+The boundary contains no `MBE`, `DEFEXEC`, attachment, or alternate executable branch.  The base boundary's F11 regression exercises every retained base case on the nonsingular repository golden curve, coefficient normalization, and malformed/unsupported indices.  Those checks are execution assurance only; stored-sequence semantic correspondence is supplied by the generic theorems above.  No performance claim is made, and no quotient-coordinate operation is used.
