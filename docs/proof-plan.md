@@ -50,25 +50,29 @@ general kernel theorem but is not mandated by the direct fixed-kernel
 calculation.  The experimental F7/F49 context remains feasibility evidence,
 not the generic realization.
 
-1. Extend the completed generic division-polynomial sequence/evaluator seam
-   only with a concrete F11 all-index adapter and execution evidence.  The
-   independent recurrence-and-length predicate, generated-table satisfaction,
-   entrywise uniqueness, evaluator correspondence, fixing, closure, base, and
-   evaluator-only recurrence equations are certified.  Do not claim a generic
-   F11 instance without an explicit correspondence theorem.
-2. Add only the quotient-coordinate laws demanded when the first concrete
+1. Certify a focused complete F11 instance of the existing joint finite-field
+   constraints and package its constraint theorems as a reusable proving seam.
+   Test staged, narrowly controlled functional instances through the polynomial
+   and division-polynomial layers before attempting the all-index endpoint.
+2. If that feasibility test succeeds, complete the generic/F11
+   division-polynomial semantic correspondence.  The independent
+   recurrence-and-length predicate, generated-table satisfaction, entrywise
+   uniqueness, evaluator correspondence, fixing, closure, base, and
+   evaluator-only recurrence equations are already certified; concrete
+   execution does not replace the explicit correspondence theorem.
+3. Add only the quotient-coordinate laws demanded when the first concrete
    trace-test client requires them.  Preserve arbitrary-ACL2-value and
    zero-normalized-modulus coverage at every public totalized endpoint, and keep
    trace tests in a separate change.
-3. On the Hasse track, stage the pure discriminant argument behind explicitly
+4. On the Hasse track, stage the pure discriminant argument behind explicitly
    abstract endomorphism/degree premises, without claiming Hasse or treating a
    false context guard as realization.
-4. Realize those premises through the narrow rank-two short-Weierstrass
+5. Realize those premises through the narrow rank-two short-Weierstrass
    function-field fragment, starting with canonical map equality and
    `deg(pi)=q`; then determine the weakest point-level realization for the
    concrete `ker(1-pi)`/separable-degree bridge, adding a directed carrier only
    if the selected proof genuinely needs arbitrary kernels.
-5. Add polynomial natural scaling, fast scalar multiplication, or the deferred
+6. Add polynomial natural scaling, fast scalar multiplication, or the deferred
    extension-field carrier/fixer bridge only when one of these concrete clients
    requires it.
 
@@ -110,13 +114,13 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-The next shared/Schoof repository boundary is the smallest additional
-finite-field quotient-coordinate law required by a concrete Schoof client;
-unconditional reduced-add associativity is certified and does not authorize
-completion of the entire reduced-ring or field package.  The next Hasse boundary,
-separately, is only an abstract arithmetic consumer for the quadratic degree
-premises; no public Hasse claim is permitted until the rank-two symbolic map and
-geometric kernel realizations are certified.
+The next shared/Schoof repository boundary is the focused F11 finite-field
+proving instance and staged functional-instance feasibility test.  Success is
+followed by the generic/F11 division-polynomial semantic correspondence;
+quotient-coordinate arithmetic begins only after that semantic boundary.  The
+next Hasse boundary, separately, is only an abstract arithmetic consumer for the
+quadratic degree premises; no public Hasse claim is permitted until the rank-two
+symbolic map and geometric kernel realizations are certified.
 
 ## Finite-field division-step substrate
 

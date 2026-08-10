@@ -185,6 +185,45 @@ boundary are maintained in
 
 ## 13. Schoof-algorithm track
 
+### Finite-field constraint-layering obstacle
+
+The requested algebra/coding split of `finite-field-context` remains open.  The
+current single encapsulate constrains the eight algebraic symbols together with
+`finite-field-rank`, `finite-field-unrank`, and `finite-field-bound`; because the
+coding inverse laws mention `finite-field-fix`, ACL2 includes those laws in the
+constraint set inherited when the fixer (and hence the algebraic family) is
+functionally substituted.
+
+Two bounded structural splits were checked and rejected rather than retained.
+Closing the algebra encapsulate and then introducing the three coding symbols
+cannot certify the required witness theorem
+`finite-field-fix-of-finite-field-unrank`: the first encapsulate deliberately
+permits arbitrary field representations, including infinite ones, so its public
+axioms do not imply the existence of a bounded rank/unrank bijection.  Nesting
+the coding encapsulate retains access to the local two-element consistency
+witness and certifies, but ACL2 assigns the enclosing constrained algebraic
+symbols the constraints of the complete outer encapsulate; an algebra-only
+functional instance therefore still inherits the coding laws.  This is not a
+file-layout issue.
+
+Two sound second-family designs remain available: either a separately named
+algebra-only constrained family with a mechanical polynomial target, leaving
+the existing joint context for coding clients, or a separately named coding
+field family with certified concrete compatibility instances.  Neither is yet
+known to be the smallest necessary architecture.  Before selecting or migrating
+to either design, test the lower-cost route of retaining the joint context and
+certifying its complete F11 instance once: substitute `f11-fix` for both rank
+and unrank, use 11 for the bound, package the resulting constraint theorems as a
+reusable proving seam, and consume that seam through staged, narrowly controlled
+functional instances.  The earlier complete-endpoint attempt timed out, which
+is evidence of proof-search blow-up rather than evidence that this staged route
+is impossible.
+
+The next Schoof checkpoint is therefore the focused F11 finite-field proving
+instance and staged functional-instance feasibility test.  If it succeeds,
+complete the generic/F11 division-polynomial semantic correspondence before
+starting quotient-coordinate work.
+
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|
 | Division-polynomial base boundary | Certified through normalized base data | `finite-field-division-polynomial-base-spec`; `finite-field-division-polynomial-base`; `finite-field-division-polynomial-base-correct`; base equations; canonical/field-polynomial closure; fixing compatibility | Dense ascending-order univariate polynomials in `x`; even indices store `psi_n/(2y)`. Covers indices 0--4 and totalizes all other/malformed indices to zero. The all-index stored-sequence correspondence is certified separately; the exact one-step recurrence equations are in the recurrence-step boundary. |
