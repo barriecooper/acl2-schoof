@@ -21,19 +21,15 @@ The Schoof track uses dense ascending univariate division-polynomial data with
 the conventional `2y` factor removed from even indices. Its immediate forward
 order is:
 
-1. Complete generic/F11 table, sequence, and all-index evaluator
-   correspondence. The generic table/sequence/evaluator theory and bounded F11
-   base/recurrence transport are already available; concrete execution does not
-   replace the remaining semantic correspondence.
-2. Add only the quotient-coordinate laws required by the first trace-test
+1. Add only the quotient-coordinate laws required by the first trace-test
    client.
-3. Add Frobenius action and trace-congruence tests over that quotient-coordinate
+2. Add Frobenius action and trace-congruence tests over that quotient-coordinate
    interface.
-4. Add bounded CRT reconstruction and compose the trace congruences into the
+3. Add bounded CRT reconstruction and compose the trace congruences into the
    final point-count correctness theorem and executable Schoof boundary.
 
-Do not introduce generated-table or all-index claims before their explicit
-F11 correspondence theorems certify. Cardinality-based Frobenius must use
+The generic and F11 generated-table, relational-sequence, uniqueness, and
+all-index evaluator correspondence is certified. Cardinality-based Frobenius must use
 certified actual cardinality and compatible characteristic/prime-power
 metadata, never merely `field-frobenius-exponent`.
 

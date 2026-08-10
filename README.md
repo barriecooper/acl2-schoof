@@ -29,7 +29,11 @@ The repository currently certifies these subsystem-level foundations:
   polynomial, plus concrete PFIELD/F7 clients and an F7X2 proving instance;
 - a certified executable 49-element carrier and exact cardinality for the
   concrete presentation `F7[X]/(X^2+1)`, plus regressions connecting that presentation to the generic fixed-modulus representative-count formula;
-- the first division-polynomial client boundary: a complete generic base, recurrence, table, sequence, and evaluator correspondence; explicit functional-instance transport of the bounded base and one-step recurrence to F11; and transparent F11 all-index execution evidence through all three recurrence branches.  F11 generated-table satisfaction, concrete sequence uniqueness, and generic-to-F11 all-index evaluator correspondence remain open;
+- the first division-polynomial client boundary: complete generic and F11 base,
+  recurrence, generated-table, relational-sequence, uniqueness, and all-index
+  evaluator correspondence, with explicit functional-instance transport of the
+  bounded base and one-step recurrence and direct concrete transport above that
+  recursive boundary;
 - short-Weierstrass coordinates, canonical affine coordinates, tagged curve
   points (affine or infinity), and point negation;
 - total affine branch classification and executable affine/tagged-point
@@ -56,7 +60,9 @@ for valid curve points.  The generic functional-instance endpoint
 group under the maintained characteristic hypothesis. Natural scalar
 multiplication is certified as transparent linear repeated addition; an
 optimized scalar algorithm remains open.
-There is no certified Hasse theorem, point-count correctness theorem, all-index F11 evaluator adapter, classical bivariate division-polynomial correspondence, Frobenius machinery for Schoof, or Schoof algorithm.
+There is no certified Hasse theorem, point-count correctness theorem, classical
+bivariate division-polynomial correspondence, Frobenius machinery for Schoof,
+or Schoof algorithm.
 
 The generic field and polynomial layers intentionally continue to admit F2.
 Curve results that require the initial short-Weierstrass characteristic scope

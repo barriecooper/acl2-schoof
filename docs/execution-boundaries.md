@@ -339,8 +339,12 @@ The transparent F11 adapter executes the all-index evaluator and ascending table
 with verified guards.  Its golden-curve regressions cover indices 5, 6, and 7,
 therefore exercising both odd orientations and the even branch, as well as
 coefficient fixing, malformed-index fixing, and table/evaluator consistency.
-This is concrete execution evidence only.  The generic/F11 functional-instance
-correspondence remains open, so the adapter is not yet a certified semantic
-instance of the generic development.
+The execution checks remain evidence only, but the adapter now separately has
+certified stored-sequence semantics: its generated table satisfies the concrete
+relational predicate, every satisfying table agrees entrywise and at its final
+entry with the evaluator, and the public all-index theorem includes `nfix` and
+coefficient-fixing totalisation.  The bounded base and recurrence transports
+are explicit functional instances; the recursive table and uniqueness layer is
+a direct concrete transport of the generic induction architecture.
 
-The boundary contains no `MBE`, `DEFEXEC`, attachment, or alternate executable branch.  The base boundary's F11 regression exercises every retained base case on the nonsingular repository golden curve, coefficient normalization, and malformed/unsupported indices.  Those checks are execution assurance only; stored-sequence semantic correspondence is supplied by the generic theorems above.  No performance claim is made, and no quotient-coordinate operation is used.
+The boundary contains no `MBE`, `DEFEXEC`, attachment, or alternate executable branch.  The base boundary's F11 regression exercises every retained base case on the nonsingular repository golden curve, coefficient normalization, and malformed/unsupported indices.  Those checks are execution assurance only; stored-sequence semantic correspondence is supplied by the generic and F11 theorem families above.  No performance claim is made, and no quotient-coordinate operation is used.
