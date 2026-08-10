@@ -272,3 +272,5 @@
 (include-book "schoof/division-polynomial-recurrence-step-regression")
 (include-book "schoof/division-polynomial-table")
 (include-book "schoof/division-polynomial-table-regression")
+(include-book "schoof/division-polynomial-sequence")
+(include-book "schoof/division-polynomial-sequence-regression")

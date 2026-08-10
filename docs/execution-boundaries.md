@@ -320,9 +320,20 @@ stable in-range lookup, canonical/field-polynomial entry closure, and index and
 coefficient fixing.  Repeated transparent list extension traverses prefixes;
 the only sharing claim is that each polynomial entry is calculated once.
 
-A public all-index evaluator remains intentionally absent pending a named
-full-sequence specification, correspondence, and public recurrence interface.
-No F11 all-index execution or mathematical correspondence is claimed by this
-builder-only boundary.
+`finite-field-division-polynomial-sequence-p` is an independent relational
+candidate specification: it requires a true list of exact length
+`nfix(n)+1` and recurrence-step equality at every declared index.  It does not
+mention the executable builder.  The transparent evaluator
+`finite-field-division-polynomial` selects index `nfix(n)` from the generated
+table and has verified guards, index/coefficient fixing, canonical and
+finite-field-polynomial closure, all five base equations, and all three public
+recurrences stated solely with lower evaluator calls.  Generated-table
+satisfaction, specified-table uniqueness/entry agreement, and their evaluator
+correspondence are not yet certified; consequently this remains a partial
+boundary and no semantic correspondence claim is made.
+
+No F11 all-index execution is yet claimed.  The generic evaluator remains a
+constrained-field function and no hand-written F11 computation is treated as
+its instance without a correspondence theorem.
 
 The boundary contains no `MBE`, `DEFEXEC`, attachment, or alternate executable branch.  Its F11 regression exercises every retained base case on the nonsingular repository golden curve, coefficient normalization, and malformed/unsupported indices.  Those checks are execution assurance only; semantic correspondence is the generic theorem.  No performance claim is made, and no quotient-coordinate operation is used.
