@@ -449,3 +449,11 @@ Each polynomial is therefore constructed once; the transparent list extension
 still traverses the prefix and carries the corresponding list cost.
 
 The initial base computation needs normalization and coefficient-field arithmetic only.  It does not use quotient coordinates, so it creates no justification for another reduced-ring law.  The exact separated-`2y` recurrence step and its odd/even equations are certified.  A named recurrence-and-length sequence relation and transparent public evaluator expose fixing, closure, base values, and evaluator-only recurrence equations.  The generated table satisfies that relation, and every satisfying table agrees entrywise with the evaluator throughout its declared range.  This stored-sequence correspondence is not a correspondence with classical bivariate division polynomials, which remains open.
+
+The joint F11 finite-field instance transports the complete totalized base
+operation and the complete one-step recurrence definition to the existing
+transparent F11 operations.  Its reusable seam covers normalization, natural
+coefficients, `C`, polynomial addition/subtraction/multiplication, square, and
+cube.  This bounded transport stops before generated-table satisfaction,
+concrete sequence uniqueness, all-index evaluator correspondence, and the
+later classical bivariate interpretation.

@@ -50,29 +50,26 @@ general kernel theorem but is not mandated by the direct fixed-kernel
 calculation.  The experimental F7/F49 context remains feasibility evidence,
 not the generic realization.
 
-1. Certify a focused complete F11 instance of the existing joint finite-field
-   constraints and package its constraint theorems as a reusable proving seam.
-   Test staged, narrowly controlled functional instances through the polynomial
-   and division-polynomial layers before attempting the all-index endpoint.
-2. If that feasibility test succeeds, complete the generic/F11
-   division-polynomial semantic correspondence.  The independent
+1. Extend the certified bounded generic/F11 base and one-step recurrence
+   transport through the generated table and all-index evaluator.  The
+   independent
    recurrence-and-length predicate, generated-table satisfaction, entrywise
    uniqueness, evaluator correspondence, fixing, closure, base, and
    evaluator-only recurrence equations are already certified; concrete
    execution does not replace the explicit correspondence theorem.
-3. Add only the quotient-coordinate laws demanded when the first concrete
+2. Add only the quotient-coordinate laws demanded when the first concrete
    trace-test client requires them.  Preserve arbitrary-ACL2-value and
    zero-normalized-modulus coverage at every public totalized endpoint, and keep
    trace tests in a separate change.
-4. On the Hasse track, stage the pure discriminant argument behind explicitly
+3. On the Hasse track, stage the pure discriminant argument behind explicitly
    abstract endomorphism/degree premises, without claiming Hasse or treating a
    false context guard as realization.
-5. Realize those premises through the narrow rank-two short-Weierstrass
+4. Realize those premises through the narrow rank-two short-Weierstrass
    function-field fragment, starting with canonical map equality and
    `deg(pi)=q`; then determine the weakest point-level realization for the
    concrete `ker(1-pi)`/separable-degree bridge, adding a directed carrier only
    if the selected proof genuinely needs arbitrary kernels.
-6. Add polynomial natural scaling, fast scalar multiplication, or the deferred
+5. Add polynomial natural scaling, fast scalar multiplication, or the deferred
    extension-field carrier/fixer bridge only when one of these concrete clients
    requires it.
 
@@ -115,10 +112,10 @@ generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
 The F11 joint finite-field context now has a certified PFIELD-derived named
-constraint interface.  The staged coefficient-fixer length functional instance
-and the generic index-3 division-polynomial base equation both certify against
-the existing transparent F11 definitions.  Continue the generic/F11 semantic
-correspondence in bounded base/recurrence stages before any all-index endpoint;
+constraint interface.  The staged coefficient-fixer length functional instance,
+complete totalized base family, and complete one-step recurrence transport certify against the
+existing transparent F11 definitions.  Continue the generic/F11 semantic
+correspondence with generated-table and all-index evaluator correspondence;
 do not introduce a second constrained family while this joint-context route
 remains mechanically effective.  Quotient-coordinate arithmetic begins only
 after the complete division-polynomial semantic boundary.  The
