@@ -185,6 +185,38 @@ boundary are maintained in
 
 ## 13. Schoof-algorithm track
 
+### Finite-field constraint-layering obstacle
+
+The requested algebra/coding split of `finite-field-context` remains open.  The
+current single encapsulate constrains the eight algebraic symbols together with
+`finite-field-rank`, `finite-field-unrank`, and `finite-field-bound`; because the
+coding inverse laws mention `finite-field-fix`, ACL2 includes those laws in the
+constraint set inherited when the fixer (and hence the algebraic family) is
+functionally substituted.
+
+Two bounded structural splits were checked and rejected rather than retained.
+Closing the algebra encapsulate and then introducing the three coding symbols
+cannot certify the required witness theorem
+`finite-field-fix-of-finite-field-unrank`: the first encapsulate deliberately
+permits arbitrary field representations, including infinite ones, so its public
+axioms do not imply the existence of a bounded rank/unrank bijection.  Nesting
+the coding encapsulate retains access to the local two-element consistency
+witness and certifies, but ACL2 assigns the enclosing constrained algebraic
+symbols the constraints of the complete outer encapsulate; an algebra-only
+functional instance therefore still inherits the coding laws.  This is not a
+file-layout issue.
+
+The smallest sound alternative requires an explicit compatibility architecture:
+either a separately named algebra-only constrained family with a mechanical
+finite-field polynomial target over that family, leaving the existing joint
+context for coding clients, or a separately named coding field family plus a
+certified compatibility instance for every concrete finite field.  Both choices
+introduce a second symbol family and affect the polynomial functional-instance
+surface, so neither is a safe bounded compatibility edit without a dedicated
+client migration.  The F11 division-polynomial semantic instance remains the
+next Schoof boundary after that architecture is selected and certified;
+quotient-coordinate work remains deferred.
+
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|
 | Division-polynomial base boundary | Certified through normalized base data | `finite-field-division-polynomial-base-spec`; `finite-field-division-polynomial-base`; `finite-field-division-polynomial-base-correct`; base equations; canonical/field-polynomial closure; fixing compatibility | Dense ascending-order univariate polynomials in `x`; even indices store `psi_n/(2y)`. Covers indices 0--4 and totalizes all other/malformed indices to zero. The all-index stored-sequence correspondence is certified separately; the exact one-step recurrence equations are in the recurrence-step boundary. |
