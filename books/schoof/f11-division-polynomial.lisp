@@ -15,8 +15,6 @@
 (def-mul-instance f11-poly-raw-mul f11-poly-mul f11-poly-raw-add
                   f11-poly-raw-scale f11-normalize gfield::f11-zero)
 
-(defun f11-polynomial-p (xs) (f11-coefficient-list-p xs))
-
 (defun f11-natural-coefficient (n)
   (declare (xargs :measure (nfix n)))
   (if (zp (nfix n)) (gfield::f11-zero)
@@ -99,12 +97,17 @@
   (declare (xargs :guard (natp n) :verify-guards nil :measure (nfix n)))
   (if (zp n) (list (f11-division-polynomial-base 0 a b))
     (let ((old (f11-division-polynomial-table-nat (1- n) a b)))
-      (append old (list (f11-division-polynomial-recurrence-step n old a b))))))
+      (f11-division-polynomial-table-extend
+       old (f11-division-polynomial-recurrence-step n old a b)))))
 (defun f11-division-polynomial-table (n a b)
   (f11-division-polynomial-table-nat (nfix n) (gfield::f11-fix a)
                                       (gfield::f11-fix b)))
 (defun f11-division-polynomial (n a b)
   (nth (nfix n) (f11-division-polynomial-table n a b)))
+
+; These predicates stage the concrete relational specification needed by the
+; later generic/F11 semantic-instance boundary.  This executable-substrate book
+; proves neither generated-table satisfaction nor uniqueness for them.
 (defun f11-division-polynomial-sequence-entries-p (k table a b)
   (and (equal (nth k table)
               (f11-division-polynomial-recurrence-step k table a b))
@@ -114,9 +117,7 @@
   (and (true-listp table) (equal (len table) (+ 1 (nfix n)))
        (f11-division-polynomial-sequence-entries-p (nfix n) table a b)))
 
-; Public concrete contract.  The definitions above are literal specializations
-; of the generic operations; the equation group makes that substitution seam
-; explicit and keeps it mechanically inspectable.
+; Public executable contract.  The semantic functional instance remains open.
 (defthm f11-division-polynomial-base-equations
   (and (equal (f11-division-polynomial-base 0 a b) nil)
        (equal (f11-division-polynomial-base 1 a b) '(1))
