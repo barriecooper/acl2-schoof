@@ -416,6 +416,15 @@ contracts, and the particular Frobenius laws demanded by both clients.
 
 The executable Schoof track uses dense ascending-coefficient univariate polynomials in `x` over the constrained finite field.  For the short-Weierstrass equation `y^2 = x^3 + ax + b`, odd entries represent `psi_n`; even entries represent `psi_n/(2y)`.  Thus `psi_2 = 2y` is stored as the constant one.  This convention avoids a bivariate or rational-function layer while retaining the data needed by the standard odd/even recurrences and later trace tests.  It is the convention used by the certified base boundary through index four.
 
+Quotient coordinates use the transparent rank-two pair `(u . v)` for
+`u(x) + y v(x)`.  Both components are canonical remainders under the existing
+GPOLY modulus operation, and multiplication reduces the scalar and `y`
+components after imposing `y^2 = x^3 + ax + b`.  This layer depends downward
+on the generic reduced-polynomial ring and accepts the curve coefficients and
+modulus explicitly; it adds neither a polynomial family nor a field or inverse
+assumption.  Division-polynomial evaluators supply moduli to concrete clients,
+while Frobenius and trace-test code remain downstream.
+
 Natural integer constants are embedded by repeated finite-field addition of one; curve coefficients are fixed before use.  Dense coefficient order is ascending.  The retained formulas are
 
 - `psi_0 = 0`, `psi_1 = 1`, and stored `psi_2/(2y) = 1`;

@@ -21,11 +21,10 @@ The Schoof track uses dense ascending univariate division-polynomial data with
 the conventional `2y` factor removed from even indices. Its immediate forward
 order is:
 
-1. Add only the quotient-coordinate laws required by the first trace-test
-   client.
-2. Add Frobenius action and trace-congruence tests over that quotient-coordinate
+1. Complete the remaining distributive/associative normalization interface as
+   needed while adding Frobenius action and trace-congruence tests over the certified quotient-coordinate
    interface.
-3. Add bounded CRT reconstruction and compose the trace congruences into the
+2. Add bounded CRT reconstruction and compose the trace congruences into the
    final point-count correctness theorem and executable Schoof boundary.
 
 The generic and F11 generated-table, relational-sequence, uniqueness, and

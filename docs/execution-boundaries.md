@@ -348,3 +348,20 @@ are explicit functional instances; the recursive table and uniqueness layer is
 a direct concrete transport of the generic induction architecture.
 
 The boundary contains no `MBE`, `DEFEXEC`, attachment, or alternate executable branch.  The base boundary's F11 regression exercises every retained base case on the nonsingular repository golden curve, coefficient normalization, and malformed/unsupported indices.  Those checks are execution assurance only; stored-sequence semantic correspondence is supplied by the generic and F11 theorem families above.  No performance claim is made, and no quotient-coordinate operation is used.
+
+## Quotient coordinates
+
+`quotient-coordinate` is a transparent dotted pair `(u . v)`.  Its fixer reads
+the two projections and applies `poly-remainder` to each; an atom therefore
+fixes deterministically to `(nil . nil)`.  All public constructors and
+operations return fixed components, and addition, negation, subtraction, and
+multiplication first fix their operands.  All functions have verified guards;
+there is no logical/executable split, attachment, or optimized branch.
+
+The focused F11 regression takes `psi_3` from the certified merged evaluator on
+the repository golden curve `(a,b)=(1,6)`.  Its fuel-bounded concrete long
+division spelling uses the existing F11 dense normalization, arithmetic,
+degree, and leading-coefficient operations.  It checks component reduction,
+nontrivial addition and multiplication, the curve relation, and malformed-input
+fixing.  These evaluations are execution evidence only; the generic certified
+fixing, closure, embedding, and curve-relation theorems supply logical evidence.
