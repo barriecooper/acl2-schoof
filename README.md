@@ -29,7 +29,7 @@ The repository currently certifies these subsystem-level foundations:
   polynomial, plus concrete PFIELD/F7 clients and an F7X2 proving instance;
 - a certified executable 49-element carrier and exact cardinality for the
   concrete presentation `F7[X]/(X^2+1)`, plus regressions connecting that presentation to the generic fixed-modulus representative-count formula;
-- the first division-polynomial client boundary: canonical univariate base data through index four, with the conventional `2y` factor separated at even indices, base-only F11 execution evidence, a certified separated-`2y` recurrence step, and a sequential ascending table/public evaluator satisfying an independent recurrence-and-length specification with entrywise uniqueness, fixing, closure, base, and recurrence equations;
+- the first division-polynomial client boundary: canonical univariate base data through index four, with the conventional `2y` factor separated at even indices, transparent F11 all-index execution evidence through all three recurrence branches, a certified separated-`2y` recurrence step, and a sequential ascending table/public evaluator satisfying an independent recurrence-and-length specification with entrywise uniqueness, fixing, closure, base, and recurrence equations;
 - short-Weierstrass coordinates, canonical affine coordinates, tagged curve
   points (affine or infinity), and point negation;
 - total affine branch classification and executable affine/tagged-point
