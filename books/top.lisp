@@ -285,4 +285,5 @@
 (include-book "schoof/f11-division-polynomial-functional-instance-regression")
 (include-book "schoof/quotient-coordinate")
 (include-book "schoof/quotient-coordinate-power")
+(include-book "schoof/quotient-coordinate-trace-predicate")
 (include-book "schoof/f11-quotient-coordinate-regression")

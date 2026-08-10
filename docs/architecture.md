@@ -429,16 +429,23 @@ certified functional instance of this generic production API; that future
 concrete execution correspondence is separate from the ring architecture.
 
 Natural powers in this ring are transparent repeated multiplication with a
-fixed base and `nfix`ed exponent.  The cardinality-indexed action raises a
-coordinate to `q`, and its iterator raises to `q^n`.  Their operation and
-one-iteration boundary is certified; exponent composition and homomorphism
-laws remain open. Addition preservation additionally needs the missing
-actual-cardinality/characteristic prime-power bridge. For the F11, `ell=3`
+fixed base and `nfix`ed exponent.  Addition of exponents, power of a power,
+power of a product, zero/one bases, polynomial embedding, and the even/odd
+powers of `y` are certified without field assumptions.  The cardinality-indexed
+action raises a coordinate to `q`, and its iterator raises to `q^n`; zero,
+successor, and additive composition of iteration counts are certified.
+Multiplication preservation is characteristic-independent. Addition
+preservation additionally needs the missing actual-cardinality/characteristic
+freshman's-dream transport. For the F11, `ell=3`
 client, `[11]P=[2]P=-P`, so the
 audited equation is `pi^2(P)-P=[t]pi(P)`.  Existing affine addition divides by
 slopes and is not reused in this quotient ring.  A narrow denominator-free or
-cross-multiplied point-expression layer remains necessary before that equation
-can be made into a certified `psi_3` trace predicate.
+cross-multiplied point-expression layer checks
+`D^2(x1+x2+x3)=N^2` and `D(y1+y3)=N(x1-x3)`, with a separate narrow opposite
+relation for an infinity result.  This gives a certified algebraic trace
+predicate, not affine group equality: a zero-divisor `D` cannot be cancelled,
+and the opposite relation is not a general projective point representation.
+The F11 production instance and classical torsion interpretation remain open.
 
 Natural integer constants are embedded by repeated finite-field addition of one; curve coefficients are fixed before use.  Dense coefficient order is ascending.  The retained formulas are
 
