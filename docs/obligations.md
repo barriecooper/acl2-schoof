@@ -206,16 +206,23 @@ symbols the constraints of the complete outer encapsulate; an algebra-only
 functional instance therefore still inherits the coding laws.  This is not a
 file-layout issue.
 
-The smallest sound alternative requires an explicit compatibility architecture:
-either a separately named algebra-only constrained family with a mechanical
-finite-field polynomial target over that family, leaving the existing joint
-context for coding clients, or a separately named coding field family plus a
-certified compatibility instance for every concrete finite field.  Both choices
-introduce a second symbol family and affect the polynomial functional-instance
-surface, so neither is a safe bounded compatibility edit without a dedicated
-client migration.  The F11 division-polynomial semantic instance remains the
-next Schoof boundary after that architecture is selected and certified;
-quotient-coordinate work remains deferred.
+Two sound second-family designs remain available: either a separately named
+algebra-only constrained family with a mechanical polynomial target, leaving
+the existing joint context for coding clients, or a separately named coding
+field family with certified concrete compatibility instances.  Neither is yet
+known to be the smallest necessary architecture.  Before selecting or migrating
+to either design, test the lower-cost route of retaining the joint context and
+certifying its complete F11 instance once: substitute `f11-fix` for both rank
+and unrank, use 11 for the bound, package the resulting constraint theorems as a
+reusable proving seam, and consume that seam through staged, narrowly controlled
+functional instances.  The earlier complete-endpoint attempt timed out, which
+is evidence of proof-search blow-up rather than evidence that this staged route
+is impossible.
+
+The next Schoof checkpoint is therefore the focused F11 finite-field proving
+instance and staged functional-instance feasibility test.  If it succeeds,
+complete the generic/F11 division-polynomial semantic correspondence before
+starting quotient-coordinate work.
 
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|

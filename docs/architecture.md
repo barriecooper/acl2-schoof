@@ -74,6 +74,17 @@ functional instantiation; unrestricted GPOLY remains authoritative, and PFIELD
 and F7 remain the executable clients.  Finite-field-prefixed division,
 remainder, and fixed-modulus representation remain open.
 
+The polynomial and division-polynomial definitions depend mathematically only
+on the carrier/fixer, constants, arithmetic, inverse, and field laws.  ACL2's
+functional-instantiation dependency is currently broader: the joint
+`finite-field-*` encapsulate also constrains rank, unrank, and bound, and its
+coding inverse laws mention the algebraic fixer.  Consequently, substituting
+the algebraic symbols inherits coding obligations even when a client theorem
+does not use coding operations.  Before selecting or migrating to a second
+algebraic symbol family, the architecture will test reuse of one complete
+concrete F11 instance of the existing joint constraints as a proving seam for
+staged polynomial and division-polynomial functional instances.
+
 ### Field-only X-CERT algebra
 
 `books/field/xcert-algebra.lisp` defines total field expressions for the output
