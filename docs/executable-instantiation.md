@@ -93,4 +93,4 @@ It uses transparent generated definitions for the core step and public term/next
 projections, with verified guards, reconstruction, strict degree decrease, and a
 strict core length theorem suitable for the future recursive divmod measure.  The
 decisive cancellation proof is length/leading-coefficient based, not
-coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are transparent generated definitions with verified guards. Their public correctness is proved by accumulator invariants, while fixed-modulus representations and coding/cardinality operations remain open.
+coefficient-vector or coding based.  Recursive finite-field divmod, fixed-modulus coefficient vectors, mixed-radix coding, explicit carriers, and representative-count cardinality are transparent certified layers.  The remaining open boundary is their field-facing bridge to the generic irreducible quotient-field package.

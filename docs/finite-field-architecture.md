@@ -236,8 +236,10 @@ The certified dependency now includes
 `finite-field context -> finite-field polynomial core`.  The core is the
 ordinary transparent `finite-field-poly-*` target over the field-shaped part of
 the context; polynomial correctness does not use rank, unrank, or bound.
-Finite-field division/remainder, fixed-modulus representation, mixed-radix
-coding, and generic carrier/cardinality remain separate open boundaries.
+Finite-field recursive divmod, fixed-modulus coefficient representation,
+mixed-radix coding, carrier construction, and representative-count cardinality
+are now certified.  The field-facing bridge to the generic irreducible
+quotient-field package remains open.
 
 1. Add a minimal abstract equational field signature and prove only structural
    generic polynomial normalization/carrier facts.
@@ -292,7 +294,7 @@ interface and prove equivalence without changing curve theorems.
 Open mathematics remains open in `docs/obligations.md`; this decision marks no
 division, extension-field, Hasse, or Schoof obligation proved.
 
-Current finite-field polynomial dependency chain: finite-field context → finite-field polynomial core → finite-field monomial/scalar-division support → finite-field division-step substrate → recursive divmod and projections → public remainder/reduced representatives → fixed-modulus coefficient representation. Exact-width coefficient-vector mixed-radix rank/unrank is certified; carrier/cardinality layers remain open.
+Current finite-field polynomial dependency chain: finite-field context → polynomial core → monomial/scalar-division support → division step → recursive divmod → reduced representatives → fixed-modulus coefficient vectors → mixed-radix coding → explicit carrier and representative-count cardinality.  The remaining bridge packages this explicit layer with the generic irreducible quotient-field interface.
 
 ## Finite-field division-step substrate
 
@@ -301,4 +303,4 @@ It uses transparent generated definitions for the core step and public term/next
 projections, with verified guards, reconstruction, strict degree decrease, and a
 strict core length theorem suitable for the future recursive divmod measure.  The
 decisive cancellation proof is length/leading-coefficient based, not
-coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are certified; fixed-modulus coefficient representation and exact-width coefficient-vector coding are certified; carrier/cardinality operations remain open.
+coefficient-vector or coding based.  Recursive finite-field divmod, fixed-modulus coefficient representation, exact-width coding, carrier construction, and representative-count cardinality are certified; the field-facing quotient-package bridge remains open.

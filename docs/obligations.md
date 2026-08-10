@@ -185,73 +185,25 @@ boundary are maintained in
 
 ## 13. Schoof-algorithm track
 
-### Finite-field constraint-layering obstacle
+### Joint F11 finite-field instance seam
 
-The requested algebra/coding split of `finite-field-context` remains open.  The
-current single encapsulate constrains the eight algebraic symbols together with
-`finite-field-rank`, `finite-field-unrank`, and `finite-field-bound`; because the
-coding inverse laws mention `finite-field-fix`, ACL2 includes those laws in the
-constraint set inherited when the fixer (and hence the algebraic family) is
-functionally substituted.
-
-Two bounded structural splits were checked and rejected rather than retained.
-Closing the algebra encapsulate and then introducing the three coding symbols
-cannot certify the required witness theorem
-`finite-field-fix-of-finite-field-unrank`: the first encapsulate deliberately
-permits arbitrary field representations, including infinite ones, so its public
-axioms do not imply the existence of a bounded rank/unrank bijection.  Nesting
-the coding encapsulate retains access to the local two-element consistency
-witness and certifies, but ACL2 assigns the enclosing constrained algebraic
-symbols the constraints of the complete outer encapsulate; an algebra-only
-functional instance therefore still inherits the coding laws.  This is not a
-file-layout issue.
-
-Second-family designs remain sound contingencies, but the lower-cost joint
-context route is now mechanically effective and does not justify introducing
-one.  The earlier complete-endpoint timeout was proof-search blow-up: bounded
-clients can instead consume named projections of the complete F11 instance
-through delayed constraint hints.
-
-The complete F11 joint-context substitution is certified by
-`f11-finite-field-context-constraint-seam`: `f11-fix` serves as fixer, rank,
-and unrank, and 11 is the bound.  Its proof is a modulus-11 functional instance
-of the production PFIELD constraint seam.  The first polynomial attempt showed
-only that the disabled conjunction was not automatically consumed: ACL2 first
-stopped at multiplication fixed congruence, which was already a conjunct.
-Named projections of every joint constraint, packaged as
-`f11-finite-field-context-instance-theory` and supplied by the established
-delayed `stable-under-simplificationp` hint, now certify the complete
-`finite-field-len-of-poly-fix-coefficients` F11 functional instance.  The same
-interface now certifies the complete totalized F11 base family and transports
-the generic one-step recurrence, including its base and all three odd/even
-branches, to the existing transparent F11 implementation.  Generated-table
-satisfaction, concrete sequence uniqueness, all-index evaluator
-correspondence, and the classical bivariate semantic bridge remain open.  No
-separately named algebra-only constrained family is presently necessary.
+The joint F11 context is consumable through the named projections in
+`f11-finite-field-context-instance-theory` and delayed constraint hints.
+`f11-fix` supplies fixer, rank, and unrank, and 11 supplies the bound.  This
+single context certifies bounded polynomial and division-polynomial functional
+instances; no second constrained family is currently required.
 
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|
-| Division-polynomial base boundary | Certified through normalized base data | `finite-field-division-polynomial-base-spec`; `finite-field-division-polynomial-base`; `finite-field-division-polynomial-base-correct`; base equations; canonical/field-polynomial closure; fixing compatibility | Dense ascending-order univariate polynomials in `x`; even indices store `psi_n/(2y)`. Covers indices 0--4 and totalizes all other/malformed indices to zero. The all-index stored-sequence correspondence is certified separately; the exact one-step recurrence equations are in the recurrence-step boundary. |
-| Division-polynomial recurrence step | Certified generic and F11-instance boundary | `finite-field-division-polynomial-c`; `finite-field-division-polynomial-recurrence-step`; `f11-division-polynomial-operation-interface`; `f11-division-polynomial-recurrence-step-from-finite-field-instance`; exact base, odd/even-half, odd/odd-half, and even step equations; canonical/field-polynomial closure; fixing compatibility | The complete case split is transported through the joint F11 context to the generated F11 normalization, addition, subtraction, multiplication, square, and cube operations. Generated-table and all-index concrete correspondence remain separate. |
-| Division-polynomial sequential table | Certified invariant boundary | `finite-field-division-polynomial-table-extend`; `finite-field-division-polynomial-table-nat`; `finite-field-division-polynomial-table`; exact length, true-list, newest-entry, stable-lookup, in-range, closure, and fixing theorems | Transparent ascending list through `nfix(n)`. Each recurrence-step result is constructed once; repeated extension still traverses the prefix. These table invariants by themselves do not establish evaluator/specification correspondence; that theorem belongs to the sequence/evaluator boundary below. |
-| Division-polynomial sequence/evaluator | Certified relational correspondence | `finite-field-division-polynomial-sequence-p`; `finite-field-division-polynomial`; generated-table satisfaction; pointwise generated recurrence; specified-table entry agreement; final-entry correspondence; fixing, canonicality, closure, five base equations, and all three evaluator-only separated-`2y` recurrence equations | The generic predicate independently requires exact true-list length and recurrence-step equality at every declared index; it does not mention the builder. The generic generated table satisfies it, and any satisfying generic table agrees with the evaluator at every in-range index. The transparent F11 table and evaluator execute through all recurrence branches, with exact F5--F7 evidence, but their staged concrete sequence predicates do not yet have generated-table satisfaction or uniqueness theorems; generic/F11 generated-table and all-index correspondence and the classical bivariate semantic bridge remain open. |
-| Division-polynomial concrete all-index execution | Certified executable substrate; all-index semantic bridge open | `f11-division-polynomial`; exact golden-curve values at indices 5, 6, and 7; coefficient/index fixing regressions | The transparent F11 base and one-step recurrence have generic functional-instance transport, and the table/evaluator executes all recurrence branches. Concrete generated-table satisfaction, sequence uniqueness, and all-index evaluator correspondence are still required; execution evidence alone does not supply them. Quotient-coordinate laws remain deferred. |
-| Quotient-coordinate arithmetic | Open | — | Build on canonical polynomial and modular arithmetic. |
+| Generic division-polynomial base | Certified | `finite-field-division-polynomial-base-spec`; `finite-field-division-polynomial-base`; correctness, indices 0--4, unsupported/malformed totalization, closure, and fixing theorems | Dense ascending univariate polynomials; even indices store `psi_n/(2y)`. |
+| Generic division-polynomial recurrence | Certified | `finite-field-division-polynomial-c`; `finite-field-division-polynomial-recurrence-step`; exact base, both odd branches, even branch, closure, and fixing theorems | Transparent one-step operation over an ascending table. |
+| Generic division-polynomial table | Certified | `finite-field-division-polynomial-table-extend`; `finite-field-division-polynomial-table`; length, lookup, entry, closure, and fixing invariants | Each recurrence result is constructed once; list extension still traverses the prefix. |
+| Generic division-polynomial sequence/evaluator | Certified | `finite-field-division-polynomial-sequence-p`; generated-table satisfaction; entrywise uniqueness; `finite-field-division-polynomial`; final-entry, fixing, closure, base, and recurrence theorems | This is the complete generic table/sequence/all-index correspondence, not an F11 transport or classical bivariate semantics theorem. |
+| Bounded F11 base and recurrence transport | Certified | `f11-division-polynomial-base-*-from-finite-field-instance`; `f11-division-polynomial-operation-interface`; `f11-division-polynomial-recurrence-step-from-finite-field-instance` | Every retained base theorem (indices 0--4, unsupported indices, index fixing, and coefficient fixing) and the complete recurrence case split is an explicit functional instance through the joint F11 seam. |
+| F11 generated table, sequence, and all-index evaluator correspondence | Open | Transparent F11 table/evaluator and concrete F5--F7 execution regressions exist | Generated-table satisfaction, concrete sequence uniqueness, and generic/F11 all-index evaluator correspondence remain to be proved. Execution evidence does not supply them. |
+| Classical bivariate division-polynomial semantics | Open | — | Connect the separated-`2y` univariate representation to classical bivariate division polynomials in its characteristic scope. |
+| Quotient-coordinate arithmetic | Open | — | Add only laws required by the first trace-test client. |
 | Frobenius action and trace tests | Open | — | Requires finite-field metadata and quotient-coordinate semantics. |
 | Bounded CRT reconstruction | Open | — | Specify and certify the point-count reconstruction bound. |
-| Schoof point-count correctness | Open | — | Compose trace congruences with CRT reconstruction. |
-| Executable Schoof algorithm | Open | — | Each optimized boundary requires specification, correspondence, guards, and execution evidence. |
+| Schoof point-count correctness and executable composition | Open | — | Compose trace congruences with CRT and certify each logical/executable boundary. |
 | Performance optimization and benchmarking | Deferred | — | Performance evidence remains separate from logical correctness. |
-
-- Finite-field monomial/scalar-division support — Certified (`finite-field-poly-monomial`, `finite-field-poly-degree-of-monomial`, `finite-field-div-nonzero`, `finite-field-div-mul-denominator`).
-- Finite-field division-step substrate — Certified (`finite-field-poly-division-step-core-reconstruction`, `finite-field-poly-division-step-core-degree-decreases`, `finite-field-poly-division-step-core-length-decreases`).
-- Finite-field recursive divmod and projections — Certified (`finite-field-poly-divmod-reconstruction`, `finite-field-poly-remainder-degree-bound`).
-
-## Finite-field division-step substrate
-
-The finite-field-prefixed one-step polynomial division substrate is certified.
-It uses transparent generated definitions for the core step and public term/next
-projections, with verified guards, reconstruction, strict degree decrease, and a
-strict core length theorem suitable for the future recursive divmod measure.  The
-decisive cancellation proof is length/leading-coefficient based, not
-coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are certified; fixed-modulus representations and coding/cardinality operations remain open and are not introduced here.

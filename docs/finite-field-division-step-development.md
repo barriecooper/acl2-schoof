@@ -1,6 +1,6 @@
-# Temporary finite-field division-step development note
+# Historical finite-field division-step development note
 
-This note records the retained certifying prefix for the finite-field one-step
+This audit records the retained certifying prefix at its historical baseline for the finite-field one-step
 division substrate.  The book `books/polynomial/generic/finite-field-division-step.lisp`
 currently certifies the generated one-step definitions, guard verification,
 inactive core equation, leading-coefficient nonzero support, inverse nonzero
@@ -17,7 +17,9 @@ facts are finite-field counterparts of:
 - `consp-of-poly-mul-when-canonical-nonzero`
 
 A later direct next-canonical attempt also failed without this product layer in
-place.  The likely next step is to add small reusable finite-field multiplication
+place.  At that recorded baseline, the recommended next step was to add small reusable finite-field multiplication
 transport theorems, preferably by functional instantiation of the generic
 multiplication theorems, then resume the source theorem order at
 `finite-field-poly-division-step-core-product-properties`.
+
+Current planning is maintained in [proof-plan.md](proof-plan.md); the recommendations above are historical and are not active task guidance.
