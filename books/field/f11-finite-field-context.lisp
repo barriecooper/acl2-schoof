@@ -1,0 +1,66 @@
+(in-package "GFIELD")
+
+(include-book "pfield-finite-field-context-regression")
+(include-book "examples/f11")
+
+; Complete substitution:
+; PFIELD-MODULUS -> 11; PFIELD-ELEMENT-P -> F11-ELEMENT-P;
+; PFIELD-FIX -> F11-FIX; zero/one/add/mul/neg/inv -> their F11 names.
+; Consequently both rank and unrank are F11-FIX and the bound is 11.
+(defthm f11-finite-field-context-constraint-seam
+  (and
+   (booleanp (f11-element-p x))
+   (f11-element-p (f11-fix x))
+   (implies (f11-element-p x) (equal (f11-fix x) x))
+   (equal (f11-fix (f11-fix x)) (f11-fix x))
+   (f11-element-p (f11-zero)) (f11-element-p (f11-one))
+   (not (equal (f11-zero) (f11-one)))
+   (equal (f11-fix (f11-zero)) (f11-zero))
+   (equal (f11-fix (f11-one)) (f11-one))
+   (f11-element-p (f11-add x y)) (f11-element-p (f11-mul x y))
+   (f11-element-p (f11-neg x)) (f11-element-p (f11-inv x))
+   (equal (f11-fix (f11-add x y)) (f11-add x y))
+   (equal (f11-fix (f11-mul x y)) (f11-mul x y))
+   (equal (f11-fix (f11-neg x)) (f11-neg x))
+   (equal (f11-fix (f11-inv x)) (f11-inv x))
+   (equal (f11-add (f11-fix x) (f11-fix y)) (f11-add x y))
+   (equal (f11-add (f11-fix x) y) (f11-add x y))
+   (equal (f11-add x (f11-fix y)) (f11-add x y))
+   (equal (f11-mul (f11-fix x) y) (f11-mul x y))
+   (equal (f11-mul x (f11-fix y)) (f11-mul x y))
+   (equal (f11-mul (f11-fix x) (f11-fix y)) (f11-mul x y))
+   (equal (f11-neg (f11-fix x)) (f11-neg x))
+   (equal (f11-inv (f11-fix x)) (f11-inv x))
+   (equal (f11-add (f11-add x y) z) (f11-add x (f11-add y z)))
+   (equal (f11-add x y) (f11-add y x))
+   (equal (f11-add (f11-zero) x) (f11-fix x))
+   (equal (f11-add (f11-neg x) x) (f11-zero))
+   (implies (and (equal (f11-fix x1) (f11-fix x2))
+                 (equal (f11-fix y1) (f11-fix y2)))
+            (equal (f11-add x1 y1) (f11-add x2 y2)))
+   (implies (and (equal (f11-fix x1) (f11-fix x2))
+                 (equal (f11-fix y1) (f11-fix y2)))
+            (equal (f11-mul x1 y1) (f11-mul x2 y2)))
+   (equal (f11-mul (f11-mul x y) z) (f11-mul x (f11-mul y z)))
+   (equal (f11-mul x y) (f11-mul y x))
+   (equal (f11-mul (f11-one) x) (f11-fix x))
+   (equal (f11-mul x (f11-add y z))
+          (f11-add (f11-mul x y) (f11-mul x z)))
+   (equal (f11-inv (f11-zero)) (f11-zero))
+   (implies (not (equal (f11-fix x) (f11-zero)))
+            (equal (f11-mul (f11-inv x) x) (f11-one)))
+   (posp 11) (natp (f11-fix x)) (< (f11-fix x) 11)
+   (equal (f11-fix (f11-fix k)) (f11-fix k))
+   (equal (f11-fix (f11-fix x)) (f11-fix x))
+   (implies (and (natp k) (< k 11))
+            (equal (f11-fix (f11-fix k)) k)))
+  :rule-classes nil
+  :hints (("Goal"
+           :by (:functional-instance
+                pfield-finite-field-context-constraint-seam
+                (pfield-modulus (lambda () 11))
+                (pfield-element-p f11-element-p) (pfield-fix f11-fix)
+                (pfield-zero f11-zero) (pfield-one f11-one)
+                (pfield-add f11-add) (pfield-mul f11-mul)
+                (pfield-neg f11-neg) (pfield-inv f11-inv))
+           :in-theory (enable dm::primep))))

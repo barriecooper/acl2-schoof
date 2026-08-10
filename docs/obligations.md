@@ -219,10 +219,18 @@ functional instances.  The earlier complete-endpoint attempt timed out, which
 is evidence of proof-search blow-up rather than evidence that this staged route
 is impossible.
 
-The next Schoof checkpoint is therefore the focused F11 finite-field proving
-instance and staged functional-instance feasibility test.  If it succeeds,
-complete the generic/F11 division-polynomial semantic correspondence before
-starting quotient-coordinate work.
+The complete F11 joint-context substitution is now certified by
+`f11-finite-field-context-constraint-seam`: `f11-fix` serves as fixer, rank,
+and unrank, and 11 is the bound.  Its proof is a modulus-11 functional instance
+of the PFIELD constraint seam.  A staged polynomial attempt against
+`finite-field-len-of-poly-fix-coefficients`, with the complete substitution,
+still left the field multiplication fixed-congruence constraint at ACL2's
+functional-instance checkpoint (after the inverse constraint had been supplied
+explicitly).  Thus the conjunctive seam is useful certified evidence but does
+not by itself change ACL2's constraint closure.  No disconnected polynomial or
+division-polynomial correspondence event is retained.  This mechanically
+justifies investigating a separately named algebra-only constrained family;
+the generic/F11 division-polynomial semantic correspondence remains open.
 
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|

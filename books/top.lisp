@@ -15,6 +15,7 @@
 (include-book "field/finite-field-context-regression")
 (include-book "field/pfield-finite-bijection-regression")
 (include-book "field/pfield-finite-field-context-regression")
+(include-book "field/f11-finite-field-context")
 (include-book "polynomial/generic/finite-field-instance")
 (include-book "polynomial/generic/finite-field-instance-regression")
 (include-book "polynomial/generic/finite-field-monomial-division-support")
