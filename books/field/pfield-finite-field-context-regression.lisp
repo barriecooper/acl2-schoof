@@ -1,7 +1,6 @@
 (in-package "GFIELD")
 
-(include-book "finite-field-context")
-(include-book "pfield-finite-bijection-regression")
+(include-book "pfield-finite-field-context")
 
 (defthm pfield-neg-of-neg-from-finite-field-context
   (equal (pfield-neg (pfield-neg x)) (pfield-fix x))

@@ -206,23 +206,27 @@ symbols the constraints of the complete outer encapsulate; an algebra-only
 functional instance therefore still inherits the coding laws.  This is not a
 file-layout issue.
 
-Two sound second-family designs remain available: either a separately named
-algebra-only constrained family with a mechanical polynomial target, leaving
-the existing joint context for coding clients, or a separately named coding
-field family with certified concrete compatibility instances.  Neither is yet
-known to be the smallest necessary architecture.  Before selecting or migrating
-to either design, test the lower-cost route of retaining the joint context and
-certifying its complete F11 instance once: substitute `f11-fix` for both rank
-and unrank, use 11 for the bound, package the resulting constraint theorems as a
-reusable proving seam, and consume that seam through staged, narrowly controlled
-functional instances.  The earlier complete-endpoint attempt timed out, which
-is evidence of proof-search blow-up rather than evidence that this staged route
-is impossible.
+Second-family designs remain sound contingencies, but the lower-cost joint
+context route is now mechanically effective and does not justify introducing
+one.  The earlier complete-endpoint timeout was proof-search blow-up: bounded
+clients can instead consume named projections of the complete F11 instance
+through delayed constraint hints.
 
-The next Schoof checkpoint is therefore the focused F11 finite-field proving
-instance and staged functional-instance feasibility test.  If it succeeds,
-complete the generic/F11 division-polynomial semantic correspondence before
-starting quotient-coordinate work.
+The complete F11 joint-context substitution is certified by
+`f11-finite-field-context-constraint-seam`: `f11-fix` serves as fixer, rank,
+and unrank, and 11 is the bound.  Its proof is a modulus-11 functional instance
+of the production PFIELD constraint seam.  The first polynomial attempt showed
+only that the disabled conjunction was not automatically consumed: ACL2 first
+stopped at multiplication fixed congruence, which was already a conjunct.
+Named projections of every joint constraint, packaged as
+`f11-finite-field-context-instance-theory` and supplied by the established
+delayed `stable-under-simplificationp` hint, now certify the complete
+`finite-field-len-of-poly-fix-coefficients` F11 functional instance.  The same
+interface certifies the generic index-3 division-polynomial base equation for
+the existing transparent F11 implementation.  This early semantic checkpoint
+does not establish the complete base family, recurrence, generated table, or
+all-index correspondence; those remain open.  No separately named algebra-only
+constrained family is presently necessary.
 
 | Boundary | Status | Public endpoint | Open dependency / detail |
 |---|---|---|---|

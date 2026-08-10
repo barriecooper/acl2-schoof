@@ -1,44 +1,6 @@
 (in-package "GFIELD")
 
-(include-book "pfield-cardinality")
-(include-book "../algebra/finite-bijection")
-
-(defthm posp-of-pfield-modulus-for-finite-bijection
-  (posp (pfield-modulus))
-  :hints (("Goal" :use pfield-modulus-lower-bound)))
-
-(defthm natp-of-pfield-fix-for-finite-bijection
-  (natp (pfield-fix x))
-  :rule-classes (:rewrite :type-prescription)
-  :hints (("Goal" :use pfield-fep-of-pfield-fix
-           :in-theory (enable pfield::fep))))
-
-(defthm pfield-fix-upper-bound-for-finite-bijection
-  (< (pfield-fix x) (pfield-modulus))
-  :rule-classes (:rewrite :linear)
-  :hints (("Goal" :use pfield-fep-of-pfield-fix
-           :in-theory (enable pfield::fep))))
-
-(defthm pfield-fix-of-fix-for-finite-bijection
-  (equal (pfield-fix (pfield-fix x)) (pfield-fix x))
-  :hints (("Goal" :use pfield-fix-idempotent)))
-
-(defthm pfield-fix-of-unrank-for-finite-bijection
-  (equal (pfield-fix (pfield-fix k)) (pfield-fix k))
-  :hints (("Goal" :use (:instance pfield-fix-idempotent (x k)))))
-
-(defthm pfield-fix-inverse-when-bounded
-  (implies (and (natp k) (< k (pfield-modulus)))
-           (equal (pfield-fix (pfield-fix k)) k))
-  :hints (("Goal"
-           :use ((:instance pfield-fix-when-pfield-element-p (x k))
-                 (:instance pfield-fix-idempotent (x k)))
-           :in-theory (enable pfield-element-p pfield::fep))))
-
-(defthm pfield-fix-when-natural-and-bounded
-  (implies (and (natp k) (< k (pfield-modulus)))
-           (equal (pfield-fix k) k))
-  :hints (("Goal" :use pfield-fix-inverse-when-bounded)))
+(include-book "pfield-finite-field-context")
 
 (defun pfield-finite-unrank-list (indices)
   (declare (xargs :guard (true-listp indices)))
