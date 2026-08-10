@@ -34,6 +34,10 @@ The repository currently certifies these subsystem-level foundations:
   evaluator correspondence, with explicit functional-instance transport of the
   bounded base and one-step recurrence and direct concrete transport above that
   recursive boundary;
+- transparent rank-two quotient coordinates over the existing reduced GPOLY
+  ring, with total fixing, complete commutative-ring laws, polynomial embedding,
+  the defining short-Weierstrass `y` relation, and independent F11 `psi_3`
+  execution evidence;
 - short-Weierstrass coordinates, canonical affine coordinates, tagged curve
   points (affine or infinity), and point negation;
 - total affine branch classification and executable affine/tagged-point
