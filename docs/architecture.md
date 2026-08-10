@@ -431,4 +431,4 @@ once.  That builder is not yet public: exact length, stable lower-index lookup,
 and evaluator/specification correspondence must be certified together before
 an all-index evaluator is retained.
 
-The initial base computation needs normalization and coefficient-field arithmetic only.  It does not use quotient coordinates, so it creates no justification for another reduced-ring law.  A future recurrence should use a terminating half-index recursion with explicit sharing/memoization strategy rather than naive overlapping recursion; the exact recurrence specification and general correspondence theorem remain the next boundary.
+The initial base computation needs normalization and coefficient-field arithmetic only.  It does not use quotient coordinates, so it creates no justification for another reduced-ring law.  The exact separated-`2y` recurrence step and its odd/even equations are certified.  The next boundary is a sequential list-backed builder with exact-length, stable-lookup, closure, and recurrence invariants, retained together with a public evaluator and its named sequence-specification correspondence; it must avoid naive overlapping recursion.
