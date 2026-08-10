@@ -50,11 +50,12 @@ general kernel theorem but is not mandated by the direct fixed-kernel
 calculation.  The experimental F7/F49 context remains feasibility evidence,
 not the generic realization.
 
-1. Complete the division-polynomial table/evaluator seam: the sequential
-   list-backed builder and its elementary length, stable-lookup, entry, fixing,
-   and closure invariants are certified; next add the named full-sequence
-   specification and retain a public evaluator only with its correspondence and
-   public recurrence equations.
+1. Extend the completed generic division-polynomial sequence/evaluator seam
+   only with a concrete F11 all-index adapter and execution evidence.  The
+   independent recurrence-and-length predicate, generated-table satisfaction,
+   entrywise uniqueness, evaluator correspondence, fixing, closure, base, and
+   evaluator-only recurrence equations are certified.  Do not claim a generic
+   F11 instance without an explicit correspondence theorem.
 2. Add only the quotient-coordinate laws demanded when the first concrete
    trace-test client requires them.  Preserve arbitrary-ACL2-value and
    zero-normalized-modulus coverage at every public totalized endpoint, and keep
