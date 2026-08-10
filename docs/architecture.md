@@ -80,13 +80,14 @@ functional-instantiation dependency is currently broader: the joint
 `finite-field-*` encapsulate also constrains rank, unrank, and bound, and its
 coding inverse laws mention the algebraic fixer.  Consequently, substituting
 the algebraic symbols inherits coding obligations even when a client theorem
-does not use coding operations.  The complete PFIELD-derived F11 instance is
-certified with `f11-fix` as fixer, rank, and unrank and 11 as bound.  Its
-conjunctive constraint seam certifies consistency and specialization, but an
-actual polynomial functional-instance checkpoint still exposes the individual
-joint constraints and stops at multiplication congruence.  A separately named
-algebra-only constrained family is therefore the next architecture experiment;
-the existing coding context remains authoritative for finite clients.
+does not use coding operations.  Reusable PFIELD joint-context evidence now
+lives in a production support book, and the F11 production specialization
+depends on that support rather than on regression books.  The complete F11
+instance uses `f11-fix` as fixer, rank, and unrank and 11 as bound.  A named
+projection theory supplies its individual constraints to delayed
+functional-instance hints; polynomial and early division-polynomial regression
+clients certify through that interface.  The existing joint coding context
+therefore remains the authoritative constrained family.
 
 ### Field-only X-CERT algebra
 

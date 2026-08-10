@@ -114,14 +114,14 @@ may validate execution and functional instantiation, but cannot substitute for
 generic correctness. Chronological PR narratives belong in Git history, not in
 this plan.
 
-The F11 joint finite-field context now has a certified PFIELD-derived seam, but
-the first staged polynomial functional instance still stops at the joint
-context's multiplication congruence constraint.  The next shared/Schoof
-boundary is therefore a narrowly scoped algebra-only constrained-family
-feasibility test; do not retry the all-index endpoint through the unchanged
-joint constraint closure.  The generic/F11 division-polynomial semantic
-correspondence remains subsequent work, and quotient-coordinate arithmetic
-begins only after that semantic boundary.  The
+The F11 joint finite-field context now has a certified PFIELD-derived named
+constraint interface.  The staged coefficient-fixer length functional instance
+and the generic index-3 division-polynomial base equation both certify against
+the existing transparent F11 definitions.  Continue the generic/F11 semantic
+correspondence in bounded base/recurrence stages before any all-index endpoint;
+do not introduce a second constrained family while this joint-context route
+remains mechanically effective.  Quotient-coordinate arithmetic begins only
+after the complete division-polynomial semantic boundary.  The
 next Hasse boundary, separately, is only an abstract arithmetic consumer for the
 quadratic degree premises; no public Hasse claim is permitted until the rank-two
 symbolic map and geometric kernel realizations are certified.
