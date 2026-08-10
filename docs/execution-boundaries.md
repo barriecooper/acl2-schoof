@@ -358,10 +358,16 @@ operations return fixed components, and addition, negation, subtraction, and
 multiplication first fix their operands.  All functions have verified guards;
 there is no logical/executable split, attachment, or optimized branch.
 
-The focused F11 regression takes `psi_3` from the certified merged evaluator on
-the repository golden curve `(a,b)=(1,6)`.  Its fuel-bounded concrete long
-division spelling uses the existing F11 dense normalization, arithmetic,
-degree, and leading-coefficient operations.  It checks component reduction,
-nontrivial addition and multiplication, the curve relation, and malformed-input
-fixing.  These evaluations are execution evidence only; the generic certified
-fixing, closure, embedding, and curve-relation theorems supply logical evidence.
+The focused F11 book takes `psi_3` from the certified merged evaluator on the
+repository golden curve `(a,b)=(1,6)`.  Its fuel-bounded concrete long-division
+spelling uses the existing F11 dense normalization, arithmetic, degree, and
+leading-coefficient operations.  It checks component reduction, nontrivial
+addition and multiplication, the curve relation, and malformed-input fixing.
+It is strictly an independent execution witness: it neither instantiates nor
+executes the generic `quotient-coordinate-*` functions, and no certified
+correspondence currently connects its concrete operations to the production
+API.  Building that seam would require the presently absent concrete F11
+divmod/reduced-ring functional instance and is an execution-interface issue,
+not an open quotient-coordinate ring law.  The assertions therefore
+demonstrate the intended F11 formulas and practical reductions only; generic
+logical correctness comes separately from the production theorems.

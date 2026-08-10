@@ -3,9 +3,15 @@
 (include-book "quotient-coordinate")
 (include-book "f11-division-polynomial-correspondence")
 
-; Concrete F11 spelling of the already adopted dense-polynomial remainder
-; algorithm.  Fuel is the dividend length; an active leading-term cancellation
-; strictly lowers that length for the canonical nonzero modulus used below.
+; Independent concrete F11 execution witness.  These functions use the same
+; dense representation and mathematical formulas as the generic production
+; boundary, but this book does not instantiate or execute QUOTIENT-COORDINATE-*
+; and proves no correspondence to those generic functions.  A correspondence
+; would require a substantial concrete F11 divmod/reduced-ring instantiation
+; that is intentionally outside this focused boundary.
+;
+; Fuel is the dividend length; an active leading-term cancellation strictly
+; lowers that length for the canonical nonzero modulus used below.
 (defun f11-quotient-zero-prefix (n tail)
   (if (zp (nfix n)) tail
     (cons 0 (f11-quotient-zero-prefix (1- (nfix n)) tail))))
