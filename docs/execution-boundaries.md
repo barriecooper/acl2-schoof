@@ -371,3 +371,13 @@ divmod/reduced-ring functional instance and is an execution-interface issue,
 not an open quotient-coordinate ring law.  The assertions therefore
 demonstrate the intended F11 formulas and practical reductions only; generic
 logical correctness comes separately from the production theorems.
+
+### Quotient-coordinate natural power
+
+The quotient-coordinate power book adds only transparent logic-mode
+definitions. `quotient-coordinate-pow-spec` is linear repeated multiplication;
+`quotient-coordinate-pow` fixes its base and applies `nfix` to its exponent.
+The cardinality-indexed action and iterator directly use that power operation.
+All guards are verified. There is no `MBE`, `DEFEXEC`, attachment, accumulator,
+or alternate executable implementation, and hence no separate implementation
+correspondence or performance claim.

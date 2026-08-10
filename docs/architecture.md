@@ -428,6 +428,18 @@ execution witness uses the same representation and formulas but is not a
 certified functional instance of this generic production API; that future
 concrete execution correspondence is separate from the ring architecture.
 
+Natural powers in this ring are transparent repeated multiplication with a
+fixed base and `nfix`ed exponent.  The cardinality-indexed action raises a
+coordinate to `q`, and its iterator raises to `q^n`.  Their operation and
+one-iteration boundary is certified; exponent composition and homomorphism
+laws remain open. Addition preservation additionally needs the missing
+actual-cardinality/characteristic prime-power bridge. For the F11, `ell=3`
+client, `[11]P=[2]P=-P`, so the
+audited equation is `pi^2(P)-P=[t]pi(P)`.  Existing affine addition divides by
+slopes and is not reused in this quotient ring.  A narrow denominator-free or
+cross-multiplied point-expression layer remains necessary before that equation
+can be made into a certified `psi_3` trace predicate.
+
 Natural integer constants are embedded by repeated finite-field addition of one; curve coefficients are fixed before use.  Dense coefficient order is ascending.  The retained formulas are
 
 - `psi_0 = 0`, `psi_1 = 1`, and stored `psi_2/(2y) = 1`;
