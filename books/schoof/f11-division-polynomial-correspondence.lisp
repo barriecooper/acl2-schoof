@@ -288,11 +288,13 @@
                          natp-of-one-less-when-posp-for-f11-table
                          natp posp zp nfix nth)))))
 
-(defthm integerp-when-natp-for-f11-table
-  (implies (natp x) (integerp x)))
+(local
+ (defthm integerp-when-natp-for-f11-table
+   (implies (natp x) (integerp x))))
 
-(defthm nfix-when-natp-for-f11-table
-  (implies (natp x) (equal (nfix x) x)))
+(local
+ (defthm nfix-when-natp-for-f11-table
+   (implies (natp x) (equal (nfix x) x))))
 
 (defthm f11-division-polynomial-table-lookup-stable
   (implies (and (natp k) (<= k (nfix n)))
