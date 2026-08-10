@@ -425,10 +425,12 @@ the common factors cancel to the same stored formula in both parities.  This
 derivation records the source and representation transformation; it is not a
 formal bridge to a bivariate classical definition, which remains open.
 
-The retained step uses `nth` only as a transparent table access.  The intended
-next execution boundary is a sequential list builder that computes each entry
-once.  That builder is not yet public: exact length, stable lower-index lookup,
-and evaluator/specification correspondence must be certified together before
-an all-index evaluator is retained.
+The retained step uses `nth` only as a transparent table access.  The certified
+sequential builder produces the ascending table through `nfix(n)`, binding its
+single recursive prefix before extending it with one recurrence-step result.
+Exact length, true-list output, newest-entry, stable lower-index lookup,
+in-range access, coefficient/index fixing, and entry closure are certified.
+Each polynomial is therefore constructed once; the transparent list extension
+still traverses the prefix and carries the corresponding list cost.
 
-The initial base computation needs normalization and coefficient-field arithmetic only.  It does not use quotient coordinates, so it creates no justification for another reduced-ring law.  A future recurrence should use a terminating half-index recursion with explicit sharing/memoization strategy rather than naive overlapping recursion; the exact recurrence specification and general correspondence theorem remain the next boundary.
+The initial base computation needs normalization and coefficient-field arithmetic only.  It does not use quotient coordinates, so it creates no justification for another reduced-ring law.  The exact separated-`2y` recurrence step and its odd/even equations are certified.  The next boundary is the named full-sequence specification and a public evaluator with certified correspondence and recurrence equations.  The builder alone makes no claim of correspondence with a classical bivariate division-polynomial development.
