@@ -280,3 +280,4 @@
 (include-book "schoof/f11-division-polynomial")
 (include-book "schoof/f11-division-polynomial-regression")
 (include-book "schoof/f11-division-polynomial-functional-instance-regression")
+(include-book "schoof/f11-division-polynomial-correspondence")

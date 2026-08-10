@@ -24,9 +24,11 @@ specification; abstract theorem books use constrained operations of matching
 arity, and generated/manual instance books connect the two.  No stobj or
 global encapsulated field constant is part of the semantic interface.
 
-This PR is an architecture decision only.  It adds no division, gcd,
-derivative, curve, Hasse, or Schoof implementation and makes no claim that an
-extension field has been certified.
+The current dependency boundary is concise: recursive finite-field divmod and
+reduced representatives are certified; coefficient-vector coding, carrier
+construction, and representative-count cardinality are certified; and the
+field-facing bridge to the generic irreducible quotient-field package remains
+open.
 
 ## Audit method and current dependency inventory
 
@@ -230,7 +232,7 @@ four-element computation would not certify generic irreducibility,
 cardinality, or the interface, and would become misleading scaffolding.  No
 experiment used admission, axioms, trust tags, or raw Lisp.
 
-## Migration plan and consequences
+## Historical migration plan and consequences
 
 The certified dependency now includes
 `finite-field context -> finite-field polynomial core`.  The core is the
@@ -240,6 +242,10 @@ Finite-field recursive divmod, fixed-modulus coefficient representation,
 mixed-radix coding, carrier construction, and representative-count cardinality
 are now certified.  The field-facing bridge to the generic irreducible
 quotient-field package remains open.
+
+The numbered plan below records the original architecture migration and is not
+the current work queue; certified status and forward sequencing live in the
+maintained documents named above.
 
 1. Add a minimal abstract equational field signature and prove only structural
    generic polynomial normalization/carrier facts.

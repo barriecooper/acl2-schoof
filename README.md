@@ -56,7 +56,10 @@ for valid curve points.  The generic functional-instance endpoint
 group under the maintained characteristic hypothesis. Natural scalar
 multiplication is certified as transparent linear repeated addition; an
 optimized scalar algorithm remains open.
-There is no certified Hasse theorem, point-count correctness theorem, all-index F11 evaluator adapter, classical bivariate division-polynomial correspondence, Frobenius machinery for Schoof, or Schoof algorithm.
+There is no certified Hasse theorem, point-count correctness theorem,
+all-index generic-to-F11 evaluator correspondence, classical bivariate
+division-polynomial correspondence, Frobenius machinery for Schoof, or Schoof
+algorithm.
 
 The generic field and polynomial layers intentionally continue to admit F2.
 Curve results that require the initial short-Weierstrass characteristic scope
