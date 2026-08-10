@@ -280,7 +280,9 @@ unless its inspected source contains that proof.  Host-prover libraries may
 also account for dependencies that ACL2 should replace with a narrower local
 interface rather than copy wholesale.
 
-## Exactly one recommended next task
+## Recommended next task at the recorded audit baseline
+
+This recommendation records the audit baseline; current ordering is maintained in [the live proof plan](../proof-plan.md).
 
 ### Ambient/base-field feasibility specification
 

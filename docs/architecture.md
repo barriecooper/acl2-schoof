@@ -56,7 +56,10 @@ carriers or total semantics.  In particular, only bounded rank-after-unrank is
 generic: arbitrary-input unrank totalisation remains client-specific.  The
 context is independent of `GFIELD` operations despite sharing the project
 package, and adds no field, characteristic, polynomial, or Frobenius premise.
-Generic coefficient reconstruction and extension cardinality remain open.
+The explicit finite-field coefficient reconstruction, representative carrier,
+and representative-count cardinality layers are certified.  A field-facing
+bridge from that layer to the generic irreducible quotient-field package remains
+open.
 
 A separate `finite-field-*` context jointly constrains a renamed field-shaped
 interface with coherent bounded rank, unrank, and bound operations.  It does not
@@ -71,23 +74,17 @@ leading coefficient, and additive/multiplicative operations are ordinary
 transparent definitions generated from the existing component templates where
 available.  Narrow GPOLY semantic theorems are transported by explicit
 functional instantiation; unrestricted GPOLY remains authoritative, and PFIELD
-and F7 remain the executable clients.  Finite-field-prefixed division,
-remainder, and fixed-modulus representation remain open.
+and F7 remain the executable clients.  Finite-field-prefixed recursive divmod, reduced representatives,
+fixed-modulus coefficient vectors, mixed-radix coding, carrier construction,
+and representative-count cardinality are certified.  The remaining boundary is
+a field-facing bridge to the generic irreducible quotient-field package.
 
-The polynomial and division-polynomial definitions depend mathematically only
-on the carrier/fixer, constants, arithmetic, inverse, and field laws.  ACL2's
-functional-instantiation dependency is currently broader: the joint
-`finite-field-*` encapsulate also constrains rank, unrank, and bound, and its
-coding inverse laws mention the algebraic fixer.  Consequently, substituting
-the algebraic symbols inherits coding obligations even when a client theorem
-does not use coding operations.  Reusable PFIELD joint-context evidence now
-lives in a production support book, and the F11 production specialization
-depends on that support rather than on regression books.  The complete F11
-instance uses `f11-fix` as fixer, rank, and unrank and 11 as bound.  A named
-projection theory supplies its individual constraints to delayed
-functional-instance hints; polynomial and early division-polynomial regression
-clients certify through that interface.  The existing joint coding context
-therefore remains the authoritative constrained family.
+The polynomial and division-polynomial layers consume the joint
+`finite-field-*` context through a stable named projection theory.  The complete
+F11 instance uses `f11-fix` as fixer, rank, and unrank and 11 as its bound.
+This joint-context interface is the authoritative dependency seam for bounded
+F11 functional instances; no parallel algebra-only constrained family is
+needed.
 
 ### Field-only X-CERT algebra
 
@@ -189,7 +186,8 @@ fixed constant and linear coefficients as radix-7 digits, while unrank decodes
 `mod(nfix(k),49)`.  Mapping unrank over the indices 0 through 48 gives a
 certified exhaustive duplicate-free executable carrier; F7X2 cardinality is
 definitionally its length.  The resulting order is an execution convention,
-not a semantic property.  Generic extension cardinality remains open.
+not a semantic property.  A reusable field-facing bridge from the explicit
+representative-count layer to the generic quotient-field package remains open.
 
 Fixed-modulus representatives also have a generic exact-length coefficient
 representation.  `fixed-modulus-coefficient-vector` fixes its arbitrary input
@@ -202,8 +200,10 @@ exactly the modulus degree recovers that list literally. Thus extraction then
 reconstruction equals the quotient fixer, while reconstruction then extraction
 equals the original canonical vector. Re-extraction restores trailing vector
 zero slots removed by polynomial normalization. Equality of vectors implies
-equality through the fixer; generic mixed-radix coding and extension
-cardinality remain open beyond this representation boundary.
+equality through the fixer.  The separate finite-field-prefixed mixed-radix,
+carrier, and representative-count layers are certified; connecting that
+explicit cardinality evidence to this generic quotient-field package remains
+open.
 
 ## Curve representations
 
@@ -368,16 +368,12 @@ guards, and correspondence evidence belong in
   field, polynomial, curve, and Frobenius foundations; neither track is a
   prerequisite for the other after that seam.
 
-Finite-field monomial/scalar-division support is now certified in the staged GPOLY target: scalar division, zero-prefix, shift, monomial degree/leading-coefficient facts, and scalar nonzero/division-denominator support are available without using finite-field coding/cardinality operations. The finite-field division-step substrate and recursive divmod/projection bridge are certified; the public remainder/reduced-polynomial layer is certified.  The finite-field fixed-modulus coefficient representation now extracts exact-width padded coefficient vectors from the canonical finite-field remainder and reconstructs by finite-field normalization; coefficient-vector rank/unrank is a separate certified mixed-radix boundary; carrier construction and cardinality remain separate.
-
-## Finite-field division-step substrate
-
-The finite-field-prefixed one-step polynomial division substrate is certified.
-It uses transparent generated definitions for the core step and public term/next
-projections, with verified guards, reconstruction, strict degree decrease, and a
-strict core length theorem suitable for the future recursive divmod measure.  The
-decisive cancellation proof is length/leading-coefficient based, not
-coefficient-vector or coding based.  Recursive finite-field divmod and public quotient/remainder APIs are certified by direct accumulator invariants; fixed-modulus coefficient representation is now certified; coding/cardinality operations remain open and are not introduced here.
+The explicit finite-field polynomial chain is certified through recursive
+divmod, public remainder and reduced representatives, exact-width fixed-modulus
+coefficient vectors, mixed-radix rank/unrank, exhaustive carrier construction,
+and representative-count cardinality.  These layers provide an explicit
+representative model; the field-facing bridge connecting it to the generic
+irreducible quotient-field package remains open.
 
 ## Hasse ambient-point and degree architecture
 
@@ -449,3 +445,11 @@ Each polynomial is therefore constructed once; the transparent list extension
 still traverses the prefix and carries the corresponding list cost.
 
 The initial base computation needs normalization and coefficient-field arithmetic only.  It does not use quotient coordinates, so it creates no justification for another reduced-ring law.  The exact separated-`2y` recurrence step and its odd/even equations are certified.  A named recurrence-and-length sequence relation and transparent public evaluator expose fixing, closure, base values, and evaluator-only recurrence equations.  The generated table satisfies that relation, and every satisfying table agrees entrywise with the evaluator throughout its declared range.  This stored-sequence correspondence is not a correspondence with classical bivariate division polynomials, which remains open.
+
+The joint F11 finite-field instance transports the complete totalized base
+operation and the complete one-step recurrence definition to the existing
+transparent F11 operations.  Its reusable seam covers normalization, natural
+coefficients, `C`, polynomial addition/subtraction/multiplication, square, and
+cube.  This bounded transport stops before generated-table satisfaction,
+concrete sequence uniqueness, all-index evaluator correspondence, and the
+later classical bivariate interpretation.
