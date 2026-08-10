@@ -50,15 +50,15 @@ general kernel theorem but is not mandated by the direct fixed-kernel
 calculation.  The experimental F7/F49 context remains feasibility evidence,
 not the generic realization.
 
-1. Use the now-certified finite-field same-coset uniqueness, unconditional
-   divisor-multiple remainder invariance, remainder/add compatibility, and
-   reduced-add associativity only to complete the additional quotient-coordinate
-   laws demanded by a concrete Schoof client.  Preserve arbitrary-ACL2-value and
-   zero-normalized-modulus coverage at every public totalized endpoint.  This
-   shared/Schoof boundary does not depend on Hasse geometry.
-2. Complete only the quotient-coordinate reduced-ring laws demanded by a
-   Schoof client; keep division-polynomial formulas and trace tests in separate
-   changes.
+1. Complete the division-polynomial table/evaluator seam: the sequential
+   list-backed builder and its elementary length, stable-lookup, entry, fixing,
+   and closure invariants are certified; next add the named full-sequence
+   specification and retain a public evaluator only with its correspondence and
+   public recurrence equations.
+2. Add only the quotient-coordinate laws demanded when the first concrete
+   trace-test client requires them.  Preserve arbitrary-ACL2-value and
+   zero-normalized-modulus coverage at every public totalized endpoint, and keep
+   trace tests in a separate change.
 3. On the Hasse track, stage the pure discriminant argument behind explicitly
    abstract endomorphism/degree premises, without claiming Hasse or treating a
    false context guard as realization.
@@ -95,7 +95,7 @@ endpoint `(q + 1 - N)^2 <= 4q`.  Reuse the common polynomial and curve layers.
 
 ## Phase 3B: executable Schoof track
 
-The certified first client represents division-polynomial data as dense univariate polynomials in `x`, with the conventional `2y` factor removed from even indices. It provides indices 0 through 4 and a certified transparent recurrence step over an ascending table, including the exact two odd orientations, the even formula, `C = 4(x^3+ax+b)`, fixing, and closure. Next build the list-backed sequential table and prove its exact-length, stable-lookup, closure, and recurrence invariants; retain a public all-index evaluator only together with its correspondence to the named recurrence. This construction should append each new entry once and must not use overlapping recursion. Add quotient-coordinate arithmetic only at the first trace-test dependency that requires it. Then develop Frobenius action, trace-congruence tests, and bounded incremental CRT reconstruction. Each
+The certified first client represents division-polynomial data as dense univariate polynomials in `x`, with the conventional `2y` factor removed from even indices. It provides indices 0 through 4 and a certified transparent recurrence step over an ascending table, including the exact two odd orientations, the even formula, `C = 4(x^3+ax+b)`, fixing, and closure. The list-backed sequential table and its exact-length, stable-lookup, entry, fixing, and closure invariants are certified; retain a public all-index evaluator only together with its correspondence to the named recurrence. The builder constructs each new entry once and does not use overlapping recursion, while its repeated list extension still traverses prefixes. Add quotient-coordinate arithmetic only at the first trace-test dependency that requires it. Then develop Frobenius action, trace-congruence tests, and bounded incremental CRT reconstruction. Each
 logical/executable boundary needs an independent specification, a certified
 correspondence theorem, verified guards, and focused execution evidence.
 Practical benchmarks are performance evidence, not proof of point-count

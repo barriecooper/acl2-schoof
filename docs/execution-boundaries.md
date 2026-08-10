@@ -305,9 +305,24 @@ helpers, orientation helpers, and public step have verified guards; the public
 closure and fixing theorems hold for arbitrary ACL2 table contents.  The guard
 on the step requires a true list for efficient Common Lisp `nth`, while its
 logical definition remains total.  This boundary has no opaque execution
-branch and makes no performance claim.  A table builder and public evaluator
-remain intentionally absent until a length/access invariant and a mathematical
-correspondence theorem are certified; consequently concrete execution of F5
-and later values is not yet claimed by this boundary.
+branch and makes no performance claim.
+
+`finite-field-division-polynomial-table-extend` is the narrow transparent
+one-element list extension used by the builder.  Its true-list, exact-length,
+old-index stability, and new-final-entry properties are certified without
+exposing broad append or `nth` theories to clients.
+`finite-field-division-polynomial-table-nat` recurses on a guarded natural bound,
+binds its single recursive prefix, invokes the certified recurrence step once,
+and extends that prefix once.  `finite-field-division-polynomial-table` is the
+total public table wrapper and applies `nfix` to arbitrary bounds.  The builder
+has certified exact length, true-list output, base and newest-entry equations,
+stable in-range lookup, canonical/field-polynomial entry closure, and index and
+coefficient fixing.  Repeated transparent list extension traverses prefixes;
+the only sharing claim is that each polynomial entry is calculated once.
+
+A public all-index evaluator remains intentionally absent pending a named
+full-sequence specification, correspondence, and public recurrence interface.
+No F11 all-index execution or mathematical correspondence is claimed by this
+builder-only boundary.
 
 The boundary contains no `MBE`, `DEFEXEC`, attachment, or alternate executable branch.  Its F11 regression exercises every retained base case on the nonsingular repository golden curve, coefficient normalization, and malformed/unsupported indices.  Those checks are execution assurance only; semantic correspondence is the generic theorem.  No performance claim is made, and no quotient-coordinate operation is used.
