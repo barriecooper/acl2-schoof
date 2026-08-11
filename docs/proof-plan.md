@@ -22,9 +22,9 @@ the conventional `2y` factor removed from even indices. Its immediate forward
 order is:
 
 1. The generic GPOLY evaluation theorem is transported through the finite-field
-   interface and connected to the maintained index-3 evaluator. Next specialize
-   the coefficients and evaluation to F11 and add the ambient
-   evaluation seam needed to interpret quotient calculations at classical
+   interface, connected to the maintained index-3 evaluator, and specialized
+   to the F11 golden curve with exact coefficients `(10 6 6 0 3)`. Next add the
+   ambient evaluation seam needed to interpret quotient calculations at classical
    `E[3]` points.  The generic GFIELD/GPOLY theorem alone does not make the
    formal quotient coordinates an ambient extension-field point.
 2. Connect the algebraic cross-multiplied predicate to the actual Frobenius

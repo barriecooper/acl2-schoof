@@ -295,6 +295,8 @@
 (include-book "schoof/f11-division-polynomial-functional-instance")
 (include-book "schoof/f11-division-polynomial-correspondence")
 (include-book "schoof/f11-division-polynomial-functional-instance-regression")
+(include-book "schoof/f11-third-division-polynomial")
+(include-book "schoof/f11-third-division-polynomial-regression")
 (include-book "schoof/quotient-coordinate")
 (include-book "schoof/quotient-coordinate-power")
 (include-book "schoof/quotient-coordinate-trace-program")
