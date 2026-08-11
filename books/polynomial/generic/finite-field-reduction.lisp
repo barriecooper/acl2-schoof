@@ -944,3 +944,176 @@
                      (left (finite-field-poly-remainder left modulus))))
     :in-theory
     (disable finite-field-poly-remainder finite-field-poly-add))))
+
+(defmacro def-finite-field-poly-mul-law-for-reduction (name source formula)
+   `(defthm ,name
+       ,formula
+       :hints
+       (("Goal"
+         :in-theory (theory 'minimal-theory)
+         :by (:functional-instance ,source
+              (gfield::field-element-p gfield::finite-field-element-p)
+              (gfield::field-fix gfield::finite-field-fix)
+              (gfield::field-zero gfield::finite-field-zero)
+              (gfield::field-one gfield::finite-field-one)
+              (gfield::field-add gfield::finite-field-add)
+              (gfield::field-mul gfield::finite-field-mul)
+              (gfield::field-neg gfield::finite-field-neg)
+              (gfield::field-inv gfield::finite-field-inv)
+              (fix-coefficients finite-field-poly-fix-coefficients)
+              (trim-trailing-zeros finite-field-poly-trim-trailing-zeros)
+              (normalize finite-field-poly-normalize)
+              (raw-add finite-field-poly-raw-add)
+              (poly-add finite-field-poly-add)
+              (raw-scale finite-field-poly-raw-scale)
+              (poly-scale finite-field-poly-scale)
+              (raw-mul finite-field-poly-raw-mul)
+              (poly-mul finite-field-poly-mul)))
+        (and stable-under-simplificationp
+             (list :use (theory 'gfield::finite-field-context-instance-theory)
+                   :in-theory
+                   (list 'quote
+                         (union-theories
+                          (theory 'finite-field-poly-definition-theory)
+                          (theory 'minimal-theory))))))))
+
+(def-finite-field-poly-mul-law-for-reduction
+  finite-field-poly-mul-commutative-for-reduction
+  poly-mul-commutative
+  (equal (finite-field-poly-mul x y) (finite-field-poly-mul y x)))
+
+(def-finite-field-poly-mul-law-for-reduction
+  finite-field-poly-mul-associative-for-reduction
+  poly-mul-associative
+  (equal (finite-field-poly-mul (finite-field-poly-mul x y) z)
+         (finite-field-poly-mul x (finite-field-poly-mul y z))))
+
+; Multiplying the certified reconstruction of LEFT by RIGHT leaves the
+; remainder product in the same coset.  This expansionary algebraic shape is
+; kept out of rewriting and used only by the multiplication reduction laws.
+(defthm finite-field-poly-normalize-of-poly-mul-reconstruction-left
+  (equal
+   (finite-field-poly-normalize (finite-field-poly-mul left right))
+   (finite-field-poly-add
+    (finite-field-poly-mul (finite-field-poly-remainder left modulus) right)
+    (finite-field-poly-mul
+     (finite-field-poly-mul (mv-nth 0 (finite-field-poly-divmod left modulus)) right)
+     (finite-field-poly-normalize modulus))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance finite-field-poly-divmod-reconstruction (f left) (g modulus))
+          (:instance finite-field-poly-remainder-is-divmod-remainder
+                     (f left) (g modulus))
+          (:instance finite-field-poly-mul-right-distributive
+                     (x (finite-field-poly-mul (mv-nth 0 (finite-field-poly-divmod left modulus))
+                                  (finite-field-poly-normalize modulus)))
+                     (y (finite-field-poly-remainder left modulus))
+                     (z right))
+          (:instance finite-field-poly-mul-associative-for-reduction
+                     (x (mv-nth 0 (finite-field-poly-divmod left modulus)))
+                     (y (finite-field-poly-normalize modulus)) (z right))
+          (:instance finite-field-poly-mul-associative-for-reduction
+                     (x (mv-nth 0 (finite-field-poly-divmod left modulus)))
+                     (y right) (z (finite-field-poly-normalize modulus)))
+          (:instance finite-field-poly-mul-commutative-for-reduction
+                     (x (finite-field-poly-normalize modulus)) (y right))
+          (:instance finite-field-poly-add-commutative
+                     (x (finite-field-poly-mul
+                         (mv-nth 0 (finite-field-poly-divmod left modulus))
+                         (finite-field-poly-mul (finite-field-poly-normalize modulus) right)))
+                     (y (finite-field-poly-mul (finite-field-poly-remainder left modulus) right)))
+          (:instance finite-field-poly-mul-normalize-left-for-reduction (x left) (y right))
+          (:instance finite-field-poly-normalize-when-canonical
+                     (xs (finite-field-poly-mul left right))))
+    :in-theory
+    (disable finite-field-poly-divmod finite-field-poly-remainder finite-field-poly-normalize finite-field-poly-add finite-field-poly-mul
+             finite-field-canonical-polynomial-p))))
+
+(defthm finite-field-poly-remainder-of-poly-mul-remainder-left
+  (equal
+   (finite-field-poly-remainder (finite-field-poly-mul left right) modulus)
+   (finite-field-poly-remainder
+    (finite-field-poly-mul (finite-field-poly-remainder left modulus) right) modulus))
+  :rule-classes nil
+  :hints
+  (("Goal" :cases ((consp (finite-field-poly-normalize modulus))))
+   ("Subgoal 1"
+    :use ((:instance finite-field-poly-normalize-of-poly-mul-reconstruction-left)
+          (:instance finite-field-poly-remainder-of-normalize-dividend
+                     (dividend (finite-field-poly-mul left right)))
+          (:instance finite-field-poly-remainder-of-normalize-dividend
+                     (dividend
+                      (finite-field-poly-add
+                       (finite-field-poly-mul (finite-field-poly-remainder left modulus) right)
+                       (finite-field-poly-mul
+                        (finite-field-poly-mul
+                         (mv-nth 0 (finite-field-poly-divmod left modulus)) right)
+                        (finite-field-poly-normalize modulus)))))
+          (:instance finite-field-poly-remainder-of-poly-add-modulus-multiple
+                     (dividend
+                      (finite-field-poly-mul (finite-field-poly-remainder left modulus) right))
+                     (multiplier
+                      (finite-field-poly-mul (mv-nth 0 (finite-field-poly-divmod left modulus))
+                                right))))
+    :in-theory (disable finite-field-poly-divmod finite-field-poly-remainder finite-field-poly-normalize finite-field-poly-add finite-field-poly-mul))
+   ("Subgoal 2"
+    :use ((:instance finite-field-poly-remainder-zero-normalized-modulus
+                     (dividend (finite-field-poly-mul left right)))
+          (:instance finite-field-poly-remainder-zero-normalized-modulus
+                     (dividend
+                      (finite-field-poly-mul (finite-field-poly-remainder left modulus) right)))
+          (:instance finite-field-poly-remainder-zero-normalized-modulus
+                     (dividend left))
+          (:instance finite-field-poly-mul-normalize-left-for-reduction (x left) (y right)))
+    :in-theory (disable finite-field-poly-remainder finite-field-poly-normalize finite-field-poly-mul))))
+
+(defthm finite-field-poly-remainder-of-poly-mul-remainder-right
+  (equal
+   (finite-field-poly-remainder (finite-field-poly-mul left right) modulus)
+   (finite-field-poly-remainder
+    (finite-field-poly-mul left (finite-field-poly-remainder right modulus)) modulus))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-remainder-of-poly-mul-remainder-left
+                            (left right) (right left))
+                 (:instance finite-field-poly-mul-commutative-for-reduction (x left) (y right))
+                 (:instance finite-field-poly-mul-commutative-for-reduction
+                            (x (finite-field-poly-remainder right modulus)) (y left)))
+           :in-theory (disable finite-field-poly-remainder finite-field-poly-mul))))
+
+(defthm finite-field-poly-remainder-of-poly-mul-remainders
+  (equal
+   (finite-field-poly-remainder (finite-field-poly-mul left right) modulus)
+   (finite-field-poly-remainder
+    (finite-field-poly-mul (finite-field-poly-remainder left modulus)
+              (finite-field-poly-remainder right modulus))
+    modulus))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-remainder-of-poly-mul-remainder-left)
+                 (:instance finite-field-poly-remainder-of-poly-mul-remainder-right
+                            (left (finite-field-poly-remainder left modulus))))
+           :in-theory (disable finite-field-poly-remainder finite-field-poly-mul))))
+
+
+(def-finite-field-poly-mul-law-for-reduction
+  finite-field-poly-mul-one-left-for-remainder-self
+  poly-mul-of-one-left
+  (equal (finite-field-poly-mul
+          (list (gfield::finite-field-one)) polynomial)
+         (finite-field-poly-normalize polynomial)))
+
+(defthm finite-field-poly-remainder-self
+  (equal (finite-field-poly-remainder modulus modulus) nil)
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance finite-field-poly-remainder-of-poly-add-divisor-multiple
+                     (dividend nil)
+                     (multiplier (list (gfield::finite-field-one))))
+          (:instance finite-field-poly-remainder-zero-dividend))
+    :in-theory
+    (e/d (finite-field-poly-add)
+         (finite-field-poly-remainder finite-field-poly-mul
+          finite-field-poly-normalize finite-field-poly-raw-add)))))

@@ -370,8 +370,14 @@ hidden in execution.
 
 The focused regression certifies `psi_3=(10 6 6 0 3)` for `(a,b)=(1,6)` and
 exercises genuine reduction, exact division, reduced arithmetic, normalization,
-and malformed totalization.  The old quotient-coordinate witness no longer
-owns a fuel-bounded divider: its component fixer calls `f11-poly-remainder`.
+and malformed totalization.  The F11 quotient-coordinate layer also has a
+transparent base-polynomial embedding and constant-first Horner evaluator.
+Atomic polynomial tails evaluate as ambient zero, coefficients are fixed by
+`f11-fix`, and every Horner step uses the existing fixed addition and
+multiplication operations.  Certified remainder homomorphism laws establish
+that evaluation at universal `X` embeds the production remainder; there is no
+alternate evaluator, `MBE`, attachment, or executable branch.  The old
+quotient-coordinate witness no longer owns a fuel-bounded divider: its component fixer calls `f11-poly-remainder`.
 Its former rank-two formulas are now compatibility wrappers around the F11
 production specialization.
 

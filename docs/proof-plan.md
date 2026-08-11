@@ -23,21 +23,24 @@ order is:
 
 1. The generic GPOLY evaluation theorem is transported through the finite-field
    interface, connected to the maintained index-3 evaluator, and specialized
-   to the F11 golden curve with exact coefficients `(10 6 6 0 3)`. Next add the
-   ambient evaluation seam needed to interpret quotient calculations at classical
-   `E[3]` points.  The generic GFIELD/GPOLY theorem alone does not make the
-   formal quotient coordinates an ambient extension-field point.
-2. Connect the algebraic cross-multiplied predicate to the actual Frobenius
-   trace congruence modulo `ell`; characteristic-11 addition preservation is a
-   separate boundary unless that semantic proof requires it.
-3. Generalize to enough torsion primes and certify the next required executable
+   to the F11 golden curve with exact coefficients `(10 6 6 0 3)`.  Ambient
+   Horner evaluation certifies that the maintained and literal index-3 moduli
+   vanish at the universal quotient-coordinate `X`.
+2. Certify characteristic-11 additive Frobenius for the quotient-coordinate
+   power map, complementing its existing multiplicative and iteration laws.
+3. Connect the algebraic cross-multiplied predicate to the actual Frobenius
+   trace congruence modulo `ell`.  A narrowly scoped classical `E[3]`
+   interpretation remains open and should be introduced only where that
+   correctness proof requires it; constructing a general ambient-field or
+   algebraic-closure model is not on executable Schoof's critical path.
+4. Generalize to enough torsion primes and certify the next required executable
    client.  No `ell=5` client is currently certified.
-4. Certify enough correct residues that their modulus product exceeds the Hasse
+5. Certify enough correct residues that their modulus product exceeds the Hasse
    uniqueness bound.  Modulus 3 alone is insufficient for F11; numerically
    `3*5=15 > 4*sqrt(11)`, but this does not certify either residue's classical
    correctness or an `ell=5` implementation.
-5. Reconstruct the unique trace in the Hasse interval by bounded CRT.
-6. Compose the result into final point-count correctness and the executable
+6. Reconstruct the unique trace in the Hasse interval by bounded CRT.
+7. Compose the result into final point-count correctness and the executable
    Schoof boundary.
 
 The generic and F11 generated-table, relational-sequence, uniqueness, and
