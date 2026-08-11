@@ -51,6 +51,7 @@
      (field-nat-mul 12 (field-mul x (field-mul (field-mul x x) x)))
      (field-nat-mul 12 (field-mul x (field-mul a x))))
     (field-nat-mul 12 (field-mul x b))))
+  :rule-classes nil
   :hints (("Goal"
            :in-theory
            (union-theories (theory 'minimal-theory)
@@ -59,6 +60,7 @@
 (defthm psi3-quartic-monomial-reassociation
   (equal (field-mul x (field-mul (field-mul x x) x))
          (field-mul (field-mul x x) (field-mul x x)))
+  :rule-classes nil
   :hints (("Goal"
            :use ((:instance field-mul-associative
                             (x x) (y (field-mul x x)) (z x))
@@ -71,6 +73,7 @@
 (defthm psi3-quadratic-monomial-reassociation
   (equal (field-mul x (field-mul a x))
          (field-mul a (field-mul x x)))
+  :rule-classes nil
   :hints (("Goal"
            :use ((:instance field-mul-associative (x x) (y a) (z x))
                  (:instance field-mul-associative (x a) (y x) (z x))
@@ -92,6 +95,7 @@
                     (field-mul (field-mul x x) (field-mul x x)))
      (field-nat-mul 12 (field-mul a (field-mul x x))))
     (field-nat-mul 12 (field-mul b x))))
+  :rule-classes nil
   :hints (("Goal"
            :use (psi3-scaled-product-distribution
                  psi3-quartic-monomial-reassociation
@@ -103,6 +107,7 @@
   (equal (field-mul (field-add u v) (field-add u v))
          (field-add (field-add (field-mul u u) (field-mul u v))
                     (field-add (field-mul v u) (field-mul v v))))
+  :rule-classes nil
   :hints (("Goal" :in-theory
            (union-theories (theory 'minimal-theory)
             '(field-mul-left-distributive field-mul-right-distributive)))))
@@ -110,6 +115,7 @@
 (defthm psi3-three-times-square-product
   (equal (field-mul (field-nat-mul 3 q) (field-nat-mul 3 q))
          (field-nat-mul 9 (field-mul q q)))
+  :rule-classes nil
   :hints (("Goal" :do-not '(preprocess)
            :in-theory
            (enable field-nat-mul field-mul-left-distributive
@@ -121,6 +127,7 @@
   (equal (field-add (field-mul (field-nat-mul 3 q) a)
                     (field-mul a (field-nat-mul 3 q)))
          (field-nat-mul 6 (field-mul a q)))
+  :rule-classes nil
   :hints (("Goal" :do-not '(preprocess)
            :in-theory
            (enable field-nat-mul field-mul-left-distributive
@@ -139,6 +146,7 @@
                     (field-mul (field-mul x x) (field-mul x x)))
      (field-nat-mul 6 (field-mul a (field-mul x x))))
     (field-mul a a)))
+  :rule-classes nil
   :hints (("Goal"
            :use ((:instance psi3-binomial-square-distribution
                             (u (field-nat-mul 3 (field-mul x x))) (v a))
@@ -148,7 +156,7 @@
                             (q (field-mul x x))))
            :in-theory
            (union-theories (theory 'minimal-theory)
-            '(field-add-associative psi3-quartic-monomial-reassociation)))))
+            '(field-add-associative)))))
 
 (defthm psi3-left-coefficient-decomposition
   (equal
@@ -161,6 +169,7 @@
                linear)
     (field-add (field-nat-mul 9 quartic)
                (field-nat-mul 6 quadratic))))
+  :rule-classes nil
   :hints (("Goal"
            :use ((:instance field-nat-mul-of-sum
                             (m 3) (n 9) (x quartic))
@@ -180,6 +189,7 @@
    (field-add square
               (field-add (field-nat-mul 9 quartic)
                          (field-nat-mul 6 quadratic))))
+  :rule-classes nil
   :hints (("Goal"
            :use ((:instance field-add-commutative
                             (x (field-add (field-nat-mul 9 quartic)
@@ -201,6 +211,7 @@
                           (field-nat-mul 6 quadratic))
                linear)
     square))
+  :rule-classes nil
   :hints (("Goal"
            :use (psi3-left-coefficient-decomposition
                  psi3-right-coefficient-reordering
@@ -229,6 +240,7 @@
 (defthm third-division-polynomial-expression-is-expanded-expression
   (equal (third-division-polynomial-expression x a b)
          (third-division-polynomial-expanded-expression x a b))
+  :rule-classes nil
   :hints (("Goal"
            :use ((:instance psi3-scaled-product-expansion
                             (x (field-fix x))
@@ -257,6 +269,7 @@
   (equal (short-weierstrass-psi3 x)
          (third-division-polynomial-expanded-expression
           x (short-weierstrass-a) (short-weierstrass-b)))
+  :rule-classes nil
   :hints (("Goal"
            :use (short-weierstrass-psi3-is-third-division-polynomial-expression
                  (:instance third-division-polynomial-expression-is-expanded-expression
