@@ -12,6 +12,7 @@
           (field-nat-mul 3 (field-one)))
     x)
    (third-division-polynomial-expanded-expression x a b))
+  :rule-classes nil
   :hints
   (("Goal"
     :use third-division-polynomial-gpoly-eval-is-expanded-expression
@@ -28,6 +29,7 @@
            (field-nat-mul 3 (field-one))))
     x)
    (third-division-polynomial-expanded-expression x a b))
+  :rule-classes nil
   :hints
   (("Goal"
     :use third-division-polynomial-normalized-gpoly-eval-is-expanded-expression

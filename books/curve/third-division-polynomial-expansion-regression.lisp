@@ -5,6 +5,7 @@
 (defthm third-division-polynomial-expansion-minimal-theory-client
   (equal (third-division-polynomial-expression x a b)
          (third-division-polynomial-expanded-expression x a b))
+  :rule-classes nil
   :hints (("Goal"
            :use third-division-polynomial-expression-is-expanded-expression
            :in-theory (theory 'minimal-theory))))
@@ -13,6 +14,7 @@
   (equal (short-weierstrass-psi3 x)
          (third-division-polynomial-expanded-expression
           x (short-weierstrass-a) (short-weierstrass-b)))
+  :rule-classes nil
   :hints (("Goal"
            :use short-weierstrass-psi3-is-expanded-expression
            :in-theory (theory 'minimal-theory))))
