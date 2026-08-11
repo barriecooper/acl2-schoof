@@ -298,6 +298,7 @@
 (include-book "schoof/f11-third-division-polynomial")
 (include-book "schoof/f11-third-division-polynomial-regression")
 (include-book "schoof/quotient-coordinate")
+(include-book "schoof/quotient-coordinate-regression")
 (include-book "schoof/quotient-coordinate-power")
 (include-book "schoof/quotient-coordinate-trace-program")
 (include-book "schoof/quotient-coordinate-trace-predicate")
