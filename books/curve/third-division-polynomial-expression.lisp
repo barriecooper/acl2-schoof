@@ -1,7 +1,6 @@
 (in-package "GFIELD")
 
 (include-book "../curve/third-division-polynomial")
-(include-book "../polynomial/generic/base")
 
 (defun third-division-polynomial-expression (x a b)
   (field-sub
@@ -48,4 +47,3 @@
               field-fix-idempotent field-fix-of-add field-fix-of-mul
               field-mul-of-fixes field-nat-mul-of-field-fix
               field-add-associative)))))
-
