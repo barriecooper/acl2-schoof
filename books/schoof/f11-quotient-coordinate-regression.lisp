@@ -64,11 +64,12 @@
        (equal (f11-quotient-coordinate-embed 'malformed modulus)
               (f11-quotient-coordinate-zero modulus)))
   :rule-classes nil
-  :hints (("Goal" :in-theory
-           (union-theories (theory 'minimal-theory)
-                           '(f11-quotient-coordinate-zero
-                             f11-quotient-coordinate
-                             f11-quotient-coordinate-eval
-                             f11-quotient-coordinate-embed
-                             f11-normalize f11-fix-coefficients
-                             f11-trim-trailing-zeros)))))
+  :hints (("Goal"
+           :use ((:instance f11-quotient-coordinate-embed-of-normalize
+                            (polynomial 'malformed)))
+           :in-theory
+           (union-theories
+            (theory 'minimal-theory)
+            '(f11-quotient-coordinate-eval f11-normalize
+              f11-fix-coefficients f11-trim-trailing-zeros
+              f11-quotient-coordinate-embed-zero)))))

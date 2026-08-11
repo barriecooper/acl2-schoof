@@ -23,10 +23,12 @@ order is:
 
 1. The generic GPOLY evaluation theorem is transported through the finite-field
    interface, connected to the maintained index-3 evaluator, and specialized
-   to the F11 golden curve with exact coefficients `(10 6 6 0 3)`. Next add the
-   ambient evaluation seam needed to interpret quotient calculations at classical
-   `E[3]` points.  The generic GFIELD/GPOLY theorem alone does not make the
-   formal quotient coordinates an ambient extension-field point.
+   to the F11 golden curve with exact coefficients `(10 6 6 0 3)`.  Ambient
+   Horner evaluation now certifies that the maintained and literal index-3
+   moduli vanish at the universal quotient-coordinate `X`.  Next interpret
+   these coordinate-ring facts in an ambient field or algebraic closure and
+   connect them to classical `E[3]` point semantics; the universal quotient
+   coordinates alone are not classical extension-field points.
 2. Connect the algebraic cross-multiplied predicate to the actual Frobenius
    trace congruence modulo `ell`; characteristic-11 addition preservation is a
    separate boundary unless that semantic proof requires it.
