@@ -358,19 +358,22 @@ operations return fixed components, and addition, negation, subtraction, and
 multiplication first fix their operands.  All functions have verified guards;
 there is no logical/executable split, attachment, or optimized branch.
 
-The focused F11 book takes `psi_3` from the certified merged evaluator on the
-repository golden curve `(a,b)=(1,6)`.  Its fuel-bounded concrete long-division
-spelling uses the existing F11 dense normalization, arithmetic, degree, and
-leading-coefficient operations.  It checks component reduction, nontrivial
-addition and multiplication, the curve relation, and malformed-input fixing.
-It is strictly an independent execution witness: it neither instantiates nor
-executes the generic `quotient-coordinate-*` functions, and no certified
-correspondence currently connects its concrete operations to the production
-API.  Building that seam would require the presently absent concrete F11
-divmod/reduced-ring functional instance and is an execution-interface issue,
-not an open quotient-coordinate ring law.  The assertions therefore
-demonstrate the intended F11 formulas and practical reductions only; generic
-logical correctness comes separately from the production theorems.
+The F11 polynomial production instance generates monomials, the division step,
+divmod, quotient, and remainder from the same templates as the finite-field
+production layer, substituting the certified F11 coefficient operations.  Its
+recursive decrease theorem is a functional instance of the finite-field
+theorem, and guards are verified throughout.  Reduced addition, negation,
+subtraction, multiplication, and one are transparent operation-then-remainder
+wrappers.  Their total semantics include malformed polynomials and zero or
+malformed divisors; no nonzero, irreducibility, field, or domain assumption is
+hidden in execution.
+
+The focused regression certifies `psi_3=(10 6 6 0 3)` for `(a,b)=(1,6)` and
+exercises genuine reduction, exact division, reduced arithmetic, normalization,
+and malformed totalization.  The old quotient-coordinate witness no longer
+owns a fuel-bounded divider: its component fixer calls `f11-poly-remainder`.
+Its rank-two formulas remain independent of the generic quotient-coordinate
+API until the next specialization boundary.
 
 ### Quotient-coordinate natural power
 
@@ -386,5 +389,6 @@ The denominator-free trace predicate is likewise transparent and total.  It
 uses only fixed quotient-coordinate addition, subtraction, negation,
 multiplication, powers, equality, `nfix`, and `mod`.  Malformed trace residues
 deterministically select residue zero.  It has no separate executable branch;
-the existing concrete F11 quotient functions remain an independent witness and
-do not execute this production predicate.
+the concrete F11 quotient formulas remain an independent witness and do not
+yet execute this production predicate, although their component reduction now
+uses the production F11 polynomial instance.

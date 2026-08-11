@@ -130,6 +130,11 @@ equation theorem for functional-instantiation constraints. The public divmod
 interface consumes it without globally unfolding the recursive core; generic
 GPOLY remains the source of division semantics.
 
+The executable F11 production instance reuses those generators with the
+existing dense F11 representation and coefficient arithmetic.  Its remainder
+is now the single concrete reduction path used by the F11 quotient-coordinate
+witness; quotient-coordinate operation correspondence remains downstream.
+
 `poly-coefficient` is a total projection: indices are totalized with `nfix`,
 represented values are field-fixed, and absent coefficients or coefficients
 beyond a malformed dotted tail are field zero.  Normalization preserves every
