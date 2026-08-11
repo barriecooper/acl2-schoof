@@ -21,11 +21,12 @@ The Schoof track uses dense ascending univariate division-polynomial data with
 the conventional `2y` factor removed from even indices. Its immediate forward
 order is:
 
-1. Connect the certified expanded generic curve-level `psi_3` expression to
-   the GPOLY index-3 Horner evaluator and its F11 specialization, then add
-   the ambient evaluation seam needed to interpret quotient calculations at
-   classical `E[3]` points.  The expanded GFIELD theorem alone does not make
-   the formal quotient coordinates an ambient extension-field point.
+1. Transport the certified generic GPOLY evaluation theorem through the
+   finite-field interface and connect it to the maintained index-3 evaluator.
+   Then specialize the coefficients and evaluation to F11 and add the ambient
+   evaluation seam needed to interpret quotient calculations at classical
+   `E[3]` points.  The generic GFIELD/GPOLY theorem alone does not make the
+   formal quotient coordinates an ambient extension-field point.
 2. Connect the algebraic cross-multiplied predicate to the actual Frobenius
    trace congruence modulo `ell`; characteristic-11 addition preservation is a
    separate boundary unless that semantic proof requires it.
