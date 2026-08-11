@@ -27,6 +27,10 @@
 (defun f11-quotient-coordinate-y (modulus)
   (f11-quotient-coordinate nil (f11-poly-reduced-one modulus) modulus))
 
+; Embed an arbitrary ascending F11 polynomial with zero y-component.
+(defun f11-quotient-coordinate-embed (polynomial modulus)
+  (f11-quotient-coordinate (f11-normalize polynomial) nil modulus))
+
 (defun f11-quotient-coordinate-add (left right modulus)
   (let ((left (f11-quotient-coordinate-fix left modulus))
         (right (f11-quotient-coordinate-fix right modulus)))
@@ -66,6 +70,23 @@
                            (f11-poly-reduced-mul v1 u2 modulus) modulus)
      modulus)))
 
+; Transparent constant-first Horner evaluation in the quotient-coordinate
+; algebra.  Atomic polynomial tails are the zero polynomial, coefficients are
+; fixed by the embedding, and every arithmetic step uses the fixed public
+; quotient-coordinate operations.
+(defun f11-quotient-coordinate-eval (polynomial coordinate a b modulus)
+  (if (atom polynomial)
+      (f11-quotient-coordinate-zero modulus)
+    (f11-quotient-coordinate-add
+     (f11-quotient-coordinate-embed (list (gfield::f11-fix (car polynomial)))
+                                    modulus)
+     (f11-quotient-coordinate-mul
+      coordinate
+      (f11-quotient-coordinate-eval (cdr polynomial) coordinate a b modulus)
+      a b modulus)
+     modulus)))
+
+
 (verify-guards f11-quotient-coordinate)
 (verify-guards f11-quotient-coordinate-u)
 (verify-guards f11-quotient-coordinate-v)
@@ -74,11 +95,13 @@
 (verify-guards f11-quotient-coordinate-one)
 (verify-guards f11-quotient-coordinate-x)
 (verify-guards f11-quotient-coordinate-y)
+(verify-guards f11-quotient-coordinate-embed)
 (verify-guards f11-quotient-coordinate-add)
 (verify-guards f11-quotient-coordinate-neg)
 (verify-guards f11-quotient-coordinate-sub)
 (verify-guards f11-quotient-coordinate-curve-cubic)
 (verify-guards f11-quotient-coordinate-mul)
+(verify-guards f11-quotient-coordinate-eval)
 
 (defun f11-quotient-coordinate-pow-spec (base n a b modulus)
   (declare (xargs :guard (natp n)))
