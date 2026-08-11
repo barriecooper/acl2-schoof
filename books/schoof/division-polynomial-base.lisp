@@ -28,8 +28,7 @@
          (ab (gfield::finite-field-mul a b)))
     (cond ((equal n 0) nil)
           ((equal n 1) (list (gfield::finite-field-one)))
-          ; Even indices omit the conventional factor 2y.  In particular, the odd
-          ; index 3 below stores classical psi_3 itself, not a normalized quotient.
+          ; Even indices omit the conventional factor 2y.
           ((equal n 2) (list (gfield::finite-field-one)))
           ((equal n 3)
            (finite-field-poly-normalize
