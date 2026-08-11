@@ -288,6 +288,8 @@
 (include-book "schoof/division-polynomial-table-regression")
 (include-book "schoof/division-polynomial-sequence")
 (include-book "schoof/division-polynomial-sequence-regression")
+(include-book "schoof/finite-field-third-division-polynomial")
+(include-book "schoof/finite-field-third-division-polynomial-regression")
 (include-book "schoof/f11-division-polynomial")
 (include-book "schoof/f11-division-polynomial-regression")
 (include-book "schoof/f11-division-polynomial-functional-instance")
