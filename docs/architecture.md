@@ -450,7 +450,12 @@ cross-multiplied point-expression layer checks
 relation for an infinity result.  This gives a certified algebraic trace
 predicate, not affine group equality: a zero-divisor `D` cannot be cancelled,
 and the opposite relation is not a general projective point representation.
-The F11 production instance and classical torsion interpretation remain open.
+The F11 specialization uses the identical transparent pair representation and
+the production F11 polynomial remainder/reduced operations.  Its first
+`psi_3=(10 6 6 0 3)` client certifies false, false, and true for residues 0, 1,
+and 2 respectively, including nonzero cross-product values for the successful
+branch.  The classical torsion interpretation and affine equivalence remain
+open, so this is not yet a trace-congruence theorem.
 
 Natural integer constants are embedded by repeated finite-field addition of one; curve coefficients are fixed before use.  Dense coefficient order is ascending.  The retained formulas are
 

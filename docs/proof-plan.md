@@ -21,12 +21,11 @@ The Schoof track uses dense ascending univariate division-polynomial data with
 the conventional `2y` factor removed from even indices. Its immediate forward
 order is:
 
-1. Specialize quotient coordinates over the certified executable F11
-   polynomial divmod/reduced-operation instance, connect the generic
-   denominator-free trace predicate to that specialization, and certify the
-   first F11 `psi_3` trace-congruence client. Characteristic-11 addition
-   preservation remains a separate Frobenius boundary.
-2. Add bounded CRT reconstruction and compose the trace congruences into the
+1. Establish the classical bivariate division-polynomial/3-torsion semantic
+   bridge needed to interpret the now-certified algebraic F11 `psi_3`
+   quotient-coordinate calculation. Characteristic-11 addition preservation
+   remains a separate Frobenius boundary and was not needed for evaluation.
+2. Add bounded CRT reconstruction and compose certified trace congruences into the
    final point-count correctness theorem and executable Schoof boundary.
 
 The generic and F11 generated-table, relational-sequence, uniqueness, and
