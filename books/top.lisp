@@ -21,6 +21,8 @@
 (include-book "polynomial/generic/finite-field-instance-regression")
 (include-book "polynomial/generic/f11-finite-field-instance")
 (include-book "polynomial/generic/f11-finite-field-instance-regression")
+(include-book "polynomial/generic/f11-production-reduced-ring")
+(include-book "polynomial/generic/f11-production-reduced-ring-regression")
 (include-book "polynomial/generic/finite-field-monomial-division-support")
 (include-book "field/difference-of-squares")
 (include-book "field/common-summand-subtraction")

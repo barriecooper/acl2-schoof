@@ -2,46 +2,15 @@
 
 (include-book "quotient-coordinate")
 (include-book "f11-division-polynomial-correspondence")
+(include-book "../polynomial/generic/f11-production-reduced-ring")
 
-; Independent concrete F11 execution witness.  These functions use the same
-; dense representation and mathematical formulas as the generic production
-; boundary, but this book does not instantiate or execute QUOTIENT-COORDINATE-*
-; and proves no correspondence to those generic functions.  A correspondence
-; would require a substantial concrete F11 divmod/reduced-ring instantiation
-; that is intentionally outside this focused boundary.
-;
-; Fuel is the dividend length; an active leading-term cancellation strictly
-; lowers that length for the canonical nonzero modulus used below.
-(defun f11-quotient-zero-prefix (n tail)
-  (if (zp (nfix n)) tail
-    (cons 0 (f11-quotient-zero-prefix (1- (nfix n)) tail))))
-
-(defun f11-quotient-remainder-fuel (fuel dividend modulus)
-  (declare (xargs :measure (nfix fuel)))
-  (let ((dividend (f11-normalize dividend))
-        (modulus (f11-normalize modulus)))
-    (if (or (zp (nfix fuel)) (not (consp modulus))
-            (not (consp dividend))
-            (< (f11-poly-degree dividend) (f11-poly-degree modulus)))
-        dividend
-      (let* ((difference (- (f11-poly-degree dividend)
-                            (f11-poly-degree modulus)))
-             (coefficient
-              (gfield::f11-div (f11-poly-leading-coefficient dividend)
-                               (f11-poly-leading-coefficient modulus)))
-             (term (f11-quotient-zero-prefix difference (list coefficient))))
-        (f11-quotient-remainder-fuel
-         (1- (nfix fuel))
-         (f11-poly-sub dividend (f11-poly-mul term modulus)) modulus)))))
-
-(defun f11-quotient-remainder (dividend modulus)
-  (f11-quotient-remainder-fuel (len (f11-normalize dividend))
-                               dividend modulus))
-
+; The quotient-coordinate formulas remain an independent witness, but their
+; component reduction now uses the certified production F11 divmod instance.
+; Correspondence for the rank-two quotient-coordinate operations is downstream.
 (defun f11-quotient-fix (coordinate modulus)
-  (cons (f11-quotient-remainder
+  (cons (f11-poly-remainder
          (if (consp coordinate) (car coordinate) nil) modulus)
-        (f11-quotient-remainder
+        (f11-poly-remainder
          (if (consp coordinate) (cdr coordinate) nil) modulus)))
 
 (defun f11-quotient-add (left right modulus)
@@ -100,9 +69,6 @@
  (equal (f11-quotient-fix 'malformed (f11-quotient-regression-modulus))
         (cons nil nil)))
 
-(verify-guards f11-quotient-zero-prefix)
-(verify-guards f11-quotient-remainder-fuel)
-(verify-guards f11-quotient-remainder)
 (verify-guards f11-quotient-fix)
 (verify-guards f11-quotient-add)
 (verify-guards f11-quotient-mul)
