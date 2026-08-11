@@ -36,8 +36,9 @@ The repository currently certifies these subsystem-level foundations:
   recursive boundary;
 - transparent rank-two quotient coordinates over the existing reduced GPOLY
   ring, with total fixing, complete commutative-ring laws, polynomial embedding,
-  the defining short-Weierstrass `y` relation, and independent F11 `psi_3`
-  execution evidence;
+  the defining short-Weierstrass `y` relation, an executable production F11
+  specialization, and certified F11 `psi_3` trace-predicate results for
+  residues 0, 1, and 2;
 - short-Weierstrass coordinates, canonical affine coordinates, tagged curve
   points (affine or infinity), and point negation;
 - total affine branch classification and executable affine/tagged-point

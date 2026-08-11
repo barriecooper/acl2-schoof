@@ -372,8 +372,8 @@ The focused regression certifies `psi_3=(10 6 6 0 3)` for `(a,b)=(1,6)` and
 exercises genuine reduction, exact division, reduced arithmetic, normalization,
 and malformed totalization.  The old quotient-coordinate witness no longer
 owns a fuel-bounded divider: its component fixer calls `f11-poly-remainder`.
-Its rank-two formulas remain independent of the generic quotient-coordinate
-API until the next specialization boundary.
+Its former rank-two formulas are now compatibility wrappers around the F11
+production specialization.
 
 ### Quotient-coordinate natural power
 
@@ -389,6 +389,12 @@ The denominator-free trace predicate is likewise transparent and total.  It
 uses only fixed quotient-coordinate addition, subtraction, negation,
 multiplication, powers, equality, `nfix`, and `mod`.  Malformed trace residues
 deterministically select residue zero.  It has no separate executable branch;
-the concrete F11 quotient formulas remain an independent witness and do not
-yet execute this production predicate, although their component reduction now
-uses the production F11 polynomial instance.
+the concrete F11 specialization follows the same branch structure and uses the
+production polynomial instance throughout.  All specialized public guards are
+verified.  The generic and F11 predicates are certified functional instances
+of the same operation-parametric trace-program definition; this is program
+structure correspondence, not transfer of every generic ring theorem.  At
+`psi_3=(10 6 6 0 3)`, its certified execution rejects residues 0
+and 1 and accepts residue 2.  The accepted equalities are nonzero cross-product
+equalities, not `0=0`; this remains execution of an algebraic predicate rather
+than an affine-addition, classical torsion, or Schoof-correctness theorem.

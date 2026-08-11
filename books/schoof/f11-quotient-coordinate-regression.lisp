@@ -1,36 +1,18 @@
 (in-package "GPOLY")
 
-(include-book "quotient-coordinate")
-(include-book "f11-division-polynomial-correspondence")
-(include-book "../polynomial/generic/f11-production-reduced-ring")
+(include-book "f11-quotient-coordinate")
 
-; The quotient-coordinate formulas remain an independent witness, but their
-; component reduction now uses the certified production F11 divmod instance.
-; Correspondence for the rank-two quotient-coordinate operations is downstream.
+; Compatibility names for the older execution witness are now transparent
+; wrappers around the certified production specialization, not duplicated
+; rank-two formulas.
 (defun f11-quotient-fix (coordinate modulus)
-  (cons (f11-poly-remainder
-         (if (consp coordinate) (car coordinate) nil) modulus)
-        (f11-poly-remainder
-         (if (consp coordinate) (cdr coordinate) nil) modulus)))
+  (f11-quotient-coordinate-fix coordinate modulus))
 
 (defun f11-quotient-add (left right modulus)
-  (let ((left (f11-quotient-fix left modulus))
-        (right (f11-quotient-fix right modulus)))
-    (f11-quotient-fix
-     (cons (f11-poly-add (car left) (car right))
-           (f11-poly-add (cdr left) (cdr right))) modulus)))
+  (f11-quotient-coordinate-add left right modulus))
 
 (defun f11-quotient-mul (left right a b modulus)
-  (let* ((left (f11-quotient-fix left modulus))
-         (right (f11-quotient-fix right modulus))
-         (cubic (list (gfield::f11-fix b) (gfield::f11-fix a) 0 1)))
-    (f11-quotient-fix
-     (cons (f11-poly-add
-            (f11-poly-mul (car left) (car right))
-            (f11-poly-mul cubic (f11-poly-mul (cdr left) (cdr right))))
-           (f11-poly-add (f11-poly-mul (car left) (cdr right))
-                         (f11-poly-mul (cdr left) (car right))))
-     modulus)))
+  (f11-quotient-coordinate-mul left right a b modulus))
 
 (defun f11-quotient-regression-modulus ()
   (f11-division-polynomial 3 1 6))
