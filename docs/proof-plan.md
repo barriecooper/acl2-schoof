@@ -21,8 +21,11 @@ The Schoof track uses dense ascending univariate division-polynomial data with
 the conventional `2y` factor removed from even indices. Its immediate forward
 order is:
 
-1. Establish the classical bivariate division-polynomial and torsion semantic
-   bridge needed to interpret quotient calculations on classical `E[ell]`.
+1. Mechanically connect the certified generic curve-level `psi_3` root/[3]P
+   theorem to the GPOLY index-3 evaluator and its F11 specialization, then add
+   the ambient evaluation seam needed to interpret quotient calculations at
+   classical `E[3]` points.  The pointwise GFIELD theorem alone does not make
+   the formal quotient coordinates an ambient extension-field point.
 2. Connect the algebraic cross-multiplied predicate to the actual Frobenius
    trace congruence modulo `ell`; characteristic-11 addition preservation is a
    separate boundary unless that semantic proof requires it.
