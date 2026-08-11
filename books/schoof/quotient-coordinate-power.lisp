@@ -262,17 +262,6 @@
                  quotient-coordinate-one quotient-coordinate
                  poly-remainder poly-divmod)))))
 
-(local
- (defthm quotient-coordinate-mul-zero-left-for-power
-   (equal (quotient-coordinate-mul
-           (quotient-coordinate-zero modulus) z a b modulus)
-          (quotient-coordinate-zero modulus))
-   :hints (("Goal"
-            :in-theory (e/d (quotient-coordinate-mul
-                             quotient-coordinate-zero)
-                            (quotient-coordinate-fix quotient-coordinate
-                             poly-remainder poly-divmod))))))
-
 (defthm quotient-coordinate-pow-of-zero-coordinate
   (equal (quotient-coordinate-pow
           (quotient-coordinate-zero modulus) n a b modulus)
@@ -284,7 +273,7 @@
                     (quotient-coordinate-zero modulus) n a b modulus)
            :in-theory
            (e/d (quotient-coordinate-pow quotient-coordinate-pow-spec
-                  quotient-coordinate-mul-zero-left-for-power)
+                  quotient-coordinate-mul-zero-left)
                 (quotient-coordinate-mul quotient-coordinate-fix
                  quotient-coordinate-zero quotient-coordinate-one
                  quotient-coordinate poly-remainder poly-divmod)))))
