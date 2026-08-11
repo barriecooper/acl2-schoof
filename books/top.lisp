@@ -150,6 +150,8 @@
 (include-book "curve/curve-point-natural-scalar")
 (include-book "curve/curve-point-natural-scalar-regression")
 (include-book "curve/f11-curve-point-natural-scalar-regression")
+(include-book "curve/third-division-polynomial")
+(include-book "curve/third-division-polynomial-regression")
 (include-book "curve/affine-inverse-tangent-translation")
 (include-book "curve/affine-inverse-tangent-translation-regression")
 (include-book "curve/affine-dd-opposite-y-propagation")
