@@ -377,7 +377,7 @@ Atomic polynomial tails evaluate as ambient zero, coefficients are fixed by
 multiplication operations.  Certified remainder homomorphism laws establish
 that evaluation at universal `X` embeds the production remainder; there is no
 alternate evaluator, `MBE`, attachment, or executable branch.  The old
-quotient-coordinate witness no longer ownss a fuel-bounded divider: its component fixer calls `f11-poly-remainder`.
+quotient-coordinate witness no longer owns a fuel-bounded divider: its component fixer calls `f11-poly-remainder`.
 Its former rank-two formulas are now compatibility wrappers around the F11
 production specialization.
 
