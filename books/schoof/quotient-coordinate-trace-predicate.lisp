@@ -1,6 +1,7 @@
 (in-package "GPOLY")
 
 (include-book "quotient-coordinate-power")
+(include-book "quotient-coordinate-trace-program")
 
 ; Division-free affine secant relation.  D=x2-x1 and N=y2-y1.  The two
 ; equations are D^2(x1+x2+x3)=N^2 and D(y1+y3)=N(x1-x3).  Over a field, and
@@ -98,6 +99,48 @@
           (quotient-coordinate-neg pi-y modulus))
         a b modulus))))
   :rule-classes nil)
+
+; The production predicate is mechanically an instance of the public
+; operation-parametric trace-program seam.
+(defthm quotient-coordinate-trace-candidate-from-trace-program
+  (equal
+   (quotient-coordinate-trace-candidate-p x y q trace a b modulus)
+   (let* ((pi-x (quotient-coordinate-frobenius x q a b modulus))
+          (pi-y (quotient-coordinate-frobenius y q a b modulus))
+          (pi2-x (quotient-coordinate-frobenius-iterate x q 2 a b modulus))
+          (pi2-y (quotient-coordinate-frobenius-iterate y q 2 a b modulus))
+          (minus-y (quotient-coordinate-neg y modulus))
+          (residue (mod (nfix trace) 3)))
+     (if (equal residue 0)
+         (quotient-coordinate-cross-opposite-p pi2-x pi2-y x minus-y modulus)
+       (quotient-coordinate-cross-add-p
+        pi2-x pi2-y x minus-y pi-x
+        (if (equal residue 1) pi-y (quotient-coordinate-neg pi-y modulus))
+        a b modulus))))
+  :rule-classes nil
+  :hints (("Goal"
+           :by (:functional-instance
+                quotient-coordinate-trace-program-definition
+                (trace-program-fix quotient-coordinate-fix)
+                (trace-program-zero quotient-coordinate-zero)
+                (trace-program-add quotient-coordinate-add)
+                (trace-program-neg quotient-coordinate-neg)
+                (trace-program-sub quotient-coordinate-sub)
+                (trace-program-mul quotient-coordinate-mul)
+                (trace-program-power quotient-coordinate-frobenius)
+                (trace-program-power-iterate
+                 quotient-coordinate-frobenius-iterate)
+                (trace-program-cross-add-p quotient-coordinate-cross-add-p)
+                (trace-program-cross-opposite-p
+                 quotient-coordinate-cross-opposite-p)
+                (trace-program-candidate-p
+                 quotient-coordinate-trace-candidate-p))
+           :in-theory
+           (union-theories
+            (theory 'minimal-theory)
+            '(quotient-coordinate-cross-add-p
+              quotient-coordinate-cross-opposite-p
+              quotient-coordinate-trace-candidate-p nfix mod)))))
 
 (verify-guards quotient-coordinate-cross-add-p)
 (verify-guards quotient-coordinate-cross-opposite-p)

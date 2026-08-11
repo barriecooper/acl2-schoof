@@ -391,7 +391,10 @@ multiplication, powers, equality, `nfix`, and `mod`.  Malformed trace residues
 deterministically select residue zero.  It has no separate executable branch;
 the concrete F11 specialization follows the same branch structure and uses the
 production polynomial instance throughout.  All specialized public guards are
-verified.  At `psi_3=(10 6 6 0 3)`, its certified execution rejects residues 0
+verified.  The generic and F11 predicates are certified functional instances
+of the same operation-parametric trace-program definition; this is program
+structure correspondence, not transfer of every generic ring theorem.  At
+`psi_3=(10 6 6 0 3)`, its certified execution rejects residues 0
 and 1 and accepts residue 2.  The accepted equalities are nonzero cross-product
 equalities, not `0=0`; this remains execution of an algebraic predicate rather
 than an affine-addition, classical torsion, or Schoof-correctness theorem.

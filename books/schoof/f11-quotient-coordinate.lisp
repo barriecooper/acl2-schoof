@@ -138,7 +138,7 @@
 ; boundary.  It applies to arbitrary (including malformed) ACL2 inputs and
 ; moduli; no canonicality, nonzero-modulus, field, or domain hypothesis is
 ; hidden in the specialization.
-(defthm f11-quotient-coordinate-trace-candidate-production-specialization
+(defthm f11-quotient-coordinate-trace-candidate-execution-contract
   (equal (f11-quotient-coordinate-trace-candidate-p x y q trace a b modulus)
          (let* ((pi-x (f11-quotient-coordinate-pow x q a b modulus))
                 (pi-y (f11-quotient-coordinate-pow y q a b modulus))
@@ -162,6 +162,55 @@
                  f11-quotient-coordinate-cardinality-power
                  f11-quotient-coordinate-cardinality-power-iterate)
                 (f11-quotient-coordinate-pow expt)))))
+
+
+; Mechanical instance of the same operation-parametric program contract used
+; by the generic production predicate.
+(defthm f11-quotient-coordinate-trace-candidate-from-production-program
+  (equal
+   (f11-quotient-coordinate-trace-candidate-p x y q trace a b modulus)
+   (let* ((pi-x (f11-quotient-coordinate-cardinality-power x q a b modulus))
+          (pi-y (f11-quotient-coordinate-cardinality-power y q a b modulus))
+          (pi2-x (f11-quotient-coordinate-cardinality-power-iterate
+                  x q 2 a b modulus))
+          (pi2-y (f11-quotient-coordinate-cardinality-power-iterate
+                  y q 2 a b modulus))
+          (minus-y (f11-quotient-coordinate-neg y modulus))
+          (residue (mod (nfix trace) 3)))
+     (if (equal residue 0)
+         (f11-quotient-coordinate-cross-opposite-p
+          pi2-x pi2-y x minus-y modulus)
+       (f11-quotient-coordinate-cross-add-p
+        pi2-x pi2-y x minus-y pi-x
+        (if (equal residue 1) pi-y
+          (f11-quotient-coordinate-neg pi-y modulus))
+        a b modulus))))
+  :rule-classes nil
+  :hints (("Goal"
+           :by (:functional-instance
+                quotient-coordinate-trace-program-definition
+                (trace-program-fix f11-quotient-coordinate-fix)
+                (trace-program-zero f11-quotient-coordinate-zero)
+                (trace-program-add f11-quotient-coordinate-add)
+                (trace-program-neg f11-quotient-coordinate-neg)
+                (trace-program-sub f11-quotient-coordinate-sub)
+                (trace-program-mul f11-quotient-coordinate-mul)
+                (trace-program-power
+                 f11-quotient-coordinate-cardinality-power)
+                (trace-program-power-iterate
+                 f11-quotient-coordinate-cardinality-power-iterate)
+                (trace-program-cross-add-p
+                 f11-quotient-coordinate-cross-add-p)
+                (trace-program-cross-opposite-p
+                 f11-quotient-coordinate-cross-opposite-p)
+                (trace-program-candidate-p
+                 f11-quotient-coordinate-trace-candidate-p))
+           :in-theory
+           (union-theories
+            (theory 'minimal-theory)
+            '(f11-quotient-coordinate-cross-add-p
+              f11-quotient-coordinate-cross-opposite-p
+              f11-quotient-coordinate-trace-candidate-p nfix mod)))))
 
 (verify-guards f11-quotient-coordinate-pow-spec)
 (verify-guards f11-quotient-coordinate-pow)

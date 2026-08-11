@@ -21,12 +21,20 @@ The Schoof track uses dense ascending univariate division-polynomial data with
 the conventional `2y` factor removed from even indices. Its immediate forward
 order is:
 
-1. Establish the classical bivariate division-polynomial/3-torsion semantic
-   bridge needed to interpret the now-certified algebraic F11 `psi_3`
-   quotient-coordinate calculation. Characteristic-11 addition preservation
-   remains a separate Frobenius boundary and was not needed for evaluation.
-2. Add bounded CRT reconstruction and compose certified trace congruences into the
-   final point-count correctness theorem and executable Schoof boundary.
+1. Establish the classical bivariate division-polynomial and torsion semantic
+   bridge needed to interpret quotient calculations on classical `E[ell]`.
+2. Connect the algebraic cross-multiplied predicate to the actual Frobenius
+   trace congruence modulo `ell`; characteristic-11 addition preservation is a
+   separate boundary unless that semantic proof requires it.
+3. Generalize to enough torsion primes and certify the next required executable
+   client.  No `ell=5` client is currently certified.
+4. Certify enough correct residues that their modulus product exceeds the Hasse
+   uniqueness bound.  Modulus 3 alone is insufficient for F11; numerically
+   `3*5=15 > 4*sqrt(11)`, but this does not certify either residue's classical
+   correctness or an `ell=5` implementation.
+5. Reconstruct the unique trace in the Hasse interval by bounded CRT.
+6. Compose the result into final point-count correctness and the executable
+   Schoof boundary.
 
 The generic and F11 generated-table, relational-sequence, uniqueness, and
 all-index evaluator correspondence is certified. Cardinality-based Frobenius must use

@@ -451,7 +451,9 @@ relation for an infinity result.  This gives a certified algebraic trace
 predicate, not affine group equality: a zero-divisor `D` cannot be cancelled,
 and the opposite relation is not a general projective point representation.
 The F11 specialization uses the identical transparent pair representation and
-the production F11 polynomial remainder/reduced operations.  Its first
+the production F11 polynomial remainder/reduced operations.  Its trace client
+and the generic production client are mechanically checked instances of one
+operation-parametric cross-multiplied program contract.  The
 `psi_3=(10 6 6 0 3)` client certifies false, false, and true for residues 0, 1,
 and 2 respectively, including nonzero cross-product values for the successful
 branch.  The classical torsion interpretation and affine equivalence remain
