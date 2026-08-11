@@ -134,8 +134,10 @@
        (if (equal residue 1) pi-y
          (f11-quotient-coordinate-neg pi-y modulus)) a b modulus))))
 
-; This single transparent expansion theorem is the structural correspondence
-; boundary.  It applies to arbitrary (including malformed) ACL2 inputs and
+; This transparent theorem expands the concrete cardinality-power wrappers
+; into executable natural powers. The following functional-instance theorem
+; supplies the shared trace-program structure boundary  It applies to
+; arbitrary (including malformed) ACL2 inputs and
 ; moduli; no canonicality, nonzero-modulus, field, or domain hypothesis is
 ; hidden in the specialization.
 (defthm f11-quotient-coordinate-trace-candidate-execution-contract
