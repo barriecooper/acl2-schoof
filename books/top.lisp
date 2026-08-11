@@ -154,6 +154,8 @@
 (include-book "curve/third-division-polynomial-regression")
 (include-book "curve/third-division-polynomial-expression")
 (include-book "curve/third-division-polynomial-expression-regression")
+(include-book "curve/third-division-polynomial-expansion")
+(include-book "curve/third-division-polynomial-expansion-regression")
 (include-book "curve/affine-inverse-tangent-translation")
 (include-book "curve/affine-inverse-tangent-translation-regression")
 (include-book "curve/affine-dd-opposite-y-propagation")
