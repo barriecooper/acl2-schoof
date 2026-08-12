@@ -695,3 +695,313 @@
     (:instance quotient-coordinate-mul-commutative
      (x (quotient-coordinate-pow z j a b modulus)) (z z)))
    :in-theory (theory 'minimal-theory)))))
+
+; The quintic repeats the bounded quartic architecture.  Coefficients remain
+; opaque throughout distribution and branch normalization.
+(local
+ (defthm quotient-coordinate-quintic-outer-local
+  (equal
+   (quotient-coordinate-mul (quotient-coordinate-add x z modulus)
+    (quotient-coordinate-add t0
+     (quotient-coordinate-add t1
+      (quotient-coordinate-add t2
+       (quotient-coordinate-add t3 t4 modulus) modulus) modulus) modulus)
+    a b modulus)
+   (quotient-coordinate-add
+    (quotient-coordinate-mul (quotient-coordinate-add x z modulus) t0 a b modulus)
+    (quotient-coordinate-add
+     (quotient-coordinate-mul (quotient-coordinate-add x z modulus) t1 a b modulus)
+     (quotient-coordinate-add
+      (quotient-coordinate-mul (quotient-coordinate-add x z modulus) t2 a b modulus)
+      (quotient-coordinate-add
+       (quotient-coordinate-mul (quotient-coordinate-add x z modulus) t3 a b modulus)
+       (quotient-coordinate-mul (quotient-coordinate-add x z modulus) t4 a b modulus)
+       modulus) modulus) modulus) modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-mul-left-distributive
+     (x (quotient-coordinate-add x z modulus)) (z t0)
+     (w (quotient-coordinate-add t1
+         (quotient-coordinate-add t2 (quotient-coordinate-add t3 t4 modulus) modulus) modulus)))
+    (:instance quotient-coordinate-mul-left-distributive
+     (x (quotient-coordinate-add x z modulus)) (z t1)
+     (w (quotient-coordinate-add t2 (quotient-coordinate-add t3 t4 modulus) modulus)))
+    (:instance quotient-coordinate-mul-left-distributive
+     (x (quotient-coordinate-add x z modulus)) (z t2)
+     (w (quotient-coordinate-add t3 t4 modulus)))
+    (:instance quotient-coordinate-mul-left-distributive
+     (x (quotient-coordinate-add x z modulus)) (z t3) (w t4)))
+   :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm quotient-coordinate-quintic-left-endpoint-local
+  (equal
+   (quotient-coordinate-mul (quotient-coordinate-add x z modulus)
+                            (quotient-coordinate-pow x 4 a b modulus) a b modulus)
+   (quotient-coordinate-add
+    (quotient-coordinate-pow x 5 a b modulus)
+    (quotient-coordinate-mul (quotient-coordinate-pow x 4 a b modulus) z a b modulus)
+    modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-cubic-endpoint-distribution-local
+     (term (quotient-coordinate-pow x 4 a b modulus)))
+    (:instance quotient-coordinate-pow-successor (base x) (n 4))
+    (:instance quotient-coordinate-mul-commutative
+     (x z) (z (quotient-coordinate-pow x 4 a b modulus))))
+   :in-theory (union-theories (theory 'minimal-theory) '(nfix))))))
+
+(local
+ (defthm quotient-coordinate-quintic-right-endpoint-local
+  (equal
+   (quotient-coordinate-mul (quotient-coordinate-add x z modulus)
+                            (quotient-coordinate-pow z 4 a b modulus) a b modulus)
+   (quotient-coordinate-add
+    (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus)
+    (quotient-coordinate-pow z 5 a b modulus) modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-cubic-endpoint-distribution-local
+     (term (quotient-coordinate-pow z 4 a b modulus)))
+    (:instance quotient-coordinate-pow-successor (base z) (n 4)))
+   :in-theory (union-theories (theory 'minimal-theory) '(nfix))))))
+
+(local
+ (defthm quotient-coordinate-quintic-x3z-times-x-local
+  (equal
+   (quotient-coordinate-mul
+    (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus) z a b modulus)
+    x a b modulus)
+   (quotient-coordinate-mul (quotient-coordinate-pow x 4 a b modulus) z a b modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-mul-associative
+     (x (quotient-coordinate-pow x 3 a b modulus)) (z z) (w x))
+    (:instance quotient-coordinate-mul-associative
+     (x (quotient-coordinate-pow x 3 a b modulus)) (z x) (w z))
+    (:instance quotient-coordinate-mul-commutative (x z) (z x))
+    (:instance quotient-coordinate-mul-commutative
+     (x (quotient-coordinate-pow x 3 a b modulus)) (z x))
+    (:instance quotient-coordinate-pow-successor (base x) (n 3)))
+   :in-theory (union-theories (theory 'minimal-theory) '(nfix))))))
+
+(local
+ (defthm quotient-coordinate-quintic-x3z-times-z-local
+  (equal
+   (quotient-coordinate-mul
+    (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus) z a b modulus)
+    z a b modulus)
+   (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus)
+                            (quotient-coordinate-pow z 2 a b modulus) a b modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-mul-associative
+     (x (quotient-coordinate-pow x 3 a b modulus)) (z z) (w z))
+    (:instance quotient-coordinate-pow-two-normal-local (x z)))
+   :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm quotient-coordinate-quintic-xz3-times-x-local
+  (equal
+   (quotient-coordinate-mul
+    (quotient-coordinate-mul x (quotient-coordinate-pow z 3 a b modulus) a b modulus)
+    x a b modulus)
+   (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus)
+                            (quotient-coordinate-pow z 3 a b modulus) a b modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-mul-associative
+     (x x) (z (quotient-coordinate-pow z 3 a b modulus)) (w x))
+    (:instance quotient-coordinate-mul-associative
+     (x x) (z x) (w (quotient-coordinate-pow z 3 a b modulus)))
+    (:instance quotient-coordinate-mul-commutative
+     (x (quotient-coordinate-pow z 3 a b modulus)) (z x))
+    (:instance quotient-coordinate-pow-two-normal-local (x x)))
+   :in-theory (theory 'minimal-theory)))))
+(local
+ (defthm quotient-coordinate-quintic-xz3-times-z-local
+  (equal
+   (quotient-coordinate-mul
+    (quotient-coordinate-mul x (quotient-coordinate-pow z 3 a b modulus) a b modulus)
+    z a b modulus)
+   (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-mul-associative
+     (x x) (z (quotient-coordinate-pow z 3 a b modulus)) (w z))
+    (:instance quotient-coordinate-pow-successor (base z) (n 3))
+    (:instance quotient-coordinate-mul-commutative
+     (x (quotient-coordinate-pow z 3 a b modulus)) (z z)))
+   :in-theory (union-theories (theory 'minimal-theory) '(nfix))))))
+
+(local
+ (defthm quotient-coordinate-quintic-first-middle-local
+  (equal
+   (quotient-coordinate-mul (quotient-coordinate-add x z modulus)
+    (quotient-coordinate-nat-mul 4
+     (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus) z a b modulus) modulus) a b modulus)
+   (quotient-coordinate-add
+    (quotient-coordinate-nat-mul 4
+     (quotient-coordinate-mul (quotient-coordinate-pow x 4 a b modulus) z a b modulus) modulus)
+    (quotient-coordinate-nat-mul 4
+     (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus)
+                              (quotient-coordinate-pow z 2 a b modulus) a b modulus) modulus) modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-scaled-branch-transport-local
+     (n 4) (term (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus) z a b modulus)))
+    (:instance quotient-coordinate-quintic-x3z-times-x-local)
+    (:instance quotient-coordinate-quintic-x3z-times-z-local))
+   :in-theory (union-theories (theory 'minimal-theory) '(natp))))))
+
+(local
+ (defthm quotient-coordinate-quintic-center-local
+  (equal
+   (quotient-coordinate-mul (quotient-coordinate-add x z modulus)
+    (quotient-coordinate-nat-mul 6
+     (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus)
+                              (quotient-coordinate-pow z 2 a b modulus) a b modulus) modulus) a b modulus)
+   (quotient-coordinate-add
+    (quotient-coordinate-nat-mul 6
+     (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus)
+                              (quotient-coordinate-pow z 2 a b modulus) a b modulus) modulus)
+    (quotient-coordinate-nat-mul 6
+     (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus)
+                              (quotient-coordinate-pow z 3 a b modulus) a b modulus) modulus) modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-scaled-branch-transport-local
+     (n 6) (term (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus)
+                                          (quotient-coordinate-pow z 2 a b modulus) a b modulus)))
+    (:instance quotient-coordinate-monomial-times-x-local (i 2) (j 2))
+    (:instance quotient-coordinate-monomial-times-z-local (i 2) (j 2)))
+   :in-theory (union-theories (theory 'minimal-theory) '(natp nfix))))))
+
+(local
+ (defthm quotient-coordinate-quintic-third-middle-local
+  (equal
+   (quotient-coordinate-mul (quotient-coordinate-add x z modulus)
+    (quotient-coordinate-nat-mul 4
+     (quotient-coordinate-mul x (quotient-coordinate-pow z 3 a b modulus) a b modulus) modulus) a b modulus)
+   (quotient-coordinate-add
+    (quotient-coordinate-nat-mul 4
+     (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus)
+                              (quotient-coordinate-pow z 3 a b modulus) a b modulus) modulus)
+    (quotient-coordinate-nat-mul 4
+     (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus) modulus) modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-scaled-branch-transport-local
+     (n 4) (term (quotient-coordinate-mul x (quotient-coordinate-pow z 3 a b modulus) a b modulus)))
+    (:instance quotient-coordinate-quintic-xz3-times-x-local)
+    (:instance quotient-coordinate-quintic-xz3-times-z-local))
+   :in-theory (union-theories (theory 'minimal-theory) '(natp))))))
+
+(local
+ (defthm quotient-coordinate-quintic-expanded-local
+  (equal
+   (quotient-coordinate-pow (quotient-coordinate-add x z modulus) 5 a b modulus)
+   (let ((x4z (quotient-coordinate-mul (quotient-coordinate-pow x 4 a b modulus) z a b modulus))
+         (x3z2 (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus) (quotient-coordinate-pow z 2 a b modulus) a b modulus))
+         (x2z3 (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus) (quotient-coordinate-pow z 3 a b modulus) a b modulus))
+         (xz4 (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus)))
+    (quotient-coordinate-add (quotient-coordinate-pow x 5 a b modulus)
+     (quotient-coordinate-add x4z
+      (quotient-coordinate-add (quotient-coordinate-nat-mul 4 x4z modulus)
+       (quotient-coordinate-add (quotient-coordinate-nat-mul 4 x3z2 modulus)
+        (quotient-coordinate-add (quotient-coordinate-nat-mul 6 x3z2 modulus)
+         (quotient-coordinate-add (quotient-coordinate-nat-mul 6 x2z3 modulus)
+          (quotient-coordinate-add (quotient-coordinate-nat-mul 4 x2z3 modulus)
+           (quotient-coordinate-add (quotient-coordinate-nat-mul 4 xz4 modulus)
+            (quotient-coordinate-add xz4 (quotient-coordinate-pow z 5 a b modulus) modulus) modulus) modulus) modulus) modulus) modulus) modulus) modulus) modulus)))
+  :rule-classes nil
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-pow-successor
+     (base (quotient-coordinate-add x z modulus)) (n 4))
+    (:instance quotient-coordinate-pow-four-of-add-local)
+    (:instance quotient-coordinate-quintic-outer-local
+     (t0 (quotient-coordinate-pow x 4 a b modulus))
+     (t1 (quotient-coordinate-nat-mul 4 (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus) z a b modulus) modulus))
+     (t2 (quotient-coordinate-nat-mul 6 (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus) (quotient-coordinate-pow z 2 a b modulus) a b modulus) modulus))
+     (t3 (quotient-coordinate-nat-mul 4 (quotient-coordinate-mul x (quotient-coordinate-pow z 3 a b modulus) a b modulus) modulus))
+     (t4 (quotient-coordinate-pow z 4 a b modulus)))
+    (:instance quotient-coordinate-quintic-left-endpoint-local)
+    (:instance quotient-coordinate-quintic-first-middle-local)
+    (:instance quotient-coordinate-quintic-center-local)
+    (:instance quotient-coordinate-quintic-third-middle-local)
+    (:instance quotient-coordinate-quintic-right-endpoint-local))
+   :in-theory (union-theories (theory 'minimal-theory)
+    '(nfix quotient-coordinate-quintic-left-endpoint-local
+      quotient-coordinate-quintic-first-middle-local
+      quotient-coordinate-quintic-center-local
+      quotient-coordinate-quintic-third-middle-local
+      quotient-coordinate-quintic-right-endpoint-local
+      quotient-coordinate-add-associative))))))
+
+(local
+ (defthm quotient-coordinate-collect-one-four-local
+  (implies (quotient-coordinate-p term modulus)
+   (equal
+    (quotient-coordinate-add term
+     (quotient-coordinate-add (quotient-coordinate-nat-mul 4 term modulus) tail modulus) modulus)
+    (quotient-coordinate-add (quotient-coordinate-nat-mul 5 term modulus) tail modulus)))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-one-times-closed-local)
+    (:instance quotient-coordinate-collect-adjacent-scalars-local (m 1) (n 4)))
+   :in-theory (union-theories (theory 'minimal-theory) '(natp binary-+))))))
+(local
+ (defthm quotient-coordinate-collect-four-one-local
+  (implies (quotient-coordinate-p term modulus)
+   (equal
+    (quotient-coordinate-add (quotient-coordinate-nat-mul 4 term modulus)
+     (quotient-coordinate-add term tail modulus) modulus)
+    (quotient-coordinate-add (quotient-coordinate-nat-mul 5 term modulus) tail modulus)))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-one-times-closed-local)
+    (:instance quotient-coordinate-collect-adjacent-scalars-local (m 4) (n 1)))
+   :in-theory (union-theories (theory 'minimal-theory) '(natp binary-+))))))
+
+(local
+ (defthm quotient-coordinate-pow-five-of-add-local
+  (equal
+   (quotient-coordinate-pow (quotient-coordinate-add x z modulus) 5 a b modulus)
+   (let ((x4z (quotient-coordinate-mul (quotient-coordinate-pow x 4 a b modulus) z a b modulus))
+         (x3z2 (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus) (quotient-coordinate-pow z 2 a b modulus) a b modulus))
+         (x2z3 (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus) (quotient-coordinate-pow z 3 a b modulus) a b modulus))
+         (xz4 (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus)))
+    (quotient-coordinate-add (quotient-coordinate-pow x 5 a b modulus)
+     (quotient-coordinate-add (quotient-coordinate-nat-mul 5 x4z modulus)
+      (quotient-coordinate-add (quotient-coordinate-nat-mul 10 x3z2 modulus)
+       (quotient-coordinate-add (quotient-coordinate-nat-mul 10 x2z3 modulus)
+        (quotient-coordinate-add (quotient-coordinate-nat-mul 5 xz4 modulus)
+                                 (quotient-coordinate-pow z 5 a b modulus) modulus) modulus) modulus) modulus) modulus)))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-quintic-expanded-local)
+    (:instance quotient-coordinate-collect-one-four-local
+     (term (quotient-coordinate-mul (quotient-coordinate-pow x 4 a b modulus) z a b modulus))
+     (tail (quotient-coordinate-add
+       (quotient-coordinate-nat-mul 4 (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus) (quotient-coordinate-pow z 2 a b modulus) a b modulus) modulus)
+       (quotient-coordinate-add
+        (quotient-coordinate-nat-mul 6 (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus) (quotient-coordinate-pow z 2 a b modulus) a b modulus) modulus)
+        (quotient-coordinate-add
+         (quotient-coordinate-nat-mul 6 (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus) (quotient-coordinate-pow z 3 a b modulus) a b modulus) modulus)
+         (quotient-coordinate-add
+          (quotient-coordinate-nat-mul 4 (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus) (quotient-coordinate-pow z 3 a b modulus) a b modulus) modulus)
+          (quotient-coordinate-add
+           (quotient-coordinate-nat-mul 4 (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus) modulus)
+           (quotient-coordinate-add (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus)
+                                    (quotient-coordinate-pow z 5 a b modulus) modulus) modulus) modulus) modulus) modulus) modulus)))
+    (:instance quotient-coordinate-collect-adjacent-scalars-local
+     (m 4) (n 6)
+     (term (quotient-coordinate-mul (quotient-coordinate-pow x 3 a b modulus) (quotient-coordinate-pow z 2 a b modulus) a b modulus))
+     (tail (quotient-coordinate-add
+       (quotient-coordinate-nat-mul 6 (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus) (quotient-coordinate-pow z 3 a b modulus) a b modulus) modulus)
+       (quotient-coordinate-add
+        (quotient-coordinate-nat-mul 4 (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus) (quotient-coordinate-pow z 3 a b modulus) a b modulus) modulus)
+        (quotient-coordinate-add
+         (quotient-coordinate-nat-mul 4 (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus) modulus)
+         (quotient-coordinate-add (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus)
+                                  (quotient-coordinate-pow z 5 a b modulus) modulus) modulus) modulus) modulus)))
+    (:instance quotient-coordinate-collect-adjacent-scalars-local
+     (m 6) (n 4)
+     (term (quotient-coordinate-mul (quotient-coordinate-pow x 2 a b modulus) (quotient-coordinate-pow z 3 a b modulus) a b modulus))
+     (tail (quotient-coordinate-add
+       (quotient-coordinate-nat-mul 4 (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus) modulus)
+       (quotient-coordinate-add (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus)
+                                (quotient-coordinate-pow z 5 a b modulus) modulus) modulus)))
+    (:instance quotient-coordinate-collect-four-one-local
+     (term (quotient-coordinate-mul x (quotient-coordinate-pow z 4 a b modulus) a b modulus))
+     (tail (quotient-coordinate-pow z 5 a b modulus)))
+    (:instance quotient-coordinate-operations-closed (x (quotient-coordinate-pow x 4 a b modulus)) (z z))
+    (:instance quotient-coordinate-operations-closed (x x) (z (quotient-coordinate-pow z 4 a b modulus))))
+   :in-theory (union-theories (theory 'minimal-theory) '(natp binary-+))))))
