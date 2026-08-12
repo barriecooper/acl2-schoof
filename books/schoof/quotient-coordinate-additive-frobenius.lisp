@@ -3,8 +3,8 @@
 (include-book "quotient-coordinate-power")
 (include-book "quotient-coordinate-natural-scalar")
 
-; Scalar multiplication commutes with multiplication in the quotient ring.
-; This orientation is the one used by the fixed Pascal expansion below.
+; Natural scaling is compatible with multiplication in the left factor.
+; This orientation is intended for the fixed Pascal expansion.
 (defthm quotient-coordinate-mul-of-nat-mul-left
   (equal
    (quotient-coordinate-mul
