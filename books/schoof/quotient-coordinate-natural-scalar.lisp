@@ -94,6 +94,50 @@
 ; This bridge is deliberately proved only from the public commutative-ring
 ; interface.  In particular the rank-two multiplication implementation and
 ; polynomial reduction stay disabled throughout the induction.
+(local
+ (defthm quotient-coordinate-add-swap-first-two-for-natural-scalar
+   (equal (quotient-coordinate-add y
+            (quotient-coordinate-add x z modulus) modulus)
+          (quotient-coordinate-add x
+            (quotient-coordinate-add y z modulus) modulus))
+   :hints (("Goal"
+            :use ((:instance quotient-coordinate-add-associative
+                             (x y) (z x) (w z))
+                  (:instance quotient-coordinate-add-associative
+                             (x x) (z y) (w z))
+                  (:instance quotient-coordinate-add-commutative
+                             (x y) (z x)))
+            :in-theory (disable quotient-coordinate-add
+                                quotient-coordinate-add-associative
+                                quotient-coordinate-add-commutative)))))
+
+(local
+ (defthm quotient-coordinate-add-zero-left-of-natural-scalar
+   (equal (quotient-coordinate-add
+           (quotient-coordinate-zero modulus)
+           (quotient-coordinate-nat-mul n x modulus) modulus)
+          (quotient-coordinate-nat-mul n x modulus))
+   :hints (("Goal"
+            :use ((:instance quotient-coordinate-add-zero-left
+                             (x (quotient-coordinate-nat-mul n x modulus)))
+                  (:instance quotient-coordinate-fix-when-p
+                             (coordinate (quotient-coordinate-nat-mul n x modulus)))
+                  (:instance quotient-coordinate-p-of-nat-mul (coordinate x)))
+            :in-theory (theory 'minimal-theory)))))
+
+(defthm quotient-coordinate-nat-mul-of-sum
+  (implies (and (natp m) (natp n))
+   (equal (quotient-coordinate-nat-mul (+ m n) x modulus)
+          (quotient-coordinate-add
+           (quotient-coordinate-nat-mul m x modulus)
+           (quotient-coordinate-nat-mul n x modulus) modulus)))
+  :hints (("Goal" :induct (quotient-coordinate-nat-mul m x modulus)
+           :in-theory (e/d (quotient-coordinate-nat-mul
+                              quotient-coordinate-add-swap-first-two-for-natural-scalar
+                              quotient-coordinate-add-zero-left-of-natural-scalar)
+                             (quotient-coordinate-add quotient-coordinate-zero quotient-coordinate-fix
+                              quotient-coordinate poly-remainder poly-divmod)))))
+
 (defthm quotient-coordinate-nat-mul-is-unit-times
   (equal
    (quotient-coordinate-nat-mul n coordinate modulus)
