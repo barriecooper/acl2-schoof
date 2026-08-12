@@ -647,3 +647,51 @@
     (:instance quotient-coordinate-operations-closed (x (quotient-coordinate-pow x 2 a b modulus)) (z (quotient-coordinate-pow z 2 a b modulus)))
     (:instance quotient-coordinate-operations-closed (x x) (z (quotient-coordinate-pow z 3 a b modulus))))
    :in-theory (theory 'minimal-theory)))))
+
+; Fixed-row engineering for the remaining Pascal stages.  These two local
+; monomial steps preserve the descending-X orientation without opening power
+; or multiplication implementations.
+(local
+ (defthm quotient-coordinate-monomial-times-x-local
+  (equal
+   (quotient-coordinate-mul
+    (quotient-coordinate-mul
+     (quotient-coordinate-pow x i a b modulus)
+     (quotient-coordinate-pow z j a b modulus) a b modulus)
+    x a b modulus)
+   (quotient-coordinate-mul
+    (quotient-coordinate-pow x (+ 1 (nfix i)) a b modulus)
+    (quotient-coordinate-pow z j a b modulus) a b modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-mul-associative
+     (x (quotient-coordinate-pow x i a b modulus))
+     (z (quotient-coordinate-pow z j a b modulus)) (w x))
+    (:instance quotient-coordinate-mul-associative
+     (x (quotient-coordinate-pow x i a b modulus)) (z x)
+     (w (quotient-coordinate-pow z j a b modulus)))
+    (:instance quotient-coordinate-mul-commutative
+     (x (quotient-coordinate-pow z j a b modulus)) (z x))
+    (:instance quotient-coordinate-pow-successor (base x) (n i))
+    (:instance quotient-coordinate-mul-commutative
+     (x (quotient-coordinate-pow x i a b modulus)) (z x)))
+   :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm quotient-coordinate-monomial-times-z-local
+  (equal
+   (quotient-coordinate-mul
+    (quotient-coordinate-mul
+     (quotient-coordinate-pow x i a b modulus)
+     (quotient-coordinate-pow z j a b modulus) a b modulus)
+    z a b modulus)
+   (quotient-coordinate-mul
+    (quotient-coordinate-pow x i a b modulus)
+    (quotient-coordinate-pow z (+ 1 (nfix j)) a b modulus) a b modulus))
+  :hints (("Goal" :use
+   ((:instance quotient-coordinate-mul-associative
+     (x (quotient-coordinate-pow x i a b modulus))
+     (z (quotient-coordinate-pow z j a b modulus)) (w z))
+    (:instance quotient-coordinate-pow-successor (base z) (n j))
+    (:instance quotient-coordinate-mul-commutative
+     (x (quotient-coordinate-pow z j a b modulus)) (z z)))
+   :in-theory (theory 'minimal-theory)))))
