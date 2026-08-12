@@ -148,6 +148,7 @@
   (and (quotient-coordinate-p (quotient-coordinate-zero modulus) modulus)
        (quotient-coordinate-p (quotient-coordinate-one modulus) modulus)
        (quotient-coordinate-p (quotient-coordinate-embed x modulus) modulus)
+       (quotient-coordinate-p (quotient-coordinate-x modulus) modulus)
        (quotient-coordinate-p (quotient-coordinate-y modulus) modulus)
        (quotient-coordinate-p (quotient-coordinate-add x z modulus) modulus)
        (quotient-coordinate-p (quotient-coordinate-neg x modulus) modulus)
@@ -157,6 +158,7 @@
   :hints (("Goal" :in-theory (e/d (quotient-coordinate-zero
                                       quotient-coordinate-one
                                       quotient-coordinate-embed
+                                      quotient-coordinate-x
                                       quotient-coordinate-y
                                       quotient-coordinate-add
                                       quotient-coordinate-neg

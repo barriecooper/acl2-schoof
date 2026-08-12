@@ -2,6 +2,13 @@
 
 (include-book "quotient-coordinate")
 
+(defthm quotient-coordinate-x-closed-minimal-theory-client
+  (quotient-coordinate-p (quotient-coordinate-x modulus) modulus)
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance quotient-coordinate-operations-closed))
+           :in-theory (theory 'minimal-theory))))
+
 (defthm quotient-coordinate-zero-multiplication-minimal-theory-client
   (and
    (equal (quotient-coordinate-mul

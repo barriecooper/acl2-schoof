@@ -1,6 +1,6 @@
 (in-package "GPOLY")
 
-(include-book "quotient-coordinate-trace-predicate")
+(include-book "quotient-coordinate-power")
 (include-book "../polynomial/generic/remainder-evaluation")
 
 ; The field value denoted by u(x)+y*v(x).  Selectors deliberately give this a
