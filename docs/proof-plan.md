@@ -21,11 +21,12 @@ The Schoof track uses dense ascending univariate division-polynomial data with
 the conventional `2y` factor removed from even indices. Its immediate forward
 order is:
 
-1. The generic GPOLY evaluation theorem is transported through the finite-field
-   interface, connected to the maintained index-3 evaluator, and specialized
-   to the F11 golden curve with exact coefficients `(10 6 6 0 3)`.  Ambient
-   Horner evaluation certifies that the maintained and literal index-3 moduli
-   vanish at the universal quotient-coordinate `X`.
+1. Use the certified remainder-at-root theorem and quotient-coordinate semantic
+   evaluation homomorphism to interpret the maintained index-3 modulus and its
+   quotient-coordinate calculations at classical torsion coordinates.  The
+   generic single-field boundary already preserves fixing, constants, `x`, `y`,
+   additive operations, multiplication, and natural powers; the remaining work
+   is the narrow ambient-field transport needed by classical `E[3]`.
 2. With characteristic-11 additive Frobenius certified, connect the algebraic cross-multiplied predicate to the actual Frobenius
    trace congruence modulo `ell`.  A narrowly scoped classical `E[3]`
    interpretation remains open and should be introduced only where that
