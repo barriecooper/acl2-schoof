@@ -31,6 +31,10 @@
 (defun quotient-coordinate-embed (polynomial modulus)
   (quotient-coordinate polynomial nil modulus))
 
+(defun quotient-coordinate-x (modulus)
+  (quotient-coordinate
+   (list (gfield::field-zero) (gfield::field-one)) nil modulus))
+
 (defun quotient-coordinate-y (modulus)
   (quotient-coordinate nil (poly-reduced-one modulus) modulus))
 
