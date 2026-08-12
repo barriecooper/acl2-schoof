@@ -302,6 +302,8 @@
 (include-book "schoof/quotient-coordinate-natural-scalar")
 (include-book "schoof/quotient-coordinate-natural-scalar-regression")
 (include-book "schoof/quotient-coordinate-power")
+(include-book "schoof/quotient-coordinate-additive-frobenius")
+(include-book "schoof/quotient-coordinate-additive-frobenius-regression")
 (include-book "schoof/quotient-coordinate-trace-program")
 (include-book "schoof/quotient-coordinate-trace-predicate")
 (include-book "schoof/f11-quotient-coordinate")

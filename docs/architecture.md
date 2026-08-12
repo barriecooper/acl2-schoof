@@ -439,9 +439,12 @@ power of a product, zero/one bases, polynomial embedding, and the even/odd
 powers of `y` are certified without field assumptions.  The cardinality-indexed
 action raises a coordinate to `q`, and its iterator raises to `q^n`; zero,
 successor, and additive composition of iteration counts are certified.
-Multiplication preservation is characteristic-independent. Addition
-preservation additionally needs the missing actual-cardinality/characteristic
-freshman's-dream transport. For the F11, `ell=3`
+Multiplication preservation is characteristic-independent. Addition preservation
+is certified at exponent exactly 11 under characteristic 11. This fixed
+eleventh-power construction is an F11 bootstrap, not a reusable generic
+characteristic-p Frobenius architecture. Future characteristics should use an
+abstract commutative-ring binomial/characteristic-p layer, with p^r-power
+addition derived by iteration rather than another fixed expansion. For the F11, `ell=3`
 client, `[11]P=[2]P=-P`, so the
 audited equation is `pi^2(P)-P=[t]pi(P)`.  Existing affine addition divides by
 slopes and is not reused in this quotient ring.  A narrow denominator-free or
