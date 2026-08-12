@@ -121,3 +121,43 @@
       (:instance quotient-coordinate-pow-two-normal-local (x x))
       (:instance quotient-coordinate-pow-two-normal-local (x z)))
      :in-theory (theory 'minimal-theory)))))
+
+; Bounded cubic stages distribute only the selected right-associated row.
+(local
+ (defthm quotient-coordinate-cubic-outer-distribution-local
+   (equal
+    (quotient-coordinate-mul
+     (quotient-coordinate-add x z modulus)
+     (quotient-coordinate-add x2
+      (quotient-coordinate-add two-xz z2 modulus) modulus) a b modulus)
+    (quotient-coordinate-add
+     (quotient-coordinate-mul
+      (quotient-coordinate-add x z modulus) x2 a b modulus)
+     (quotient-coordinate-add
+      (quotient-coordinate-mul
+       (quotient-coordinate-add x z modulus) two-xz a b modulus)
+      (quotient-coordinate-mul
+       (quotient-coordinate-add x z modulus) z2 a b modulus) modulus)
+     modulus))
+   :hints (("Goal"
+            :use ((:instance quotient-coordinate-mul-left-distributive
+                             (x (quotient-coordinate-add x z modulus))
+                             (z x2)
+                             (w (quotient-coordinate-add two-xz z2 modulus)))
+                  (:instance quotient-coordinate-mul-left-distributive
+                             (x (quotient-coordinate-add x z modulus))
+                             (z two-xz) (w z2)))
+            :in-theory (theory 'minimal-theory)))))
+
+(local
+ (defthm quotient-coordinate-cubic-endpoint-distribution-local
+   (equal
+    (quotient-coordinate-mul
+     (quotient-coordinate-add x z modulus) term a b modulus)
+    (quotient-coordinate-add
+     (quotient-coordinate-mul x term a b modulus)
+     (quotient-coordinate-mul z term a b modulus) modulus))
+   :hints (("Goal"
+            :use ((:instance quotient-coordinate-mul-right-distributive
+                             (w term)))
+            :in-theory (theory 'minimal-theory)))))
