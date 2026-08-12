@@ -138,6 +138,86 @@
                              (quotient-coordinate-add quotient-coordinate-zero quotient-coordinate-fix
                               quotient-coordinate poly-remainder poly-divmod)))))
 
+; These two semantic scalar laws deliberately remain out of the default
+; rewrite theory.  Their proofs use only the public additive interface; in
+; particular, quotient-coordinate addition and polynomial reduction remain
+; disabled during the inductions.
+(local
+ (defthm quotient-coordinate-nonzero-times-right
+   (implies (and (natp m) (natp n) (not (zp m)))
+            (equal (+ n (* (1- m) n)) (* m n)))
+   :rule-classes nil))
+
+(local
+ (defthm quotient-coordinate-natp-of-predecessor-times-right
+   (implies (and (natp m) (natp n) (not (zp m)))
+            (natp (* (1- m) n)))
+   :rule-classes :type-prescription))
+
+(defthm quotient-coordinate-nat-mul-of-nat-mul
+  (implies (and (natp m) (natp n))
+   (equal (quotient-coordinate-nat-mul
+           m (quotient-coordinate-nat-mul n x modulus) modulus)
+          (quotient-coordinate-nat-mul (* m n) x modulus)))
+  :rule-classes nil
+  :hints (("Goal"
+           :induct (quotient-coordinate-nat-mul m x modulus)
+           :in-theory (e/d (quotient-coordinate-nat-mul
+                            quotient-coordinate-nat-mul-of-sum)
+                           (quotient-coordinate-add quotient-coordinate-fix
+                            quotient-coordinate poly-remainder poly-divmod)))
+          ("Subgoal *1/2"
+           :use ((:instance quotient-coordinate-nonzero-times-right)
+                 (:instance
+                  quotient-coordinate-natp-of-predecessor-times-right)
+                 (:instance quotient-coordinate-nat-mul-of-sum
+                            (m n) (n (* (1- m) n)))))))
+
+(local
+ (defthm quotient-coordinate-add-four-for-natural-scalar
+   (equal
+    (quotient-coordinate-add
+     (quotient-coordinate-add x z modulus)
+     (quotient-coordinate-add y w modulus) modulus)
+    (quotient-coordinate-add
+     (quotient-coordinate-add x y modulus)
+     (quotient-coordinate-add z w modulus) modulus))
+   :hints (("Goal"
+            :use ((:instance quotient-coordinate-add-associative
+                             (x x) (z z)
+                             (w (quotient-coordinate-add y w modulus)))
+                  (:instance quotient-coordinate-add-associative
+                             (x z) (z y) (w w))
+                  (:instance quotient-coordinate-add-commutative
+                             (x z) (z y))
+                  (:instance quotient-coordinate-add-associative
+                             (x y) (z z) (w w))
+                  (:instance quotient-coordinate-add-associative
+                             (x x) (z y)
+                             (w (quotient-coordinate-add z w modulus))))
+            :in-theory (disable quotient-coordinate-add
+                                quotient-coordinate-add-associative
+                                quotient-coordinate-add-commutative)))))
+
+(defthm quotient-coordinate-nat-mul-distributes-over-add
+  (implies (natp n)
+   (equal
+    (quotient-coordinate-nat-mul
+     n (quotient-coordinate-add x z modulus) modulus)
+    (quotient-coordinate-add
+     (quotient-coordinate-nat-mul n x modulus)
+     (quotient-coordinate-nat-mul n z modulus) modulus)))
+  :rule-classes nil
+  :hints (("Goal"
+           :induct (quotient-coordinate-nat-mul n x modulus)
+           :in-theory
+           (e/d (quotient-coordinate-nat-mul
+                 quotient-coordinate-add-four-for-natural-scalar
+                 quotient-coordinate-add-zero-left-of-natural-scalar)
+                (quotient-coordinate-add quotient-coordinate-zero
+                 quotient-coordinate-fix quotient-coordinate
+                 poly-remainder poly-divmod)))))
+
 (defthm quotient-coordinate-nat-mul-is-unit-times
   (equal
    (quotient-coordinate-nat-mul n coordinate modulus)

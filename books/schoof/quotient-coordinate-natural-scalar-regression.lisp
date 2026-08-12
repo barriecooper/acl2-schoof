@@ -74,3 +74,26 @@
   :hints (("Goal"
            :use ((:instance quotient-coordinate-nat-mul-of-sum))
            :in-theory (theory 'minimal-theory))))
+
+(defthm quotient-coordinate-natural-scalar-composition-minimal-theory-client
+  (implies (and (natp m) (natp n))
+   (equal (quotient-coordinate-nat-mul
+           m (quotient-coordinate-nat-mul n x modulus) modulus)
+          (quotient-coordinate-nat-mul (* m n) x modulus)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance quotient-coordinate-nat-mul-of-nat-mul))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm quotient-coordinate-natural-scalar-distribution-minimal-theory-client
+  (implies (natp n)
+   (equal
+    (quotient-coordinate-nat-mul
+     n (quotient-coordinate-add x z modulus) modulus)
+    (quotient-coordinate-add
+     (quotient-coordinate-nat-mul n x modulus)
+     (quotient-coordinate-nat-mul n z modulus) modulus)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance quotient-coordinate-nat-mul-distributes-over-add))
+           :in-theory (theory 'minimal-theory))))
