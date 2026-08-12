@@ -66,11 +66,13 @@ group under the maintained characteristic hypothesis. Natural scalar
 multiplication is certified as transparent linear repeated addition; an
 optimized scalar algorithm remains open.
 There is no certified Hasse theorem, point-count correctness theorem, classical
-bivariate division-polynomial correspondence, characteristic-dependent
-Frobenius ring endomorphism for Schoof, or Schoof algorithm.  The quotient-
-coordinate layer does provide cardinality-indexed power operations, iteration,
-and characteristic-independent multiplication preservation; addition
-preservation and the semantic Frobenius/trace bridge remain open.
+bivariate division-polynomial correspondence, generic characteristic-dependent
+Frobenius ring endomorphism, or Schoof algorithm.  The quotient-coordinate
+layer provides cardinality-indexed power operations, iteration,
+characteristic-independent multiplication preservation, and addition
+preservation at exponent exactly 11 under characteristic 11; generic
+characteristic-p portability and the semantic Frobenius/trace bridge remain
+open.
 
 The generic field and polynomial layers intentionally continue to admit F2.
 Curve results that require the initial short-Weierstrass characteristic scope
