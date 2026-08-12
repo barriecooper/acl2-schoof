@@ -44,7 +44,7 @@ The labels used below are:
 3. The next generic Frobenius design should adapt the upstream binomial proof's
    interval-aligned recursion and separate multiplication branches to an
    abstract commutative ring, combine it with a theorem that a prime divides
-   every interior coefficient, and derive `p^r)-power additivity by iteration.
+   every interior coefficient, and derive `p^r`-power additivity by iteration.
 4. The Community Books contain directly useful integer prime, divisibility,
    gcd, and CRT results.  They do not by themselves supply the centred
    reconstruction, Hasse-interval uniqueness, or modulus-product argument
