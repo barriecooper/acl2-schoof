@@ -63,3 +63,14 @@
            :use ((:instance
                   quotient-coordinate-nat-mul-eleven-of-characteristic))
            :in-theory (theory 'minimal-theory))))
+
+(defthm quotient-coordinate-natural-scalar-sum-minimal-theory-client
+  (implies (and (natp m) (natp n))
+   (equal (quotient-coordinate-nat-mul (+ m n) x modulus)
+          (quotient-coordinate-add
+           (quotient-coordinate-nat-mul m x modulus)
+           (quotient-coordinate-nat-mul n x modulus) modulus)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance quotient-coordinate-nat-mul-of-sum))
+           :in-theory (theory 'minimal-theory))))
