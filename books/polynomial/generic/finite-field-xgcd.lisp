@@ -3,10 +3,6 @@
 (include-book "finite-field-euclidean-gcd")
 (include-book "xgcd")
 
-(defun finite-field-polynomial-one-for-xgcd ()
-  (declare (xargs :guard t))
-  (list (gfield::finite-field-one)))
-
 (local
  (defun finite-field-poly-const-for-xgcd (a)
    (if (equal (gfield::finite-field-fix a)
@@ -41,10 +37,9 @@
               (finite-field-poly-sub
                s-next (finite-field-poly-mul t-next quotient)))))
     (mv (finite-field-poly-normalize first)
-        (finite-field-polynomial-one-for-xgcd)
+        (list (gfield::finite-field-one))
         nil)))
 
-(verify-guards finite-field-polynomial-one-for-xgcd)
 (verify-guards finite-field-poly-extended-euclidean-gcd)
 
 (defthm finite-field-poly-extended-euclidean-gcd-zero-second
@@ -52,7 +47,7 @@
    (not (consp (finite-field-poly-normalize second)))
    (equal (finite-field-poly-extended-euclidean-gcd first second)
           (mv (finite-field-poly-normalize first)
-              (finite-field-polynomial-one-for-xgcd)
+              (list (gfield::finite-field-one))
               nil)))
   :rule-classes nil
   :hints (("Goal" :in-theory
@@ -88,8 +83,7 @@
    :hints (("Goal"
             :induct (finite-field-poly-extended-euclidean-gcd first second)
             :in-theory
-            (e/d (finite-field-poly-extended-euclidean-gcd
-                  finite-field-polynomial-one-for-xgcd)
+            (e/d (finite-field-poly-extended-euclidean-gcd)
                  (finite-field-poly-normalize finite-field-poly-divmod))))))
 
 (defthm finite-field-poly-extended-euclidean-gcd-gcd-canonical

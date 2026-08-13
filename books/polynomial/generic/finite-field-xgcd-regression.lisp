@@ -28,7 +28,7 @@
 
 (defthm finite-field-xgcd-zero-zero-regression
   (equal (finite-field-poly-extended-euclidean-gcd nil nil)
-         (mv nil (finite-field-polynomial-one-for-xgcd) nil))
+         (mv nil (list (gfield::finite-field-one)) nil))
   :rule-classes nil
   :hints (("Goal"
            :use ((:instance
@@ -39,18 +39,42 @@
 (defthm finite-field-xgcd-nonzero-zero-regression
   (equal
    (finite-field-poly-extended-euclidean-gcd
-    (finite-field-polynomial-one-for-xgcd) nil)
-   (mv (finite-field-polynomial-one-for-xgcd)
-       (finite-field-polynomial-one-for-xgcd) nil))
+    (list (gfield::finite-field-one)) nil)
+   (mv (list (gfield::finite-field-one))
+       (list (gfield::finite-field-one)) nil))
   :rule-classes nil
   :hints (("Goal"
            :use ((:instance
                   finite-field-poly-extended-euclidean-gcd-zero-second
-                  (first (finite-field-polynomial-one-for-xgcd))
+                  (first (list (gfield::finite-field-one)))
                   (second nil)))
            :in-theory
-           (enable finite-field-polynomial-one-for-xgcd
-                   finite-field-poly-normalize))))
+           (enable finite-field-poly-normalize))))
+
+(defthm finite-field-xgcd-zero-nonzero-regression
+  (equal
+   (finite-field-poly-extended-euclidean-gcd
+    nil (list (gfield::finite-field-one)))
+   (mv (list (gfield::finite-field-one))
+       nil
+       (list (gfield::finite-field-one))))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use
+    ((:instance finite-field-poly-extended-euclidean-gcd-nonzero-second
+                (first nil)
+                (second (list (gfield::finite-field-one))))
+     (:instance finite-field-poly-divmod-zero-dividend
+                (g (list (gfield::finite-field-one))))
+     (:instance finite-field-poly-extended-euclidean-gcd-zero-second
+                (first (list (gfield::finite-field-one)))
+                (second nil)))
+    :in-theory
+    (e/d (finite-field-poly-normalize finite-field-poly-sub
+          finite-field-poly-mul)
+         (finite-field-poly-extended-euclidean-gcd
+          finite-field-poly-divmod)))))
 
 ; These instances exercise the total client boundary at representations
 ; that historically expose fixing and normalization mistakes.
@@ -103,23 +127,23 @@
 
 (def-finite-field-xgcd-client-case
   finite-field-xgcd-equal-inputs-regression
-  (finite-field-polynomial-one-for-xgcd)
-  (finite-field-polynomial-one-for-xgcd))
+  (list (gfield::finite-field-one))
+  (list (gfield::finite-field-one)))
 
 (def-finite-field-xgcd-client-case
   finite-field-xgcd-exact-divisibility-regression
   (finite-field-poly-mul
    (finite-field-poly-add
     (finite-field-poly-monomial (gfield::finite-field-one) 1)
-    (finite-field-polynomial-one-for-xgcd))
-   (finite-field-polynomial-one-for-xgcd))
-  (finite-field-polynomial-one-for-xgcd))
+    (list (gfield::finite-field-one)))
+   (list (gfield::finite-field-one)))
+  (list (gfield::finite-field-one)))
 
 (def-finite-field-xgcd-client-case
   finite-field-xgcd-multistep-chain-regression
   (finite-field-poly-add
    (finite-field-poly-monomial (gfield::finite-field-one) 3)
-   (finite-field-polynomial-one-for-xgcd))
+   (list (gfield::finite-field-one)))
   (finite-field-poly-add
    (finite-field-poly-monomial (gfield::finite-field-one) 2)
-   (finite-field-polynomial-one-for-xgcd)))
+   (list (gfield::finite-field-one))))
