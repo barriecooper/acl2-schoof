@@ -314,6 +314,8 @@
 (include-book "schoof/quotient-coordinate-trace-predicate")
 (include-book "schoof/quotient-coordinate-semantic-soundness")
 (include-book "schoof/quotient-coordinate-semantic-soundness-regression")
+(include-book "schoof/quotient-coordinate-field-cross-add-group-soundness")
+(include-book "schoof/quotient-coordinate-field-cross-add-group-soundness-regression")
 (include-book "schoof/quotient-coordinate-ambient-semantics")
 (include-book "schoof/quotient-coordinate-ambient-soundness")
 (include-book "schoof/quotient-coordinate-ambient-soundness-regression")
