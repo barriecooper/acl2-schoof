@@ -77,8 +77,6 @@
            :in-theory (disable finite-field-poly-normalize
                                finite-field-poly-monic-normalize))))
 
-(set-rewrite-stack-limit 5000)
-
 (set-default-hints
  '((and stable-under-simplificationp
         (list :use (theory 'gfield::finite-field-context-instance-theory)
@@ -319,6 +317,11 @@
                 (poly-remainder finite-field-poly-remainder)
                 (poly-divides-p finite-field-poly-divides-p)
                 (poly-common-divisor-p finite-field-poly-common-divisor-p)))))
+
+; The broad defaults above are confined to the functional-instantiation
+; obligations.  Direct wrapper and correctness proofs below use only their
+; explicit hints and the ordinary inherited theory.
+(set-default-hints nil)
 
 (defun finite-field-poly-monic-euclidean-gcd (first second)
   (declare (xargs :guard t))
