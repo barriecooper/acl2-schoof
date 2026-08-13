@@ -228,6 +228,8 @@
 (include-book "polynomial/generic/finite-field-reduction-regression")
 (include-book "polynomial/generic/finite-field-euclidean-interface")
 (include-book "polynomial/generic/finite-field-euclidean-interface-regression")
+(include-book "polynomial/generic/finite-field-euclidean-gcd")
+(include-book "polynomial/generic/finite-field-euclidean-gcd-regression")
 (include-book "polynomial/generic/finite-field-reduced-ring")
 (include-book "polynomial/generic/finite-field-reduced-ring-regression")
 (include-book "polynomial/generic/finite-field-fixed-modulus-coefficients")
