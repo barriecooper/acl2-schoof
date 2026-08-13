@@ -316,6 +316,8 @@
 (include-book "schoof/quotient-coordinate-semantic-soundness-regression")
 (include-book "schoof/quotient-coordinate-field-cross-add-group-soundness")
 (include-book "schoof/quotient-coordinate-field-cross-add-group-soundness-regression")
+(include-book "schoof/quotient-coordinate-group-semantic-composition")
+(include-book "schoof/quotient-coordinate-group-semantic-composition-regression")
 (include-book "schoof/quotient-coordinate-ambient-semantics")
 (include-book "schoof/quotient-coordinate-ambient-soundness")
 (include-book "schoof/quotient-coordinate-ambient-soundness-regression")

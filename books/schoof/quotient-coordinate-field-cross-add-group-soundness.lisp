@@ -367,5 +367,78 @@
               gfield::affine-coordinates-fix-when-affine-coordinates-p
               gfield::affine-coordinates-p-of-fix)))))
 
+(local
+ (defthm field-sum-zero-implies-opposite-local
+   (implies (equal (gfield::field-add y1 y2) (gfield::field-zero))
+            (equal (gfield::field-fix y2) (gfield::field-neg y1)))
+   :hints (("Goal"
+            :use ((:instance gfield::field-add-left-cancel-forward
+                             (x y1) (y y2) (z (gfield::field-neg y1))))
+            :in-theory
+            (union-theories
+             (theory 'minimal-theory)
+             '(gfield::field-add-fix-right
+               gfield::field-add-inverse-right
+               gfield::field-fix-of-neg))))))
+
+(defthm quotient-coordinate-field-cross-opposite-implies-affine-opposite-relation
+  (implies
+   (and (gfield::short-weierstrass-affine-point-p
+         (quotient-coordinate-field-affine-point x1 y1))
+        (gfield::short-weierstrass-affine-point-p
+         (quotient-coordinate-field-affine-point x2 y2))
+        (quotient-coordinate-field-cross-opposite-p x1 y1 x2 y2))
+   (gfield::affine-opposite-y-infinity-relation-p
+    (quotient-coordinate-field-affine-point x1 y1)
+    (quotient-coordinate-field-affine-point x2 y2)
+    (gfield::curve-point-infinity)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use (field-sum-zero-implies-opposite-local)
+           :in-theory
+           (union-theories
+            (theory 'minimal-theory)
+            '(quotient-coordinate-field-cross-opposite-p
+              quotient-coordinate-field-affine-point
+              gfield::affine-opposite-y-infinity-relation-p
+              gfield::affine-coordinates-x-of-make
+              gfield::affine-coordinates-y-of-make
+              gfield::field-neg-of-fix
+              gfield::curve-point-fix-of-infinity)))))
+
+(defthm quotient-coordinate-field-cross-opposite-implies-curve-point-addition
+  (implies
+   (and (gfield::short-weierstrass-affine-point-p
+         (quotient-coordinate-field-affine-point x1 y1))
+        (gfield::short-weierstrass-affine-point-p
+         (quotient-coordinate-field-affine-point x2 y2))
+        (quotient-coordinate-field-cross-opposite-p x1 y1 x2 y2))
+   (gfield::curve-point-addition-relation-p
+    (quotient-coordinate-field-curve-point x1 y1)
+    (quotient-coordinate-field-curve-point x2 y2)
+    (gfield::curve-point-infinity)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use (quotient-coordinate-field-cross-opposite-implies-affine-opposite-relation
+                 (:instance affine-fix-of-field-affine-point-local
+                            (x x1) (y y1))
+                 (:instance affine-fix-of-field-affine-point-local
+                            (x x2) (y y2))
+                 (:instance gfield::short-weierstrass-curve-point-p-of-affine
+                            (coordinates
+                             (quotient-coordinate-field-affine-point x1 y1)))
+                 (:instance gfield::short-weierstrass-curve-point-p-of-affine
+                            (coordinates
+                             (quotient-coordinate-field-affine-point x2 y2))))
+           :in-theory
+           (union-theories
+            (theory 'minimal-theory)
+            '(quotient-coordinate-field-curve-point
+              gfield::curve-point-addition-relation-p
+              gfield::curve-point-fix-of-affine-coordinates
+              gfield::curve-point-affine-coordinates-get-of-constructor
+              gfield::affine-coordinates-fix-idempotent
+              gfield::curve-point-fix-of-infinity)))))
+
 (verify-guards quotient-coordinate-field-affine-point)
 (verify-guards quotient-coordinate-field-curve-point)

@@ -20,3 +20,19 @@
   :hints (("Goal"
            :use quotient-coordinate-field-cross-add-implies-curve-point-addition
            :in-theory (theory 'minimal-theory))))
+
+(defthm quotient-coordinate-field-cross-opposite-group-soundness-minimal-theory-client
+  (implies
+   (and (gfield::short-weierstrass-affine-point-p
+         (quotient-coordinate-field-affine-point x1 y1))
+        (gfield::short-weierstrass-affine-point-p
+         (quotient-coordinate-field-affine-point x2 y2))
+        (quotient-coordinate-field-cross-opposite-p x1 y1 x2 y2))
+   (gfield::curve-point-addition-relation-p
+    (quotient-coordinate-field-curve-point x1 y1)
+    (quotient-coordinate-field-curve-point x2 y2)
+    (gfield::curve-point-infinity)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use quotient-coordinate-field-cross-opposite-implies-curve-point-addition
+           :in-theory (theory 'minimal-theory))))
