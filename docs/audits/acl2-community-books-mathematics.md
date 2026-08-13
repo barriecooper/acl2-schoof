@@ -336,3 +336,65 @@ Before a different characteristic becomes an implementation target, the
 abstract commutative-ring binomial/characteristic-`p` layer described above
 must become a certified boundary.  CRT work becomes urgent after enough
 trace-residue correctness clients exist to support reconstruction.
+
+## Addendum: Cayley--Hamilton search (2026-08-13)
+
+This addendum records a fresh, scoped search at upstream ACL2 revision
+[`48f289ce50bcc88487fd3e85163e7afd8e9e6e7f`](https://github.com/acl2/acl2/commit/48f289ce50bcc88487fd3e85163e7afd8e9e6e7f)
+(commit date 2026-08-12).  The revision was inspected by a sparse checkout of
+`books/doc` and `books/projects/linear`, followed by case-insensitive searches
+for Cayley--Hamilton, characteristic polynomials, eigenvalues, matrix trace,
+and spellings of `2x2`, and by reading the linear books named below.  This is a
+revision-pinned addition to the inventory, not a claim about all ACL2 books at
+all times.
+
+### Exact positive and negative evidence
+
+* [`books/doc/100-theorems.lisp`](https://github.com/acl2/acl2/blob/48f289ce50bcc88487fd3e85163e7afd8e9e6e7f/books/doc/100-theorems.lisp#L345)
+  contains “49. The Cayley-Hamilton Theorem” only as a commented-out catalogue
+  entry.  It names no event or certified book.
+* [`books/projects/linear/README`](https://github.com/acl2/acl2/blob/48f289ce50bcc88487fd3e85163e7afd8e9e6e7f/books/projects/linear/README#L43-L53)
+  calls the development a work in progress and lists the ring of polynomials,
+  eigenvalues, and the characteristic polynomial as planned work.
+* The available ring side is substantial:
+  [`ring`](https://github.com/acl2/acl2/blob/48f289ce50bcc88487fd3e85163e7afd8e9e6e7f/books/projects/linear/ring.lisp)
+  constrains a commutative ring with unity,
+  [`rmat`](https://github.com/acl2/acl2/blob/48f289ce50bcc88487fd3e85163e7afd8e9e6e7f/books/projects/linear/rmat.lisp)
+  supplies rectangular matrices, transpose, addition, scalar multiplication,
+  and matrix multiplication, and
+  [`rdet`](https://github.com/acl2/acl2/blob/48f289ce50bcc88487fd3e85163e7afd8e9e6e7f/books/projects/linear/rdet.lisp)
+  supplies permutation determinants, alternating/multilinear properties,
+  multiplicativity, cofactor expansion, and the classical adjoint.
+* The field side repeats and extends that infrastructure:
+  [`field`](https://github.com/acl2/acl2/blob/48f289ce50bcc88487fd3e85163e7afd8e9e6e7f/books/projects/linear/field.lisp),
+  [`fmat`](https://github.com/acl2/acl2/blob/48f289ce50bcc88487fd3e85163e7afd8e9e6e7f/books/projects/linear/fmat.lisp), and
+  [`fdet`](https://github.com/acl2/acl2/blob/48f289ce50bcc88487fd3e85163e7afd8e9e6e7f/books/projects/linear/fdet.lisp)
+  provide field operations, matrices, and determinants;
+  [`reduction`](https://github.com/acl2/acl2/blob/48f289ce50bcc88487fd3e85163e7afd8e9e6e7f/books/projects/linear/reduction.lisp)
+  adds reduced row-echelon form, row reduction as matrix multiplication,
+  invertibility, linear systems, and Cramer's rule.
+
+No theorem, definition, or comment implementing a specialized `2x2`
+characteristic identity under another name was found in those inspected paths,
+and the repository-wide filename list disclosed no separate characteristic-
+polynomial book in `books/projects/linear`.  In particular, searches for the
+four-entry identity, matrix trace terminology, `2x2` spellings, eigenvalues,
+and characteristic polynomials led only to the planned-work README (apart from
+ordinary determinant prose).  **Conclusion:** no suitable certified general or
+fixed-`2x2` Cayley--Hamilton endpoint was found at the inspected revision and
+within the paths and terms above.  This scoped negative result does not assert
+that no differently encoded local algebra lemma exists anywhere in ACL2.
+
+### Cost interpretation
+
+For a literal matrix `((a b) (c d))`, the identity
+`M^2 - (a+d)M + (ad-bc)I = 0` is four bounded commutative-ring normalizations.
+It could probably be proved locally without characteristic polynomials,
+permutation determinants, row reduction, or the complete `linear` stack.  That
+small algebra fact is categorically different from proving that Frobenius acts
+on a rank-two `E[3]`, that its determinant is `q mod 3`, and that its matrix
+trace is `q + 1 - #E(F_q) mod 3`.  The latter are elliptic-curve, torsion,
+fixed-point/cardinality, and semantic-identification obligations; importing a
+matrix library or proving the four identities does not discharge them.  The
+focused route comparison is preserved in
+[the Schoof trace-congruence audit](schoof-trace-congruence-routes.md).
