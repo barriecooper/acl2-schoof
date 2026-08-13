@@ -190,21 +190,20 @@ just an accepted candidate.  Quotient equality alone supplies none of these.
 
 ### Recommendation
 
-Certify a **bounded affine/group interpretation family for the existing trace
-cross equations**, followed by one conditional F11/`ell=3` composition theorem.
-The exact family should say:
+Certify a **bounded same-field affine/group interpretation family for the
+existing trace cross equations**.  The exact family should say:
 
 1. for valid affine points over the existing generic curve field, the two
    identically oriented secant cross equations, together with the explicit
    nonzero x-difference/denominator premise, imply the corresponding named
    curve-point addition equation;
 2. the equal-x/opposite-y predicate implies the named infinity/opposite group
-   equation under the existing affine validity hypotheses;
-3. after functional instantiation/composition with quotient-coordinate
-   ambient soundness, F11 candidate 2 conditionally gives that same point
-   equation for **any supplied** `psi_3` root and ordinate on
-   `y^2=x^3+x+6`, whenever the selected ordinary branch's denominator is
-   nonzero, with the exceptional branch stated separately.
+   equation under the existing affine validity hypotheses; and
+3. composition with the existing **single-field** quotient-coordinate semantic
+   soundness theorem gives the same conditional group equation at any supplied
+   modulus root and supplied curve point in that same `GFIELD` instance,
+   assuming validity of the evaluated affine points and the ordinary branch's
+   nonzero denominator, with the exceptional branch stated separately.
 
 The exact sign and ordering must be copied from
 `quotient-coordinate-field-cross-add-p` and proved against the existing
@@ -214,20 +213,40 @@ addition relation; it must not be reconstructed from memory.  Reuse
 `books/schoof/quotient-coordinate-trace-predicate.lisp`, and
 `books/schoof/quotient-coordinate-{semantic,ambient}-soundness.lisp` and their
 included foundations.  A small production book under `books/schoof/` should
-hold the generic bridge; a focused `*-regression.lisp` should compose the exact
-F11 constants and exercise ordinary and exceptional orientations.
+hold the generic bridge, and a focused `*-regression.lisp` should exercise the
+ordinary and exceptional orientations through minimal-theory clients.
 
-The only genuinely new mathematical context should be the field/cancellation
-and nonzero-denominator hypotheses already required by affine secant addition.
-If the current ambient commutative-ring seam cannot be functionally instantiated
-into the existing curve field without a narrow compatibility lemma, add only
-that named preservation lemma.  Do not add a root, extension, closure, module,
-matrix, isogeny, or degree context.
+The only genuinely new mathematical hypotheses should be the field/cancellation,
+valid-affine-point, and nonzero-denominator hypotheses already required by
+affine secant addition.  Do not construct a new ambient carrier or claim a
+concrete F11 ambient-root corollary in this boundary.
+
+### Deferred concrete F11 composition
+
+PR #347's ambient seam is deliberately only a commutative ring, while the
+existing curve-point group implementation is built over the single `GFIELD`
+field interface.  Its base side is also the generic `GFIELD` operation family,
+not by itself the separate executable F11 operation family.  Consequently a
+narrow compatibility lemma cannot manufacture a useful simultaneous
+F11-base/ambient-field instance.  Since the F11 `psi_3` has no certified root
+in the base field, the same-field theorem alone is not yet the desired concrete
+F11 per-root result.
+
+That concrete corollary is therefore deferred until a later boundary explicitly
+chooses and certifies one of:
+
+* a narrow F11-to-ambient-field context with the required operation-preservation
+  and curve-interface instance; or
+* a concrete certified F11 extension-field witness with the same compatibility
+  facts.
+
+This is the concrete instantiation seam already recorded as deferred after
+PR #347.  It must not be hidden inside the generic affine/group-law task.
 
 ### Why this boundary is smallest
 
-It closes a known semantic gap immediately downstream of certified executable
-acceptance; is reusable for later primes; and tests the exact signs,
+It closes a known semantic gap immediately downstream of certified equation
+transport; is reusable for later primes; and tests the exact signs,
 denominators, and exceptional spelling before choosing an ambient carrier.
 Unlike fixed `2x2` Cayley--Hamilton, it does not hide determinant and trace
 identification.  Unlike an extension field, it does not construct a universe
@@ -241,17 +260,20 @@ Stop and return to audit if the family requires any of the following:
 
 * constructing or enumerating `E[3]`, roots, or an algebraic closure;
 * proving `psi_3` square-free/irreducible or building an extension field;
+* introducing a new F11-to-ambient-field context or concrete extension witness;
 * introducing vector spaces, matrices, Cayley--Hamilton, isogenies, or degree;
 * proving all Schoof exceptional branches rather than the predicates already
   represented; or
-* weakening the theorem by dropping the denominator premise.
+* weakening the ordinary theorem by dropping its denominator premise.
 
-The result would prove that the already transported equations have the claimed
-affine/group meaning, and would give a conditional per-root F11 theorem.  It
-would **not** prove root or torsion existence, completeness of `E[3]`, semantic
+The result would prove that the existing field-level cross equations have the
+claimed affine/group meaning and would give a conditional same-field
+composition theorem.  It would **not** prove a useful concrete F11 ambient-root
+corollary, root or torsion existence, completeness of `E[3]`, semantic
 nonzeroness of the denominator for every root, Frobenius trace/determinant
 identification, a trace congruence, the numerical point count by Schoof, CRT,
 or Hasse.  After certification, the next audit point is a bounded choice between
-a universal-root/square-free completeness theorem and a concrete certified F11
-torsion witness; the matrix and global-degree routes remain deferred unless
-that evidence changes their relative cost.
+a narrow F11-to-ambient-field realization, a universal-root/square-free
+completeness theorem, and a concrete certified F11 torsion witness; the matrix
+and global-degree routes remain deferred unless that evidence changes their
+relative cost.
