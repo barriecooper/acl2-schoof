@@ -310,6 +310,8 @@
 (include-book "schoof/quotient-coordinate-additive-frobenius-regression")
 (include-book "schoof/quotient-coordinate-trace-program")
 (include-book "schoof/quotient-coordinate-trace-predicate")
+(include-book "schoof/quotient-coordinate-semantic-soundness")
+(include-book "schoof/quotient-coordinate-semantic-soundness-regression")
 (include-book "schoof/f11-quotient-coordinate")
 (include-book "schoof/f11-quotient-coordinate-regression")
 (include-book "schoof/f11-quotient-coordinate-evaluation")
