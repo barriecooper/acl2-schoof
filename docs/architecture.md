@@ -453,6 +453,14 @@ cross-multiplied point-expression layer checks
 relation for an infinity result.  This gives a certified algebraic trace
 predicate, not affine group equality: a zero-divisor `D` cannot be cancelled,
 and the opposite relation is not a general projective point representation.
+The downstream semantic-soundness book consumes both the quotient-coordinate
+predicate and the single-field evaluation homomorphism.  It proves, in the
+forward direction only, that accepted cross predicates satisfy the identical
+field-level cross equations after evaluation at a modulus root, and packages
+the three residue branches into a field-level trace-candidate predicate.  This
+consumer direction keeps semantic evaluation and the executable predicate
+independent of their soundness client.  It adds no cancellation or nonzero
+denominator premise and is not an affine group-law or classical torsion result.
 The F11 specialization uses the identical transparent pair representation and
 the production F11 polynomial remainder/reduced operations.  Its trace client
 and the generic production client are mechanically checked instances of one
