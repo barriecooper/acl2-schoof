@@ -507,3 +507,31 @@ coefficients, `C`, polynomial addition/subtraction/multiplication, square, and
 cube.  This bounded transport stops before generated-table satisfaction,
 concrete sequence uniqueness, all-index evaluator correspondence, and the
 later classical bivariate interpretation.
+
+### Narrow base-to-ambient Schoof evaluation seam
+
+The production `base-ambient-context` is downstream of the existing `GFIELD`
+and generic-polynomial algebra.  Its base operations are exactly `GFIELD`'s
+fix, zero, one, addition, negation, and multiplication; it adds separately
+named ambient fixing and commutative-ring operations, natural power, and a
+base-to-ambient map preserving precisely those base operations.  There is no
+ambient inverse, injectivity, cardinality, fixed-subfield recognition,
+nonidentity witness, Frobenius axiom, root-existence axiom, or algebraic-closure
+premise.  This deliberately does not promote the stronger experimental
+`two-field-context`, which remains a feasibility artifact for fixed-subfield
+questions.
+
+`ambient-evaluation` consumes that scalar seam and the existing GPOLY dense
+ascending operations.  The Schoof ambient semantics then consumes ambient
+polynomial evaluation and the existing quotient-coordinate implementation;
+the ambient soundness book consumes those semantics and the unchanged trace
+predicate.  Thus the established direction is
+`GFIELD -> GPOLY -> ambient evaluation -> quotient-coordinate ambient semantics
+-> ambient trace soundness`; none of the existing single-field books depends
+on the new ambient layer.
+
+This seam transports equations only at a supplied ambient modulus root and a
+supplied point on the embedded short-Weierstrass equation.  It neither supplies
+such points nor represents all classical torsion points.  In particular it is
+separate from the Hasse point-carrier, splitting-field, kernel-cardinality, and
+morphism-degree problems described in the ambient-domain audit.
