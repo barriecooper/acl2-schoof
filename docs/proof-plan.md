@@ -21,10 +21,11 @@ The Schoof track uses dense ascending univariate division-polynomial data with
 the conventional `2y` factor removed from even indices. Its immediate forward
 order is:
 
-1. Certify the narrow **same-field** affine/group-law interpretation of
-   the existing denominator-free cross equations: the distinct-x secant
-   conclusion under valid-affine-point and explicit nonzero-denominator
-   premises, the opposite/infinity conclusion, and composition with the
+1. Complete the narrow **same-field** affine/group-law interpretation of
+   the existing denominator-free cross equations.  The ordinary distinct-x
+   field cross-add conclusion under valid-affine-point and explicit
+   nonzero-denominator premises is certified.  Remaining in this boundary are
+   the opposite/infinity conclusion, composition with the
    existing single-field quotient-coordinate semantic soundness theorem at a
    supplied modulus root and curve point in that same `GFIELD` instance.
    Reuse the existing affine curve books; introduce no root construction,
