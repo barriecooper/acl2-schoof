@@ -21,14 +21,13 @@ The Schoof track uses dense ascending univariate division-polynomial data with
 the conventional `2y` factor removed from even indices. Its immediate forward
 order is:
 
-1. Transport the certified single-field semantic soundness theorem for the
-   complete quotient-coordinate trace candidate into the ambient field needed
-   for classical torsion coordinates.  The existing boundary preserves the
-   q-power and iterated q-power actions and both cross predicates at every root
-   represented in the same field; it does not assert that this field contains
-   all of `E[3]`.
-2. Connect the semantically evaluated cross-multiplied predicate to the actual Frobenius
-   trace congruence modulo `ell`.  A narrowly scoped classical `E[3]`
+1. Build the classical interpretation downstream of the now-certified
+   conditional base-to-ambient trace evaluation boundary.  The boundary
+   transports predicate acceptance at a supplied ambient modulus root and
+   supplied embedded-curve point, but does not construct roots or torsion.
+
+2. Connect the semantically evaluated cross-multiplied predicate to the actual
+   Frobenius trace congruence modulo `ell`.  A narrowly scoped classical `E[3]`
    interpretation remains open and should be introduced only where that
    correctness proof requires it; constructing a general ambient-field or
    algebraic-closure model is not on executable Schoof's critical path.
