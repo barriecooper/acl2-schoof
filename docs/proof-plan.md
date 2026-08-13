@@ -21,16 +21,24 @@ The Schoof track uses dense ascending univariate division-polynomial data with
 the conventional `2y` factor removed from even indices. Its immediate forward
 order is:
 
-1. Build the classical interpretation downstream of the now-certified
-   conditional base-to-ambient trace evaluation boundary.  The boundary
-   transports predicate acceptance at a supplied ambient modulus root and
-   supplied embedded-curve point, but does not construct roots or torsion.
+1. Certify the narrow affine/group-law interpretation of the existing
+   denominator-free cross equations: the distinct-x secant conclusion under an
+   explicit nonzero-denominator premise, the opposite/infinity conclusion, and
+   an F11/`ell=3` conditional corollary for a supplied root and curve point.
+   Reuse the existing affine curve books and quotient-coordinate ambient
+   soundness; introduce no root construction, algebraic closure, or matrix
+   theory.  Stop if this requires completeness of `E[3]`, a new ambient carrier,
+   or a general division-polynomial semantics layer rather than the bounded
+   group-law bridge.  The route rationale and exact limits are recorded in the
+   [trace-congruence route audit](audits/schoof-trace-congruence-routes.md).
 
-2. Connect the semantically evaluated cross-multiplied predicate to the actual
-   Frobenius trace congruence modulo `ell`.  A narrowly scoped classical `E[3]`
-   interpretation remains open and should be introduced only where that
-   correctness proof requires it; constructing a general ambient-field or
-   algebraic-closure model is not on executable Schoof's critical path.
+2. Supply the remaining classical `E[3]` coverage needed to turn that conditional
+   point equation into a statement about every nonzero 3-torsion point, then
+   identify the equation's scalar as the actual Frobenius trace modulo 3.
+   Completeness, square-freeness or a universal-root substitute, Frobenius
+   preservation, and trace/determinant identification must be explicit.  A
+   general ambient field, algebraic closure, and Cayley--Hamilton development
+   are not independently on executable Schoof's critical path.
 3. Generalize to enough torsion primes and certify the next required executable
    client.  No `ell=5` client is currently certified.
 4. Certify enough correct residues that their modulus product exceeds the Hasse
