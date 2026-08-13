@@ -461,6 +461,16 @@ the three residue branches into a field-level trace-candidate predicate.  This
 consumer direction keeps semantic evaluation and the executable predicate
 independent of their soundness client.  It adds no cancellation or nonzero
 denominator premise and is not an affine group-law or classical torsion result.
+The separate same-field group interpretation consumer packages evaluated field
+coordinates through the established affine and tagged curve-point constructors.
+For valid affine operands it maps cross-opposite to the existing
+opposite-y/infinity relation and full addition relation; it maps cross-add to
+the existing secant and full addition relations only under an explicit nonzero
+evaluated denominator.  A final composition book consumes these two independent
+producer layers.  The resulting implications are one-way and conditional: they
+provide neither a converse nor coverage of classical torsion points, and the
+cross-opposite composition deliberately needs no supplied semantic curve
+premise because its semantic producer uses only addition and fixing.
 The F11 specialization uses the identical transparent pair representation and
 the production F11 polynomial remainder/reduced operations.  Its trace client
 and the generic production client are mechanically checked instances of one
