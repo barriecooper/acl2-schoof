@@ -19,6 +19,14 @@
            :in-theory (theory 'minimal-theory)
            :use ((:instance finite-field-poly-reduced-add-definition)))))
 
+(defthm finite-field-poly-reduced-mul-commutative-minimal-theory-client
+  (equal (finite-field-poly-reduced-mul left right modulus)
+         (finite-field-poly-reduced-mul right left modulus))
+  :hints (("Goal"
+           :in-theory (theory 'minimal-theory)
+           :use ((:instance finite-field-poly-reduced-mul-commutative
+                            (a left) (b right))))))
+
 (defthm finite-field-poly-reduced-add-associative-minimal-theory-client
   (equal
    (finite-field-poly-reduced-add

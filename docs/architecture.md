@@ -374,11 +374,15 @@ guards, and correspondence evidence belong in
   prerequisite for the other after that seam.
 
 The explicit finite-field polynomial chain is certified through recursive
-divmod, public remainder and reduced representatives, exact-width fixed-modulus
+divmod, public remainder and reduced representatives, and a total modular
+inverse candidate whose two-sided reduced-multiplication laws require the
+explicit monic-GCD-one premise.  It continues through exact-width fixed-modulus
 coefficient vectors, mixed-radix rank/unrank, exhaustive carrier construction,
 and representative-count cardinality.  These layers provide an explicit
 representative model; the field-facing bridge connecting it to the generic
-irreducible quotient-field package remains open.
+irreducible quotient-field package remains open.  In particular, no
+irreducibility result or inverse theorem for every nonzero residue class is
+implied by the conditional modular-inverse boundary.
 
 ## Hasse ambient-point and degree architecture
 

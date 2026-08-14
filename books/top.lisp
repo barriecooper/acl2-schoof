@@ -240,6 +240,8 @@
 (include-book "polynomial/generic/finite-field-monic-xgcd-reduction-regression")
 (include-book "polynomial/generic/finite-field-reduced-ring")
 (include-book "polynomial/generic/finite-field-reduced-ring-regression")
+(include-book "polynomial/generic/finite-field-modular-inverse")
+(include-book "polynomial/generic/finite-field-modular-inverse-regression")
 (include-book "polynomial/generic/finite-field-fixed-modulus-coefficients")
 (include-book "polynomial/generic/finite-field-fixed-modulus-coefficients-regression")
 (include-book "polynomial/generic/finite-field-coefficient-vector-coding")
