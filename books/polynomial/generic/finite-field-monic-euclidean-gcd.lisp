@@ -141,6 +141,46 @@
     (poly-leading-coefficient finite-field-poly-leading-coefficient)
     (poly-monic-normalize finite-field-poly-monic-normalize)))))
 
+(defthm finite-field-poly-degree-of-poly-monic-normalize-when-nonzero
+  (implies (consp (finite-field-poly-normalize polynomial))
+           (equal (finite-field-poly-degree
+                   (finite-field-poly-monic-normalize polynomial))
+                  (finite-field-poly-degree polynomial)))
+  :rule-classes nil
+  :hints (("Goal" :in-theory (theory 'minimal-theory)
+           :by (:functional-instance
+    poly-degree-of-poly-monic-normalize-when-nonzero
+    (gfield::field-element-p gfield::finite-field-element-p)
+    (gfield::field-fix gfield::finite-field-fix)
+    (gfield::field-zero gfield::finite-field-zero)
+    (gfield::field-one gfield::finite-field-one)
+    (gfield::field-add gfield::finite-field-add)
+    (gfield::field-mul gfield::finite-field-mul)
+    (gfield::field-neg gfield::finite-field-neg)
+    (gfield::field-inv gfield::finite-field-inv)
+    (gfield::field-div finite-field-div)
+    (fix-coefficients finite-field-poly-fix-coefficients)
+    (trim-trailing-zeros finite-field-poly-trim-trailing-zeros)
+    (normalize finite-field-poly-normalize)
+    (coefficient-list-p finite-field-coefficient-list-p)
+    (polynomial-p finite-field-polynomial-p)
+    (canonical-polynomial-p finite-field-canonical-polynomial-p)
+    (raw-add finite-field-poly-raw-add)
+    (poly-add finite-field-poly-add)
+    (raw-neg finite-field-poly-raw-neg)
+    (poly-neg finite-field-poly-neg)
+    (poly-sub finite-field-poly-sub)
+    (raw-scale finite-field-poly-raw-scale)
+    (poly-scale finite-field-poly-scale)
+    (raw-mul finite-field-poly-raw-mul)
+    (poly-mul finite-field-poly-mul)
+    (zero-prefix finite-field-poly-zero-prefix)
+    (poly-shift finite-field-poly-shift)
+    (monomial finite-field-poly-monomial)
+    (poly-degree finite-field-poly-degree)
+    (poly-leading-coefficient finite-field-poly-leading-coefficient)
+    (poly-monic-normalize finite-field-poly-monic-normalize)))))
+
 (defthm finite-field-poly-leading-coefficient-of-poly-monic-normalize
   (equal (finite-field-poly-leading-coefficient
           (finite-field-poly-monic-normalize polynomial))

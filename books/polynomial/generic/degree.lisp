@@ -288,6 +288,39 @@
                      poly-scale
                      poly-leading-coefficient-of-poly-monic-normalize)))))
 
+(defthm poly-degree-of-poly-monic-normalize-when-nonzero
+  (implies (consp (normalize poly))
+           (equal (poly-degree (poly-monic-normalize poly))
+                  (poly-degree poly)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance poly-leading-coefficient-nonzero-when-canonical-nonzero
+                     (p (normalize poly)))
+          (:instance poly-leading-coefficient-of-normalize (p poly))
+          (:instance gfield::field-inv-nonzero
+                     (gfield::x (poly-leading-coefficient poly)))
+          (:instance normalize-of-raw-scale-when-canonical-nonzero
+                     (a (gfield::field-inv
+                         (poly-leading-coefficient poly)))
+                     (x (normalize poly)))
+          (:instance len-of-raw-scale
+                     (a (gfield::field-inv
+                         (poly-leading-coefficient poly)))
+                     (x (normalize poly)))
+          (:instance canonical-polynomial-p-of-poly-monic-normalize)
+          (:instance consp-of-poly-monic-normalize)
+          (:instance poly-degree-when-canonical-nonzero
+                     (p (poly-monic-normalize poly)))
+          (:instance poly-degree-when-canonical-nonzero
+                     (p (normalize poly))))
+    :in-theory
+    (e/d (poly-monic-normalize poly-scale poly-degree)
+         (normalize poly-leading-coefficient
+          normalize-of-poly-monic-normalize
+          poly-leading-coefficient-nonzero-when-canonical-nonzero
+          gfield::field-inv-nonzero)))))
+
 (defthm poly-degree-less-than-input-length
   (implies (consp (normalize p))
            (< (poly-degree p) (len p)))
