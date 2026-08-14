@@ -75,8 +75,8 @@
             finite-field-poly-extended-euclidean-gcd
             finite-field-poly-monic-normalize))))
 
-; A multi-step-shaped client makes the common scalar syntactically visible on
-; both coefficients, so scaling only one projection breaks this regression.
+; This wrapper-shape client records common-scalar plumbing only; it does not
+; claim that this particular already-monic input makes rescaling nontrivial.
 (defthm finite-field-monic-xgcd-multistep-common-scaling-regression
   (let* ((one (list (gfield::finite-field-one)))
          (x (finite-field-poly-monomial
