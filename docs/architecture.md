@@ -5,6 +5,16 @@ open status belongs in the [obligation ledger](obligations.md), execution
 contracts in [execution boundaries](execution-boundaries.md), and future
 ordering in the [proof plan](proof-plan.md).
 
+The public arbitrary-field Schoof target uses the staged hybrid selected by the
+[arbitrary-field executable architecture audit](audits/arbitrary-field-executable-schoof-architecture.md):
+one executable accepts a value from an explicit certified polynomial-basis
+finite-field descriptor family, while fixed-descriptor wrappers functionally
+instantiate the existing constrained theorem layers.  The present `field-*`,
+`finite-field-*`, fixed-modulus, and short-curve symbol families remain reusable
+logical contexts; their prefixes do not make them runtime-data-parametric.
+Concrete F7, F11, and F7X2 books remain instances and regressions, not owners of
+the public architecture.
+
 ## Algebraic layers
 
 ### Generic fields and concrete adapters

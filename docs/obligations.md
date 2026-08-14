@@ -1,5 +1,15 @@
 # Proof obligation ledger
 
+The cross-cutting inventory and dependency analysis for the final executable
+target is maintained in the
+[arbitrary-field executable architecture audit](audits/arbitrary-field-executable-schoof-architecture.md).
+It records three newly explicit open seams: a descriptor-indexed field and
+runtime-curve input boundary with fixed-context correspondence; a runtime-`ell`
+trace program with exhaustive exceptional branches; and the general
+cardinality-Frobenius/torsion-to-trace bridge followed by CRT/Hasse composition.
+None is certified at this baseline.  Existing F7, F11, and F7X2 results are
+clients or regressions and do not discharge those general obligations.
+
 This is the authoritative ledger of certified, open, and deferred formal
 boundaries. It records public endpoints rather than proof history or internal
 lemmas. Stable design belongs in [architecture.md](architecture.md), execution
