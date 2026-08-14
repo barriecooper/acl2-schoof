@@ -101,6 +101,14 @@
                             (x a) (y b)))
            :in-theory (enable finite-field-poly-reduced-add))))
 
+(defthm finite-field-poly-reduced-mul-commutative
+  (equal (finite-field-poly-reduced-mul a b modulus)
+         (finite-field-poly-reduced-mul b a modulus))
+  :hints (("Goal"
+           :use ((:instance finite-field-poly-mul-commutative-for-reduction
+                            (x a) (y b)))
+           :in-theory (enable finite-field-poly-reduced-mul))))
+
 (defthm finite-field-poly-reduced-add-associative
   (equal
    (finite-field-poly-reduced-add
