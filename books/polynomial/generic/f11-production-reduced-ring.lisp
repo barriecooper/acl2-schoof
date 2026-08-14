@@ -292,6 +292,52 @@
          (f11-poly-remainder dividend modulus)))
 
 (def-f11-production-remainder-law
+  f11-poly-divmod-quotient-canonical
+  finite-field-poly-divmod-quotient-canonical
+  (f11-canonical-polynomial-p (mv-nth 0 (f11-poly-divmod f g))))
+
+(def-f11-production-remainder-law
+  f11-poly-divmod-remainder-canonical
+  finite-field-poly-divmod-remainder-canonical
+  (f11-canonical-polynomial-p (mv-nth 1 (f11-poly-divmod f g))))
+
+(def-f11-production-remainder-law
+  f11-poly-divmod-reconstruction
+  finite-field-poly-divmod-reconstruction
+  (equal (f11-poly-add
+          (f11-poly-mul (mv-nth 0 (f11-poly-divmod f g))
+                        (f11-normalize g))
+          (mv-nth 1 (f11-poly-divmod f g)))
+         (f11-normalize f)))
+
+(def-f11-production-remainder-law
+  f11-poly-divmod-final-remainder-degree-bound
+  finite-field-poly-divmod-final-remainder-degree-bound
+  (implies (consp (f11-normalize g))
+           (or (equal (mv-nth 1 (f11-poly-divmod f g)) nil)
+               (< (f11-poly-degree (mv-nth 1 (f11-poly-divmod f g)))
+                  (f11-poly-degree (f11-normalize g))))))
+
+(def-f11-production-remainder-law
+  f11-poly-normalize-of-remainder
+  finite-field-poly-normalize-of-remainder
+  (equal (f11-normalize (f11-poly-remainder dividend modulus))
+         (f11-poly-remainder dividend modulus)))
+
+(def-f11-production-remainder-law
+  f11-poly-remainder-of-normalize-modulus
+  finite-field-poly-remainder-of-normalize-modulus
+  (equal (f11-poly-remainder dividend (f11-normalize modulus))
+         (f11-poly-remainder dividend modulus)))
+
+(def-f11-production-remainder-law
+  f11-poly-remainder-strict-length-bound
+  finite-field-poly-remainder-strict-length-bound
+  (implies (consp (f11-normalize modulus))
+           (< (len (f11-poly-remainder dividend modulus))
+              (len (f11-normalize modulus)))))
+
+(def-f11-production-remainder-law
   f11-poly-remainder-idempotent
   finite-field-poly-remainder-idempotent
   (equal (f11-poly-remainder (f11-poly-remainder dividend modulus) modulus)

@@ -134,6 +134,12 @@ The executable F11 production instance reuses those generators with the
 existing dense F11 representation and coefficient arithmetic.  Its remainder
 is now the single concrete reduction path used by the F11 quotient-coordinate
 witness; quotient-coordinate operation correspondence remains downstream.
+The same production operations now support a transparent, guard-verified F11
+divisibility, Euclidean GCD, monic GCD, raw and monic XGCD, and modular-inverse
+stack.  Its correctness theorems are staged functional transports from the
+finite-field-prefixed stack; no second F11 arithmetic, divmod, or remainder
+implementation is introduced.  Modular-inverse correctness is conditional on
+the concrete monic GCD being polynomial one.
 
 `poly-coefficient` is a total projection: indices are totalized with `nfix`,
 represented values are field-fixed, and absent coefficients or coefficients

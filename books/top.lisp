@@ -242,6 +242,8 @@
 (include-book "polynomial/generic/finite-field-reduced-ring-regression")
 (include-book "polynomial/generic/finite-field-modular-inverse")
 (include-book "polynomial/generic/finite-field-modular-inverse-regression")
+(include-book "polynomial/generic/f11-production-euclidean-stack")
+(include-book "polynomial/generic/f11-production-euclidean-stack-regression")
 (include-book "polynomial/generic/finite-field-fixed-modulus-coefficients")
 (include-book "polynomial/generic/finite-field-fixed-modulus-coefficients-regression")
 (include-book "polynomial/generic/finite-field-coefficient-vector-coding")
