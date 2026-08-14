@@ -1,8 +1,94 @@
 (in-package "GPOLY")
 
 (include-book "finite-field-modular-inverse")
-(include-book "finite-field-monic-xgcd-regression")
-(include-book "finite-field-monic-xgcd-reduction-regression")
+
+; Exact execution plumbing stays local to this regression.  Later test books
+; must be clients of production equations, not of earlier regression theorems.
+(local
+ (defthm finite-field-singleton-one-canonical-for-modular-inverse-regression
+   (finite-field-canonical-polynomial-p
+    (list (gfield::finite-field-one)))
+   :hints
+   (("Goal"
+     :in-theory
+     (enable finite-field-canonical-polynomial-p
+             finite-field-poly-leading-coefficient)))))
+
+(local
+ (defthm finite-field-normalization-for-modular-inverse-regression
+   (and
+    (equal (finite-field-poly-normalize 'malformed-modulus) nil)
+    (equal (finite-field-poly-normalize
+            (list (gfield::finite-field-zero)
+                  (gfield::finite-field-zero)))
+           nil))
+   :hints
+   (("Goal"
+     :in-theory
+     (enable finite-field-poly-normalize
+             finite-field-poly-trim-trailing-zeros)))))
+
+(local
+ (defthm finite-field-monic-xgcd-cases-for-modular-inverse-regression
+   (let ((one (list (gfield::finite-field-one))))
+     (and
+      (equal (finite-field-poly-monic-extended-euclidean-gcd nil nil)
+             (mv nil nil nil))
+      (equal (finite-field-poly-monic-extended-euclidean-gcd
+              'malformed-first 'malformed-modulus)
+             (mv nil nil nil))
+      (equal (finite-field-poly-monic-extended-euclidean-gcd
+              (cons (gfield::finite-field-one) 'malformed-tail) nil)
+             (mv one one nil))
+      (equal (finite-field-poly-monic-extended-euclidean-gcd
+              (list (gfield::finite-field-one)
+                    (gfield::finite-field-zero)) nil)
+             (mv one one nil))))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :in-theory
+     (enable finite-field-poly-monic-extended-euclidean-gcd
+             finite-field-poly-extended-euclidean-gcd
+             finite-field-poly-monic-normalize)))))
+
+(local
+ (defthm finite-field-remainder-one-cases-for-modular-inverse-regression
+   (let ((one (list (gfield::finite-field-one))))
+     (and
+      (equal (finite-field-poly-remainder one one) nil)
+      (equal (finite-field-poly-remainder one nil) one)
+      (equal (finite-field-poly-remainder one 'malformed-modulus) one)
+      (equal (finite-field-poly-remainder
+              one (list (gfield::finite-field-zero)
+                        (gfield::finite-field-zero)))
+             one)))
+   :hints
+   (("Goal"
+     :use
+     ((:instance finite-field-poly-remainder-self
+                 (modulus (list (gfield::finite-field-one))))
+      (:instance finite-field-poly-normalize-when-canonical
+                 (xs (list (gfield::finite-field-one))))
+      (:instance
+       finite-field-singleton-one-canonical-for-modular-inverse-regression)
+      (:instance finite-field-normalization-for-modular-inverse-regression)
+      (:instance finite-field-poly-remainder-zero-normalized-modulus
+                 (dividend (list (gfield::finite-field-one)))
+                 (modulus nil))
+      (:instance finite-field-poly-remainder-zero-normalized-modulus
+                 (dividend (list (gfield::finite-field-one)))
+                 (modulus 'malformed-modulus))
+      (:instance finite-field-poly-remainder-zero-normalized-modulus
+                 (dividend (list (gfield::finite-field-one)))
+                 (modulus (list (gfield::finite-field-zero)
+                                (gfield::finite-field-zero)))))
+     :in-theory
+     (union-theories
+      (theory 'finite-field-poly-definition-theory)
+      (union-theories
+       (theory 'gfield::finite-field-context-instance-theory)
+       (theory 'minimal-theory)))))))
 
 (defthm finite-field-poly-modular-inverse-definition-minimal-theory-client
   (equal
@@ -91,9 +177,9 @@
   :hints
   (("Goal"
     :use
-    ((:instance finite-field-monic-xgcd-total-boundary-regressions)
-     (:instance finite-field-polynomial-one-total-remainder-regressions)
-     (:instance finite-field-polynomial-one-modulo-negative-one-regression)
+    ((:instance finite-field-monic-xgcd-cases-for-modular-inverse-regression)
+     (:instance finite-field-remainder-one-cases-for-modular-inverse-regression)
+     (:instance finite-field-polynomial-one-definition)
      (:instance finite-field-poly-modular-inverse-definition
                 (first nil) (modulus nil))
      (:instance finite-field-poly-modular-inverse-definition
