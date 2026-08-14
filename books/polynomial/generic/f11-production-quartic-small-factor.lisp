@@ -67,69 +67,82 @@
                                gfield::f11-element-p)))))
 
 ; Narrow transports from the already certified finite-field/F11 stack.
-(def-f11-stack-law f11-poly-normalize-idempotent-for-irreducibility
-  finite-field-poly-normalize-idempotent
+(local
+ (def-f11-stack-law f11-poly-normalize-idempotent-for-irreducibility
+   finite-field-poly-normalize-idempotent
   (equal (f11-normalize (f11-normalize polynomial))
-         (f11-normalize polynomial)))
-(def-f11-stack-law f11-poly-degree-of-normalize-for-irreducibility
-  finite-field-poly-degree-of-poly-normalize
+         (f11-normalize polynomial))))
+(local
+ (def-f11-stack-law f11-poly-degree-of-normalize-for-irreducibility
+   finite-field-poly-degree-of-poly-normalize
   (equal (f11-poly-degree (f11-normalize polynomial))
-         (f11-poly-degree polynomial)))
-(def-f11-stack-law f11-canonical-polynomial-p-of-normalize-for-irreducibility
-  finite-field-canonical-polynomial-p-of-poly-normalize
-  (f11-canonical-polynomial-p (f11-normalize polynomial)))
-(def-f11-stack-law f11-poly-mul-normalize-left-for-irreducibility
-  finite-field-poly-mul-normalize-left-for-reduction-public
+         (f11-poly-degree polynomial))))
+(local
+ (def-f11-stack-law f11-canonical-polynomial-p-of-normalize-for-irreducibility
+   finite-field-canonical-polynomial-p-of-poly-normalize
+  (f11-canonical-polynomial-p (f11-normalize polynomial))))
+(local
+ (def-f11-stack-law f11-poly-mul-normalize-left-for-irreducibility
+   finite-field-poly-mul-normalize-left
   (equal (f11-poly-mul (f11-normalize left) right)
-         (f11-poly-mul left right)))
-(def-f11-stack-law f11-poly-mul-normalize-right-for-irreducibility
-  finite-field-poly-mul-normalize-right-for-reduction-public
+         (f11-poly-mul left right))))
+(local
+ (def-f11-stack-law f11-poly-mul-normalize-right-for-irreducibility
+   finite-field-poly-mul-normalize-right
   (equal (f11-poly-mul left (f11-normalize right))
-         (f11-poly-mul left right)))
-(def-f11-stack-law f11-poly-degree-of-poly-mul-for-irreducibility
-  finite-field-poly-degree-of-poly-mul
+         (f11-poly-mul left right))))
+(local
+ (def-f11-stack-law f11-poly-degree-of-poly-mul-for-irreducibility
+   finite-field-poly-degree-of-poly-mul
   (implies (and (f11-canonical-polynomial-p left)
                 (f11-canonical-polynomial-p right)
                 (consp left) (consp right))
            (equal (f11-poly-degree (f11-poly-mul left right))
                   (+ (f11-poly-degree left) (f11-poly-degree right))))
-  :rule-classes nil)
-(def-f11-stack-law f11-poly-mul-commutative-for-irreducibility
-  finite-field-poly-mul-commutative-for-reduction
+  :rule-classes nil))
+(local
+ (def-f11-stack-law f11-poly-mul-commutative-for-irreducibility
+   finite-field-poly-mul-commutative-for-reduction
   (equal (f11-poly-mul left right) (f11-poly-mul right left))
-  :rule-classes nil)
-(def-f11-stack-law f11-poly-divides-p-of-multiple-for-irreducibility
-  finite-field-poly-divides-p-of-multiple
+  :rule-classes nil))
+(local
+ (def-f11-stack-law f11-poly-divides-p-of-multiple-for-irreducibility
+   finite-field-poly-divides-p-of-multiple
   (f11-poly-divides-p divisor (f11-poly-mul multiplier divisor))
-  :rule-classes nil)
-(def-f11-stack-law f11-poly-divides-p-of-normalize-dividend-for-irreducibility
-  finite-field-poly-divides-p-of-normalize-dividend
+  :rule-classes nil))
+(local
+ (def-f11-stack-law f11-poly-divides-p-of-normalize-dividend-for-irreducibility
+   finite-field-poly-divides-p-of-normalize-dividend
   (equal (f11-poly-divides-p divisor (f11-normalize dividend))
-         (f11-poly-divides-p divisor dividend)))
+         (f11-poly-divides-p divisor dividend))))
 (def-f11-stack-law f11-poly-degree-of-poly-monic-normalize-when-nonzero
   finite-field-poly-degree-of-poly-monic-normalize-when-nonzero
   (implies (consp (f11-normalize factor))
            (equal (f11-poly-degree (f11-poly-monic-normalize factor))
                   (f11-poly-degree factor)))
   :rule-classes nil)
-(def-f11-stack-law f11-consp-of-poly-monic-normalize-for-irreducibility
-  finite-field-consp-of-poly-monic-normalize
+(local
+ (def-f11-stack-law f11-consp-of-poly-monic-normalize-for-irreducibility
+   finite-field-consp-of-poly-monic-normalize
   (equal (consp (f11-poly-monic-normalize factor))
          (consp (f11-normalize factor)))
-  :rule-classes nil)
-(def-f11-stack-law f11-canonical-polynomial-p-of-poly-monic-normalize-for-irreducibility
-  finite-field-canonical-polynomial-p-of-poly-monic-normalize
-  (f11-canonical-polynomial-p (f11-poly-monic-normalize factor)))
-(def-f11-stack-law f11-poly-leading-coefficient-of-poly-monic-normalize-for-irreducibility
-  finite-field-poly-leading-coefficient-of-poly-monic-normalize
+  :rule-classes nil))
+(local
+ (def-f11-stack-law f11-canonical-polynomial-p-of-poly-monic-normalize-for-irreducibility
+   finite-field-canonical-polynomial-p-of-poly-monic-normalize
+  (f11-canonical-polynomial-p (f11-poly-monic-normalize factor))))
+(local
+ (def-f11-stack-law f11-poly-leading-coefficient-of-poly-monic-normalize-for-irreducibility
+   finite-field-poly-leading-coefficient-of-poly-monic-normalize
   (equal (f11-poly-leading-coefficient (f11-poly-monic-normalize factor))
          (if (consp (f11-normalize factor)) (gfield::f11-one)
            (gfield::f11-zero)))
-  :rule-classes nil)
-(def-f11-stack-law f11-poly-divides-p-of-poly-monic-normalize-divisor-for-irreducibility
-  finite-field-poly-divides-p-of-poly-monic-normalize-divisor
+  :rule-classes nil))
+(local
+ (def-f11-stack-law f11-poly-divides-p-of-poly-monic-normalize-divisor-for-irreducibility
+   finite-field-poly-divides-p-of-poly-monic-normalize-divisor
   (equal (f11-poly-divides-p (f11-poly-monic-normalize divisor) dividend)
-         (f11-poly-divides-p divisor dividend)))
+         (f11-poly-divides-p divisor dividend))))
 
 (defthm f11-poly-reducible-p-of-normalize
   (equal (f11-poly-reducible-p (f11-normalize poly))

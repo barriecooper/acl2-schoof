@@ -346,7 +346,7 @@
                       (theory 'finite-field-poly-definition-theory)
                       (theory 'minimal-theory))))))))
 
-(defthm finite-field-poly-mul-normalize-left-for-reduction-public
+(defthm finite-field-poly-mul-normalize-left
    (equal (finite-field-poly-mul (finite-field-poly-normalize x) y)
           (finite-field-poly-mul x y))
    :rule-classes nil
@@ -765,7 +765,7 @@
                       (theory 'finite-field-poly-definition-theory)
                       (theory 'minimal-theory))))))))
 
-(defthm finite-field-poly-mul-normalize-right-for-reduction-public
+(defthm finite-field-poly-mul-normalize-right
    (equal (finite-field-poly-mul x (finite-field-poly-normalize y))
           (finite-field-poly-mul x y))
    :rule-classes nil
