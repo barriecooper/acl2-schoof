@@ -77,17 +77,23 @@ would receive that value, for example `(ff-add fd x y)`, `(ff-fix fd x)`,
 `(ff-cardinality fd)`, `(ff-elements fd)`, and `(ff-equal fd x y)`.  For the
 polynomial-basis family, elements are exact-width or normalized base-`p`
 coefficient vectors, equality is literal equality after `ff-fix`, the order is
-`p^m`, and enumeration decodes indices below that order.  A logical predicate
-`ff-descriptor-p` would require prime `p`, positive `m`, a monic degree-`m`
-modulus, and irreducibility; it must not trust certificate data merely stored
-in the descriptor.
+`p^m`, and enumeration decodes indices below that order.  A proposed executable
+`ff-descriptor-structure-p` would check only data shape, representation tags,
+natural/positive size fields, and canonical encodings checkable by the
+representation kernel.  A distinct proposed logical `ff-field-valid-p` would
+require prime `p`, positive `m`, a monic modulus of degree `m`, and
+irreducibility.  It must not trust certificate data merely stored in the
+descriptor.  An optional future certified executable `ff-field-valid-check`
+could decide that logical predicate, but no such checker exists or is required
+for the initial interface.
 
 The representative, coding, carrier, cardinality, PFIELD arithmetic, divmod,
 and fixed-modulus field ingredients exist separately.  The uniform descriptor,
 arity-threaded curve/polynomial/Schoof APIs, field-law theorem, verified guards,
-and scalable validity story do not.  Executably checking irreducibility is not
-required on every call: named constructors may have theorem hypotheses, and a
-validated-descriptor entry point may later use a certified checker.  This model
+and scalable validity story do not.  Initial correctness theorems must assume
+`ff-field-valid-p`; execution must not claim to reject every composite `p` or
+reducible modulus.  Named constructors can discharge the logical hypothesis,
+and a validated-descriptor entry point may later use a certified checker.  This model
 covers `p^m`, but converting all present constrained definitions directly would
 cause broad arity churn and proof risk.  It gives the cleanest public runtime
 contract at the highest initial engineering cost.
@@ -95,7 +101,7 @@ contract at the highest initial engineering cost.
 ### C. Staged hybrid (selected)
 
 Build one explicit polynomial-basis descriptor family and its executable
-operations as in B.  Prove once, with descriptor validity as a parameterized
+operations as in B.  Prove once, with logical descriptor validity as a parameterized
 hypothesis, that those operations satisfy a descriptor-indexed field interface.
 Use a small fixed-descriptor wrapper to functionally instantiate the existing
 `GFIELD`, `finite-field-*`, GPOLY, curve, and group mathematics.  In parallel,
@@ -106,20 +112,19 @@ fixed-descriptor logical instance.
 This represents operations by dispatch on the descriptor's representation tag
 (initially only the polynomial-basis family); order by `p^m`; equality and
 canonicalization by `ff-fix`; specification enumeration by rank/unrank; and
-validity by an explicit logical predicate.  Guards can require the descriptor
-and fixed elements, while total definitions assign documented fixing/failure
-semantics to malformed inputs.  A new descriptor value in the certified family
+field validity by `ff-field-valid-p`.  The executable structural predicate and
+fixer support guards and total representation semantics without deciding field
+validity.  A new descriptor value in the certified family
 does not reprove Schoof mathematics.  A new *representation backend* does need
 one field-interface/equivalence proof.  Direct descriptor calls may cost more
 than specialized wrappers, so performance claims require separate measurements.
 
 The hybrid is the smallest defensible final architecture because it preserves
 the substantial constrained theorem investment while meeting the single
-runtime-input requirement.  The key unresolved design choice is whether public
-valid descriptors are assumption-only or also accepted through a certified
-validation function.  This does not block the logical/executable core: begin
-with a recognizer hypothesis and total failure semantics; add a checker only
-when a real caller requires untrusted descriptor validation.
+runtime-input requirement.  Logical field validity is initially a correctness
+hypothesis, not an executable promise.  Whether to add a certified executable
+field validator remains unresolved and does not block the core: add it only
+when a real caller requires validation of untrusted descriptors.
 
 ## Curve input and proposed final contracts
 
@@ -137,13 +142,15 @@ descriptor zero after fixing.  The characteristic restriction should be
 derived from descriptor characteristic `p` and connected to the existing
 `short-weierstrass-characteristic-p`; it must not be hidden in a guard.
 
-For malformed inputs, a proposed total top-level function should return a
-tagged failure rather than silently count a fixed replacement curve.  Inside a
-successful branch, `(ff-fix fd a)` and `(ff-fix fd b)` are the canonical
-coefficients.  This makes invalid-descriptor, unsupported-characteristic, and
-singular-curve behavior observable while leaving the correctness theorem about
-the success branch.  Names in the following sketches are **proposals**, not
-existing ACL2 definitions:
+For failures that are executable, a proposed total top-level function should
+return a tagged failure rather than silently count a fixed replacement curve.
+Initially these are structurally malformed descriptors, unsupported
+short-Weierstrass characteristic, malformed coefficients, and singular curves,
+provided each check is certified executable.  It must not imply rejection of
+every nonprime characteristic or reducible modulus before a field-validity
+checker exists.  Inside a successful branch, `(ff-fix fd a)` and
+`(ff-fix fd b)` are the canonical coefficients.  Names in the following
+sketches are **proposals**, not existing ACL2 definitions:
 
 ```lisp
 (schoof-count fd a b)
@@ -161,7 +168,7 @@ must connect to it without using that enumeration as the algorithm.
 
 ```lisp
 (defthm schoof-count-correct                       ; PROPOSED
-  (implies (and (ff-descriptor-p fd)
+  (implies (and (ff-field-valid-p fd)             ; logical hypothesis
                 (ff-supported-short-weierstrass-characteristic-p fd)
                 (ff-element-p fd a)
                 (ff-element-p fd b)
@@ -171,8 +178,10 @@ must connect to it without using that enumeration as the algorithm.
                         (len (curve-rational-points-spec fd a b))))))
 ```
 
-Logical correctness is this equality plus the no-enumeration implementation
-invariant.  Guard verification only shows safe execution on described inputs.
+`ff-field-valid-p` implies structural well-formedness, but the executable need
+not decide it.  Therefore the theorem is conditional even if `schoof-count`
+returns `(:error ...)` only for its executable checks.  Logical correctness is
+this equality plus the no-enumeration implementation invariant.  Guard verification only shows safe execution on described inputs.
 Termination requires measures for division-polynomial generation, candidate
 search, prime accumulation, and CRT loops.  Neither guards nor termination
 imply the equality.  Concrete timings and asymptotic/operation-count bounds are
@@ -182,7 +191,7 @@ separate performance evidence and are presently absent.
 
 | # | Required endpoint | Certified endpoint now | Exact missing obligation / dependency | Kind |
 |---:|---|---|---|---|
-| 1 | Descriptor operations, characteristic, `q=p^m`, carrier and fixer | Constrained field/finite-field contexts; PFIELD and F7X2 clients; explicit coefficient-vector carrier/count | Descriptor-indexed field package; field-facing bridge; characteristic/order compatibility; depends on no Schoof layer | Logical + executable |
+| 1 | Descriptor representation, then field validity | Constrained field/finite-field contexts; PFIELD and F7X2 clients; explicit coefficient-vector carrier/count | First structural shape/fixing, reduced operations, rank/unrank and `p^m` count; then inverse/field laws under logical validity, characteristic/order, and fixed-descriptor correspondence | Logical + executable |
 | 2 | Runtime nonsingular curve | Fixed-symbol short curve, tagged points, characteristic predicate, general addition/group laws | Thread `fd,a,b`; descriptor equivalence; discriminant and failure contract | Logical + executable |
 | 3 | Enough primes `ell`, prime and `ell != p` | `DM::PRIMEP` available; characteristic exclusions are generic field facts | Executable generation/selection, pairwise coprimality, stopping-product theorem | Logical + executable |
 | 4 | Runtime `psi_ell` | Generated finite-field table and all-index evaluator correspondence | Descriptor instance/equivalence and required degree/shape facts for general odd prime `ell` | Both; largely present in constrained form |
@@ -229,7 +238,7 @@ book, with these three as clients.
 
 | Finding | Disposition |
 |---|---|
-| `field-*`, `finite-field-*`, short-curve coefficients, and fixed-modulus-field modulus are first-order fixed symbols; prefixes do not make them runtime-parametric. | **Immediate architectural correction:** establish descriptor-indexed operations and a fixed-descriptor equivalence seam before expanding Schoof clients. |
+| `field-*`, `finite-field-*`, short-curve coefficients, and fixed-modulus-field modulus are first-order fixed symbols; prefixes do not make them runtime-parametric. | **Immediate architectural correction:** first establish a descriptor representation kernel, then a field-law/functional-instantiation bridge, then the runtime curve bridge. |
 | The explicit coefficient vectors/carrier/count are not connected to the generic irreducible quotient field. | **Immediate**, within the same descriptor-family boundary; avoid a second arithmetic implementation. |
 | Production F11 division-polynomial and quotient clients duplicate fixed names and literals. | **Accurate labelling now; later generalization.** Preserve as instances/regressions while runtime orchestration is built. |
 | `quotient-coordinate-frobenius-eleven-of-add` is tied to 11 and does not establish `q=p^m`. | **Later generalization, prerequisite before residue correctness.** F7X2 should test the prime-power statement. |
@@ -248,9 +257,9 @@ not the existence of concrete clients.
 | Route | Cost and ACL2 risk | Reuse/scalability | Relation to target |
 |---|---|---|---|
 | Continue F11 root/torsion witness | Moderate implementation, high risk of further instance-only lemmas | Low; validates one curve/prime | Useful later regression, not critical path |
-| Build explicit arbitrary-field input layer first | Moderate/high arity and equivalence engineering; bounded mathematics | Highest; resolves meaning of public input and `p^m` early | **Selected immediate boundary** |
-| Generalize trace program to runtime `ell` first | Moderate recursion/branch proof; awkward over fixed field/curve symbols | High after descriptor seam | Selected second boundary |
-| Generic Frobenius/torsion correctness first | Very high mathematical and representation risk | Essential and highly reusable | Third boundary, after its data/algorithm statement is stable |
+| Build explicit arbitrary-field input layer first | Moderate/high arity and equivalence engineering; bounded mathematics | Highest; resolves meaning of public input and `p^m` early | **Selected as three staged boundaries, beginning with the representation kernel** |
+| Generalize trace program to runtime `ell` first | Moderate recursion/branch proof; awkward over fixed field/curve symbols | High after descriptor and curve seams | Begin only after the first three input boundaries |
+| Generic Frobenius/torsion correctness first | Very high mathematical and representation risk | Essential and highly reusable | Follow runtime-`ell`, after its data/algorithm statement is stable |
 | CRT/top-level scaffolding first | Low/moderate programming, but proof invariants would be conditional on nonexistent residues/Hasse | Reusable integer layer | Defer until residue theorem; otherwise misleading |
 | Staged combination | Controls risk if boundaries remain separate | Best overall | Adopt the ordered stages below |
 
@@ -261,40 +270,37 @@ explicit certified polynomial-basis finite-field descriptor family; existing
 constrained mathematics remains the logical theorem layer through a
 fixed-descriptor functional instance and an execution-equivalence theorem.
 
-### Next implementation boundary
+### Next implementation boundary: descriptor representation kernel
 
-Build only the **descriptor-indexed finite-field and runtime-curve input seam**:
+Build only the polynomial-basis descriptor shape/fixer, element
+representation/fixing/equality, addition, negation, multiplication, rank,
+unrank, and the `p^m` representative/carrier count, with prime and extension
+concrete regressions.  This is deliberately a **reduced-ring/representation
+boundary**.  It neither defines field inversion nor claims field laws, a
+`GFIELD` instance, or executable detection of prime/irreducible descriptors.
 
-1. define one total polynomial-basis descriptor recognizer and element
-   operations, reusing the certified PFIELD/divmod/representative stack;
-2. prove fixer/equality, field laws, rank/unrank carrier, `q=p^m`, and
-   characteristic facts under descriptor validity;
-3. connect a fixed descriptor to `GFIELD` and `finite-field-*` by functional
-   instantiation/equivalence;
-4. define descriptor-indexed short-curve validity for runtime `a,b`, and prove
-   correspondence to existing fixed-symbol curve predicates; and
-5. include guard-verified concrete prime and extension executions.
-
-This is one coherent seam: data inputs become certified field and curve
-contexts.  It must not also generalize trace, prove torsion, or add CRT.  The
-smallest early experiment, before committing to broad API conversion, is a
-guard-verified descriptor operation subset (fix/add/mul plus rank/unrank) for
-both F7 and F7X2, accompanied by a fixed-descriptor functional instance.  Stop
-if ACL2 cannot keep the descriptor hypothesis stable without duplicating field
-mathematics; in that event reconsider A versus C using certification time,
-theorem-statement size, and execution overhead as explicit decision criteria.
+The executable structural predicate should recognize safely processable data;
+the separate logical field-validity predicate may already be stated but is not
+decided by this kernel.  Reuse the certified PFIELD/divmod/representative stack
+and do not introduce a second arithmetic implementation.
 
 ### Following dependency order
 
-1. **Runtime-`ell` quotient trace boundary:** descriptor/curve-threaded
+1. **Descriptor field-law bridge:** add inverse; prove field laws under logical
+   descriptor validity, characteristic/order facts, and fixed-descriptor
+   correspondence/functional instantiation into `GFIELD` and `finite-field-*`.
+2. **Runtime short-curve bridge:** thread descriptor and runtime `a,b` through
+   discriminant/nonsingularity and point fixing, and prove correspondence with
+   the existing fixed-symbol curve context.
+3. **Runtime-`ell` quotient trace boundary:** descriptor/curve-threaded
    division-polynomial generation, reduced quotient computation, bounded
    candidate search, and an exhaustive ordinary/exceptional branch dispatcher;
    prove equivalence to the constrained operations, not trace correctness yet.
-2. **Generic cardinality-Frobenius/torsion residue boundary:** `q=p^m`
+4. **Generic cardinality-Frobenius/torsion residue boundary:** `q=p^m`
    Frobenius, curve/group preservation, all relevant `ell`-torsion coverage,
    and the theorem that the accepted quotient candidate is the
    cardinality-defined trace modulo `ell`.
-3. **Prime accumulation and reconstruction boundary:** auxiliary-prime loop,
+5. **Prime accumulation and reconstruction boundary:** auxiliary-prime loop,
    residue accumulator invariant, centered CRT, then consume the independently
    certified Hasse bound to obtain the unique trace and compose the proposed
    point-cardinality theorem.

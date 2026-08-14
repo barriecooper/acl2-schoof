@@ -15,6 +15,14 @@ logical contexts; their prefixes do not make them runtime-data-parametric.
 Concrete F7, F11, and F7X2 books remain instances and regressions, not owners of
 the public architecture.
 
+Descriptor assurance has three distinct layers.  An executable structural
+predicate recognizes and fixes representable descriptor data; a logical
+field-validity predicate additionally requires prime characteristic, positive
+extension degree, the correct modulus degree, and irreducibility; and an
+optional future certified executable validator may decide that logical
+predicate.  Until such a validator exists, field validity is a theorem
+hypothesis, not an error condition the executable claims to detect.
+
 ## Algebraic layers
 
 ### Generic fields and concrete adapters
