@@ -236,6 +236,8 @@
 (include-book "polynomial/generic/finite-field-xgcd-regression")
 (include-book "polynomial/generic/finite-field-monic-xgcd")
 (include-book "polynomial/generic/finite-field-monic-xgcd-regression")
+(include-book "polynomial/generic/finite-field-monic-xgcd-reduction")
+(include-book "polynomial/generic/finite-field-monic-xgcd-reduction-regression")
 (include-book "polynomial/generic/finite-field-reduced-ring")
 (include-book "polynomial/generic/finite-field-reduced-ring-regression")
 (include-book "polynomial/generic/finite-field-fixed-modulus-coefficients")
