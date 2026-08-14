@@ -21,8 +21,9 @@ The maintained documents have distinct responsibilities:
 
 * [Arbitrary-field executable Schoof architecture](arbitrary-field-executable-schoof-architecture.md)
   selects the staged descriptor/constrained-theory hybrid, inventories the
-  certified baseline after PR #360, and records the general dependency order
-  from runtime field and curve inputs to point cardinality.
+  certified baseline after PR #360, records the general dependency order from
+  runtime field and curve inputs to point cardinality, and records the post-PR
+  #361 runtime modular-coefficient interface gap found during implementation.
 
 | Audit | Status | Scope |
 |---|---|---|
