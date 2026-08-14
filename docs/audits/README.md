@@ -19,6 +19,11 @@ The maintained documents have distinct responsibilities:
 
 ## Index
 
+* [Arbitrary-field executable Schoof architecture](arbitrary-field-executable-schoof-architecture.md)
+  selects the staged descriptor/constrained-theory hybrid, inventories the
+  certified baseline after PR #360, and records the general dependency order
+  from runtime field and curve inputs to point cardinality.
+
 | Audit | Status | Scope |
 |---|---|---|
 | [`associativity-assembly.md`](associativity-assembly.md) | Historical decision and completion record | Selects the finite affine semantic associativity endpoint, records its D/O/T coverage and validation, and follows it through the certified tagged wrapper. Current theorem status lives in the obligation ledger and associativity status document. |

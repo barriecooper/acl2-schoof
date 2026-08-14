@@ -19,7 +19,39 @@ point carrier remains to be selected when that bridge is realized.
 
 The Schoof track uses dense ascending univariate division-polynomial data with
 the conventional `2y` factor removed from even indices. Its immediate forward
-order is:
+order is governed by the
+[arbitrary-field executable architecture audit](audits/arbitrary-field-executable-schoof-architecture.md).
+That audit selects a staged hybrid: an explicit run-time polynomial-basis
+finite-field descriptor family supplies the public executable input, while a
+fixed-descriptor wrapper functionally instantiates the existing constrained
+field, polynomial, curve, and group mathematics.  “Arbitrary finite field” no
+longer means only a separately certified nullary operation instance.
+
+The next coherent boundary is only the **descriptor representation kernel**:
+polynomial-basis descriptor shape/fixing, element representation/fixing/equality,
+add/neg/mul, rank/unrank, `p^m` representative count, and prime/extension
+regressions.  This reduced-ring/representation boundary does not add inverse,
+claim field laws, instantiate `GFIELD`, or decide logical field validity.
+
+Descriptor assurance separates an executable structural predicate from a
+logical field-validity predicate requiring primality, positive extension
+degree, correct modulus degree, and irreducibility.  A certified executable
+validator is optional future work.  The subsequent order is:
+
+1. inverse and the descriptor field-law bridge under logical validity,
+   including characteristic/order and fixed-descriptor functional instances;
+2. the runtime short-curve bridge for descriptor-threaded `A,B`, discriminant,
+   point fixing, and fixed-symbol correspondence;
+3. descriptor/curve-threaded runtime-`ell` division-polynomial and quotient
+   trace execution, including bounded candidate search and exhaustive
+   ordinary/exceptional branch dispatch;
+4. generic cardinality-`q` Frobenius and torsion semantics proving that the
+   accepted residue is the cardinality-defined trace modulo `ell`; and
+5. auxiliary-prime accumulation, centered CRT, Hasse uniqueness, and final
+   composition with the independently specified rational-point cardinality.
+
+The older specialized sequence is retained below as historical/detail context,
+not as the controlling forward route:
 
 1. Continue the reusable finite-field instantiation seam identified by the
    post-PR #350 route audit.  Finite-field-prefixed divisibility, the Euclidean
