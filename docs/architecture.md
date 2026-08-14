@@ -388,12 +388,17 @@ and representative-count cardinality.  These layers provide an explicit
 representative model; the field-facing bridge connecting it to the generic
 irreducible quotient-field package remains open.  In particular, no
 irreducibility result or inverse theorem for every nonzero residue class is
-implied by the conditional modular-inverse boundary.  The production F11
-logical irreducibility interface and symbolic quartic boundary are certified:
-a reducible normalized quartic has a monic divisor of degree one or two.  The
-next concrete boundary is bounded exclusion of all such divisors of
-`(7 2 2 0 1)`; neither the production `psi_3` irreducibility theorem nor its
-quotient field is established yet.
+implied by the conditional modular-inverse boundary.  At the generic and
+finite-field-prefixed logical layers, monic normalization preserves degree for
+nonzero polynomials, reducibility supplies a positive-degree monic divisor of
+degree at most half the input degree, and absence of such a divisor implies
+irreducibility.  This is not an executable irreducibility test.  A scalable
+executable criterion, if required, needs a separate audit; Rabin-style
+Frobenius/GCD testing is only a candidate.  Schoof's general quotient-ring
+computation does not require division-polynomial irreducibility.  The concrete
+F11 quartic root-field route is therefore only a specialised test or classical
+correctness witness, not the architecture for arbitrary finite fields; its
+concrete irreducibility theorem and quotient field remain open.
 
 ## Hasse ambient-point and degree architecture
 
