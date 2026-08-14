@@ -346,6 +346,37 @@
                       (theory 'finite-field-poly-definition-theory)
                       (theory 'minimal-theory))))))))
 
+(defthm finite-field-poly-mul-normalize-left-for-reduction-public
+   (equal (finite-field-poly-mul (finite-field-poly-normalize x) y)
+          (finite-field-poly-mul x y))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :in-theory (theory 'minimal-theory)
+     :by (:functional-instance poly-mul-normalize-left
+          (gfield::field-element-p gfield::finite-field-element-p)
+          (gfield::field-fix gfield::finite-field-fix)
+          (gfield::field-zero gfield::finite-field-zero)
+          (gfield::field-one gfield::finite-field-one)
+          (gfield::field-add gfield::finite-field-add)
+          (gfield::field-mul gfield::finite-field-mul)
+          (gfield::field-neg gfield::finite-field-neg)
+          (gfield::field-inv gfield::finite-field-inv)
+          (fix-coefficients finite-field-poly-fix-coefficients)
+          (trim-trailing-zeros finite-field-poly-trim-trailing-zeros)
+          (normalize finite-field-poly-normalize)
+          (raw-add finite-field-poly-raw-add)
+          (raw-scale finite-field-poly-raw-scale)
+          (raw-mul finite-field-poly-raw-mul)
+          (poly-mul finite-field-poly-mul)))
+    (and stable-under-simplificationp
+         (list :use (theory 'gfield::finite-field-context-instance-theory)
+               :in-theory
+               (list 'quote
+                     (union-theories
+                      (theory 'finite-field-poly-definition-theory)
+                      (theory 'minimal-theory)))))))
+
 (local
  (defthm finite-field-poly-neg-of-normalize-for-reduction
    (equal (finite-field-poly-neg (finite-field-poly-normalize x))
@@ -733,6 +764,37 @@
                      (union-theories
                       (theory 'finite-field-poly-definition-theory)
                       (theory 'minimal-theory))))))))
+
+(defthm finite-field-poly-mul-normalize-right-for-reduction-public
+   (equal (finite-field-poly-mul x (finite-field-poly-normalize y))
+          (finite-field-poly-mul x y))
+   :rule-classes nil
+   :hints
+   (("Goal"
+     :in-theory (theory 'minimal-theory)
+     :by (:functional-instance poly-mul-normalize-right
+          (gfield::field-element-p gfield::finite-field-element-p)
+          (gfield::field-fix gfield::finite-field-fix)
+          (gfield::field-zero gfield::finite-field-zero)
+          (gfield::field-one gfield::finite-field-one)
+          (gfield::field-add gfield::finite-field-add)
+          (gfield::field-mul gfield::finite-field-mul)
+          (gfield::field-neg gfield::finite-field-neg)
+          (gfield::field-inv gfield::finite-field-inv)
+          (fix-coefficients finite-field-poly-fix-coefficients)
+          (trim-trailing-zeros finite-field-poly-trim-trailing-zeros)
+          (normalize finite-field-poly-normalize)
+          (raw-add finite-field-poly-raw-add)
+          (raw-scale finite-field-poly-raw-scale)
+          (raw-mul finite-field-poly-raw-mul)
+          (poly-mul finite-field-poly-mul)))
+    (and stable-under-simplificationp
+         (list :use (theory 'gfield::finite-field-context-instance-theory)
+               :in-theory
+               (list 'quote
+                     (union-theories
+                      (theory 'finite-field-poly-definition-theory)
+                      (theory 'minimal-theory)))))))
 
 (local
  (defthm finite-field-poly-mul-of-nil-right-for-reduction

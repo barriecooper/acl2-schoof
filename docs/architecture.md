@@ -388,7 +388,12 @@ and representative-count cardinality.  These layers provide an explicit
 representative model; the field-facing bridge connecting it to the generic
 irreducible quotient-field package remains open.  In particular, no
 irreducibility result or inverse theorem for every nonzero residue class is
-implied by the conditional modular-inverse boundary.
+implied by the conditional modular-inverse boundary.  The production F11
+logical irreducibility interface and symbolic quartic boundary are certified:
+a reducible normalized quartic has a monic divisor of degree one or two.  The
+next concrete boundary is bounded exclusion of all such divisors of
+`(7 2 2 0 1)`; neither the production `psi_3` irreducibility theorem nor its
+quotient field is established yet.
 
 ## Hasse ambient-point and degree architecture
 
