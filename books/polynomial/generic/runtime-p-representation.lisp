@@ -123,6 +123,16 @@
 (defthm runtime-p-coefficient-fix-idempotent
   (equal (runtime-p-coefficient-fix (runtime-p-coefficient-fix x p) p)
          (runtime-p-coefficient-fix x p)))
+(defthm runtime-p-coefficient-p-of-zero
+  (runtime-p-coefficient-p (runtime-p-zero p) p))
+(defthm runtime-p-coefficient-p-of-one
+  (runtime-p-coefficient-p (runtime-p-one p) p))
+(defthm runtime-p-coefficient-fix-of-zero
+  (equal (runtime-p-coefficient-fix (runtime-p-zero p) p)
+         (runtime-p-zero p)))
+(defthm runtime-p-coefficient-fix-of-one
+  (equal (runtime-p-coefficient-fix (runtime-p-one p) p)
+         (runtime-p-one p)))
 (defthm runtime-p-coefficient-fix-bounds
   (and (integerp (runtime-p-coefficient-fix x p))
        (<= 0 (runtime-p-coefficient-fix x p))
@@ -281,6 +291,12 @@
 (defthm runtime-p-effective-modulus-of-pfield-modulus
   (equal (runtime-p-effective-modulus (gfield::pfield-modulus))
          (gfield::pfield-modulus)))
+(defthm runtime-p-zero-pfield-correspondence
+  (equal (runtime-p-zero (gfield::pfield-modulus))
+         (gfield::pfield-zero)))
+(defthm runtime-p-one-pfield-correspondence
+  (equal (runtime-p-one (gfield::pfield-modulus))
+         (gfield::pfield-one)))
 (defthm runtime-p-coefficient-fix-pfield-correspondence
   (equal (runtime-p-coefficient-fix x (gfield::pfield-modulus))
          (gfield::pfield-fix x)))
@@ -290,6 +306,10 @@
 (defthm runtime-p-neg-pfield-correspondence
   (equal (runtime-p-neg x (gfield::pfield-modulus))
          (gfield::pfield-neg x)))
+(defthm runtime-p-sub-pfield-correspondence
+  (equal (runtime-p-sub x y (gfield::pfield-modulus))
+         (gfield::pfield-sub x y))
+  :hints (("Goal" :in-theory (enable runtime-p-sub gfield::pfield-sub))))
 (defthm runtime-p-mul-pfield-correspondence
   (equal (runtime-p-mul x y (gfield::pfield-modulus))
          (gfield::pfield-mul x y)))
@@ -346,6 +366,17 @@
          (pfield-poly-neg x))
   :rule-classes nil
   :hints (("Goal" :in-theory (enable runtime-p-poly-neg pfield-poly-neg))))
+(defthm runtime-p-poly-sub-pfield-correspondence
+  (equal (runtime-p-poly-sub x y (gfield::pfield-modulus))
+         (pfield-poly-sub x y))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance runtime-p-poly-add-pfield-correspondence
+                     (x x) (y (runtime-p-poly-neg y
+                                                  (gfield::pfield-modulus))))
+          (:instance runtime-p-poly-neg-pfield-correspondence (x y)))
+    :in-theory (enable runtime-p-poly-sub pfield-poly-sub))))
 (defthm runtime-p-poly-scale-pfield-correspondence
   (equal (runtime-p-poly-scale a x (gfield::pfield-modulus))
          (pfield-poly-scale a x))

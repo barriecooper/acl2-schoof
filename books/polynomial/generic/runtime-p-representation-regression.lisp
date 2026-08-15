@@ -43,3 +43,71 @@
   :rule-classes nil
   :hints (("Goal" :use ((:instance runtime-p-rank-of-unrank
                           (width 3) (k 342) (p 7))))))
+
+; Public-boundary clients.  MINIMAL-THEORY contains none of the runtime or
+; PFIELD recursive definitions, so these proofs can only consume the named
+; certified endpoints supplied through :USE.
+(defthm runtime-p-zero-one-minimal-theory-client
+  (and (runtime-p-coefficient-p (runtime-p-zero p) p)
+       (runtime-p-coefficient-p (runtime-p-one p) p)
+       (equal (runtime-p-coefficient-fix (runtime-p-zero p) p)
+              (runtime-p-zero p))
+       (equal (runtime-p-coefficient-fix (runtime-p-one p) p)
+              (runtime-p-one p)))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance runtime-p-coefficient-p-of-zero)
+          (:instance runtime-p-coefficient-p-of-one)
+          (:instance runtime-p-coefficient-fix-of-zero)
+          (:instance runtime-p-coefficient-fix-of-one))
+    :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-normalize-multiplication-result-minimal-theory-client
+  (equal (runtime-p-normalize (runtime-p-poly-mul x y p) p)
+         (runtime-p-poly-mul x y p))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance runtime-p-canonical-polynomial-p-of-poly-mul)
+          (:instance runtime-p-normalize-when-canonical
+                     (xs (runtime-p-poly-mul x y p))))
+    :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-rank-of-unrank-minimal-theory-client
+  (implies (and (natp k) (< k (runtime-p-coding-bound width p)))
+           (equal (runtime-p-rank (runtime-p-unrank width k p) p) k))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance runtime-p-rank-of-unrank))
+    :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-unrank-of-rank-minimal-theory-client
+  (implies (runtime-p-vector-p coefficients width p)
+           (equal (runtime-p-unrank
+                   width (runtime-p-rank coefficients p) p)
+                  coefficients))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance runtime-p-unrank-of-rank))
+    :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-multiplication-pfield-minimal-theory-client
+  (equal (runtime-p-poly-mul x y (gfield::pfield-modulus))
+         (pfield-poly-mul x y))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance runtime-p-poly-mul-pfield-correspondence))
+    :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-subtraction-pfield-minimal-theory-client
+  (equal (runtime-p-poly-sub x y (gfield::pfield-modulus))
+         (pfield-poly-sub x y))
+  :rule-classes nil
+  :hints
+  (("Goal"
+    :use ((:instance runtime-p-poly-sub-pfield-correspondence))
+    :in-theory (theory 'minimal-theory))))
