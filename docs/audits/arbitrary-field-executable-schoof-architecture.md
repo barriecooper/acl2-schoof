@@ -325,26 +325,30 @@ requested low-order width rather than rejected.
 
 No descriptor definitions were introduced.  Structural descriptor validity,
 logical field validity, and any future executable validator remain separate.
-An implementation attempt selected the smallest execution interface: normalized
-length/degree and leading coefficient, a monic predicate that is exactly
-equality of the normalized leading coefficient with canonical coefficient one,
-one inverse-free cancellation step, and one fuel-bounded divmod recursion whose
-public fuel is the normalized dividend length.  The nonmonic (including zero)
-fallback is `(nil . normalized-dividend)`; constant one reduces to zero.  The
-same core supplies both projections, and reduced multiplication reduces its
-unreduced product exactly once.  This total execution prefix certifies guards,
-canonical remainders, malformed/dotted/trailing-zero behavior, and prime,
-composite, and malformed-`p` executions.
+The immediate next boundary is monic reduction, followed by the descriptor
+kernel.
 
-The attempt did **not** close the representation-level Euclidean proof.  The
-exact residual is the reusable runtime-`p` commutative-ring polynomial algebra
-needed to prove one-step reconstruction and strict normalized-length decrease;
-from those, core reconstruction, strict remainder bound, idempotence,
-reduced-operation invariance, and fixed-PFIELD divmod/remainder correspondence
-must still be staged.  The existing inverse-based division stack was rejected:
-copying it would introduce an irrelevant inverse and would be invalid for
-composite `p`.  Accordingly, the maintained boundary remains open and the
-descriptor kernel remains blocked rather than being started prematurely.
+### Rejected execution-only monic-reduction draft
+
+An execution-only draft after the representation core was deliberately removed
+rather than retained as production.  Its fuel-bounded recursion had executable
+examples and canonical-output facts, but no certified theorem that an active
+monic step strictly decreases normalized remainder length.  Consequently its
+fuel could not be proved adequate and it supplied neither Euclidean
+reconstruction nor a strict final remainder bound.  The first missing theorem
+was the active-step cancellation/decrease lemma; proving it requires the
+runtime-`p` modular commutative-ring laws and the corresponding unreduced
+polynomial reconstruction identities, none of which may be imported from the
+prime-only fixed PFIELD field context for composite `p`.
+
+Keeping that recursion would expose a public operation without its intended
+representation-level specification and would make the later descriptor kernel
+depend on an uncertified logical/executable boundary.  The selected next change
+must therefore introduce the modular-ring and polynomial-algebra lemmas first,
+then certify active-step cancellation, fuel adequacy, divmod reconstruction and
+strict bound, remainder/reduced-operation laws, and fixed-PFIELD correspondence
+as one coherent boundary.  A standalone execution prefix is not independently
+sufficient and must not be registered.
 
 ### Following dependency order
 
