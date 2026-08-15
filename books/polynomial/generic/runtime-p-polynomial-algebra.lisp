@@ -2,6 +2,24 @@
 
 (include-book "runtime-p-algebra")
 
+(defun runtime-p-polynomial-one (p)
+  (declare (xargs :guard t))
+  (list (runtime-p-one p)))
+
+(defthm runtime-p-canonical-polynomial-p-of-polynomial-one
+  (runtime-p-canonical-polynomial-p
+   (runtime-p-polynomial-one p) p)
+  :hints (("Goal" :in-theory (enable runtime-p-polynomial-one
+                                     runtime-p-canonical-polynomial-p
+                                     runtime-p-coefficient-list-p))))
+
+(defthm runtime-p-normalize-of-polynomial-one
+  (equal
+   (runtime-p-normalize (runtime-p-polynomial-one p) p)
+   (runtime-p-polynomial-one p)))
+
+(verify-guards runtime-p-polynomial-one)
+
 ; Proof-local rewrite orientations of the public coefficient ring laws.
 (local (defthm rp-add-associative
   (equal (runtime-p-add (runtime-p-add x y p) z p)
@@ -723,4 +741,108 @@
                             (x y) (y z) (z x))
                  (:instance runtime-p-poly-mul-commutative (x y) (y x))
                  (:instance runtime-p-poly-mul-commutative (x z) (y x)))
+           :in-theory (theory 'minimal-theory))))
+
+; Multiplicative constants and negation complete the total normalized
+; commutative-ring interface.  The raw identity lemma is proof shaping only;
+; public identities retain fixing semantics for arbitrary ACL2 inputs.
+(local (defthm rp-raw-scale-by-one
+  (equal (runtime-p-raw-scale (runtime-p-one p) x p)
+         (runtime-p-fix-coefficients x p))
+  :hints (("Goal" :induct (runtime-p-raw-scale (runtime-p-one p) x p)
+           :in-theory (enable runtime-p-raw-scale)))))
+
+(local (defthm rp-raw-mul-polynomial-one-left
+  (implies (runtime-p-coefficient-list-p x p)
+           (equal (runtime-p-raw-mul (runtime-p-polynomial-one p) x p)
+                  x))
+  :hints (("Goal"
+           :cases ((consp x))
+           :in-theory (enable runtime-p-polynomial-one runtime-p-raw-mul)))))
+
+(defthm runtime-p-poly-mul-one-left
+  (equal
+   (runtime-p-poly-mul
+    (runtime-p-polynomial-one p) x p)
+   (runtime-p-normalize x p))
+  :hints (("Goal"
+           :use ((:instance rp-raw-mul-polynomial-one-left
+                            (x (runtime-p-normalize x p))))
+           :in-theory (enable runtime-p-poly-mul))))
+
+(defthm runtime-p-poly-mul-one-right
+  (equal
+   (runtime-p-poly-mul
+    x (runtime-p-polynomial-one p) p)
+   (runtime-p-normalize x p))
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-mul-commutative
+                            (y (runtime-p-polynomial-one p)))
+                 (:instance runtime-p-poly-mul-one-left))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-poly-mul-zero-left
+  (equal (runtime-p-poly-mul nil x p)
+         nil)
+  :hints (("Goal" :in-theory (enable runtime-p-poly-mul
+                                     runtime-p-raw-mul))))
+
+(defthm runtime-p-poly-mul-zero-right
+  (equal (runtime-p-poly-mul x nil p)
+         nil)
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-mul-commutative (y nil))
+                 (:instance runtime-p-poly-mul-zero-left))
+           :in-theory (theory 'minimal-theory))))
+
+(local (defthm rp-poly-additive-inverse-unique
+  (implies (equal (runtime-p-poly-add a b p) nil)
+           (equal (runtime-p-normalize a p)
+                  (runtime-p-poly-neg b p)))
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-add-associative
+                            (x a) (y b) (z (runtime-p-poly-neg b p)))
+                 (:instance runtime-p-poly-add-inverse-right (x b))
+                 (:instance runtime-p-poly-add-zero-left
+                            (x (runtime-p-poly-neg b p)))
+                 (:instance runtime-p-poly-add-zero-right (x a))
+                 (:instance runtime-p-normalize-when-canonical
+                            (xs (runtime-p-poly-neg b p)))
+                 (:instance runtime-p-canonical-polynomial-p-of-poly-neg
+                            (x b)))
+           :in-theory (theory 'minimal-theory)))))
+
+(defthm runtime-p-poly-mul-neg-left
+  (equal
+   (runtime-p-poly-mul
+    (runtime-p-poly-neg x p) y p)
+   (runtime-p-poly-neg
+    (runtime-p-poly-mul x y p) p))
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-mul-right-distributive
+                            (x (runtime-p-poly-neg x p)) (y x) (z y))
+                 (:instance runtime-p-poly-add-inverse-left (x x))
+                 (:instance runtime-p-poly-mul-zero-left (x y))
+                 (:instance runtime-p-normalize-when-canonical
+                            (xs (runtime-p-poly-mul
+                                 (runtime-p-poly-neg x p) y p)))
+                 (:instance runtime-p-canonical-polynomial-p-of-poly-mul
+                            (x (runtime-p-poly-neg x p)) (y y))
+                 (:instance rp-poly-additive-inverse-unique
+                            (a (runtime-p-poly-mul
+                                (runtime-p-poly-neg x p) y p))
+                            (b (runtime-p-poly-mul x y p))))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-poly-mul-neg-right
+  (equal
+   (runtime-p-poly-mul
+    x (runtime-p-poly-neg y p) p)
+   (runtime-p-poly-neg
+    (runtime-p-poly-mul x y p) p))
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-mul-commutative
+                            (y (runtime-p-poly-neg y p)))
+                 (:instance runtime-p-poly-mul-neg-left (x y) (y x))
+                 (:instance runtime-p-poly-mul-commutative))
            :in-theory (theory 'minimal-theory))))
