@@ -297,12 +297,11 @@ polynomial modulus through normalization, multiplication, reduction, and
 coefficient-vector coding in one call.
 
 Copying the generic polynomial implementation into a descriptor book would
-create a parallel reduction stack.  The prerequisite is therefore implemented
-as two reusable boundaries.  The first certified book,
-`runtime-p-representation.lisp`, provides coefficient arithmetic, unreduced
-polynomial normalization/addition/negation/scaling/multiplication, and
-fixed-width radix coding.  The second—runtime-`p` monic reduction and fixed-`p`
-remainder correspondence—remains open.
+create a parallel reduction stack.  The certified prerequisite prefix now
+comprises runtime representation and radix coding, coefficient commutative-ring
+laws, normalized polynomial commutative-ring laws, and the canonical monomial
+and degree/leading-coefficient seam.  Runtime-`p` monic reduction and fixed-`p`
+remainder correspondence remain open.
 
 The implementation audit found that the Community Books PFIELD primitives are
 most safely called after supplying an integer modulus at least two and fixing
@@ -325,8 +324,8 @@ requested low-order width rather than rejected.
 
 No descriptor definitions were introduced.  Structural descriptor validity,
 logical field validity, and any future executable validator remain separate.
-The immediate next boundary is monic reduction, followed by the descriptor
-kernel.
+The immediate boundary is the inverse-free monic leading-term cancellation and
+decrease proof, followed by monic reduction and then the descriptor kernel.
 
 ### Rejected execution-only monic-reduction draft
 
@@ -348,21 +347,26 @@ modulus; PFIELD inverse and field packaging remain prime-dependent and are not
 imported.  The normalized polynomial additive-group laws, exact subtraction
 reconstruction, multiplication associativity and commutativity, and both
 distributive laws are now certified by `runtime-p-polynomial-algebra.lisp` for
-arbitrary inputs and arbitrary `p`.  The residual theorem chain begins with
-multiplicative identity/annihilation and negation compatibility, then the
-canonical monomial and degree/leading-coefficient seam, the monic
-product-leading-term calculation, active-step reconstruction, and strict
-normalized-length decrease.  No monomial or cancellation API is exposed until that whole
-representation boundary certifies.
+arbitrary inputs and arbitrary `p`.  Multiplicative identity, annihilation,
+negation compatibility, and the canonical monomial and degree/leading-
+coefficient seam are also certified.  The residual theorem chain now begins
+with the monic product-leading-term calculation, followed by active-step
+reconstruction and strict normalized-length or degree decrease.  Unrestricted
+product-degree additivity is false at this composite-modulus representation
+boundary because nonzero leading coefficients can be zero divisors.  The later
+cancellation proof must instead use the narrower monic-divisor calculation:
+multiplication of the active coefficient by the divisor's leading coefficient
+`1` preserves that coefficient without any no-zero-divisor law.
 
 Keeping that recursion would expose a public operation without its intended
 representation-level specification and would make the later descriptor kernel
-depend on an uncertified logical/executable boundary.  The selected next change
-must therefore introduce the modular-ring and polynomial-algebra lemmas first,
-then certify active-step cancellation, fuel adequacy, divmod reconstruction and
-strict bound, remainder/reduced-operation laws, and fixed-PFIELD correspondence
-as one coherent boundary.  A standalone execution prefix is not independently
-sufficient and must not be registered.
+depend on an uncertified logical/executable boundary.  Those coefficient,
+polynomial-algebra, and monomial/degree prerequisites are now certified.  The
+next proof boundary must establish the narrower monic leading-term calculation,
+active-step reconstruction, and strict decrease before fuel adequacy, divmod
+reconstruction and strict bound, remainder/reduced-operation laws, and
+fixed-PFIELD correspondence can be certified.  A standalone execution prefix
+is not independently sufficient and must not be registered.
 
 ### Following dependency order
 

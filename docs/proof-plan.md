@@ -27,10 +27,16 @@ fixed-descriptor wrapper functionally instantiates the existing constrained
 field, polynomial, curve, and group mathematics.  “Arbitrary finite field” no
 longer means only a separately certified nullary operation instance.
 
-The runtime prerequisite is now split into two certified implementation
-boundaries.  The first—total runtime-`p` coefficient arithmetic, unreduced
-polynomial representation/arithmetic, and radix coding—is certified by
-`runtime-p-representation.lisp`.  The runtime modular coefficient commutative-ring laws and the unconditional normalized unreduced-polynomial commutative-ring interface are now certified separately in `runtime-p-polynomial-algebra.lisp`, including polynomial one, normalization-aware identities, zero annihilation, and multiplication through negation.  Next certify canonical monomials and inverse-free monic leading-term reconstruction/strict-decrease; only afterward introduce runtime-`p` monic polynomial reduction and fixed-`p` remainder correspondence, without primality or irreducibility assumptions and without yet introducing descriptors.
+The runtime prerequisite has four certified stages: runtime-`p`
+representation and radix coding in `runtime-p-representation.lisp`; coefficient
+commutative-ring laws in `runtime-p-algebra.lisp`; normalized polynomial
+commutative-ring laws in `runtime-p-polynomial-algebra.lisp`; and the canonical
+zero-collapsing monomial plus total degree/leading-coefficient seam in
+`runtime-p-polynomial-monomial-degree.lisp`.  Next come the inverse-free monic
+product-leading-term calculation, active-step reconstruction, and strict
+normalized-length or degree decrease.  Runtime-`p` monic reduction, divmod,
+fixed-`p` remainder correspondence, descriptors, and field semantics remain
+subsequent open boundaries.
 
 Immediately after that prerequisite, the next coherent boundary is only the
 **descriptor representation kernel**:

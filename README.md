@@ -84,6 +84,16 @@ implementation scope.
 
 ## Architecture
 
+The arbitrary-field executable target follows a staged hybrid architecture: a
+runtime polynomial-basis descriptor will supply public data, while fixed-context
+wrappers reuse the existing constrained theorem layers.  The runtime-`p` prefix
+currently certifies representation and radix coding, coefficient and normalized
+polynomial commutative-ring laws, and canonical monomials with total normalized
+degree/leading coefficient.  The immediate open boundary is inverse-free monic
+leading-term cancellation and strict decrease, followed by runtime monic
+reduction and fixed-context correspondence.  F7, F11, and F7X2 remain examples
+and instances rather than owners of this general executable architecture.
+
 New algebra is built on the `GFIELD`/`GPOLY` stack. Dense polynomials store
 coefficients in ascending degree, use `nil` for zero, and remove trailing zero
 coefficients when normalized. Fixed-modulus field elements are canonical
