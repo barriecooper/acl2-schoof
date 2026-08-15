@@ -350,10 +350,7 @@ reconstruction, multiplication associativity and commutativity, and both
 distributive laws are now certified by `runtime-p-polynomial-algebra.lisp` for
 arbitrary inputs and arbitrary `p`.  The residual theorem chain begins with
 multiplicative identity/annihilation and negation compatibility, then the
-canonical monomial and degree/leading-coefficient seam, the monic
-product-leading-term calculation, active-step reconstruction, and strict
-normalized-length decrease.  No monomial or cancellation API is exposed until that whole
-representation boundary certifies.
+canonical monomial and degree/leading-coefficient seam, which is now certified, followed by the still-open monic product-leading-term calculation, active-step reconstruction, and strict normalized-length decrease. Unrestricted product-degree additivity is unavailable at this composite-modulus representation boundary because nonzero leading coefficients can be zero divisors. The later cancellation proof must instead use the narrower monic-divisor calculation: multiplication of the active coefficient by the divisor's leading coefficient `1` preserves that coefficient without any no-zero-divisor law.
 
 Keeping that recursion would expose a public operation without its intended
 representation-level specification and would make the later descriptor kernel
