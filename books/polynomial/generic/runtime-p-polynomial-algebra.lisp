@@ -495,6 +495,150 @@
                  (:instance rp-normalize-raw-mul-normalize-right
                             (x y) (y x)))))))
 
+; Additive-group support.  These raw lemmas remain proof-local: the public
+; interface is normalization-aware and total on arbitrary ACL2 inputs.
+(local (defthm rp-coefficient-list-p-of-raw-neg
+  (runtime-p-coefficient-list-p (runtime-p-raw-neg x p) p)
+  :hints (("Goal" :induct (runtime-p-raw-neg x p)
+           :in-theory (enable runtime-p-raw-neg
+                              runtime-p-coefficient-list-p)))))
+
+(local (defthm rp-raw-add-zero-left
+  (implies (runtime-p-coefficient-list-p x p)
+           (equal (runtime-p-raw-add nil x p) x))
+  :hints (("Goal" :in-theory (enable runtime-p-raw-add)))))
+
+(local (defthm rp-normalize-raw-add-inverse-left
+  (implies (runtime-p-coefficient-list-p x p)
+           (equal (runtime-p-normalize
+                   (runtime-p-raw-add (runtime-p-raw-neg x p) x p) p)
+                  nil))
+  :hints (("Goal" :induct (runtime-p-raw-neg x p)
+           :in-theory (enable runtime-p-raw-neg runtime-p-raw-add
+                              runtime-p-coefficient-list-p
+                              runtime-p-add-inverse-left
+                              runtime-p-normalize
+                              runtime-p-trim-trailing-zeros)))))
+
+(local (defthm rp-raw-neg-double
+  (implies (runtime-p-coefficient-list-p x p)
+           (equal (runtime-p-raw-neg (runtime-p-raw-neg x p) p) x))
+  :hints (("Goal" :induct (runtime-p-raw-neg x p)
+           :in-theory (enable runtime-p-raw-neg
+                              runtime-p-coefficient-list-p
+                              runtime-p-neg-double)))))
+
+(local (defthm rp-normalize-raw-neg-of-normalize
+  (implies (runtime-p-coefficient-list-p x p)
+           (equal (runtime-p-normalize
+                   (runtime-p-raw-neg (runtime-p-normalize x p) p) p)
+                  (runtime-p-normalize (runtime-p-raw-neg x p) p)))
+  :hints (("Goal" :induct (runtime-p-raw-neg x p)))))
+
+(defthm runtime-p-poly-add-associative
+  (equal
+   (runtime-p-poly-add
+    (runtime-p-poly-add x y p) z p)
+   (runtime-p-poly-add
+    x (runtime-p-poly-add y z p) p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance rp-raw-add-associative
+                            (x (runtime-p-normalize x p))
+                            (y (runtime-p-normalize y p))
+                            (z (runtime-p-normalize z p)))
+                 (:instance rp-normalize-raw-add-normalize-left
+                            (x (runtime-p-raw-add
+                                (runtime-p-normalize x p)
+                                (runtime-p-normalize y p) p))
+                            (y (runtime-p-normalize z p)))
+                 (:instance rp-normalize-raw-add-normalize-right
+                            (x (runtime-p-normalize x p))
+                            (y (runtime-p-raw-add
+                                (runtime-p-normalize y p)
+                                (runtime-p-normalize z p) p))))
+           :in-theory (enable runtime-p-poly-add))))
+
+(defthm runtime-p-poly-add-commutative
+  (equal (runtime-p-poly-add x y p)
+         (runtime-p-poly-add y x p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance rp-raw-add-commutative
+                            (x (runtime-p-normalize x p))
+                            (y (runtime-p-normalize y p))))
+           :in-theory (enable runtime-p-poly-add))))
+
+(defthm runtime-p-poly-add-zero-left
+  (equal (runtime-p-poly-add nil x p)
+         (runtime-p-normalize x p))
+  :hints (("Goal" :in-theory (enable runtime-p-poly-add
+                                     runtime-p-raw-add))))
+
+(defthm runtime-p-poly-add-zero-right
+  (equal (runtime-p-poly-add x nil p)
+         (runtime-p-normalize x p))
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-add-commutative (y nil))
+                 (:instance runtime-p-poly-add-zero-left (x x)))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-poly-add-inverse-left
+  (equal (runtime-p-poly-add (runtime-p-poly-neg x p) x p)
+         nil)
+  :hints (("Goal"
+           :use ((:instance rp-normalize-raw-add-inverse-left
+                            (x (runtime-p-normalize x p)))
+                 (:instance rp-normalize-raw-add-normalize-left
+                            (x (runtime-p-raw-neg
+                                (runtime-p-normalize x p) p))
+                            (y (runtime-p-normalize x p))))
+           :in-theory (enable runtime-p-poly-add runtime-p-poly-neg))))
+
+(defthm runtime-p-poly-add-inverse-right
+  (equal (runtime-p-poly-add x (runtime-p-poly-neg x p) p)
+         nil)
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-add-commutative
+                            (y (runtime-p-poly-neg x p)))
+                 (:instance runtime-p-poly-add-inverse-left))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-poly-neg-double
+  (equal (runtime-p-poly-neg (runtime-p-poly-neg x p) p)
+         (runtime-p-normalize x p))
+  :hints (("Goal"
+           :use ((:instance rp-raw-neg-double
+                            (x (runtime-p-normalize x p)))
+                 (:instance rp-normalize-raw-neg-of-normalize
+                            (x (runtime-p-raw-neg
+                                (runtime-p-normalize x p) p))))
+           :in-theory (enable runtime-p-poly-neg))))
+
+(defthm runtime-p-poly-sub-self
+  (equal (runtime-p-poly-sub x x p) nil)
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-add-inverse-right))
+           :in-theory (e/d (runtime-p-poly-sub)
+                           (runtime-p-poly-add runtime-p-poly-neg)))))
+
+(defthm runtime-p-poly-sub-zero
+  (equal (runtime-p-poly-sub x nil p)
+         (runtime-p-normalize x p))
+  :hints (("Goal" :in-theory (enable runtime-p-poly-sub))))
+
+(defthm runtime-p-poly-sub-reconstruction
+  (equal
+   (runtime-p-poly-add
+    (runtime-p-poly-sub x y p) y p)
+   (runtime-p-normalize x p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-add-associative
+                            (x x) (y (runtime-p-poly-neg y p)) (z y))
+                 (:instance runtime-p-poly-add-inverse-left (x y)))
+           :in-theory (enable runtime-p-poly-sub))))
+
 (defthm runtime-p-poly-mul-associative
   (equal
    (runtime-p-poly-mul

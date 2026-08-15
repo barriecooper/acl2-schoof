@@ -1,6 +1,6 @@
 (in-package "GPOLY")
 
-(include-book "runtime-p-polynomial-mul-laws")
+(include-book "runtime-p-polynomial-algebra")
 
 ; Composite-modulus execution evidence for both association orders.
 (assert-event
@@ -70,3 +70,57 @@
   :hints (("Goal"
            :use ((:instance runtime-p-poly-mul-right-distributive))
            :in-theory (theory 'minimal-theory))))
+
+; The aggregate additive laws are usable without recursive runtime definitions.
+(defthm runtime-p-poly-add-associative-minimal-theory-client
+  (equal
+   (runtime-p-poly-add (runtime-p-poly-add x y p) z p)
+   (runtime-p-poly-add x (runtime-p-poly-add y z p) p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-add-associative))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-poly-add-commutative-minimal-theory-client
+  (equal (runtime-p-poly-add x y p)
+         (runtime-p-poly-add y x p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-add-commutative))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-poly-sub-reconstruction-minimal-theory-client
+  (equal (runtime-p-poly-add (runtime-p-poly-sub x y p) y p)
+         (runtime-p-normalize x p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-sub-reconstruction))
+           :in-theory (theory 'minimal-theory))))
+
+; Nontrivial composite-modulus execution evidence for inverse, involution, and
+; exact subtraction reconstruction.
+(assert-event
+ (equal (runtime-p-poly-add
+         (runtime-p-poly-neg '(1 5 3) 6) '(1 5 3) 6)
+        nil))
+(assert-event
+ (equal (runtime-p-poly-neg (runtime-p-poly-neg '(1 5 3) 6) 6)
+        '(1 5 3)))
+(assert-event
+ (equal (runtime-p-poly-add
+         (runtime-p-poly-sub '(1 5 0) '(4 2 3) 6) '(4 2 3) 6)
+        '(1 5)))
+
+; A malformed modulus continues to select the established modulus-2 fallback.
+(assert-event
+ (equal (runtime-p-poly-sub '(7 4 3) '(2 9) 'malformed)
+        (runtime-p-poly-sub '(7 4 3) '(2 9) 2)))
+
+; A dotted input is totalized and normalized: its atomic tail is ignored, so
+; additive identity returns the canonical polynomial rather than the raw input.
+(assert-event
+ (and (equal (runtime-p-poly-add nil '(1 8 0 . 9) 6)
+             (runtime-p-normalize '(1 8 0 . 9) 6))
+      (equal (runtime-p-normalize '(1 8 0 . 9) 6) '(1 2))
+      (not (equal (runtime-p-normalize '(1 8 0 . 9) 6)
+                  '(1 8 0 . 9)))))
