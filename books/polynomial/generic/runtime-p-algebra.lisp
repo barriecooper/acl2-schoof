@@ -1,7 +1,7 @@
 (in-package "GPOLY")
 
 (include-book "runtime-p-representation")
-(include-book "kestrel/prime-fields/prime-fields-rules" :dir :system)
+(local (include-book "kestrel/prime-fields/prime-fields-rules" :dir :system))
 (local (include-book "arithmetic-5/top" :dir :system))
 
 ; The PFIELD add/mul/neg definitions are modular-ring operations for every

@@ -345,10 +345,13 @@ The coefficient half of that prerequisite is now certified separately by
 `runtime-p-algebra.lisp`.  Its proofs use only PFIELD modular addition,
 multiplication, and negation identities that are unconditional for a positive
 modulus; PFIELD inverse and field packaging remain prime-dependent and are not
-imported.  The smallest residual theorem group is polynomial multiplication
-associativity/distributivity over the normalized runtime operations, followed
-by the canonical monomial product-leading-term lemma and strict subtraction
-length decrease.  No monomial or cancellation API is exposed until that whole
+imported.  The residual theorem chain is the complete normalized polynomial-ring
+interface (normalization compatibility, additive identities/inverses,
+subtraction reconstruction, multiplication identities/annihilation,
+associativity, commutativity, distributivity, and negation compatibility),
+then the canonical monomial and degree/leading-coefficient seam, the monic
+product-leading-term calculation, exact subtraction reconstruction, and strict
+normalized-length decrease.  No monomial or cancellation API is exposed until that whole
 representation boundary certifies.
 
 Keeping that recursion would expose a public operation without its intended

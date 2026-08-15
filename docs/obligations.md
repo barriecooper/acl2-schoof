@@ -21,7 +21,7 @@ polynomial representation/arithmetic, and radix-coding core is **certified** by
 `runtime-p-representation.lisp`, including fixed-PFIELD normalization and
 multiplication correspondence.  Runtime-`p` monic reduction and fixed-`p`
 remainder correspondence remain **open** and precede the descriptor kernel.
-The coefficient commutative-ring laws (including totalized identities, inverses, subtraction reconstruction, multiplication, and distributivity) are also **certified** by `runtime-p-algebra.lisp`.  Runtime polynomial ring laws, canonical monomial, and monic leading-term reconstruction/decrease remain **open** together; no partial monomial API is present.  Neither boundary assumes primality or irreducibility or checks field validity.
+The coefficient commutative-ring laws (including totalized identities, additive inverses, subtraction reconstruction, multiplication, and distributivity) are also **certified** by `runtime-p-algebra.lisp`.  Runtime polynomial ring laws, canonical monomial, and monic leading-term reconstruction/decrease remain **open** together; no partial monomial API is present.  Neither boundary assumes primality or irreducibility or checks field validity.
 The detailed finding is recorded in the
 [architecture audit](audits/arbitrary-field-executable-schoof-architecture.md#post-pr-361-implementation-finding-runtime-coefficient-seam).
 
