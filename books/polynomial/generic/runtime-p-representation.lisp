@@ -69,6 +69,8 @@
   (runtime-p-normalize (runtime-p-raw-neg (runtime-p-normalize x p) p) p))
 (defun runtime-p-poly-sub (x y p)
   (runtime-p-poly-add x (runtime-p-poly-neg y p) p))
+(defun runtime-p-polynomial-one (p)
+  (list (runtime-p-one p)))
 (defun runtime-p-raw-scale (a x p)
   (if (atom x) nil
     (cons (runtime-p-mul (runtime-p-coefficient-fix a p)
@@ -205,6 +207,13 @@
   (runtime-p-canonical-polynomial-p (runtime-p-poly-scale a x p) p))
 (defthm runtime-p-canonical-polynomial-p-of-poly-mul
   (runtime-p-canonical-polynomial-p (runtime-p-poly-mul x y p) p))
+(defthm runtime-p-normalize-of-nil
+  (equal (runtime-p-normalize nil p) nil))
+(defthm runtime-p-canonical-polynomial-p-of-polynomial-one
+  (runtime-p-canonical-polynomial-p (runtime-p-polynomial-one p) p))
+(defthm runtime-p-normalize-of-polynomial-one
+  (equal (runtime-p-normalize (runtime-p-polynomial-one p) p)
+         (runtime-p-polynomial-one p)))
 (defthm runtime-p-poly-add-of-normalizes
   (equal (runtime-p-poly-add (runtime-p-normalize x p)
                              (runtime-p-normalize y p) p)
@@ -404,6 +413,7 @@
 (verify-guards runtime-p-raw-neg)
 (verify-guards runtime-p-poly-neg)
 (verify-guards runtime-p-poly-sub)
+(verify-guards runtime-p-polynomial-one)
 (verify-guards runtime-p-raw-scale)
 (verify-guards runtime-p-poly-scale)
 (verify-guards runtime-p-raw-mul)
