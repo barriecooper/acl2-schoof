@@ -185,7 +185,7 @@ identity accepts arbitrary polynomial inputs and arbitrary `p`, returning
 canonical normalized representatives; malformed moduli use effective modulus
 2 and composite effective moduli are supported.  This assurance establishes
 neither descriptor validity nor a field, integral domain, cancellation,
-inverses, primality, or irreducibility.  Canonical monomials and the
+multiplicative inverses, primality, or irreducibility.  Canonical monomials and the
 leading-term cancellation/decrease boundary remain open.
 
 Tagged point negation is the transparent total data transformation
