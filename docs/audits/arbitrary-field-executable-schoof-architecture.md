@@ -328,6 +328,28 @@ logical field validity, and any future executable validator remain separate.
 The immediate next boundary is monic reduction, followed by the descriptor
 kernel.
 
+### Rejected execution-only monic-reduction draft
+
+An execution-only draft after the representation core was deliberately removed
+rather than retained as production.  Its fuel-bounded recursion had executable
+examples and canonical-output facts, but no certified theorem that an active
+monic step strictly decreases normalized remainder length.  Consequently its
+fuel could not be proved adequate and it supplied neither Euclidean
+reconstruction nor a strict final remainder bound.  The first missing theorem
+was the active-step cancellation/decrease lemma; proving it requires the
+runtime-`p` modular commutative-ring laws and the corresponding unreduced
+polynomial reconstruction identities, none of which may be imported from the
+prime-only fixed PFIELD field context for composite `p`.
+
+Keeping that recursion would expose a public operation without its intended
+representation-level specification and would make the later descriptor kernel
+depend on an uncertified logical/executable boundary.  The selected next change
+must therefore introduce the modular-ring and polynomial-algebra lemmas first,
+then certify active-step cancellation, fuel adequacy, divmod reconstruction and
+strict bound, remainder/reduced-operation laws, and fixed-PFIELD correspondence
+as one coherent boundary.  A standalone execution prefix is not independently
+sufficient and must not be registered.
+
 ### Following dependency order
 
 1. **Descriptor field-law bridge:** add inverse; prove field laws under logical
