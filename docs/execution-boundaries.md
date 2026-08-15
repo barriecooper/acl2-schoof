@@ -404,3 +404,17 @@ structure correspondence, not transfer of every generic ring theorem.  At
 and 1 and accepts residue 2.  The accepted equalities are nonzero cross-product
 equalities, not `0=0`; this remains execution of an algebraic predicate rather
 than an affine-addition, classical torsion, or Schoof-correctness theorem.
+
+## Runtime-modulus normalized polynomial algebra
+
+The runtime-`p` polynomial additive-group and multiplication laws use the
+existing transparent normalization and raw coefficient-list operations; they
+add no logical/executable split or alternate branch.  Every endpoint is total
+in both polynomial inputs and the modulus: integers at least 2 execute modulo
+the supplied modulus, while every other modulus executes modulo 2.  Additive
+identities, double negation, subtraction by zero, and subtraction
+reconstruction consequently return `runtime-p-normalize` of the input rather
+than a possibly malformed raw input.  Concrete composite-modulus and malformed
+input regressions are execution assurance; the unconditional certified laws
+supply logical correctness.  Multiplicative identity and annihilation remain
+open, as do monomials and cancellation.
