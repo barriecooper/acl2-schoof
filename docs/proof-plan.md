@@ -30,7 +30,7 @@ longer means only a separately certified nullary operation instance.
 The runtime prerequisite is now split into two certified implementation
 boundaries.  The first—total runtime-`p` coefficient arithmetic, unreduced
 polynomial representation/arithmetic, and radix coding—is certified by
-`runtime-p-representation.lisp`.  The runtime modular coefficient commutative-ring laws and normalized unreduced-polynomial multiplication associativity are now certified separately.  Next certify the remaining normalized unreduced-polynomial ring laws, canonical monomial, and inverse-free monic leading-term reconstruction/strict-decrease boundary; only afterward introduce runtime-`p` monic polynomial reduction and fixed-`p` remainder correspondence, without primality or irreducibility assumptions and without yet introducing descriptors.
+`runtime-p-representation.lisp`.  The runtime modular coefficient commutative-ring laws and normalized unreduced-polynomial multiplication associativity, commutativity, and both distributive laws are now certified separately.  Next certify only the remaining normalized unreduced-polynomial ring laws before proceeding to canonical monomial and inverse-free monic leading-term reconstruction/strict-decrease; only afterward introduce runtime-`p` monic polynomial reduction and fixed-`p` remainder correspondence, without primality or irreducibility assumptions and without yet introducing descriptors.  This multiplication boundary is not yet a complete normalized polynomial commutative-ring interface.
 
 Immediately after that prerequisite, the next coherent boundary is only the
 **descriptor representation kernel**:

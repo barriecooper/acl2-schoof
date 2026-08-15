@@ -518,3 +518,65 @@
                                 (runtime-p-normalize y p)
                                 (runtime-p-normalize z p) p))))
            :in-theory (enable runtime-p-poly-mul))))
+
+(defthm runtime-p-poly-mul-commutative
+  (equal (runtime-p-poly-mul x y p)
+         (runtime-p-poly-mul y x p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance rp-raw-mul-commutative
+                            (x (runtime-p-normalize x p))
+                            (y (runtime-p-normalize y p))))
+           :in-theory (enable runtime-p-poly-mul))))
+
+(defthm runtime-p-poly-mul-right-distributive
+  (equal
+   (runtime-p-poly-mul
+    (runtime-p-poly-add x y p) z p)
+   (runtime-p-poly-add
+    (runtime-p-poly-mul x z p)
+    (runtime-p-poly-mul y z p) p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance rp-raw-mul-left-distributive
+                            (x (runtime-p-normalize x p))
+                            (y (runtime-p-normalize y p))
+                            (z (runtime-p-normalize z p)))
+                 (:instance rp-normalize-raw-mul-normalize-left
+                            (x (runtime-p-raw-add
+                                (runtime-p-normalize x p)
+                                (runtime-p-normalize y p) p))
+                            (y (runtime-p-normalize z p)))
+                 (:instance rp-normalize-raw-add-congruence
+                            (a (runtime-p-raw-mul
+                                (runtime-p-normalize x p)
+                                (runtime-p-normalize z p) p))
+                            (b (runtime-p-raw-mul
+                                (runtime-p-normalize y p)
+                                (runtime-p-normalize z p) p))
+                            (c (runtime-p-normalize
+                                (runtime-p-raw-mul
+                                 (runtime-p-normalize x p)
+                                 (runtime-p-normalize z p) p) p))
+                            (d (runtime-p-normalize
+                                (runtime-p-raw-mul
+                                 (runtime-p-normalize y p)
+                                 (runtime-p-normalize z p) p) p))))
+           :in-theory (enable runtime-p-poly-mul runtime-p-poly-add))))
+
+(defthm runtime-p-poly-mul-left-distributive
+  (equal
+   (runtime-p-poly-mul
+    x (runtime-p-poly-add y z p) p)
+   (runtime-p-poly-add
+    (runtime-p-poly-mul x y p)
+    (runtime-p-poly-mul x z p) p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-mul-commutative
+                            (x x) (y (runtime-p-poly-add y z p)))
+                 (:instance runtime-p-poly-mul-right-distributive
+                            (x y) (y z) (z x))
+                 (:instance runtime-p-poly-mul-commutative (x y) (y x))
+                 (:instance runtime-p-poly-mul-commutative (x z) (y x)))
+           :in-theory (theory 'minimal-theory))))
