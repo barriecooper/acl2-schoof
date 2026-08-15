@@ -325,8 +325,26 @@ requested low-order width rather than rejected.
 
 No descriptor definitions were introduced.  Structural descriptor validity,
 logical field validity, and any future executable validator remain separate.
-The immediate next boundary is monic reduction, followed by the descriptor
-kernel.
+An implementation attempt selected the smallest execution interface: normalized
+length/degree and leading coefficient, a monic predicate that is exactly
+equality of the normalized leading coefficient with canonical coefficient one,
+one inverse-free cancellation step, and one fuel-bounded divmod recursion whose
+public fuel is the normalized dividend length.  The nonmonic (including zero)
+fallback is `(nil . normalized-dividend)`; constant one reduces to zero.  The
+same core supplies both projections, and reduced multiplication reduces its
+unreduced product exactly once.  This total execution prefix certifies guards,
+canonical remainders, malformed/dotted/trailing-zero behavior, and prime,
+composite, and malformed-`p` executions.
+
+The attempt did **not** close the representation-level Euclidean proof.  The
+exact residual is the reusable runtime-`p` commutative-ring polynomial algebra
+needed to prove one-step reconstruction and strict normalized-length decrease;
+from those, core reconstruction, strict remainder bound, idempotence,
+reduced-operation invariance, and fixed-PFIELD divmod/remainder correspondence
+must still be staged.  The existing inverse-based division stack was rejected:
+copying it would introduce an irrelevant inverse and would be invalid for
+composite `p`.  Accordingly, the maintained boundary remains open and the
+descriptor kernel remains blocked rather than being started prematurely.
 
 ### Following dependency order
 

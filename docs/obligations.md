@@ -19,13 +19,17 @@ An implementation pass after PR #361 exposed an additional prerequisite to
 item (1).  It is now split in two.  The modular coefficient, unreduced
 polynomial representation/arithmetic, and radix-coding core is **certified** by
 `runtime-p-representation.lisp`, including fixed-PFIELD normalization and
-multiplication correspondence.  Runtime-`p` monic reduction and fixed-`p`
-remainder correspondence remain **open** and precede the descriptor kernel.
+multiplication correspondence.  The total single-recursion monic-divmod
+execution prefix and its canonical remainder/nonmonic fallback are certified
+by `runtime-p-monic-reduction.lisp`.  Its Euclidean reconstruction, strict
+remainder bound, reduced-operation algebra, and fixed-PFIELD remainder
+correspondence remain **open** and precede the descriptor kernel.
 Neither boundary assumes primality or irreducibility or checks field validity.
 The detailed finding is recorded in the
 [architecture audit](audits/arbitrary-field-executable-schoof-architecture.md#post-pr-361-implementation-finding-runtime-coefficient-seam).
 
 | Runtime-`p` modular polynomial representation and radix coding | Certified | `runtime-p-effective-modulus`; coefficient operations; `runtime-p-normalize`; polynomial arithmetic; `runtime-p-{coding-bound,rank,unrank}`; fixed-PFIELD normalization/multiplication correspondence; radix round trips | Malformed or integer `< 2` moduli execute at effective modulus 2. The original input remains available and this is not descriptor validity. Polynomials are unreduced ascending coefficient lists; monic reduction remains open. |
+| Runtime-`p` monic reduction execution prefix | Certified prefix; correctness open | `runtime-p-monic-polynomial-p`; `runtime-p-monic-{division-step,divmod-core,divmod,quotient,remainder}`; reduced-operation wrappers; canonical remainder and nonmonic fallback | Uses no inverse and executes at composite moduli. The public call normalizes both inputs; nonmonic/zero modulus returns quotient zero and normalized dividend; constant one reduces to zero. Euclidean reconstruction, strict bound/idempotence, PFIELD correspondence, and minimal-theory semantic clients remain open, so this is not yet the certified monic-reduction boundary and descriptors remain blocked. |
 
 This is the authoritative ledger of certified, open, and deferred formal
 boundaries. It records public endpoints rather than proof history or internal

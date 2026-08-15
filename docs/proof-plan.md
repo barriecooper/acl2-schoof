@@ -30,9 +30,13 @@ longer means only a separately certified nullary operation instance.
 The runtime prerequisite is now split into two certified implementation
 boundaries.  The first—total runtime-`p` coefficient arithmetic, unreduced
 polynomial representation/arithmetic, and radix coding—is certified by
-`runtime-p-representation.lisp`.  Next certify **runtime-`p` monic polynomial
-reduction and fixed-`p` remainder correspondence**, without primality or
-irreducibility assumptions and without yet introducing descriptors.
+`runtime-p-representation.lisp`.  `runtime-p-monic-reduction.lisp` adds the
+independently useful total, inverse-free execution recursion and canonical
+output/fallback prefix.  Next complete its **monic Euclidean reconstruction,
+strict remainder bound, reduced-operation laws, and fixed-PFIELD remainder
+correspondence**, without primality or irreducibility assumptions and without
+yet introducing descriptors.  The descriptor kernel must not begin before
+that proof boundary closes.
 
 Immediately after that prerequisite, the next coherent boundary is only the
 **descriptor representation kernel**:
