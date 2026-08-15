@@ -27,14 +27,12 @@ fixed-descriptor wrapper functionally instantiates the existing constrained
 field, polynomial, curve, and group mathematics.  “Arbitrary finite field” no
 longer means only a separately certified nullary operation instance.
 
-The next coherent prerequisite is the **runtime modular-coefficient seam**
-identified by the post-PR #361 implementation finding in the architecture
-audit. Existing reduction accepts a runtime polynomial modulus but closes its
-coefficient operations and coding base over nullary constrained functions;
-the PFIELD adapter accepts the converse fixed-modulus arrangement. Certify the
-smallest transparent, total runtime-`p` normalization, multiplication, monic
-reduction, and radix-coding interface and its fixed-`p` correspondence, without
-primality or irreducibility assumptions.
+The runtime prerequisite is now split into two certified implementation
+boundaries.  The first—total runtime-`p` coefficient arithmetic, unreduced
+polynomial representation/arithmetic, and radix coding—is certified by
+`runtime-p-representation.lisp`.  Next certify **runtime-`p` monic polynomial
+reduction and fixed-`p` remainder correspondence**, without primality or
+irreducibility assumptions and without yet introducing descriptors.
 
 Immediately after that prerequisite, the next coherent boundary is only the
 **descriptor representation kernel**:

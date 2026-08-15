@@ -16,15 +16,16 @@ F11, and F7X2 results are clients or regressions and do not discharge those
 general obligations.
 
 An implementation pass after PR #361 exposed an additional prerequisite to
-item (1): the certified runtime-polynomial-modulus stack closes coefficient
-arithmetic and coding over nullary constrained operations, while the PFIELD
-adapter closes over a nullary characteristic.  The transparent total
-runtime-`p` modular-coefficient normalization, multiplication, monic-reduction,
-and radix-coding seam, with fixed-`p` correspondence, is **open** and must
-precede the descriptor kernel.  It assumes neither primality nor
-irreducibility and is not a field-validity checker.  The detailed interface
-finding is recorded in the
+item (1).  It is now split in two.  The modular coefficient, unreduced
+polynomial representation/arithmetic, and radix-coding core is **certified** by
+`runtime-p-representation.lisp`, including fixed-PFIELD normalization and
+multiplication correspondence.  Runtime-`p` monic reduction and fixed-`p`
+remainder correspondence remain **open** and precede the descriptor kernel.
+Neither boundary assumes primality or irreducibility or checks field validity.
+The detailed finding is recorded in the
 [architecture audit](audits/arbitrary-field-executable-schoof-architecture.md#post-pr-361-implementation-finding-runtime-coefficient-seam).
+
+| Runtime-`p` modular polynomial representation and radix coding | Certified | `runtime-p-effective-modulus`; coefficient operations; `runtime-p-normalize`; polynomial arithmetic; `runtime-p-{coding-bound,rank,unrank}`; fixed-PFIELD normalization/multiplication correspondence; radix round trips | Malformed or integer `< 2` moduli execute at effective modulus 2. The original input remains available and this is not descriptor validity. Polynomials are unreduced ascending coefficient lists; monic reduction remains open. |
 
 This is the authoritative ledger of certified, open, and deferred formal
 boundaries. It records public endpoints rather than proof history or internal
