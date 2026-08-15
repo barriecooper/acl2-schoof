@@ -15,12 +15,13 @@ logical contexts; their prefixes do not make them runtime-data-parametric.
 Concrete F7, F11, and F7X2 books remain instances and regressions, not owners of
 the public architecture.
 
-The descriptor layer depends on one runtime-parameterized representation seam:
-modular coefficient normalization/arithmetic, monic polynomial reduction, and
-radix coding must accept `p` as data.  Existing constrained polynomial books
-remain the theorem source, but their nullary coefficient operations cannot by
-themselves serve this runtime boundary; the seam must certify fixed-`p`
-correspondence rather than duplicate the polynomial stack.
+The descriptor layer depends on two ordered runtime-parameterized seams.  The
+certified `runtime-p-*` representation core supplies total modular coefficient
+arithmetic, unreduced dense polynomial normalization/arithmetic, and radix
+coding with `p` as data.  Runtime monic polynomial reduction and fixed-`p`
+remainder correspondence are the next boundary.  Both visibly follow the
+PFIELD and generic ascending-coefficient algorithms; neither implies that the
+original `p` is prime or that a quotient is a field.
 
 Descriptor assurance has three distinct layers.  An executable structural
 predicate recognizes and fixes representable descriptor data; a logical

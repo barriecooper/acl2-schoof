@@ -296,21 +296,37 @@ production interface can therefore thread both runtime `p` and runtime
 polynomial modulus through normalization, multiplication, reduction, and
 coefficient-vector coding in one call.
 
-Copying the generic polynomial implementation into the descriptor book would
-create a parallel reduction stack and a later equivalence obligation.  A
-functional instance cannot add a descriptor argument to first-order
-constrained functions.  The smallest prerequisite is a transparent, total
-**runtime modular-coefficient seam**: list normalization, addition,
-multiplication, monic reduction, and radix coding parameterized by integer
-`p`, with explicit behavior for `p < 2`, plus certified correspondence to the
-existing generic operations when `p` is fixed.  It is a representation seam
-and assumes neither primality nor irreducibility.
+Copying the generic polynomial implementation into a descriptor book would
+create a parallel reduction stack.  The prerequisite is therefore implemented
+as two reusable boundaries.  The first certified book,
+`runtime-p-representation.lisp`, provides coefficient arithmetic, unreduced
+polynomial normalization/addition/negation/scaling/multiplication, and
+fixed-width radix coding.  The second—runtime-`p` monic reduction and fixed-`p`
+remainder correspondence—remains open.
 
-No incomplete descriptor definitions were retained.  The selected descriptor
-representation and the separation of structural recognition, logical field
-validity, and any future executable validator are unchanged.  The immediate
-order is refined to certify this seam first and then make the descriptor kernel
-a thin descriptor/fixer layer over it.
+The implementation audit found that the Community Books PFIELD primitives are
+most safely called after supplying an integer modulus at least two and fixing
+coefficient operands.  The total convention is `p` itself exactly when it is
+an integer at least two, and `2` otherwise.  Thus non-integers, negative
+integers, 0, and 1 execute modulo 2, while composite values at least two are
+preserved.  PFIELD `fep-fix` supplies canonical residues and PFIELD `add`,
+`neg`, and `mul` receive fixed operands and the effective modulus.  This does
+not alter or validate the original descriptor value: later structural
+recognition must inspect the original `p`.
+
+Polynomial recursion follows the existing generic templates exactly: atoms
+and dotted tails terminate and are discarded, coefficient order is ascending,
+normalization fixes coefficients then removes trailing zeroes, and
+multiplication uses shifted scaling plus raw addition.  Fixed-`p`
+correspondence is staged through recursive equations, with public
+non-rewriting endpoints for normalization and multiplication.  Radix unrank
+uses `nfix` on width and rank; an out-of-range rank is truncated to the
+requested low-order width rather than rejected.
+
+No descriptor definitions were introduced.  Structural descriptor validity,
+logical field validity, and any future executable validator remain separate.
+The immediate next boundary is monic reduction, followed by the descriptor
+kernel.
 
 ### Following dependency order
 
