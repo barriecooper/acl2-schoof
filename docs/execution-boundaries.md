@@ -173,7 +173,20 @@ execution branch.  Because the underlying finite-field operations are
 constrained, the family is a logical target.  Explicit functional instances
 provide semantic evidence, while existing PFIELD/F7 functions and focused F7
 evaluations provide execution evidence.  Verified guards do not replace the
-semantic bridge. The staged finite-field-prefixed reduced-ring target operations are likewise transparent operation-then-remainder wrappers with verified guards; their current algebraic evidence stops at reduced-add commutativity, with remainder/add compatibility and reduced-add associativity still open.
+semantic bridge. The staged finite-field-prefixed reduced-ring target operations are likewise transparent operation-then-remainder wrappers with verified guards.  Their certified narrow algebraic prefix includes reduced-add commutativity, reduced-mul commutativity, and reduced-add associativity; the associativity proof uses the certified left and right remainder-of-add compatibility theorems.  This remains only a prefix, not a complete reduced-ring interface.
+
+The runtime-`p` polynomial algebra similarly uses only transparent total
+definitions.  `runtime-p-polynomial-one` is the singleton containing the
+totalized coefficient one and has guard `t`.  Multiplicative identities,
+annihilation, and multiplication through negation join the previously
+certified additive, associative, commutative, and distributive laws to complete
+the unconditional normalized polynomial commutative-ring interface.  Every
+identity accepts arbitrary polynomial inputs and arbitrary `p`, returning
+canonical normalized representatives; malformed moduli use effective modulus
+2 and composite effective moduli are supported.  This assurance establishes
+neither descriptor validity nor a field, integral domain, cancellation,
+multiplicative inverses, primality, or irreducibility.  Canonical monomials and the
+leading-term cancellation/decrease boundary remain open.
 
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes

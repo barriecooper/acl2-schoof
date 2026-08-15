@@ -2,6 +2,71 @@
 
 (include-book "runtime-p-polynomial-algebra")
 
+; The constant is transparent and remains literal one at a composite modulus.
+(assert-event (equal (runtime-p-polynomial-one 6) '(1)))
+
+; Multiplicative identity fixes coefficients, trims trailing zeroes, and ignores
+; dotted tails rather than returning a malformed input unchanged.
+(assert-event
+ (and (equal (runtime-p-poly-mul (runtime-p-polynomial-one 6)
+                                 '(7 8 0 . 9) 6)
+             '(1 2))
+      (equal (runtime-p-poly-mul '(7 8 0 . 9)
+                                 (runtime-p-polynomial-one 6) 6)
+             (runtime-p-normalize '(7 8 0 . 9) 6))
+      (not (equal (runtime-p-normalize '(7 8 0 . 9) 6)
+                  '(7 8 0 . 9)))))
+
+; Zero annihilation has exactly NIL as its canonical result; no singleton zero
+; representation escapes either orientation.
+(assert-event
+ (and (equal (runtime-p-poly-mul nil '(1 2 3) 6) nil)
+      (equal (runtime-p-poly-mul '(1 2 3) nil 6) nil)
+      (equal (runtime-p-poly-mul (runtime-p-polynomial-one 6) '(0) 6)
+             nil)))
+
+; Composite-modulus execution evidence for multiplication through negation.
+(assert-event
+ (and (equal (runtime-p-poly-mul (runtime-p-poly-neg '(1 2 3) 6)
+                                 '(4 5) 6)
+             (runtime-p-poly-neg
+              (runtime-p-poly-mul '(1 2 3) '(4 5) 6) 6))
+      (equal (runtime-p-poly-mul '(4 5)
+                                 (runtime-p-poly-neg '(1 2 3) 6) 6)
+             (runtime-p-poly-neg
+              (runtime-p-poly-mul '(4 5) '(1 2 3) 6) 6))))
+
+; A malformed modulus continues to select the established modulus-2 fallback.
+(assert-event
+ (equal (runtime-p-poly-mul
+         (runtime-p-poly-neg '(3 2 5) 'malformed) '(4 3) 'malformed)
+        (runtime-p-poly-mul
+         (runtime-p-poly-neg '(3 2 5) 2) '(4 3) 2)))
+
+(defthm runtime-p-poly-mul-one-left-minimal-theory-client
+  (equal (runtime-p-poly-mul (runtime-p-polynomial-one p) x p)
+         (runtime-p-normalize x p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-mul-one-left))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-poly-mul-one-right-minimal-theory-client
+  (equal (runtime-p-poly-mul x (runtime-p-polynomial-one p) p)
+         (runtime-p-normalize x p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-mul-one-right))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-poly-mul-neg-left-minimal-theory-client
+  (equal (runtime-p-poly-mul (runtime-p-poly-neg x p) y p)
+         (runtime-p-poly-neg (runtime-p-poly-mul x y p) p))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-poly-mul-neg-left))
+           :in-theory (theory 'minimal-theory))))
+
 ; Composite-modulus execution evidence for both association orders.
 (assert-event
  (equal (runtime-p-poly-mul
