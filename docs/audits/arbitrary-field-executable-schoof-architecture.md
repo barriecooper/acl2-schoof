@@ -341,6 +341,19 @@ runtime-`p` modular commutative-ring laws and the corresponding unreduced
 polynomial reconstruction identities, none of which may be imported from the
 prime-only fixed PFIELD field context for composite `p`.
 
+The coefficient half of that prerequisite is now certified separately by
+`runtime-p-algebra.lisp`.  Its proofs use only PFIELD modular addition,
+multiplication, and negation identities that are unconditional for a positive
+modulus; PFIELD inverse and field packaging remain prime-dependent and are not
+imported.  The residual theorem chain is the complete normalized polynomial-ring
+interface (normalization compatibility, additive identities/inverses,
+subtraction reconstruction, multiplication identities/annihilation,
+associativity, commutativity, distributivity, and negation compatibility),
+then the canonical monomial and degree/leading-coefficient seam, the monic
+product-leading-term calculation, exact subtraction reconstruction, and strict
+normalized-length decrease.  No monomial or cancellation API is exposed until that whole
+representation boundary certifies.
+
 Keeping that recursion would expose a public operation without its intended
 representation-level specification and would make the later descriptor kernel
 depend on an uncertified logical/executable boundary.  The selected next change
