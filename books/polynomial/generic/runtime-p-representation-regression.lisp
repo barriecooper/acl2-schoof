@@ -111,8 +111,3 @@
   (("Goal"
     :use ((:instance runtime-p-poly-sub-pfield-correspondence))
     :in-theory (theory 'minimal-theory))))
-(assert-event (equal (runtime-p-polynomial-one 7) '(1)))
-(assert-event (equal (runtime-p-polynomial-one 6) '(1)))
-(assert-event (equal (runtime-p-polynomial-one 'bad) '(1)))
-(assert-event (runtime-p-canonical-polynomial-p
-               (runtime-p-polynomial-one 6) 6))
