@@ -185,7 +185,12 @@ identity accepts arbitrary polynomial inputs and arbitrary `p`, returning
 canonical normalized representatives; malformed moduli use effective modulus
 2 and composite effective moduli are supported.  This assurance establishes
 neither descriptor validity nor a field, integral domain, cancellation,
-multiplicative inverses, primality, or irreducibility.  The transparent, guard-verified runtime monomial fixes its coefficient and exponent, collapses a fixed zero coefficient to exactly `nil`, and otherwise emits an ascending literal-zero prefix. The transparent degree and leading-coefficient observers first normalize arbitrary inputs. Monic product-leading-term equality, reconstruction, and strict decrease remain open.
+multiplicative inverses, primality, or irreducibility.  The transparent,
+guard-verified runtime monomial fixes its coefficient and exponent, collapses a
+fixed zero coefficient to exactly `nil`, and otherwise emits an ascending
+literal-zero prefix.  The transparent degree and leading-coefficient observers
+first normalize arbitrary inputs.  Monic product-leading-term equality,
+reconstruction, and strict decrease remain open.
 
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes
