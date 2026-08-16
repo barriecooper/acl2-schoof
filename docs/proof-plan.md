@@ -27,7 +27,7 @@ fixed-descriptor wrapper functionally instantiates the existing constrained
 field, polynomial, curve, and group mathematics.  “Arbitrary finite field” no
 longer means only a separately certified nullary operation instance.
 
-The runtime prerequisite has six certified stages: runtime-`p` representation
+The runtime prerequisite has seven certified stages: runtime-`p` representation
 and radix coding in `runtime-p-representation.lisp`; coefficient commutative-
 ring laws in `runtime-p-algebra.lisp`; normalized polynomial commutative-ring
 laws in `runtime-p-polynomial-algebra.lisp`; the canonical zero-collapsing
@@ -36,12 +36,15 @@ monomial plus total degree/leading-coefficient seam in
 leading-term calculation in
 `runtime-p-monic-product-leading-term.lisp`; and exact active-step reconstruction
 with strict normalized-length and degree decrease in
-`runtime-p-active-monic-subtraction.lisp`.  Runtime-`p` monic reduction,
-division-step packaging, fuel adequacy, recursive divmod, fixed-`p` remainder
-correspondence, descriptors, and field semantics remain subsequent open
-boundaries.
+`runtime-p-active-monic-subtraction.lisp`; and the transparent, total,
+guard-verified one-step monic reduction interface in
+`runtime-p-monic-division-step.lisp`.  Fuel adequacy, recursive monic divmod,
+quotient/remainder correctness and bounds, fixed-`p` correspondence,
+descriptors, and field semantics remain subsequent open boundaries.  The
+certified step is unconditional modular-ring execution, not a completed
+remainder algorithm or a claim of field validity.
 
-After the remaining runtime monic reduction, recursive divmod, and fixed-context
+After recursive runtime monic divmod and fixed-context
 remainder-correspondence prerequisites are complete, the next coherent boundary
 is the **descriptor representation kernel**:
 polynomial-basis descriptor shape/fixing, element representation/fixing/equality,

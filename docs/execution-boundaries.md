@@ -195,13 +195,22 @@ active product canonical, nonzero, and equal to the remainder in degree,
 leading coefficient, and normalized length.  It relies only on the monic top
 coefficient multiplying the active nonzero coefficient by one; unrestricted
 product-degree additivity remains false for composite moduli with zero divisors.
-The active monic subtraction boundary composes these transparent operations
-without an execution-only step function or a new logical/executable split.  Its
-next remainder is canonical, reconstructs the normalized input with the active
-product, and has strictly smaller normalized length and, unless zero, degree.
-The proof uses additive leading-coefficient cancellation and remains valid for
-composite effective moduli.  Division-step packaging, fuel adequacy, and
-recursive monic divmod remain open.
+The active monic subtraction boundary composes these transparent operations.
+`runtime-p-monic-division-step` now packages that calculation as a transparent,
+total, guard-verified pair, with projections that call the shared step.  It
+normalizes arbitrary raw polynomial inputs; malformed `p` uses effective
+modulus 2.  Active execution requires a nonzero normalized remainder, a
+normalized leading divisor coefficient of one, and a divisor degree no larger
+than the remainder degree.  Every other case returns a `nil` term and the
+normalized remainder unchanged.  Certified public theorems give exact active
+and inactive equations, canonical outputs, unconditional reconstruction,
+strict active normalized-length decrease, and zero-or-strictly-smaller active
+degree.  The proofs use the monic product-leading-term and active subtraction
+boundaries and remain valid for composite effective moduli without inverse,
+primality, or domain assumptions.  This single step is neither recursive monic
+divmod nor a remainder operation; fuel adequacy, recursive termination,
+quotient/remainder correctness and bounds, and fixed-context correspondence
+remain open.
 
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes
