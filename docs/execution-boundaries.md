@@ -195,7 +195,13 @@ active product canonical, nonzero, and equal to the remainder in degree,
 leading coefficient, and normalized length.  It relies only on the monic top
 coefficient multiplying the active nonzero coefficient by one; unrestricted
 product-degree additivity remains false for composite moduli with zero divisors.
-Active-step reconstruction and strict decrease remain open.
+The active monic subtraction boundary composes these transparent operations
+without an execution-only step function or a new logical/executable split.  Its
+next remainder is canonical, reconstructs the normalized input with the active
+product, and has strictly smaller normalized length and, unless zero, degree.
+The proof uses additive leading-coefficient cancellation and remains valid for
+composite effective moduli.  Division-step packaging, fuel adequacy, and
+recursive monic divmod remain open.
 
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes
@@ -438,5 +444,8 @@ identities, double negation, subtraction by zero, and subtraction
 reconstruction consequently return `runtime-p-normalize` of the input rather
 than a possibly malformed raw input.  Concrete composite-modulus and malformed
 input regressions are execution assurance; the unconditional certified laws
-supply logical correctness.  Multiplicative identity and annihilation remain
-open, as do monomials and cancellation.
+supply logical correctness.  The later monomial/degree, monic product-leading-
+term, and active monic subtraction books add canonical construction and
+additive leading-term cancellation without introducing an executable boundary;
+they do not assert unrestricted product-degree additivity over composite
+effective moduli.

@@ -34,10 +34,12 @@ laws in `runtime-p-polynomial-algebra.lisp`; the canonical zero-collapsing
 monomial plus total degree/leading-coefficient seam in
 `runtime-p-polynomial-monomial-degree.lisp`; and the inverse-free monic product-
 leading-term calculation in
-`runtime-p-monic-product-leading-term.lisp`.  Next come active-step
-reconstruction and strict normalized-length or degree decrease.  Runtime-`p`
-monic reduction, divmod, fixed-`p` remainder correspondence, descriptors, and
-field semantics remain subsequent open boundaries.
+`runtime-p-monic-product-leading-term.lisp`.  Exact active-step reconstruction
+and strict normalized-length and degree decrease are also certified in
+`runtime-p-active-monic-subtraction.lisp`.  Runtime-`p` monic reduction,
+division-step packaging, fuel adequacy, recursive divmod, fixed-`p` remainder
+correspondence, descriptors, and field semantics remain subsequent open
+boundaries.
 
 Immediately after that prerequisite, the next coherent boundary is only the
 **descriptor representation kernel**:

@@ -302,9 +302,10 @@ comprises runtime representation and radix coding, coefficient commutative-ring
 laws, normalized polynomial commutative-ring laws, and the canonical monomial
 and degree/leading-coefficient seam.  It now also includes the inverse-free
 monic product-leading-term calculation certified in
-`runtime-p-monic-product-leading-term.lisp`.  Runtime-`p` active-step
-reconstruction and strict decrease, monic reduction, and fixed-`p` remainder
-correspondence remain open.
+`runtime-p-monic-product-leading-term.lisp`.  Runtime-`p` active-step exact
+reconstruction and strict normalized-length and degree decrease are certified
+in `runtime-p-active-monic-subtraction.lisp`; monic reduction and fixed-`p`
+remainder correspondence remain open.
 
 The implementation audit found that the Community Books PFIELD primitives are
 most safely called after supplying an integer modulus at least two and fixing
@@ -327,9 +328,8 @@ requested low-order width rather than rejected.
 
 No descriptor definitions were introduced.  Structural descriptor validity,
 logical field validity, and any future executable validator remain separate.
-The immediate boundary is exact active-step reconstruction and strict
-normalized-length or degree decrease, followed by monic reduction and then the
-descriptor kernel.
+The next boundary is monic reduction, followed by fixed-`p` remainder
+correspondence and then the descriptor kernel.
 
 ### Rejected execution-only monic-reduction draft
 
@@ -366,17 +366,17 @@ remains false at this composite-modulus representation boundary because
 nonzero leading coefficients can be zero divisors.  The certified narrower
 result is valid because the active coefficient is multiplied by the monic
 divisor's leading coefficient `1`, preserving that coefficient without a
-domain or no-zero-divisor law.  The residual theorem chain now begins with
-exact active-step reconstruction and strict normalized-length or degree
-decrease.
+domain or no-zero-divisor law.  The next book certifies exact active-step
+reconstruction and strict normalized-length and degree decrease by additive
+cancellation of the equal leading coefficients.
 
 Keeping that recursion would expose a public operation without its intended
 representation-level specification and would make the later descriptor kernel
 depend on an uncertified logical/executable boundary.  Those coefficient,
 polynomial-algebra, monomial/degree, and monic product-leading-term
-prerequisites are now certified.  The next proof boundary must establish exact
-active-step reconstruction and strict decrease.  Fuel adequacy, recursive
-divmod, quotient/remainder reconstruction and bounds, reduced-operation laws,
+prerequisites and active monic subtraction boundary are now certified.  Fuel
+adequacy, division-step packaging, recursive divmod, quotient/remainder
+reconstruction and bounds, reduced-operation laws,
 fixed-PFIELD correspondence, descriptors, field semantics, curves, and later
 Schoof layers remain open.  A standalone execution prefix is not independently
 sufficient and must not be registered.
