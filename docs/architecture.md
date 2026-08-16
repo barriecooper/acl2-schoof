@@ -25,9 +25,11 @@ normalized representatives for arbitrary inputs.  The canonical zero-collapsing
 monomial, total normalized degree/leading-coefficient seam, and inverse-free
 monic product-leading-term boundary are certified.  The product result is
 restricted to a monic normalized divisor, so it remains valid over composite
-moduli with zero divisors.  Active-step reconstruction and strict
-normalized-length or degree decrease remain open before runtime
-monic polynomial reduction and fixed-`p` remainder correspondence.  These
+moduli with zero divisors.  Active-step subtraction now has certified exact
+reconstruction and strict normalized-length and degree decrease.  This uses
+additive cancellation of equal leading coefficients, not unrestricted product-
+degree additivity.  Runtime monic polynomial reduction and fixed-`p` remainder
+correspondence remain open.  These
 runtime seams follow the PFIELD and generic ascending-coefficient algorithms;
 they imply neither that the original `p` is prime nor that a quotient is a
 field.
