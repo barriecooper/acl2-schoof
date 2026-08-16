@@ -23,7 +23,9 @@ The repository currently certifies these subsystem-level foundations:
 - canonical dense polynomials (`GPOLY`) with arithmetic, evaluation, formal
   differentiation and its additive laws, degree, division with remainder,
   Euclidean GCD, extended GCD, modular inversion, irreducibility, and reduced
-  arithmetic, plus a finite-field-prefixed recursive divmod and public
+  arithmetic, plus finite-field-prefixed recursive divmod and a runtime-`p`
+  inverse-free monic divmod (both with public quotient/remainder interfaces),
+  and a finite-field public
   remainder/reduced-representative interface, fixed-modulus coefficient vectors, exact-width coefficient-vector mixed-radix rank/unrank, exhaustive representative carriers, and representative-count cardinality for explicit finite-field moduli;
 - a generic fixed-modulus quotient-field construction for an irreducible
   polynomial, plus concrete PFIELD/F7 clients and an F7X2 proving instance;
@@ -91,9 +93,10 @@ currently certifies representation and radix coding, coefficient and normalized
 polynomial commutative-ring laws, and canonical monomials with total normalized
 degree/leading coefficient.  The inverse-free monic product-leading-term,
 active monic subtraction reconstruction/decrease, and transparent one-step monic
-division-step packaging boundaries are also certified.  The next open boundary is recursive monic divmod
-with termination and quotient/remainder correctness and bounds, followed by
-fixed-context remainder correspondence.  F7, F11, and F7X2 remain examples and
+division-step packaging and structural recursive monic divmod boundaries are
+also certified, including canonical results, reconstruction, and the strict
+monic final bound. The next open boundary is fixed-context remainder
+correspondence.  F7, F11, and F7X2 remain examples and
 instances rather than owners of this general executable architecture.
 
 New algebra is built on the `GFIELD`/`GPOLY` stack. Dense polynomials store
