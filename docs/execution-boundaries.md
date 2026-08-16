@@ -189,8 +189,13 @@ multiplicative inverses, primality, or irreducibility.  The transparent,
 guard-verified runtime monomial fixes its coefficient and exponent, collapses a
 fixed zero coefficient to exactly `nil`, and otherwise emits an ascending
 literal-zero prefix.  The transparent degree and leading-coefficient observers
-first normalize arbitrary inputs.  Monic product-leading-term equality,
-reconstruction, and strict decrease remain open.
+first normalize arbitrary inputs.  The certified inverse-free monic
+product-leading-term boundary accepts arbitrary raw polynomials and proves its
+active product canonical, nonzero, and equal to the remainder in degree,
+leading coefficient, and normalized length.  It relies only on the monic top
+coefficient multiplying the active nonzero coefficient by one; unrestricted
+product-degree additivity remains false for composite moduli with zero divisors.
+Active-step reconstruction and strict decrease remain open.
 
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes
