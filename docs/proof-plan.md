@@ -42,9 +42,9 @@ guard-verified one-step monic reduction interface in
 canonical results, reconstruction, and strict monic final bound in
 `runtime-p-monic-divmod.lisp`. Its length measure supersedes the rejected fuel
 design, so no fuel-adequacy obligation applies. Fixed-`p` correspondence,
-descriptors, and field semantics remain subsequent open boundaries.  The
-certified step is unconditional modular-ring execution, not a completed
-remainder algorithm or a claim of field validity.
+reduced-operation laws, descriptors, and field semantics remain subsequent open
+boundaries. The certified divmod is unconditional modular-ring execution and
+makes no claim of descriptor or field validity.
 
 After fixed-context remainder correspondence is complete, the next coherent boundary
 is the **descriptor representation kernel**:
