@@ -31,8 +31,9 @@ additive cancellation of equal leading coefficients, not unrestricted product-
 degree additivity.  The transparent, total runtime-`p` monic division step now
 packages that calculation with certified active and inactive equations,
 canonical outputs, unconditional reconstruction, and strict active decrease.
-Recursive monic divmod, quotient/remainder correctness and bounds, and fixed-`p`
-remainder correspondence remain open.  These runtime seams follow the PFIELD
+Recursive monic divmod now has a certified structural length measure, canonical
+quotient/remainder, unconditional reconstruction, and a strict final bound for
+normalized-monic divisors. Fixed-`p` remainder correspondence remains open.  These runtime seams follow the PFIELD
 and generic ascending-coefficient algorithms;
 they imply neither that the original `p` is prime nor that a quotient is a
 field.

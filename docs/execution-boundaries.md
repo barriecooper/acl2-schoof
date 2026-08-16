@@ -207,10 +207,13 @@ and inactive equations, canonical outputs, unconditional reconstruction,
 strict active normalized-length decrease, and zero-or-strictly-smaller active
 degree.  The proofs use the monic product-leading-term and active subtraction
 boundaries and remain valid for composite effective moduli without inverse,
-primality, or domain assumptions.  This single step is neither recursive monic
-divmod nor a remainder operation; fuel adequacy, recursive termination,
-quotient/remainder correctness and bounds, and fixed-context correspondence
-remain open.
+primality, or domain assumptions.  `runtime-p-monic-divmod.lisp` uses this step exactly once per active iteration
+and recurses on its strictly shorter next remainder; there is no fuel interface.
+The public divmod normalizes both inputs, starts with quotient `nil`, and returns
+canonical results; each projection invokes divmod once. Reconstruction is
+unconditional, while the strict final bound assumes only a normalized-monic
+divisor. Zero, nonmonic, and larger divisors are inactive. Malformed `p` retains
+effective-modulus-2 behavior. Fixed-context correspondence remains open.
 
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes

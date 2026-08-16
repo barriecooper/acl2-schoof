@@ -328,8 +328,8 @@ requested low-order width rather than rejected.
 
 No descriptor definitions were introduced.  Structural descriptor validity,
 logical field validity, and any future executable validator remain separate.
-The next boundary is monic reduction, followed by fixed-`p` remainder
-correspondence and then the descriptor kernel.
+Recursive monic reduction is now certified; the next boundary is fixed-`p`
+remainder correspondence and then the descriptor kernel.
 
 ### Rejected execution-only monic-reduction draft
 
@@ -376,9 +376,10 @@ representation-level specification and would make the later descriptor kernel
 depend on an uncertified logical/executable boundary.  Those coefficient,
 polynomial-algebra, monomial/degree, and monic product-leading-term
 prerequisites, active monic subtraction boundary, and transparent total
-runtime-`p` monic division-step packaging are now certified.  Fuel adequacy,
-recursive divmod, quotient/remainder
-reconstruction and bounds, reduced-operation laws,
+runtime-`p` monic division-step packaging and structural recursive monic divmod
+are now certified. Its strict length measure supersedes the rejected draft's
+unjustified fuel design. Canonical results, unconditional reconstruction, and
+the strict monic final bound are certified. Reduced-operation laws,
 fixed-PFIELD correspondence, descriptors, field semantics, curves, and later
 Schoof layers remain open.  A standalone execution prefix is not independently
 sufficient and must not be registered.
