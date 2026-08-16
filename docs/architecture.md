@@ -28,9 +28,12 @@ restricted to a monic normalized divisor, so it remains valid over composite
 moduli with zero divisors.  Active-step subtraction now has certified exact
 reconstruction and strict normalized-length and degree decrease.  This uses
 additive cancellation of equal leading coefficients, not unrestricted product-
-degree additivity.  Runtime monic polynomial reduction and fixed-`p` remainder
-correspondence remain open.  These
-runtime seams follow the PFIELD and generic ascending-coefficient algorithms;
+degree additivity.  The transparent, total runtime-`p` monic division step now
+packages that calculation with certified active and inactive equations,
+canonical outputs, unconditional reconstruction, and strict active decrease.
+Recursive monic divmod, quotient/remainder correctness and bounds, and fixed-`p`
+remainder correspondence remain open.  These runtime seams follow the PFIELD
+and generic ascending-coefficient algorithms;
 they imply neither that the original `p` is prime nor that a quotient is a
 field.
 
