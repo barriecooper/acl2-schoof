@@ -3,11 +3,19 @@ set -euo pipefail
 root=$(cd "$(dirname "$0")/.." && pwd); cd "$root"
 book=${1:?book required}; book=${book%.lisp}
 test -f "$book.lisp" || { echo "no such book: $book.lisp" >&2; exit 2; }
+certification_jobs=${ACL2_CERTIFICATION_JOBS:-1}
+case "$certification_jobs" in
+  ''|*[!0-9]*|0)
+    echo "ACL2_CERTIFICATION_JOBS must be a positive integer" >&2
+    exit 2
+    ;;
+esac
 mkdir -p .deps/logs
 log=".deps/logs/$(echo "$book" | tr / _).log"
 export ACL2_SYSTEM_BOOKS="$root/.deps/acl2/books"
+echo "Certifying $book.lisp with $certification_jobs ACL2 job(s)"
 set +e
-perl .deps/acl2/books/build/cert.pl --acl2 .deps/acl2/saved_acl2 "$book.lisp" >"$log" 2>&1
+perl .deps/acl2/books/build/cert.pl -j "$certification_jobs" --acl2 .deps/acl2/saved_acl2 "$book.lisp" >"$log" 2>&1
 rc=$?; set -e
 if ((rc)); then
   echo "certification failed; markers:" >&2
