@@ -261,6 +261,8 @@
 (include-book "polynomial/generic/runtime-p-polynomial-algebra-regression")
 (include-book "polynomial/generic/runtime-p-polynomial-monomial-degree")
 (include-book "polynomial/generic/runtime-p-polynomial-monomial-degree-regression")
+(include-book "polynomial/generic/runtime-p-monic-product-leading-term")
+(include-book "polynomial/generic/runtime-p-monic-product-leading-term-regression")
 (include-book "polynomial/generic/finite-field-fixed-modulus-carrier")
 (include-book "polynomial/generic/finite-field-fixed-modulus-carrier-regression")
 (include-book "polynomial/generic/finite-field-extension-cardinality")

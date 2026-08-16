@@ -22,9 +22,11 @@ coding with `p` as data.  The coefficient operations and normalized polynomial
 operations have certified total commutative-ring interfaces for every effective
 modulus, including composites.  Polynomial identities return canonical
 normalized representatives for arbitrary inputs.  The canonical zero-collapsing
-monomial and total normalized degree/leading-coefficient seam is certified.
-Inverse-free monic product-leading-term equality, active-step reconstruction,
-and strict normalized-length or degree decrease remain open before runtime
+monomial, total normalized degree/leading-coefficient seam, and inverse-free
+monic product-leading-term boundary are certified.  The product result is
+restricted to a monic normalized divisor, so it remains valid over composite
+moduli with zero divisors.  Active-step reconstruction and strict
+normalized-length or degree decrease remain open before runtime
 monic polynomial reduction and fixed-`p` remainder correspondence.  These
 runtime seams follow the PFIELD and generic ascending-coefficient algorithms;
 they imply neither that the original `p` is prime nor that a quotient is a
