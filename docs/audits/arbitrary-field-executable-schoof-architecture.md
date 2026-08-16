@@ -366,9 +366,10 @@ remains false at this composite-modulus representation boundary because
 nonzero leading coefficients can be zero divisors.  The certified narrower
 result is valid because the active coefficient is multiplied by the monic
 divisor's leading coefficient `1`, preserving that coefficient without a
-domain or no-zero-divisor law.  The next book certifies exact active-step
-reconstruction and strict normalized-length and degree decrease by additive
-cancellation of the equal leading coefficients.
+domain or no-zero-divisor law.  Exact active-step reconstruction and strict
+normalized-length and degree decrease are certified in
+`runtime-p-active-monic-subtraction.lisp` by additive cancellation of the equal
+leading coefficients.
 
 Keeping that recursion would expose a public operation without its intended
 representation-level specification and would make the later descriptor kernel
