@@ -89,12 +89,12 @@ runtime polynomial-basis descriptor will supply public data, while fixed-context
 wrappers reuse the existing constrained theorem layers.  The runtime-`p` prefix
 currently certifies representation and radix coding, coefficient and normalized
 polynomial commutative-ring laws, and canonical monomials with total normalized
-degree/leading coefficient.  The inverse-free monic product-leading-term and
-active monic subtraction reconstruction/decrease boundaries are also certified.
-The next open boundary is runtime monic reduction and division-step packaging,
-followed by recursive divmod and fixed-context remainder correspondence.  F7,
-F11, and F7X2 remain examples and instances rather than owners of this general
-executable architecture.
+degree/leading coefficient.  The inverse-free monic product-leading-term,
+active monic subtraction reconstruction/decrease, and transparent one-step monic
+division-step packaging boundaries are also certified.  The next open boundary is recursive monic divmod
+with termination and quotient/remainder correctness and bounds, followed by
+fixed-context remainder correspondence.  F7, F11, and F7X2 remain examples and
+instances rather than owners of this general executable architecture.
 
 New algebra is built on the `GFIELD`/`GPOLY` stack. Dense polynomials store
 coefficients in ascending degree, use `nil` for zero, and remove trailing zero

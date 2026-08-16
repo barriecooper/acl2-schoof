@@ -375,8 +375,9 @@ Keeping that recursion would expose a public operation without its intended
 representation-level specification and would make the later descriptor kernel
 depend on an uncertified logical/executable boundary.  Those coefficient,
 polynomial-algebra, monomial/degree, and monic product-leading-term
-prerequisites and active monic subtraction boundary are now certified.  Fuel
-adequacy, division-step packaging, recursive divmod, quotient/remainder
+prerequisites, active monic subtraction boundary, and transparent total
+runtime-`p` monic division-step packaging are now certified.  Fuel adequacy,
+recursive divmod, quotient/remainder
 reconstruction and bounds, reduced-operation laws,
 fixed-PFIELD correspondence, descriptors, field semantics, curves, and later
 Schoof layers remain open.  A standalone execution prefix is not independently
