@@ -263,6 +263,8 @@
 (include-book "polynomial/generic/runtime-p-polynomial-monomial-degree-regression")
 (include-book "polynomial/generic/runtime-p-monic-product-leading-term")
 (include-book "polynomial/generic/runtime-p-monic-product-leading-term-regression")
+(include-book "polynomial/generic/runtime-p-monic-product-arbitrary-multiplier")
+(include-book "polynomial/generic/runtime-p-monic-product-arbitrary-multiplier-regression")
 (include-book "polynomial/generic/runtime-p-active-monic-subtraction")
 (include-book "polynomial/generic/runtime-p-active-monic-subtraction-regression")
 (include-book "polynomial/generic/runtime-p-monic-division-step")

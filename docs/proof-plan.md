@@ -27,14 +27,15 @@ fixed-descriptor wrapper functionally instantiates the existing constrained
 field, polynomial, curve, and group mathematics.  “Arbitrary finite field” no
 longer means only a separately certified nullary operation instance.
 
-The runtime prerequisite has eight certified stages: runtime-`p` representation
+The runtime prerequisite has nine certified stages: runtime-`p` representation
 and radix coding in `runtime-p-representation.lisp`; coefficient commutative-
 ring laws in `runtime-p-algebra.lisp`; normalized polynomial commutative-ring
 laws in `runtime-p-polynomial-algebra.lisp`; the canonical zero-collapsing
 monomial plus total degree/leading-coefficient seam in
 `runtime-p-polynomial-monomial-degree.lisp`; the inverse-free monic product-
 leading-term calculation in
-`runtime-p-monic-product-leading-term.lisp`; and exact active-step reconstruction
+`runtime-p-monic-product-leading-term.lisp`; its arbitrary canonical-multiplier
+generalization in `runtime-p-monic-product-arbitrary-multiplier.lisp`; exact active-step reconstruction
 with strict normalized-length and degree decrease in
 `runtime-p-active-monic-subtraction.lisp`; and the transparent, total,
 guard-verified one-step monic reduction interface in

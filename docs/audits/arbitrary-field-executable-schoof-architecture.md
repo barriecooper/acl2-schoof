@@ -308,7 +308,11 @@ comprises runtime representation and radix coding, coefficient commutative-ring
 laws, normalized polynomial commutative-ring laws, and the canonical monomial
 and degree/leading-coefficient seam.  It now also includes the inverse-free
 monic product-leading-term calculation certified in
-`runtime-p-monic-product-leading-term.lisp`.  Runtime-`p` active-step exact
+`runtime-p-monic-product-leading-term.lisp`.  The downstream
+`runtime-p-monic-product-arbitrary-multiplier.lisp` additionally proves that
+every canonical nonzero multiplier times a normalized-monic arbitrary divisor
+is nonzero, with exact degree addition, leading-coefficient preservation, and
+exact normalized length, including at composite effective moduli.  Runtime-`p` active-step exact
 reconstruction and strict normalized-length and degree decrease are certified
 in `runtime-p-active-monic-subtraction.lisp`; monic reduction and exact fixed-
 PFIELD divmod, quotient, and remainder correspondence are certified.
@@ -374,7 +378,13 @@ remains false at this composite-modulus representation boundary because
 nonzero leading coefficients can be zero divisors.  The certified narrower
 result is valid because the active coefficient is multiplied by the monic
 divisor's leading coefficient `1`, preserving that coefficient without a
-domain or no-zero-divisor law.  Exact active-step reconstruction and strict
+domain or no-zero-divisor law.  The separate
+`runtime-p-monic-product-arbitrary-multiplier.lisp` generalizes
+this inverse-free fact to every canonical nonempty multiplier, proving a
+nonempty product, exact degree addition, preservation of the multiplier's
+leading coefficient, and exact normalized length.  It still does not assert
+unrestricted product-degree additivity for nonmonic factors.  Exact active-step
+reconstruction and strict
 normalized-length and degree decrease are certified in
 `runtime-p-active-monic-subtraction.lisp` by additive cancellation of the equal
 leading coefficients.
