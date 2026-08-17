@@ -42,15 +42,20 @@ guard-verified one-step monic reduction interface in
 canonical results, reconstruction, and strict monic final bound in
 `runtime-p-monic-divmod.lisp`. Its length measure supersedes the rejected fuel
 design, so no fuel-adequacy obligation applies. Exact fixed-PFIELD monic
-divmod, quotient, and remainder correspondence is also certified. Reduced-
-operation laws, descriptors, and field semantics remain subsequent open
-boundaries. The certified divmod is unconditional modular-ring execution and
+divmod, quotient, and remainder correspondence is also certified. The
+descriptor representation slice is described below; reduced-operation laws
+and field semantics remain subsequent open boundaries. The certified divmod is unconditional modular-ring execution and
 makes no claim of descriptor or field validity.
 
-The next coherent boundary is the **descriptor representation kernel**:
-polynomial-basis descriptor shape/fixing, element representation/fixing/equality,
-add/neg/mul, rank/unrank, `p^m` representative count, and prime/extension
-regressions.  This reduced-ring/representation boundary does not add inverse,
+The descriptor representation and execution slice is certified: polynomial-
+basis descriptor shape/fixing, element representation/fixing/equality,
+add/neg/mul, vector/rank/unrank definitions, rank bounds, and the definitional
+`p^m` coding bound.  The next tight proof group is runtime monic-remainder
+compatibility with polynomial addition, negation, and multiplication.  Those
+lemmas are required before claiming fixer congruence, the quotient-ring laws,
+or rank/unrank bijection and representation cardinality.  Focused prime,
+composite, reducible-modulus, and malformed-input regressions are certified.
+This reduced-ring/representation boundary does not add inverse,
 claim field laws, instantiate `GFIELD`, or decide logical field validity.
 
 Descriptor assurance separates an executable structural predicate from a
