@@ -20,7 +20,10 @@ certified `runtime-p-*` representation core supplies total modular coefficient
 arithmetic, unreduced dense polynomial normalization/arithmetic, and radix
 coding with `p` as data.  The coefficient operations and normalized polynomial
 operations have certified total commutative-ring interfaces for every effective
-modulus, including composites.  Polynomial identities return canonical
+modulus, including composites. The total coefficient inverse reuses PFIELD
+exponentiation and has certified field inverse laws exactly when the effective
+modulus is prime and the fixed coefficient is nonzero; composite execution is
+not presented as a field. Polynomial identities return canonical
 normalized representatives for arbitrary inputs.  The canonical zero-collapsing
 monomial, total normalized degree/leading-coefficient seam, and inverse-free
 monic product-leading-term boundary are certified.  The product result is
@@ -56,7 +59,9 @@ Runtime add/neg/mul remainder compatibility, reduced-operation fixer
 congruence, and the complete exact-equality commutative quotient-ring interface
 are certified for arbitrary inputs. Composite coefficient moduli and reducible
 monic polynomial moduli remain rings rather than fields. The next seam is
-logical field validity and inversion with fixed-context field correspondence.
+polynomial-basis inversion and the prime-plus-irreducible descriptor-validity
+bridge with fixed-context field correspondence; no curve or Schoof field layer
+is yet supplied.
 
 Descriptor assurance has three distinct layers.  An executable structural
 predicate recognizes and fixes representable descriptor data; a logical

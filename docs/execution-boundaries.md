@@ -175,6 +175,17 @@ provide semantic evidence, while existing PFIELD/F7 functions and focused F7
 evaluations provide execution evidence.  Verified guards do not replace the
 semantic bridge. The staged finite-field-prefixed reduced-ring target operations are likewise transparent operation-then-remainder wrappers with verified guards.  Their certified narrow algebraic prefix includes reduced-add commutativity, reduced-mul commutativity, and reduced-add associativity; the associativity proof uses the certified left and right remainder-of-add compatibility theorems.  This remains only a prefix, not a complete reduced-ring interface.
 
+`runtime-p-inv` is a transparent total coefficient operation with guard `t`
+and verified guards. It fixes its input, selects the established effective
+modulus (2 for malformed `p`), and calls the existing PFIELD exponentiation-
+based inverse behind an explicit zero branch. Certified closure, fixing and
+effective-modulus congruence, zero, prime-effective-modulus two-sided inverse,
+involution, and exact fixed-PFIELD correspondence provide the semantic
+evidence; F7 and F11 regressions certify concrete correspondence. Composite
+effective moduli remain executable, but none of these results presents them as
+fields. This coefficient boundary does not implement polynomial-basis inverse
+or establish descriptor validity, curve fields, or a Schoof field layer.
+
 The runtime-`p` polynomial algebra similarly uses only transparent total
 definitions.  `runtime-p-polynomial-one` is the singleton containing the
 totalized coefficient one and has guard `t`.  Multiplicative identities,
