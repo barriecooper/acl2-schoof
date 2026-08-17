@@ -52,9 +52,11 @@ degree-sized coefficient vectors are a separate coding view, with runtime
 mixed-radix rank/unrank and a `p^m` bound.  The representation, closure, vector
 round trips, bounded coding bijection, exhaustive duplicate-free carrier, and
 exact `p^m` representation count are certified without operation compatibility.
-Runtime add/neg/mul remainder compatibility and reduced-operation fixer
-congruence are certified; the complete quotient-ring interface is the next
-proof seam and is not architectural field-validity assumptions.
+Runtime add/neg/mul remainder compatibility, reduced-operation fixer
+congruence, and the complete exact-equality commutative quotient-ring interface
+are certified for arbitrary inputs. Composite coefficient moduli and reducible
+monic polynomial moduli remain rings rather than fields. The next seam is
+logical field validity and inversion with fixed-context field correspondence.
 
 Descriptor assurance has three distinct layers.  An executable structural
 predicate recognizes and fixes representable descriptor data; a logical
