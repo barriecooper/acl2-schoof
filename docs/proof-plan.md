@@ -27,7 +27,10 @@ fixed-descriptor wrapper functionally instantiates the existing constrained
 field, polynomial, curve, and group mathematics.  “Arbitrary finite field” no
 longer means only a separately certified nullary operation instance.
 
-The runtime prerequisite has nine certified stages: runtime-`p` representation
+The runtime prerequisite now also has certified total runtime-`p` coefficient
+inversion, reusing PFIELD inversion, with two-sided laws under primality of the
+effective modulus and nonzero fixed input. Malformed moduli retain effective
+modulus 2, while composites execute without a field claim. The earlier stages are: runtime-`p` representation
 and radix coding in `runtime-p-representation.lisp`; coefficient commutative-
 ring laws in `runtime-p-algebra.lisp`; normalized polynomial commutative-ring
 laws in `runtime-p-polynomial-algebra.lisp`; the canonical zero-collapsing
@@ -57,15 +60,16 @@ multiplication and descriptor add/neg/sub/mul fixer congruence are certified.
 The complete unconditional commutative quotient-ring laws are now certified;
 this boundary was not needed by the earlier representation-only coding results.  Focused prime,
 composite, reducible-modulus, and malformed-input regressions are certified.
-This reduced-ring/representation boundary does not add inverse,
-claim field laws, instantiate `GFIELD`, or decide logical field validity.
+This reduced-ring/representation boundary still does not add polynomial-basis
+inverse, claim descriptor field laws, instantiate `GFIELD`, or decide logical
+field validity. The coefficient inverse does not change those facts.
 
 Descriptor assurance separates an executable structural predicate from a
 logical field-validity predicate requiring primality, positive extension
 degree, correct modulus degree, and irreducibility.  A certified executable
 validator is optional future work.  The subsequent order is:
 
-1. logical field validity and inversion, followed by the descriptor field-law
+1. polynomial-basis inversion and the prime-plus-irreducible logical field-validity bridge, followed by the descriptor field-law
    bridge and fixed-context field correspondence, including characteristic/order and fixed-descriptor functional instances;
 2. the runtime short-curve bridge for descriptor-threaded `A,B`, discriminant,
    point fixing, and fixed-symbol correspondence;

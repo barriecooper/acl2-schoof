@@ -257,6 +257,8 @@
 (include-book "polynomial/generic/runtime-p-representation-regression")
 (include-book "polynomial/generic/runtime-p-algebra")
 (include-book "polynomial/generic/runtime-p-algebra-regression")
+(include-book "polynomial/generic/runtime-p-coefficient-inverse")
+(include-book "polynomial/generic/runtime-p-coefficient-inverse-regression")
 (include-book "polynomial/generic/runtime-p-polynomial-algebra")
 (include-book "polynomial/generic/runtime-p-polynomial-algebra-regression")
 (include-book "polynomial/generic/runtime-p-polynomial-monomial-degree")
