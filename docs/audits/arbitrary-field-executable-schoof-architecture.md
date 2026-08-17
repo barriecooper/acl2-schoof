@@ -304,8 +304,8 @@ and degree/leading-coefficient seam.  It now also includes the inverse-free
 monic product-leading-term calculation certified in
 `runtime-p-monic-product-leading-term.lisp`.  Runtime-`p` active-step exact
 reconstruction and strict normalized-length and degree decrease are certified
-in `runtime-p-active-monic-subtraction.lisp`; monic reduction and fixed-`p`
-remainder correspondence remain open.
+in `runtime-p-active-monic-subtraction.lisp`; monic reduction and exact fixed-
+PFIELD divmod, quotient, and remainder correspondence are certified.
 
 The implementation audit found that the Community Books PFIELD primitives are
 most safely called after supplying an integer modulus at least two and fixing
@@ -328,8 +328,8 @@ requested low-order width rather than rejected.
 
 No descriptor definitions were introduced.  Structural descriptor validity,
 logical field validity, and any future executable validator remain separate.
-Recursive monic reduction is now certified; the next boundary is fixed-`p`
-remainder correspondence and then the descriptor kernel.
+Recursive monic reduction and fixed-PFIELD monic remainder correspondence are
+now certified; the next boundary is the descriptor kernel.
 
 ### Rejected execution-only monic-reduction draft
 
@@ -379,8 +379,9 @@ prerequisites, active monic subtraction boundary, and transparent total
 runtime-`p` monic division-step packaging and structural recursive monic divmod
 are now certified. Its strict length measure supersedes the rejected draft's
 unjustified fuel design. Canonical results, unconditional reconstruction, and
-the strict monic final bound are certified. Reduced-operation laws,
-fixed-PFIELD correspondence, descriptors, field semantics, curves, and later
+the strict monic final bound are certified. Exact fixed-PFIELD monic divmod and
+remainder correspondence is certified. Reduced-operation laws, descriptors,
+field semantics, curves, and later
 Schoof layers remain open.  A standalone execution prefix is not independently
 sufficient and must not be registered.
 

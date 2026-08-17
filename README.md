@@ -95,9 +95,11 @@ degree/leading coefficient.  The inverse-free monic product-leading-term,
 active monic subtraction reconstruction/decrease, and transparent one-step monic
 division-step packaging and structural recursive monic divmod boundaries are
 also certified, including canonical results, reconstruction, and the strict
-monic final bound. The next open boundary is fixed-context remainder
-correspondence.  F7, F11, and F7X2 remain examples and
-instances rather than owners of this general executable architecture.
+monic final bound, together with exact fixed-PFIELD monic divmod, quotient, and
+remainder correspondence. The next open boundary is the descriptor
+representation kernel, including runtime reduced operations and their laws.
+F7, F11, and F7X2 remain examples and instances rather than owners of this
+general executable architecture.
 
 New algebra is built on the `GFIELD`/`GPOLY` stack. Dense polynomials store
 coefficients in ascending degree, use `nil` for zero, and remove trailing zero

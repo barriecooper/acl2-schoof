@@ -33,7 +33,9 @@ packages that calculation with certified active and inactive equations,
 canonical outputs, unconditional reconstruction, and strict active decrease.
 Recursive monic divmod now has a certified structural length measure, canonical
 quotient/remainder, unconditional reconstruction, and a strict final bound for
-normalized-monic divisors. Fixed-`p` remainder correspondence remains open.  These runtime seams follow the PFIELD
+normalized-monic divisors. Exact divmod, quotient, and remainder correspondence
+with fixed PFIELD long division is certified for normalized-monic divisors at
+`pfield-modulus`. These runtime seams follow the PFIELD
 and generic ascending-coefficient algorithms;
 they imply neither that the original `p` is prime nor that a quotient is a
 field.

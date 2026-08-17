@@ -269,6 +269,8 @@
 (include-book "polynomial/generic/runtime-p-monic-division-step-regression")
 (include-book "polynomial/generic/runtime-p-monic-divmod")
 (include-book "polynomial/generic/runtime-p-monic-divmod-regression")
+(include-book "polynomial/generic/runtime-p-monic-divmod-pfield-correspondence")
+(include-book "polynomial/generic/runtime-p-monic-divmod-pfield-correspondence-regression")
 (include-book "polynomial/generic/finite-field-fixed-modulus-carrier")
 (include-book "polynomial/generic/finite-field-fixed-modulus-carrier-regression")
 (include-book "polynomial/generic/finite-field-extension-cardinality")
