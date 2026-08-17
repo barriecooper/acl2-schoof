@@ -235,9 +235,12 @@ an exact degree-width coefficient vector.  Rank and unrank reuse the runtime
 mixed-radix functions, and the bound executes as `p^m`.  Concrete regressions
 exercise F7 degree one, F7X2, composite and reducible moduli, dotted/trailing-
 zero inputs, exact multiplication reduction, malformed descriptors, and coding
-endpoints.  These execution checks and verified guards do not establish the
-still-open remainder-compatibility, quotient-ring, or coding-bijection
-theorems.
+endpoints.  The representation-only proof layer additionally certifies both
+fixed-width vector round trips, both bounded rank/unrank round trips, an
+exhaustive duplicate-free unrank carrier, membership through fixing, and exact
+`p^m` carrier length.  These execution checks, guard proofs, and coding theorems
+do not establish the still-open add/neg/mul remainder compatibility, fixer
+congruence for reduced operations, or quotient-ring laws.
 
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes

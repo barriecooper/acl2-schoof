@@ -1,6 +1,6 @@
 (in-package "GPOLY")
 
-(include-book "runtime-polynomial-basis")
+(include-book "runtime-polynomial-basis-cardinality")
 
 (defconst *runtime-polynomial-basis-f7-linear*
   '(:polynomial-basis 7 (1 1)))
@@ -65,14 +65,35 @@
       (equal (runtime-polynomial-basis-rank
               '(6 6) *runtime-polynomial-basis-f7x2*) 48)))
 
+(assert-event
+ (and (equal (runtime-polynomial-basis-cardinality
+              *runtime-polynomial-basis-f7-linear*) 7)
+      (equal (runtime-polynomial-basis-cardinality
+              *runtime-polynomial-basis-f7x2*) 49)
+      (equal (car (runtime-polynomial-basis-elements
+                   *runtime-polynomial-basis-f7x2*)) nil)
+      (equal (car (last (runtime-polynomial-basis-elements
+                         *runtime-polynomial-basis-f7x2*))) '(6 6))
+      (no-duplicatesp-equal
+       (runtime-polynomial-basis-elements
+        *runtime-polynomial-basis-f7x2*))))
+
 ; Minimal-theory clients consume the public statements explicitly.
 (defthm runtime-polynomial-basis-minimal-client
   (and (runtime-polynomial-basis-element-p
         (runtime-polynomial-basis-mul x y descriptor) descriptor)
        (< (runtime-polynomial-basis-rank x descriptor)
-          (runtime-polynomial-basis-bound descriptor)))
+          (runtime-polynomial-basis-bound descriptor))
+       (equal (runtime-polynomial-basis-unrank
+               (runtime-polynomial-basis-rank x descriptor) descriptor)
+              (runtime-polynomial-basis-fix x descriptor))
+       (equal (runtime-polynomial-basis-cardinality descriptor)
+              (expt (runtime-polynomial-basis-p descriptor)
+                    (runtime-polynomial-basis-degree descriptor))))
   :rule-classes nil
   :hints (("Goal"
            :use (runtime-polynomial-basis-element-p-of-mul
-                 runtime-polynomial-basis-rank-bound)
+                 runtime-polynomial-basis-rank-bound
+                 runtime-polynomial-basis-unrank-of-rank
+                 runtime-polynomial-basis-cardinality-is-p-to-the-m)
            :in-theory (theory 'minimal-theory))))

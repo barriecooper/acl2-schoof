@@ -47,13 +47,14 @@ descriptor representation slice is described below; reduced-operation laws
 and field semantics remain subsequent open boundaries. The certified divmod is unconditional modular-ring execution and
 makes no claim of descriptor or field validity.
 
-The descriptor representation and execution slice is certified: polynomial-
-basis descriptor shape/fixing, element representation/fixing/equality,
-add/neg/mul, vector/rank/unrank definitions, rank bounds, and the definitional
-`p^m` coding bound.  The next tight proof group is runtime monic-remainder
-compatibility with polynomial addition, negation, and multiplication.  Those
-lemmas are required before claiming fixer congruence, the quotient-ring laws,
-or rank/unrank bijection and representation cardinality.  Focused prime,
+The descriptor representation, execution, and coding slice is certified:
+polynomial-basis descriptor shape/fixing, element representation/fixing/equality,
+add/neg/mul execution and closure, fixed-width vector round trips, rank/unrank
+bijection, exhaustive duplicate-free carrier, and exact `p^m` representation
+cardinality.  The next tight proof group is runtime monic-remainder compatibility
+with polynomial addition, negation, and multiplication.  Those lemmas are
+required for fixer congruence and the quotient-ring laws, but not for the now-
+certified representation-only coding boundary.  Focused prime,
 composite, reducible-modulus, and malformed-input regressions are certified.
 This reduced-ring/representation boundary does not add inverse,
 claim field laws, instantiate `GFIELD`, or decide logical field validity.

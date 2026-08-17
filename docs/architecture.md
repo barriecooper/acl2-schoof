@@ -49,10 +49,11 @@ documented F2 degree-one default.  Element fixing and every reduced operation
 reuse runtime monic remainder rather than defining another division recursion.
 Canonical elements remain variable-length dense polynomials; exact-width
 degree-sized coefficient vectors are a separate coding view, with runtime
-mixed-radix rank/unrank and a `p^m` bound.  The representation, closure, and
-rank-bound slice is certified.  Runtime remainder compatibility, the complete
-quotient-ring interface, and coding bijection/cardinality are the next proof
-seam and are not architectural field-validity assumptions.
+mixed-radix rank/unrank and a `p^m` bound.  The representation, closure, vector
+round trips, bounded coding bijection, exhaustive duplicate-free carrier, and
+exact `p^m` representation count are certified without operation compatibility.
+Runtime remainder compatibility and the complete quotient-ring interface are
+the next proof seam and are not architectural field-validity assumptions.
 
 Descriptor assurance has three distinct layers.  An executable structural
 predicate recognizes and fixes representable descriptor data; a logical

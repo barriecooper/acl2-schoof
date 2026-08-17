@@ -174,6 +174,16 @@
   (< 0 (runtime-polynomial-basis-degree descriptor))
   :rule-classes :linear)
 
+(defthm natp-of-runtime-polynomial-basis-degree
+  (natp (runtime-polynomial-basis-degree descriptor))
+  :rule-classes (:rewrite :type-prescription)
+  :hints (("Goal"
+           :use ((:instance integerp-of-runtime-p-poly-degree
+                            (poly (runtime-polynomial-basis-modulus descriptor))
+                            (p (runtime-polynomial-basis-p descriptor)))
+                 (:instance runtime-polynomial-basis-degree-positive))
+           :in-theory (enable runtime-polynomial-basis-degree))))
+
 (defthm runtime-polynomial-basis-modulus-monic
   (equal (runtime-p-poly-leading-coefficient
           (runtime-polynomial-basis-modulus descriptor)
@@ -325,3 +335,254 @@
   :hints (("Goal" :in-theory (enable runtime-polynomial-basis-bound
                                       runtime-p-coding-bound
                                       runtime-polynomial-basis-p))))
+
+(defthm posp-of-runtime-polynomial-basis-bound
+  (posp (runtime-polynomial-basis-bound descriptor))
+  :rule-classes (:rewrite :type-prescription)
+  :hints (("Goal"
+           :use ((:instance runtime-polynomial-basis-p-lower-bound)
+                 (:instance natp-of-runtime-polynomial-basis-degree))
+           :in-theory (enable runtime-polynomial-basis-bound
+                              runtime-p-coding-bound))))
+
+; The coding proof is representation-only.  In particular, none of the
+; following lemmas mentions polynomial addition, negation, or multiplication.
+(local
+ (defthm runtime-polynomial-basis-vector-aux-of-normalize-when-exact
+   (implies (and (runtime-p-coefficient-list-p coefficients p)
+                 (equal (len coefficients) (nfix width)))
+            (equal (runtime-polynomial-basis-vector-aux
+                    width (runtime-p-normalize coefficients p) p)
+                   coefficients))
+   :hints (("Goal"
+            :induct (runtime-polynomial-basis-vector-aux
+                     width coefficients p)
+            :in-theory (enable runtime-polynomial-basis-vector-aux
+                               runtime-p-normalize
+                               runtime-p-fix-coefficients
+                               runtime-p-trim-trailing-zeros
+                               runtime-p-coefficient-list-p)))))
+
+(local
+ (defthm runtime-p-normalize-of-runtime-polynomial-basis-vector-aux
+   (implies (and (runtime-p-canonical-polynomial-p polynomial p)
+                 (<= (len polynomial) (nfix width)))
+            (equal (runtime-p-normalize
+                    (runtime-polynomial-basis-vector-aux width polynomial p) p)
+                   polynomial))
+   :hints (("Goal"
+            :induct (runtime-polynomial-basis-vector-aux width polynomial p)
+            :in-theory (enable runtime-polynomial-basis-vector-aux
+                               runtime-p-normalize
+                               runtime-p-fix-coefficients
+                               runtime-p-trim-trailing-zeros
+                               runtime-p-canonical-polynomial-p
+                               runtime-p-coefficient-list-p)))))
+
+(local
+ (defthm len-of-runtime-polynomial-basis-fix-at-most-degree
+   (<= (len (runtime-polynomial-basis-fix x descriptor))
+       (runtime-polynomial-basis-degree descriptor))
+   :rule-classes :linear
+   :hints (("Goal"
+            :cases ((consp (runtime-polynomial-basis-fix x descriptor)))
+            :nonlinearp t
+            :use ((:instance
+                   runtime-p-poly-degree-when-canonical-nonzero
+                   (poly (runtime-polynomial-basis-fix x descriptor))
+                   (p (runtime-polynomial-basis-p descriptor)))
+                  (:instance runtime-polynomial-basis-fix-degree-bound)
+                  (:instance
+                   runtime-p-canonical-polynomial-p-of-runtime-polynomial-basis-fix)
+                  (:instance integerp-of-runtime-p-poly-degree
+                             (poly (runtime-polynomial-basis-fix x descriptor))
+                             (p (runtime-polynomial-basis-p descriptor)))
+                  (:instance integerp-of-runtime-p-poly-degree
+                             (poly (runtime-polynomial-basis-modulus descriptor))
+                             (p (runtime-polynomial-basis-p descriptor)))
+                  (:instance runtime-polynomial-basis-degree-positive))
+            :in-theory (union-theories
+                        '(len runtime-polynomial-basis-degree)
+                        (theory 'minimal-theory))))))
+
+(defthm runtime-polynomial-basis-reconstruct-of-vector
+  (equal (runtime-polynomial-basis-reconstruct
+          (runtime-polynomial-basis-vector x descriptor) descriptor)
+         (runtime-polynomial-basis-fix x descriptor))
+  :hints (("Goal"
+           :use ((:instance
+                  runtime-p-normalize-of-runtime-polynomial-basis-vector-aux
+                  (width (runtime-polynomial-basis-degree descriptor))
+                  (polynomial (runtime-polynomial-basis-fix x descriptor))
+                 (p (runtime-polynomial-basis-p descriptor)))
+                 (:instance len-of-runtime-polynomial-basis-fix-at-most-degree)
+                 (:instance
+                  runtime-p-canonical-polynomial-p-of-runtime-polynomial-basis-fix)
+                 (:instance natp-of-runtime-polynomial-basis-degree))
+           :in-theory
+           (union-theories
+            '(runtime-polynomial-basis-reconstruct
+              runtime-polynomial-basis-vector nfix natp)
+            (theory 'minimal-theory)))))
+
+(local
+ (defthm len-of-runtime-p-fix-coefficients
+   (equal (len (runtime-p-fix-coefficients xs p))
+          (len xs))
+   :hints (("Goal" :induct (runtime-p-fix-coefficients xs p)
+            :in-theory (enable runtime-p-fix-coefficients)))))
+
+(local
+ (defthm len-of-runtime-p-trim-trailing-zeros-upper-bound
+   (<= (len (runtime-p-trim-trailing-zeros xs p)) (len xs))
+   :rule-classes :linear
+   :hints (("Goal" :induct (runtime-p-trim-trailing-zeros xs p)
+            :in-theory (enable runtime-p-trim-trailing-zeros)))))
+
+(local
+ (defthm len-of-runtime-p-normalize-upper-bound
+   (<= (len (runtime-p-normalize xs p)) (len xs))
+   :rule-classes :linear
+   :hints (("Goal"
+            :use ((:instance len-of-runtime-p-trim-trailing-zeros-upper-bound
+                             (xs (runtime-p-fix-coefficients xs p))))
+            :in-theory (enable runtime-p-normalize)))))
+
+(defthm runtime-polynomial-basis-element-p-of-reconstruct-when-vector-p
+  (implies
+   (runtime-p-vector-p vector (runtime-polynomial-basis-degree descriptor)
+                       (runtime-polynomial-basis-p descriptor))
+   (runtime-polynomial-basis-element-p
+    (runtime-polynomial-basis-reconstruct vector descriptor) descriptor))
+  :hints
+  (("Goal"
+    :cases ((consp (runtime-p-normalize
+                    vector (runtime-polynomial-basis-p descriptor))))
+    :use ((:instance runtime-p-canonical-polynomial-p-of-normalize
+                     (xs vector) (p (runtime-polynomial-basis-p descriptor)))
+          (:instance runtime-p-poly-degree-when-canonical-nonzero
+                     (poly (runtime-p-normalize
+                            vector (runtime-polynomial-basis-p descriptor)))
+                     (p (runtime-polynomial-basis-p descriptor)))
+          (:instance len-of-runtime-p-normalize-upper-bound
+                     (xs vector) (p (runtime-polynomial-basis-p descriptor)))
+          (:instance runtime-polynomial-basis-degree-positive))
+    :in-theory (enable runtime-polynomial-basis-element-p
+                       runtime-polynomial-basis-reconstruct
+                       runtime-p-vector-p))))
+
+(defthm runtime-polynomial-basis-vector-of-reconstruct
+  (implies
+   (runtime-p-vector-p vector (runtime-polynomial-basis-degree descriptor)
+                       (runtime-polynomial-basis-p descriptor))
+   (equal (runtime-polynomial-basis-vector
+           (runtime-polynomial-basis-reconstruct vector descriptor) descriptor)
+          vector))
+  :hints (("Goal"
+           :use ((:instance
+                  runtime-polynomial-basis-vector-aux-of-normalize-when-exact
+                  (coefficients vector)
+                  (width (runtime-polynomial-basis-degree descriptor))
+                  (p (runtime-polynomial-basis-p descriptor)))
+                 (:instance runtime-polynomial-basis-fix-when-element-p
+                            (x (runtime-polynomial-basis-reconstruct
+                                vector descriptor)))
+                 (:instance
+                  runtime-polynomial-basis-element-p-of-reconstruct-when-vector-p))
+           :in-theory
+           (union-theories
+            '(runtime-polynomial-basis-vector
+              runtime-polynomial-basis-reconstruct runtime-p-vector-p)
+            (theory 'minimal-theory)))))
+
+(defthm runtime-polynomial-basis-element-p-of-unrank
+  (runtime-polynomial-basis-element-p
+   (runtime-polynomial-basis-unrank k descriptor) descriptor)
+  :hints (("Goal"
+           :use ((:instance
+                  runtime-polynomial-basis-element-p-of-reconstruct-when-vector-p
+                  (vector
+                   (runtime-p-unrank
+                    (runtime-polynomial-basis-degree descriptor) k
+                    (runtime-polynomial-basis-p descriptor))))
+                 (:instance runtime-p-vector-p-of-unrank
+                            (width (runtime-polynomial-basis-degree descriptor))
+                            (p (runtime-polynomial-basis-p descriptor))))
+           :in-theory
+           (union-theories '(runtime-polynomial-basis-unrank)
+                           (theory 'minimal-theory)))))
+
+(defthm runtime-polynomial-basis-fix-of-unrank
+  (equal (runtime-polynomial-basis-fix
+          (runtime-polynomial-basis-unrank k descriptor) descriptor)
+         (runtime-polynomial-basis-unrank k descriptor))
+  :hints (("Goal" :use
+           ((:instance runtime-polynomial-basis-fix-when-element-p
+                       (x (runtime-polynomial-basis-unrank k descriptor)))
+            (:instance runtime-polynomial-basis-element-p-of-unrank))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-polynomial-basis-vector-of-unrank
+  (equal (runtime-polynomial-basis-vector
+          (runtime-polynomial-basis-unrank k descriptor) descriptor)
+         (runtime-p-unrank (runtime-polynomial-basis-degree descriptor) k
+                           (runtime-polynomial-basis-p descriptor)))
+  :hints (("Goal"
+           :use ((:instance runtime-polynomial-basis-vector-of-reconstruct
+                            (vector
+                             (runtime-p-unrank
+                              (runtime-polynomial-basis-degree descriptor) k
+                              (runtime-polynomial-basis-p descriptor))))
+                 (:instance runtime-p-vector-p-of-unrank
+                            (width (runtime-polynomial-basis-degree descriptor))
+                            (p (runtime-polynomial-basis-p descriptor))))
+           :in-theory
+           (union-theories '(runtime-polynomial-basis-unrank)
+                           (theory 'minimal-theory)))))
+
+(defthm runtime-polynomial-basis-unrank-of-rank
+  (equal (runtime-polynomial-basis-unrank
+          (runtime-polynomial-basis-rank x descriptor) descriptor)
+         (runtime-polynomial-basis-fix x descriptor))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-unrank-of-rank
+                            (coefficients
+                             (runtime-polynomial-basis-vector x descriptor))
+                            (width (runtime-polynomial-basis-degree descriptor))
+                            (p (runtime-polynomial-basis-p descriptor)))
+                 (:instance runtime-polynomial-basis-reconstruct-of-vector)
+                 (:instance
+                  runtime-p-vector-p-of-runtime-polynomial-basis-vector))
+           :in-theory
+           (union-theories
+            '(runtime-polynomial-basis-unrank runtime-polynomial-basis-rank)
+            (theory 'minimal-theory)))))
+
+(defthm runtime-polynomial-basis-rank-of-unrank-when-bounded
+  (implies (and (natp k)
+                (< k (runtime-polynomial-basis-bound descriptor)))
+           (equal (runtime-polynomial-basis-rank
+                   (runtime-polynomial-basis-unrank k descriptor) descriptor)
+                  k))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-rank-of-unrank
+                            (width (runtime-polynomial-basis-degree descriptor))
+                            (p (runtime-polynomial-basis-p descriptor))))
+           :in-theory
+           (union-theories
+            '(runtime-polynomial-basis-rank runtime-polynomial-basis-bound
+              runtime-polynomial-basis-vector-of-unrank)
+            (theory 'minimal-theory)))))
+
+(defthm runtime-polynomial-basis-rank-of-fix
+  (equal (runtime-polynomial-basis-rank
+          (runtime-polynomial-basis-fix x descriptor) descriptor)
+         (runtime-polynomial-basis-rank x descriptor))
+  :hints (("Goal"
+           :use ((:instance runtime-polynomial-basis-fix-idempotent))
+           :in-theory
+           (union-theories
+            '(runtime-polynomial-basis-rank runtime-polynomial-basis-vector)
+            (theory 'minimal-theory)))))
