@@ -101,10 +101,9 @@ also certified, including canonical results, reconstruction, and the strict
 monic final bound, together with exact fixed-PFIELD monic divmod, quotient, and
 remainder correspondence. The descriptor shape/fixing, element
 representation/fixing/equality, operation execution and closure, vector coding,
-rank/unrank, carrier, and exact `p^m` count are certified.  The immediate open
-boundary is runtime monic-remainder compatibility with addition, negation, and
-multiplication, followed by reduced-operation fixer congruence and the complete
-quotient-ring laws.  Inverse, logical descriptor field validity and field laws,
+rank/unrank, carrier, and exact `p^m` count are certified.  Runtime monic-remainder compatibility with addition, negation, and
+multiplication and reduced-operation fixer congruence are certified.  The
+immediate open boundary is the complete quotient-ring laws.  Inverse, logical descriptor field validity and field laws,
 fixed-descriptor `GFIELD`/finite-field instantiation, runtime curves, and later
 Schoof layers remain open.  Structurally valid composite-modulus or reducible-
 polynomial descriptors are reduced rings, not thereby finite fields.

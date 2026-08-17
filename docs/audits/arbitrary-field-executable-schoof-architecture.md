@@ -191,7 +191,7 @@ separate performance evidence and are presently absent.
 
 | # | Required endpoint | Certified endpoint now | Exact missing obligation / dependency | Kind |
 |---:|---|---|---|---|
-| 1 | Descriptor reduced ring, then field validity | Runtime descriptor shape/fixing, element fixing/equality, operation execution/closure, vector coding, rank/unrank, exhaustive carrier, and exact `p^m` count; constrained field/finite-field contexts and PFIELD/F7/F11/F7X2 clients | Prove runtime monic-remainder compatibility with add/neg/mul, reduced-operation fixer congruence, and quotient-ring laws; then inverse/field laws under logical validity, characteristic/order, and fixed-descriptor correspondence | Logical + executable |
+| 1 | Descriptor reduced ring, then field validity | Runtime descriptor shape/fixing, element fixing/equality, operation execution/closure and fixer congruence, vector coding, rank/unrank, exhaustive carrier, exact `p^m` count, and runtime remainder add/neg/mul compatibility; constrained field/finite-field contexts and PFIELD/F7/F11/F7X2 clients | Prove complete quotient-ring laws; then inverse/field laws under logical validity, characteristic/order, and fixed-descriptor correspondence | Logical + executable |
 | 2 | Runtime nonsingular curve | Fixed-symbol short curve, tagged points, characteristic predicate, general addition/group laws | Thread `fd,a,b`; descriptor equivalence; discriminant and failure contract | Logical + executable |
 | 3 | Enough primes `ell`, prime and `ell != p` | `DM::PRIMEP` available; characteristic exclusions are generic field facts | Executable generation/selection, pairwise coprimality, stopping-product theorem | Logical + executable |
 | 4 | Runtime `psi_ell` | Generated finite-field table and all-index evaluator correspondence | Descriptor instance/equivalence and required degree/shape facts for general odd prime `ell` | Both; largely present in constrained form |
@@ -285,9 +285,9 @@ The executable structural predicate should recognize safely processable data;
 the separate logical field-validity predicate may already be stated but is not
 decided by this kernel.  Composite effective moduli and reducible monic
 polynomial moduli are structurally valid reduced-ring descriptors, not evidence
-of finite-field validity.  The immediate next boundary is runtime monic-
-remainder compatibility with add/neg/mul, reduced-operation fixer congruence,
-and the complete quotient-ring laws.  Reuse the certified runtime divmod stack
+of finite-field validity.  Runtime monic-remainder add/neg/mul compatibility and
+reduced-operation fixer congruence are certified.  The immediate next boundary is the complete
+quotient-ring laws.  Reuse the certified runtime divmod stack
 and do not introduce a second arithmetic implementation.
 
 ### Post-PR #361 implementation finding: runtime coefficient seam
@@ -400,15 +400,14 @@ unjustified fuel design. Canonical results, unconditional reconstruction, and
 the strict monic final bound are certified. Exact fixed-PFIELD monic divmod and
 remainder correspondence is certified. Descriptor representation,
 operation execution/closure, coding, carrier construction, and cardinality are
-now also certified.  Add/neg/mul remainder compatibility, reduced-operation
-fixer congruence, quotient-ring laws, field semantics, curves, and later Schoof
-layers remain open.
+now also certified.  Add/neg/mul remainder compatibility and reduced-operation
+fixer congruence are now certified. Quotient-ring laws, field semantics, curves, and later
+Schoof layers remain open.
 
 ### Following dependency order
 
-1. **Descriptor reduced-ring laws:** prove runtime monic-remainder
-   compatibility with add/neg/mul, fixer congruence for the reduced operations,
-   and the complete quotient-ring laws without primality or irreducibility.
+1. **Descriptor reduced-ring laws:** use the certified runtime monic-remainder add/neg/mul
+   compatibility and reduced-operation fixer congruence to prove the complete quotient-ring laws without primality or irreducibility.
 2. **Descriptor field-law bridge:** add inverse; prove field laws under logical
    descriptor validity, characteristic/order facts, and fixed-descriptor
    correspondence/functional instantiation into `GFIELD` and `finite-field-*`.

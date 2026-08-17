@@ -52,10 +52,10 @@ The descriptor representation, execution, and coding slice is certified:
 polynomial-basis descriptor shape/fixing, element representation/fixing/equality,
 add/neg/mul execution and closure, fixed-width vector round trips, rank/unrank
 bijection, exhaustive duplicate-free carrier, and exact `p^m` representation
-cardinality.  The next tight proof group is runtime monic-remainder compatibility
-with polynomial addition, negation, and multiplication.  Those lemmas are
-required for fixer congruence and the quotient-ring laws, but not for the now-
-certified representation-only coding boundary.  Focused prime,
+cardinality.  Runtime monic-remainder compatibility with polynomial addition, negation, and
+multiplication and descriptor add/neg/sub/mul fixer congruence are certified.
+The next tight proof group is the complete quotient-ring laws; this completed
+boundary was not needed by the earlier representation-only coding results.  Focused prime,
 composite, reducible-modulus, and malformed-input regressions are certified.
 This reduced-ring/representation boundary does not add inverse,
 claim field laws, instantiate `GFIELD`, or decide logical field validity.
