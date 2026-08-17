@@ -191,7 +191,7 @@ separate performance evidence and are presently absent.
 
 | # | Required endpoint | Certified endpoint now | Exact missing obligation / dependency | Kind |
 |---:|---|---|---|---|
-| 1 | Descriptor representation, then field validity | Constrained field/finite-field contexts; PFIELD and F7X2 clients; explicit coefficient-vector carrier/count | First structural shape/fixing, reduced operations, rank/unrank and `p^m` count; then inverse/field laws under logical validity, characteristic/order, and fixed-descriptor correspondence | Logical + executable |
+| 1 | Descriptor reduced ring, then field validity | Runtime descriptor shape/fixing, element fixing/equality, operation execution/closure, vector coding, rank/unrank, exhaustive carrier, and exact `p^m` count; constrained field/finite-field contexts and PFIELD/F7/F11/F7X2 clients | Prove runtime monic-remainder compatibility with add/neg/mul, reduced-operation fixer congruence, and quotient-ring laws; then inverse/field laws under logical validity, characteristic/order, and fixed-descriptor correspondence | Logical + executable |
 | 2 | Runtime nonsingular curve | Fixed-symbol short curve, tagged points, characteristic predicate, general addition/group laws | Thread `fd,a,b`; descriptor equivalence; discriminant and failure contract | Logical + executable |
 | 3 | Enough primes `ell`, prime and `ell != p` | `DM::PRIMEP` available; characteristic exclusions are generic field facts | Executable generation/selection, pairwise coprimality, stopping-product theorem | Logical + executable |
 | 4 | Runtime `psi_ell` | Generated finite-field table and all-index evaluator correspondence | Descriptor instance/equivalence and required degree/shape facts for general odd prime `ell` | Both; largely present in constrained form |
@@ -238,8 +238,8 @@ book, with these three as clients.
 
 | Finding | Disposition |
 |---|---|
-| `field-*`, `finite-field-*`, short-curve coefficients, and fixed-modulus-field modulus are first-order fixed symbols; prefixes do not make them runtime-parametric. | **Immediate architectural correction:** first establish a descriptor representation kernel, then a field-law/functional-instantiation bridge, then the runtime curve bridge. |
-| The explicit coefficient vectors/carrier/count are not connected to the generic irreducible quotient field. | **Immediate**, within the same descriptor-family boundary; avoid a second arithmetic implementation. |
+| `field-*`, `finite-field-*`, short-curve coefficients, and fixed-modulus-field modulus are first-order fixed symbols; prefixes do not make them runtime-parametric. | **Descriptor data boundary certified; immediate proof boundary:** establish reduced-operation compatibility and quotient-ring laws, then a field-law/functional-instantiation bridge, then the runtime curve bridge. |
+| Runtime descriptor coefficient vectors/carrier/count are certified independently of field validity. | **Completed representation boundary.** The later bridge to the generic irreducible quotient field belongs under logical prime/irreducible validity; avoid a second arithmetic implementation. |
 | Production F11 division-polynomial and quotient clients duplicate fixed names and literals. | **Accurate labelling now; later generalization.** Preserve as instances/regressions while runtime orchestration is built. |
 | `quotient-coordinate-frobenius-eleven-of-add` is tied to 11 and does not establish `q=p^m`. | **Later generalization, prerequisite before residue correctness.** F7X2 should test the prime-power statement. |
 | The trace program's meaningful client is `ell=3`; there is no general candidate loop or exceptional dispatcher. | **Next after the input seam**, not evidence of a generic Schoof algorithm. |
@@ -257,7 +257,7 @@ not the existence of concrete clients.
 | Route | Cost and ACL2 risk | Reuse/scalability | Relation to target |
 |---|---|---|---|
 | Continue F11 root/torsion witness | Moderate implementation, high risk of further instance-only lemmas | Low; validates one curve/prime | Useful later regression, not critical path |
-| Build explicit arbitrary-field input layer first | Moderate/high arity and equivalence engineering; bounded mathematics | Highest; resolves meaning of public input and `p^m` early | **Selected as three staged boundaries, beginning with the representation kernel** |
+| Build explicit arbitrary-field input layer first | Moderate/high arity and equivalence engineering; bounded mathematics | Highest; resolves meaning of public input and `p^m` early | **Selected; representation and coding/cardinality stage certified, reduced-ring laws next** |
 | Generalize trace program to runtime `ell` first | Moderate recursion/branch proof; awkward over fixed field/curve symbols | High after descriptor and curve seams | Begin only after the first three input boundaries |
 | Generic Frobenius/torsion correctness first | Very high mathematical and representation risk | Essential and highly reusable | Follow runtime-`ell`, after its data/algorithm statement is stable |
 | CRT/top-level scaffolding first | Low/moderate programming, but proof invariants would be conditional on nonexistent residues/Hasse | Reusable integer layer | Defer until residue theorem; otherwise misleading |
@@ -270,18 +270,24 @@ explicit certified polynomial-basis finite-field descriptor family; existing
 constrained mathematics remains the logical theorem layer through a
 fixed-descriptor functional instance and an execution-equivalence theorem.
 
-### Next implementation boundary: descriptor representation kernel
+### Certified descriptor representation and coding boundary
 
-Build only the polynomial-basis descriptor shape/fixer, element
-representation/fixing/equality, addition, negation, multiplication, rank,
-unrank, and the `p^m` representative/carrier count, with prime and extension
-concrete regressions.  This is deliberately a **reduced-ring/representation
-boundary**.  It neither defines field inversion nor claims field laws, a
-`GFIELD` instance, or executable detection of prime/irreducible descriptors.
+The polynomial-basis descriptor shape/fixer, element
+representation/fixing/equality, addition, negation, and multiplication
+execution and closure, vector coding, rank/unrank bijection, exhaustive
+duplicate-free carrier, and exact `p^m` count are certified, with prime,
+composite, reducible-modulus, and extension regressions.  This remains a
+**reduced-ring/representation boundary**.  It neither defines field inversion
+nor claims field laws, a `GFIELD` instance, or executable detection of
+prime/irreducible descriptors.
 
 The executable structural predicate should recognize safely processable data;
 the separate logical field-validity predicate may already be stated but is not
-decided by this kernel.  Reuse the certified PFIELD/divmod/representative stack
+decided by this kernel.  Composite effective moduli and reducible monic
+polynomial moduli are structurally valid reduced-ring descriptors, not evidence
+of finite-field validity.  The immediate next boundary is runtime monic-
+remainder compatibility with add/neg/mul, reduced-operation fixer congruence,
+and the complete quotient-ring laws.  Reuse the certified runtime divmod stack
 and do not introduce a second arithmetic implementation.
 
 ### Post-PR #361 implementation finding: runtime coefficient seam
@@ -326,10 +332,12 @@ non-rewriting endpoints for normalization and multiplication.  Radix unrank
 uses `nfix` on width and rank; an out-of-range rank is truncated to the
 requested low-order width rather than rejected.
 
-No descriptor definitions were introduced.  Structural descriptor validity,
+This post-PR #361 finding is now resolved by the certified runtime descriptor
+representation and coding/cardinality books.  Structural descriptor validity,
 logical field validity, and any future executable validator remain separate.
 Recursive monic reduction and fixed-PFIELD monic remainder correspondence are
-now certified; the next boundary is the descriptor kernel.
+reused directly; the next boundary is reduced-operation compatibility and
+quotient-ring laws.
 
 ### Rejected execution-only monic-reduction draft
 
@@ -372,7 +380,7 @@ normalized-length and degree decrease are certified in
 leading coefficients.
 
 Keeping that recursion would expose a public operation without its intended
-representation-level specification and would make the later descriptor kernel
+representation-level specification and would have made the descriptor kernel
 depend on an uncertified logical/executable boundary.  Those coefficient,
 polynomial-algebra, monomial/degree, and monic product-leading-term
 prerequisites, active monic subtraction boundary, and transparent total
@@ -380,28 +388,32 @@ runtime-`p` monic division-step packaging and structural recursive monic divmod
 are now certified. Its strict length measure supersedes the rejected draft's
 unjustified fuel design. Canonical results, unconditional reconstruction, and
 the strict monic final bound are certified. Exact fixed-PFIELD monic divmod and
-remainder correspondence is certified. Reduced-operation laws, descriptors,
-field semantics, curves, and later
-Schoof layers remain open.  A standalone execution prefix is not independently
-sufficient and must not be registered.
+remainder correspondence is certified. Descriptor representation,
+operation execution/closure, coding, carrier construction, and cardinality are
+now also certified.  Add/neg/mul remainder compatibility, reduced-operation
+fixer congruence, quotient-ring laws, field semantics, curves, and later Schoof
+layers remain open.
 
 ### Following dependency order
 
-1. **Descriptor field-law bridge:** add inverse; prove field laws under logical
+1. **Descriptor reduced-ring laws:** prove runtime monic-remainder
+   compatibility with add/neg/mul, fixer congruence for the reduced operations,
+   and the complete quotient-ring laws without primality or irreducibility.
+2. **Descriptor field-law bridge:** add inverse; prove field laws under logical
    descriptor validity, characteristic/order facts, and fixed-descriptor
    correspondence/functional instantiation into `GFIELD` and `finite-field-*`.
-2. **Runtime short-curve bridge:** thread descriptor and runtime `a,b` through
+3. **Runtime short-curve bridge:** thread descriptor and runtime `a,b` through
    discriminant/nonsingularity and point fixing, and prove correspondence with
    the existing fixed-symbol curve context.
-3. **Runtime-`ell` quotient trace boundary:** descriptor/curve-threaded
+4. **Runtime-`ell` quotient trace boundary:** descriptor/curve-threaded
    division-polynomial generation, reduced quotient computation, bounded
    candidate search, and an exhaustive ordinary/exceptional branch dispatcher;
    prove equivalence to the constrained operations, not trace correctness yet.
-4. **Generic cardinality-Frobenius/torsion residue boundary:** `q=p^m`
+5. **Generic cardinality-Frobenius/torsion residue boundary:** `q=p^m`
    Frobenius, curve/group preservation, all relevant `ell`-torsion coverage,
    and the theorem that the accepted quotient candidate is the
    cardinality-defined trace modulo `ell`.
-5. **Prime accumulation and reconstruction boundary:** auxiliary-prime loop,
+6. **Prime accumulation and reconstruction boundary:** auxiliary-prime loop,
    residue accumulator invariant, centered CRT, then consume the independently
    certified Hasse bound to obtain the unique trace and compose the proposed
    point-cardinality theorem.

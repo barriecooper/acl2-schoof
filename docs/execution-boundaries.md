@@ -222,6 +222,26 @@ focused F7 regressions cover multi-step, exact, lower-degree, zero, and raw
 normalization cases. No correspondence is claimed for a malformed runtime
 modulus.
 
+`runtime-polynomial-basis.lisp` adds a transparent descriptor and
+representation execution slice with guard `t` throughout.  Structurally valid
+descriptors are literal `(:polynomial-basis p modulus)` triples whose original
+`p` is an integer at least two and whose modulus is already normalized, monic,
+and of positive degree.  This check intentionally performs neither primality
+nor irreducibility testing.  Every malformed descriptor fixes to
+`(:polynomial-basis 2 (0 1))`; element fixing then calls the single certified
+`runtime-p-monic-remainder` implementation.  Canonical elements are
+variable-length polynomials, while coding pads their fixed representative to
+an exact degree-width coefficient vector.  Rank and unrank reuse the runtime
+mixed-radix functions, and the bound executes as `p^m`.  Concrete regressions
+exercise F7 degree one, F7X2, composite and reducible moduli, dotted/trailing-
+zero inputs, exact multiplication reduction, malformed descriptors, and coding
+endpoints.  The representation-only proof layer additionally certifies both
+fixed-width vector round trips, both bounded rank/unrank round trips, an
+exhaustive duplicate-free unrank carrier, membership through fixing, and exact
+`p^m` carrier length.  These execution checks, guard proofs, and coding theorems
+do not establish the still-open add/neg/mul remainder compatibility, fixer
+congruence for reduced operations, or quotient-ring laws.
+
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes
 only the affine ordinate by `field-neg`.  It calls neither the curve classifier

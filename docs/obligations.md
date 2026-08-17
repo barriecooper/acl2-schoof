@@ -3,20 +3,21 @@
 The cross-cutting inventory and dependency analysis for the final executable
 target is maintained in the
 [arbitrary-field executable architecture audit](audits/arbitrary-field-executable-schoof-architecture.md).
-It records distinct open seams: (1) a reduced-ring descriptor representation
-kernel with structural checking, fixing, operations, coding, and `p^m` count;
+It records the certified reduced-ring descriptor representation/coding kernel
+and distinct open seams: (1) runtime monic-remainder compatibility with
+add/neg/mul, reduced-operation fixer congruence, and quotient-ring laws;
 (2) inverse and field laws under a separate logical validity predicate, plus
 fixed-context functional instantiation; (3) a runtime short-curve bridge; (4) a
 runtime-`ell` trace program with exhaustive exceptional branches; and (5) the
 general cardinality-Frobenius/torsion-to-trace bridge followed by CRT/Hasse
-composition.  None is certified at this baseline.  Logical field validity
+composition.  Logical field validity
 includes primality, positive extension degree, correct modulus degree, and
 irreducibility; no executable validator is currently claimed.  Existing F7,
 F11, and F7X2 results are clients or regressions and do not discharge those
 general obligations.
 
-The runtime-`p` prerequisite to the descriptor kernel is tracked in separate
-stages:
+The runtime-`p` prerequisites and the certified descriptor endpoint are tracked
+in separate stages:
 
 | Runtime-`p` stage | Status | Book / public ownership | Totalization and remaining scope |
 |---|---|---|---|
@@ -29,6 +30,7 @@ stages:
 | Runtime monic division step | **Certified** | `runtime-p-monic-division-step.lisp`; `runtime-p-monic-division-step-{term,next}`; reconstruction and active decrease theorems | The transparent, total, guard-verified step normalizes arbitrary polynomial inputs and uses the effective modulus for arbitrary `p`.  It returns the certified inverse-free active monomial/subtraction pair exactly when the remainder is nonzero, the divisor is monic, and its degree is no larger; otherwise its term is `nil` and its next remainder is the normalized input unchanged.  This remains the sole active-step operation used by recursive divmod. |
 | Recursive runtime monic divmod | **Certified** | `runtime-p-monic-divmod.lisp`; `runtime-p-monic-{divmod,quotient,remainder}` | Structural recursion uses canonical remainder length and calls the step once per active iteration. Arbitrary inputs are normalized. Reconstruction is unconditional; the strict bound assumes a normalized-monic divisor. Inactive nonmonic/zero/larger divisors and effective-modulus-2 fixing are preserved. No inverse, primality, field, or domain law is used. |
 | Fixed-context runtime/PFIELD monic divmod correspondence | **Certified** | `runtime-p-monic-divmod-pfield-correspondence.lisp`; `runtime-p-monic-{divmod,quotient,remainder}-pfield-correspondence` | For arbitrary raw operands, exact pair and projection equality holds at `pfield-modulus` when the normalized divisor's leading coefficient is PFIELD one. The transparent PFIELD adapter is generated from the established generic long-division template. Runtime reduced-operation laws remain open. |
+| Runtime polynomial-basis descriptor representation and coding | **Certified; reduced-operation compatibility and quotient laws open** | `runtime-polynomial-basis.lisp`; `runtime-polynomial-basis-cardinality.lisp`; structural descriptor/fixer, element fixer/predicate/equality, zero/one/add/neg/sub/mul, exact-width vector/reconstruct, rank/unrank/bound, carrier/cardinality | Structural validity requires only an integer `p >= 2` and an already-normalized positive-degree monic modulus; composite `p` and reducible moduli are admitted. Malformed descriptors totalize to `(:polynomial-basis 2 (0 1))`. Element fixing reuses `runtime-p-monic-remainder`. Canonicality, strict degree bounds, fixing idempotence and identity, operation closure, both vector round trips, unrank element closure/fixedness, `unrank(rank(x)) = fix(x)`, bounded `rank(unrank(k)) = k`, rank fixing/bounds, exhaustive fixed carrier membership, duplicate-freeness, carrier length, and exact `p^m` cardinality are certified. These coding results use only the already-canonical degree-bounded remainder identity plus runtime radix laws; they do not use add/neg/mul remainder compatibility. Runtime monic-remainder compatibility with polynomial addition, negation, and multiplication remains the exact missing prerequisite for reduced-operation fixer congruence and the complete quotient-ring laws. |
 
 Taken together, the certified stages establish neither descriptor validity nor a
 field, integral domain, cancellation, multiplicative inverses, primality, or

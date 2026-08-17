@@ -25,7 +25,10 @@ The repository currently certifies these subsystem-level foundations:
   Euclidean GCD, extended GCD, modular inversion, irreducibility, and reduced
   arithmetic, plus finite-field-prefixed recursive divmod and a runtime-`p`
   inverse-free monic divmod (both with public quotient/remainder interfaces),
-  and a finite-field public
+  a runtime polynomial-basis descriptor representation with total fixing,
+  reduced-operation execution and closure, fixed-width vector coding,
+  rank/unrank bijection, exhaustive duplicate-free carrier, and exact `p^m`
+  representation cardinality, and a finite-field public
   remainder/reduced-representative interface, fixed-modulus coefficient vectors, exact-width coefficient-vector mixed-radix rank/unrank, exhaustive representative carriers, and representative-count cardinality for explicit finite-field moduli;
 - a generic fixed-modulus quotient-field construction for an irreducible
   polynomial, plus concrete PFIELD/F7 clients and an F7X2 proving instance;
@@ -87,8 +90,8 @@ implementation scope.
 ## Architecture
 
 The arbitrary-field executable target follows a staged hybrid architecture: a
-runtime polynomial-basis descriptor will supply public data, while fixed-context
-wrappers reuse the existing constrained theorem layers.  The runtime-`p` prefix
+runtime polynomial-basis descriptor supplies public representation data, while
+fixed-context wrappers reuse the existing constrained theorem layers.  The runtime-`p` prefix
 currently certifies representation and radix coding, coefficient and normalized
 polynomial commutative-ring laws, and canonical monomials with total normalized
 degree/leading coefficient.  The inverse-free monic product-leading-term,
@@ -96,8 +99,15 @@ active monic subtraction reconstruction/decrease, and transparent one-step monic
 division-step packaging and structural recursive monic divmod boundaries are
 also certified, including canonical results, reconstruction, and the strict
 monic final bound, together with exact fixed-PFIELD monic divmod, quotient, and
-remainder correspondence. The next open boundary is the descriptor
-representation kernel, including runtime reduced operations and their laws.
+remainder correspondence. The descriptor shape/fixing, element
+representation/fixing/equality, operation execution and closure, vector coding,
+rank/unrank, carrier, and exact `p^m` count are certified.  The immediate open
+boundary is runtime monic-remainder compatibility with addition, negation, and
+multiplication, followed by reduced-operation fixer congruence and the complete
+quotient-ring laws.  Inverse, logical descriptor field validity and field laws,
+fixed-descriptor `GFIELD`/finite-field instantiation, runtime curves, and later
+Schoof layers remain open.  Structurally valid composite-modulus or reducible-
+polynomial descriptors are reduced rings, not thereby finite fields.
 F7, F11, and F7X2 remain examples and instances rather than owners of this
 general executable architecture.
 

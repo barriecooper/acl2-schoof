@@ -40,6 +40,21 @@ and generic ascending-coefficient algorithms;
 they imply neither that the original `p` is prime nor that a quotient is a
 field.
 
+The first descriptor slice represents a polynomial-basis descriptor as the
+transparent triple `(:polynomial-basis p modulus)`.  Structural recognition
+requires the original `p` to be an integer at least two and the polynomial to
+be an already-normalized positive-degree monic modulus; it deliberately does
+not require primality or irreducibility.  Malformed descriptors fix to the
+documented F2 degree-one default.  Element fixing and every reduced operation
+reuse runtime monic remainder rather than defining another division recursion.
+Canonical elements remain variable-length dense polynomials; exact-width
+degree-sized coefficient vectors are a separate coding view, with runtime
+mixed-radix rank/unrank and a `p^m` bound.  The representation, closure, vector
+round trips, bounded coding bijection, exhaustive duplicate-free carrier, and
+exact `p^m` representation count are certified without operation compatibility.
+Runtime remainder compatibility and the complete quotient-ring interface are
+the next proof seam and are not architectural field-validity assumptions.
+
 Descriptor assurance has three distinct layers.  An executable structural
 predicate recognizes and fixes representable descriptor data; a logical
 field-validity predicate additionally requires prime characteristic, positive
