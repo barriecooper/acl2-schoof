@@ -279,6 +279,8 @@
 (include-book "polynomial/generic/runtime-p-monic-divmod-pfield-correspondence-regression")
 (include-book "polynomial/generic/runtime-polynomial-basis")
 (include-book "polynomial/generic/runtime-polynomial-basis-operation-congruence")
+(include-book "polynomial/generic/runtime-polynomial-basis-ring")
+(include-book "polynomial/generic/runtime-polynomial-basis-ring-regression")
 (include-book "polynomial/generic/runtime-polynomial-basis-cardinality")
 (include-book "polynomial/generic/runtime-polynomial-basis-regression")
 (include-book "polynomial/generic/runtime-polynomial-basis-operation-congruence-regression")

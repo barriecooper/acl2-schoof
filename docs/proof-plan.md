@@ -54,8 +54,8 @@ add/neg/mul execution and closure, fixed-width vector round trips, rank/unrank
 bijection, exhaustive duplicate-free carrier, and exact `p^m` representation
 cardinality.  Runtime monic-remainder compatibility with polynomial addition, negation, and
 multiplication and descriptor add/neg/sub/mul fixer congruence are certified.
-The next tight proof group is the complete quotient-ring laws; this completed
-boundary was not needed by the earlier representation-only coding results.  Focused prime,
+The complete unconditional commutative quotient-ring laws are now certified;
+this boundary was not needed by the earlier representation-only coding results.  Focused prime,
 composite, reducible-modulus, and malformed-input regressions are certified.
 This reduced-ring/representation boundary does not add inverse,
 claim field laws, instantiate `GFIELD`, or decide logical field validity.
@@ -65,8 +65,8 @@ logical field-validity predicate requiring primality, positive extension
 degree, correct modulus degree, and irreducibility.  A certified executable
 validator is optional future work.  The subsequent order is:
 
-1. inverse and the descriptor field-law bridge under logical validity,
-   including characteristic/order and fixed-descriptor functional instances;
+1. logical field validity and inversion, followed by the descriptor field-law
+   bridge and fixed-context field correspondence, including characteristic/order and fixed-descriptor functional instances;
 2. the runtime short-curve bridge for descriptor-threaded `A,B`, discriminant,
    point fixing, and fixed-symbol correspondence;
 3. descriptor/curve-threaded runtime-`ell` division-polynomial and quotient

@@ -239,8 +239,10 @@ endpoints.  The representation-only proof layer additionally certifies both
 fixed-width vector round trips, both bounded rank/unrank round trips, an
 exhaustive duplicate-free unrank carrier, membership through fixing, and exact
 `p^m` carrier length.  These execution checks, guard proofs, and coding theorems
-do not establish the still-open add/neg/mul remainder compatibility, fixer
-congruence for reduced operations, or quotient-ring laws.
+are complemented by certified add/neg/mul remainder compatibility, reduced-operation
+fixer congruence, and complete unconditional commutative quotient-ring laws.
+Those laws cover composite coefficient moduli and reducible monic moduli as
+rings; they establish neither field validity nor inversion.
 
 Tagged point negation is the transparent total data transformation
 `curve-point-neg`: it fixes its input once, preserves infinity, and changes
