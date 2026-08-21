@@ -2,6 +2,7 @@
 
 (include-book "runtime-p-coefficient-inverse")
 (include-book "runtime-p-active-monic-subtraction")
+(include-book "runtime-p-monic-division-step")
 (local (include-book "arithmetic-5/top" :dir :system))
 
 (defun runtime-p-division-step-core (remainder divisor p)
@@ -416,3 +417,217 @@
                  (:instance runtime-p-division-step-inactive-reconstruction))
            :do-not-induct t :in-theory (theory 'minimal-theory))))
 
+(defthm runtime-p-division-step-active-length-decreases
+  (implies
+   (and (consp (runtime-p-normalize remainder p))
+        (consp (runtime-p-normalize divisor p))
+        (equal (runtime-p-mul (runtime-p-poly-leading-coefficient divisor p)
+                              (runtime-p-inv (runtime-p-poly-leading-coefficient divisor p) p) p)
+               (runtime-p-one p))
+        (<= (runtime-p-poly-degree divisor p)
+            (runtime-p-poly-degree remainder p)))
+   (< (len (runtime-p-division-step-next remainder divisor p))
+      (len (runtime-p-normalize remainder p))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-division-step-active-product-properties)
+                 (:instance runtime-p-division-step-next-active-equation)
+                 (:instance runtime-p-len-of-poly-sub-strict-when-equal-normalized-len-and-leading-equal
+                  (x remainder)
+                  (y (runtime-p-poly-mul
+                      (runtime-p-poly-monomial
+                       (runtime-p-mul
+                        (runtime-p-poly-leading-coefficient remainder p)
+                        (runtime-p-inv (runtime-p-poly-leading-coefficient divisor p) p) p)
+                       (- (runtime-p-poly-degree remainder p)
+                          (runtime-p-poly-degree divisor p)) p)
+                      divisor p)))
+                 (:instance runtime-p-normalize-when-canonical
+                  (xs (runtime-p-poly-mul
+                       (runtime-p-poly-monomial
+                        (runtime-p-mul
+                         (runtime-p-poly-leading-coefficient remainder p)
+                         (runtime-p-inv (runtime-p-poly-leading-coefficient divisor p) p) p)
+                        (- (runtime-p-poly-degree remainder p)
+                           (runtime-p-poly-degree divisor p)) p)
+                       divisor p))))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-division-step-active-degree-decreases
+  (implies
+   (and (consp (runtime-p-normalize remainder p))
+        (consp (runtime-p-normalize divisor p))
+        (equal (runtime-p-mul (runtime-p-poly-leading-coefficient divisor p)
+                              (runtime-p-inv (runtime-p-poly-leading-coefficient divisor p) p) p)
+               (runtime-p-one p))
+        (<= (runtime-p-poly-degree divisor p)
+            (runtime-p-poly-degree remainder p)))
+   (let ((next (runtime-p-division-step-next remainder divisor p)))
+     (or (not (consp next))
+         (< (runtime-p-poly-degree next p)
+            (runtime-p-poly-degree remainder p)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :cases ((consp (runtime-p-division-step-next remainder divisor p)))
+           :use ((:instance runtime-p-division-step-active-length-decreases)
+                 (:instance runtime-p-division-step-output-canonical)
+                 (:instance runtime-p-canonical-polynomial-p-of-normalize (xs remainder))
+                 (:instance runtime-p-degree-less-when-canonical-nonzero-and-len-less
+                  (x (runtime-p-normalize remainder p))
+                  (y (runtime-p-division-step-next remainder divisor p)))
+                 (:instance runtime-p-poly-degree-of-normalize (poly remainder)))
+           :in-theory (theory 'minimal-theory))))
+
+(local (defthm runtime-p-mul-one-one-for-division-step
+  (equal (runtime-p-mul 1 1 p) 1)
+  :hints (("Goal" :use ((:instance runtime-p-mul-one-right
+                          (x (runtime-p-one p)))
+                         (:instance runtime-p-coefficient-fix-of-one))))))
+
+(local (defthm runtime-p-inv-one-for-division-step
+  (equal (runtime-p-inv 1 p) 1)
+  :hints (("Goal" :use ((:instance runtime-p-inv-of-one))
+           :in-theory (enable runtime-p-one)))))
+
+(local (defthm runtime-p-mul-literal-one-for-division-step
+  (implies (runtime-p-coefficient-p x p)
+           (equal (runtime-p-mul x 1 p) x))
+  :hints (("Goal" :use ((:instance runtime-p-mul-one-right)
+                         (:instance runtime-p-coefficient-fix-when-recognized))
+           :in-theory (enable runtime-p-one)))))
+
+(defthm runtime-p-division-step-when-monic
+  (implies (equal (runtime-p-poly-leading-coefficient
+                   (runtime-p-normalize divisor p) p)
+                  (runtime-p-one p))
+           (equal (runtime-p-division-step remainder divisor p)
+                  (runtime-p-monic-division-step remainder divisor p)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-inv-of-one)
+                 (:instance runtime-p-mul-one-right
+                  (x (runtime-p-poly-leading-coefficient remainder p)))
+                 (:instance runtime-p-coefficient-p-of-poly-leading-coefficient
+                  (poly remainder))
+                 (:instance runtime-p-coefficient-fix-when-recognized
+                  (x (runtime-p-poly-leading-coefficient remainder p)))
+                 (:instance runtime-p-mul-one-right (x (runtime-p-one p)))
+                 (:instance runtime-p-coefficient-fix-of-one))
+           :in-theory
+           (e/d (runtime-p-division-step
+                 runtime-p-division-step-core
+                 runtime-p-monic-division-step
+                 runtime-p-monic-division-step-core
+                 runtime-p-poly-leading-coefficient-of-normalize
+                 runtime-p-mul-one-one-for-division-step
+                 runtime-p-inv-of-one
+                 runtime-p-inv-one-for-division-step
+                 runtime-p-mul-literal-one-for-division-step)
+                (runtime-p-inv runtime-p-inv-logical-definition
+                 runtime-p-one runtime-p-mul)))))
+
+(defthm runtime-p-division-step-term-when-monic
+  (implies (equal (runtime-p-poly-leading-coefficient
+                   (runtime-p-normalize divisor p) p)
+                  (runtime-p-one p))
+           (equal (runtime-p-division-step-term remainder divisor p)
+                  (runtime-p-monic-division-step-term remainder divisor p)))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance runtime-p-division-step-when-monic))
+           :in-theory (e/d (runtime-p-division-step-term
+                            runtime-p-monic-division-step-term)
+                           (runtime-p-division-step
+                            runtime-p-division-step-core
+                            runtime-p-monic-division-step
+                            runtime-p-monic-division-step-core)))))
+
+(defthm runtime-p-division-step-next-when-monic
+  (implies (equal (runtime-p-poly-leading-coefficient
+                   (runtime-p-normalize divisor p) p)
+                  (runtime-p-one p))
+           (equal (runtime-p-division-step-next remainder divisor p)
+                  (runtime-p-monic-division-step-next remainder divisor p)))
+  :rule-classes nil
+  :hints (("Goal" :use ((:instance runtime-p-division-step-when-monic))
+           :in-theory (e/d (runtime-p-division-step-next
+                            runtime-p-monic-division-step-next)
+                           (runtime-p-division-step
+                            runtime-p-division-step-core
+                            runtime-p-monic-division-step
+                            runtime-p-monic-division-step-core)))))
+
+(defthm runtime-p-division-step-prime-divisor-inverse-check
+  (implies (and (dm::primep (runtime-p-effective-modulus p))
+                (consp (runtime-p-normalize divisor p)))
+           (equal (runtime-p-mul
+                   (runtime-p-poly-leading-coefficient divisor p)
+                   (runtime-p-inv (runtime-p-poly-leading-coefficient divisor p) p) p)
+                  (runtime-p-one p)))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-mul-inv-right
+                            (x (runtime-p-poly-leading-coefficient divisor p)))
+                 (:instance runtime-p-poly-leading-coefficient-equal-zero
+                            (poly divisor))
+                 (:instance runtime-p-coefficient-p-of-poly-leading-coefficient
+                            (poly divisor))
+                 (:instance runtime-p-coefficient-fix-when-recognized
+                            (x (runtime-p-poly-leading-coefficient divisor p))))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-division-step-prime-active
+  (implies (and (dm::primep (runtime-p-effective-modulus p))
+                (consp (runtime-p-normalize remainder p))
+                (consp (runtime-p-normalize divisor p))
+                (<= (runtime-p-poly-degree divisor p)
+                    (runtime-p-poly-degree remainder p)))
+           (equal (runtime-p-division-step remainder divisor p)
+                  (let* ((coefficient
+                          (runtime-p-mul
+                           (runtime-p-poly-leading-coefficient remainder p)
+                           (runtime-p-inv (runtime-p-poly-leading-coefficient divisor p) p) p))
+                         (term (runtime-p-poly-monomial
+                                coefficient
+                                (- (runtime-p-poly-degree remainder p)
+                                   (runtime-p-poly-degree divisor p)) p)))
+                    (cons term
+                          (runtime-p-poly-sub
+                           remainder (runtime-p-poly-mul term divisor p) p)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-division-step-prime-divisor-inverse-check)
+                 (:instance runtime-p-division-step-active))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-division-step-active-properties
+  (implies
+   (and (consp (runtime-p-normalize remainder p))
+        (consp (runtime-p-normalize divisor p))
+        (equal (runtime-p-mul (runtime-p-poly-leading-coefficient divisor p)
+                              (runtime-p-inv (runtime-p-poly-leading-coefficient divisor p) p) p)
+               (runtime-p-one p))
+        (<= (runtime-p-poly-degree divisor p)
+            (runtime-p-poly-degree remainder p)))
+   (and (runtime-p-canonical-polynomial-p
+         (runtime-p-division-step-term remainder divisor p) p)
+        (runtime-p-canonical-polynomial-p
+         (runtime-p-division-step-next remainder divisor p) p)
+        (equal (runtime-p-poly-add
+                (runtime-p-poly-mul
+                 (runtime-p-division-step-term remainder divisor p)
+                 (runtime-p-normalize divisor p) p)
+                (runtime-p-division-step-next remainder divisor p) p)
+               (runtime-p-normalize remainder p))
+        (< (len (runtime-p-division-step-next remainder divisor p))
+           (len (runtime-p-normalize remainder p)))
+        (or (not (consp (runtime-p-division-step-next remainder divisor p)))
+            (< (runtime-p-poly-degree
+                (runtime-p-division-step-next remainder divisor p) p)
+               (runtime-p-poly-degree remainder p)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-division-step-output-canonical)
+                 (:instance runtime-p-division-step-reconstruction)
+                 (:instance runtime-p-division-step-active-length-decreases)
+                 (:instance runtime-p-division-step-active-degree-decreases))
+           :in-theory (theory 'minimal-theory))))
