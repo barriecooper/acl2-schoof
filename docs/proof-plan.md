@@ -51,8 +51,8 @@ prime-effective-modulus completeness, and exact recursive-monic correspondence
 in `runtime-p-divmod.lisp`; and structural recursive monic divmod, canonical
 results, reconstruction, and strict monic final bound in
 `runtime-p-monic-divmod.lisp`. Runtime polynomial XGCD and modular inverse are
-the next open boundary. Its length measure supersedes the rejected fuel
-design, so no fuel-adequacy obligation applies. Exact fixed-PFIELD monic
+the next open boundary. The structural divmod remainder-length measure
+supersedes the rejected fuel design, so no fuel-adequacy obligation applies. Exact fixed-PFIELD monic
 divmod, quotient, and remainder correspondence is also certified. The
 descriptor representation slice is described below; reduced-operation laws
 and field semantics remain subsequent open boundaries. The certified divmod is unconditional modular-ring execution and

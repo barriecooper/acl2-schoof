@@ -233,6 +233,29 @@ focused F7 regressions cover multi-step, exact, lower-degree, zero, and raw
 normalization cases. No correspondence is claimed for a malformed runtime
 modulus.
 
+`runtime-p-divmod`, `runtime-p-quotient`, and `runtime-p-remainder` extend this
+transparent interface to general divisors.  All are ordinary guard-`t`,
+guard-verified definitions with no logical/executable split.  The public divmod
+normalizes both arbitrary polynomial operands, so dotted tails and trailing
+zeroes inherit the established normalization semantics and malformed `p`
+continues to select effective modulus 2.  Its structural core measures the
+canonical current-remainder length, starts with quotient `nil`, and binds
+`runtime-p-division-step` exactly once per active iteration, reusing that call's
+term and strictly shorter next remainder.  Each public projection invokes the
+shared divmod interface rather than a separate recursion.
+
+Both results are unconditionally canonical, and quotient times the normalized
+divisor plus remainder unconditionally reconstructs the normalized dividend,
+including every inactive case.  The strict final-remainder bound is conditional
+on a nonempty normalized divisor whose leading coefficient passes the explicit
+`lc * runtime-p-inv(lc) = 1` check.  At a prime effective modulus the certified
+coefficient theorem makes this check complete for every nonempty normalized
+divisor.  When the normalized divisor is monic, the complete multiple-value
+result and both projections are exactly the existing recursive monic-divmod
+interfaces.  At arbitrary composite effective moduli the exponentiation-based
+check remains an executable admissibility test, not complete recognition of all
+units, so this boundary is not presented as a field algorithm.
+
 `runtime-polynomial-basis.lisp` adds a transparent descriptor and
 representation execution slice with guard `t` throughout.  Structurally valid
 descriptors are literal `(:polynomial-basis p modulus)` triples whose original

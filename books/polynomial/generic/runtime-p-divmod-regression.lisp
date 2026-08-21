@@ -29,7 +29,7 @@
   :hints (("Goal" :in-theory (theory 'minimal-theory)
            :use ((:instance runtime-p-divmod-final-remainder-bound)))))
 
-; Three-term quotient and two active reductions over F7.
+; Three-term quotient from three active reductions over F7.
 (assert-event
  (mv-let (q r) (runtime-p-divmod '(1 2 3 4) '(2 3) 7)
    (equal (list q r) '((5 4 6) (5)))))
@@ -54,7 +54,13 @@
 ; Eight is recognized by the explicit inverse check modulo composite 9.
 (assert-event
  (mv-let (q r) (runtime-p-divmod '(1 2 3) '(2 8) 9)
-   (and (consp q) (or (equal r nil) (< (runtime-p-poly-degree r 9) 1)))))
+   (and (equal q '(1 6))
+        (equal r '(8))
+        (equal (runtime-p-poly-add
+                (runtime-p-poly-mul
+                 q (runtime-p-normalize '(2 8) 9) 9)
+                r 9)
+               (runtime-p-normalize '(1 2 3) 9)))))
 ; Two is a unit modulo 9, but is deliberately not recognized by this check.
 (assert-event
  (mv-let (q r) (runtime-p-divmod '(1 2 3) '(1 2) 9)
