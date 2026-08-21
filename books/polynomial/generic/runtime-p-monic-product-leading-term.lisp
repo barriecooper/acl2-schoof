@@ -89,6 +89,11 @@
   :hints (("Goal" :induct (runtime-p-zero-prefix n xs)
            :in-theory (enable runtime-p-zero-prefix)))))
 
+(local (defthm consp-of-runtime-p-zero-prefix
+  (equal (consp (runtime-p-zero-prefix n xs))
+         (or (not (zp (nfix n))) (consp xs)))
+  :hints (("Goal" :in-theory (enable runtime-p-zero-prefix)))))
+
 (local (defthm runtime-p-raw-mul-monomial-left
   (implies (and (runtime-p-coefficient-list-p xs p)
                 (runtime-p-coefficient-p a p)
@@ -141,6 +146,137 @@
   :hints (("Goal"
            :use ((:instance runtime-p-raw-mul-monomial-left))
            :in-theory (enable runtime-p-canonical-polynomial-p)))))
+
+(local (defthm runtime-p-raw-monomial-product-canonical-when-top-nonzero
+  (implies (and (runtime-p-canonical-polynomial-p xs p)
+                (consp xs)
+                (not (equal (runtime-p-mul
+                             (runtime-p-coefficient-fix a p)
+                             (car (last xs)) p)
+                            (runtime-p-zero p))))
+           (runtime-p-canonical-polynomial-p
+            (runtime-p-raw-mul (runtime-p-poly-monomial a n p) xs p) p))
+  :hints (("Goal"
+           :use ((:instance runtime-p-raw-mul-monomial-left
+                            (a (runtime-p-coefficient-fix a p)))
+                 (:instance last-of-runtime-p-zero-prefix
+                            (xs (runtime-p-raw-scale
+                                 (runtime-p-coefficient-fix a p) xs p)))
+                 (:instance last-of-runtime-p-raw-scale
+                            (a (runtime-p-coefficient-fix a p))))
+           :in-theory (enable runtime-p-canonical-polynomial-p)))))
+
+(local (defthm runtime-p-raw-monomial-product-properties
+  (implies (and (runtime-p-canonical-polynomial-p xs p)
+                (consp xs)
+                (not (equal (runtime-p-mul
+                             (runtime-p-coefficient-fix a p)
+                             (car (last xs)) p)
+                            (runtime-p-zero p))))
+           (let ((raw (runtime-p-raw-mul
+                       (runtime-p-poly-monomial
+                        (runtime-p-coefficient-fix a p) n p) xs p)))
+             (and (runtime-p-canonical-polynomial-p raw p)
+                  (consp raw)
+                  (equal (len raw) (+ (nfix n) (len xs)))
+                  (equal (car (last raw))
+                         (runtime-p-mul
+                          (runtime-p-coefficient-fix a p)
+                          (car (last xs)) p)))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance
+                 runtime-p-raw-monomial-product-canonical-when-top-nonzero
+                  (a (runtime-p-coefficient-fix a p)))
+                 (:instance runtime-p-coefficient-p-of-fix (x a))
+                 (:instance runtime-p-mul-zero-left
+                            (x (car (last xs))))
+                 (:instance runtime-p-raw-mul-monomial-left
+                            (a (runtime-p-coefficient-fix a p)))
+                 (:instance len-of-runtime-p-zero-prefix
+                            (xs (runtime-p-raw-scale
+                                 (runtime-p-coefficient-fix a p) xs p)))
+                 (:instance consp-of-runtime-p-zero-prefix
+                            (xs (runtime-p-raw-scale
+                                 (runtime-p-coefficient-fix a p) xs p)))
+                 (:instance len-of-runtime-p-raw-scale
+                            (a (runtime-p-coefficient-fix a p)))
+                 (:instance consp-of-runtime-p-raw-scale
+                            (a (runtime-p-coefficient-fix a p)))
+                 (:instance last-of-runtime-p-zero-prefix
+                            (xs (runtime-p-raw-scale
+                                 (runtime-p-coefficient-fix a p) xs p)))
+                 (:instance last-of-runtime-p-raw-scale
+                            (a (runtime-p-coefficient-fix a p))))
+           :do-not-induct t
+           :in-theory (union-theories
+                       (theory 'minimal-theory)
+                       '(runtime-p-canonical-polynomial-p
+                         runtime-p-coefficient-fix-idempotent
+                         runtime-p-mul-zero-left
+                         runtime-p-zero
+                         runtime-p-poly-monomial-of-nfix))))))
+
+(defthm runtime-p-poly-mul-nonzero-monomial-properties
+  (let* ((fixed-coefficient (runtime-p-coefficient-fix coefficient p))
+         (shift (nfix exponent))
+         (normalized-divisor (runtime-p-normalize divisor p))
+         (term (runtime-p-poly-monomial fixed-coefficient shift p))
+         (top (runtime-p-mul
+               fixed-coefficient
+               (runtime-p-poly-leading-coefficient normalized-divisor p) p))
+         (product (runtime-p-poly-mul term normalized-divisor p)))
+    (implies
+     (and (consp normalized-divisor)
+          (not (equal top (runtime-p-zero p))))
+     (and (runtime-p-canonical-polynomial-p product p)
+          (consp product)
+          (equal (runtime-p-poly-degree product p)
+                 (+ shift (runtime-p-poly-degree normalized-divisor p)))
+          (equal (runtime-p-poly-leading-coefficient product p) top)
+          (equal (len product) (+ shift (len normalized-divisor))))))
+  :rule-classes nil
+  :hints (("Goal"
+           :use ((:instance runtime-p-raw-monomial-product-properties
+                  (a (runtime-p-coefficient-fix coefficient p))
+                  (n (nfix exponent))
+                  (xs (runtime-p-normalize divisor p)))
+                 (:instance runtime-p-canonical-polynomial-p-of-normalize
+                            (xs divisor))
+                 (:instance runtime-p-normalize-of-poly-monomial
+                            (a (runtime-p-coefficient-fix coefficient p))
+                            (n (nfix exponent)))
+                 (:instance runtime-p-normalize-when-canonical
+                            (xs (runtime-p-raw-mul
+                                 (runtime-p-poly-monomial
+                                  (runtime-p-coefficient-fix coefficient p)
+                                  (nfix exponent) p)
+                                 (runtime-p-normalize divisor p) p)))
+                 (:instance runtime-p-poly-degree-when-canonical-nonzero
+                            (poly (runtime-p-raw-mul
+                                   (runtime-p-poly-monomial
+                                    (runtime-p-coefficient-fix coefficient p)
+                                    (nfix exponent) p)
+                                   (runtime-p-normalize divisor p) p)))
+                 (:instance
+                  runtime-p-poly-leading-coefficient-when-canonical-nonzero
+                  (poly (runtime-p-raw-mul
+                         (runtime-p-poly-monomial
+                          (runtime-p-coefficient-fix coefficient p)
+                          (nfix exponent) p)
+                         (runtime-p-normalize divisor p) p)))
+                 (:instance runtime-p-poly-degree-when-canonical-nonzero
+                            (poly (runtime-p-normalize divisor p)))
+                 (:instance
+                  runtime-p-poly-leading-coefficient-when-canonical-nonzero
+                  (poly (runtime-p-normalize divisor p))))
+           :in-theory (union-theories
+                       (theory 'minimal-theory)
+                       '(runtime-p-poly-mul
+                         nfix
+                         runtime-p-coefficient-fix-idempotent
+                         runtime-p-normalize-of-poly-monomial
+                         runtime-p-normalize-idempotent)))))
 
 (defthm runtime-p-poly-mul-nonzero-monomial-by-monic-properties
   (implies
