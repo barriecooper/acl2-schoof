@@ -45,10 +45,13 @@ guard-verified one-step monic reduction interface in
 `runtime-p-monic-division-step.lisp`; the complete runtime unit-leading one-step
 interface (reconstruction, strict decrease, exact monic correspondence, and
 prime-effective-modulus activity completeness) in
-`runtime-p-division-step.lisp`; recursive general divmod is the next open
-boundary; and structural recursive monic divmod,
-canonical results, reconstruction, and strict monic final bound in
-`runtime-p-monic-divmod.lisp`. Its length measure supersedes the rejected fuel
+`runtime-p-division-step.lisp`; structural recursive general divmod, canonical
+results, unconditional reconstruction, an explicit-inverse-check final bound,
+prime-effective-modulus completeness, and exact recursive-monic correspondence
+in `runtime-p-divmod.lisp`; and structural recursive monic divmod, canonical
+results, reconstruction, and strict monic final bound in
+`runtime-p-monic-divmod.lisp`. Runtime polynomial XGCD and modular inverse are
+the next open boundary. Its length measure supersedes the rejected fuel
 design, so no fuel-adequacy obligation applies. Exact fixed-PFIELD monic
 divmod, quotient, and remainder correspondence is also certified. The
 descriptor representation slice is described below; reduced-operation laws
