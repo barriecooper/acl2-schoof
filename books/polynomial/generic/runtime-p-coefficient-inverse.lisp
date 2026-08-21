@@ -43,6 +43,14 @@
   (equal (runtime-p-inv (runtime-p-zero p) p) (runtime-p-zero p))
   :hints (("Goal" :in-theory (enable runtime-p-inv))))
 
+(defthm runtime-p-inv-of-one
+  (equal (runtime-p-inv (runtime-p-one p) p) (runtime-p-one p))
+  :hints (("Goal" :in-theory (enable runtime-p-inv
+                                     runtime-p-one
+                                     runtime-p-coefficient-fix
+                                     pfield::inv
+                                     pfield::minus1))))
+
 (defthm runtime-p-inv-malformed-modulus
   (implies (not (and (integerp p) (<= 2 p)))
            (equal (runtime-p-inv x p) (runtime-p-inv x 2)))
