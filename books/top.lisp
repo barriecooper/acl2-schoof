@@ -275,6 +275,8 @@
 (include-book "polynomial/generic/runtime-p-division-step-regression")
 (include-book "polynomial/generic/runtime-p-monic-divmod")
 (include-book "polynomial/generic/runtime-p-monic-divmod-regression")
+(include-book "polynomial/generic/runtime-p-divmod")
+(include-book "polynomial/generic/runtime-p-divmod-regression")
 (include-book "polynomial/generic/runtime-p-monic-remainder-coset")
 (include-book "polynomial/generic/runtime-p-monic-remainder-coset-regression")
 (include-book "polynomial/generic/runtime-p-monic-remainder-operations")

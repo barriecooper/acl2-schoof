@@ -34,9 +34,15 @@ additive cancellation of equal leading coefficients, not unrestricted product-
 degree additivity.  The transparent, total runtime-`p` monic division step now
 packages that calculation with certified active and inactive equations,
 canonical outputs, unconditional reconstruction, and strict active decrease.
-Recursive monic divmod now has a certified structural length measure, canonical
+Recursive monic divmod has a certified structural length measure, canonical
 quotient/remainder, unconditional reconstruction, and a strict final bound for
-normalized-monic divisors. Exact divmod, quotient, and remainder correspondence
+normalized-monic divisors.  Recursive general runtime-`p` divmod uses the same
+structural measure and the unit-leading step, with unconditional reconstruction
+and a final bound under the explicit leading-coefficient inverse check.  Prime
+effective moduli make that check complete for every nonzero divisor, and
+normalized-monic divisors give exact pair and projection correspondence with
+the recursive monic implementation.  At composite moduli the exponentiation-
+based check is deliberately not complete recognition of all units. Exact divmod, quotient, and remainder correspondence
 with fixed PFIELD long division is certified for normalized-monic divisors at
 `pfield-modulus`. These runtime seams follow the PFIELD
 and generic ascending-coefficient algorithms;

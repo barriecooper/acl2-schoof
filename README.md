@@ -101,11 +101,16 @@ also certified, including canonical results, reconstruction, and the strict
 monic final bound, together with exact fixed-PFIELD monic divmod, quotient, and
 remainder correspondence. The descriptor shape/fixing, element
 representation/fixing/equality, operation execution and closure, vector coding,
-rank/unrank, carrier, and exact `p^m` count are certified.  Runtime monic-remainder compatibility with addition, negation, and
-multiplication and reduced-operation fixer congruence are certified.  The
-immediate open boundary is the complete quotient-ring laws.  Inverse, logical descriptor field validity and field laws,
-fixed-descriptor `GFIELD`/finite-field instantiation, runtime curves, and later
-Schoof layers remain open.  Structurally valid composite-modulus or reducible-
+rank/unrank, carrier, exact `p^m` count, and complete unconditional commutative
+quotient-ring laws are certified.  Runtime monic-remainder compatibility with
+addition, negation, and multiplication and reduced-operation fixer congruence
+are certified.  Transparent recursive runtime-`p` general divmod is also
+certified: composite-modulus execution and its final bound use the explicit
+leading-coefficient inverse check, while prime effective moduli make that check
+complete for nonzero divisors.  Runtime polynomial XGCD and modular inverse are
+the immediate next open boundary.  Logical descriptor field validity and field
+laws, fixed-descriptor `GFIELD`/finite-field instantiation, runtime curves, and
+later Schoof layers remain open.  Structurally valid composite-modulus or reducible-
 polynomial descriptors are reduced rings, not thereby finite fields.
 F7, F11, and F7X2 remain examples and instances rather than owners of this
 general executable architecture.
