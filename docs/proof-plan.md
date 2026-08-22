@@ -54,9 +54,11 @@ results, reconstruction, and strict monic final bound in
 is also certified: one admissibility-gated recursive chain supplies canonical
 projections, an exact first-projection GCD interface, normalization dependence,
 and an unconditional Bézout identity. Prime-effective-modulus
-divisibility/common-divisor/greatestness semantics, monic normalization and
-XGCD post-processing, and the conditional runtime polynomial modular inverse
-are the next open runtime boundary. The structural divmod and XGCD
+monic-associate construction and general-remainder invariance under inverse
+leading-coefficient scaling are also certified. Prime-effective-modulus
+divisibility/common-divisor/Euclidean-step and raw-GCD semantics are the next
+open runtime boundary; monic XGCD post-processing and the conditional runtime
+polynomial modular inverse follow. The structural divmod and XGCD
 remainder-length measures supersede the rejected fuel design, so no
 fuel-adequacy obligation applies. Exact fixed-PFIELD monic
 divmod, quotient, and remainder correspondence is also certified. The
@@ -82,20 +84,20 @@ logical field-validity predicate requiring primality, positive extension
 degree, correct modulus degree, and irreducibility.  A certified executable
 validator is optional future work.  The subsequent order is:
 
-1. complete runtime polynomial prime-GCD semantics, monic XGCD, and conditional
-   modular inversion;
-2. polynomial-basis descriptor inversion and the prime-plus-irreducible logical
+1. complete runtime polynomial prime divisibility and raw-GCD semantics;
+2. complete runtime monic XGCD and conditional modular inversion;
+3. polynomial-basis descriptor inversion and the prime-plus-irreducible logical
    field-validity bridge, followed by the descriptor field-law bridge and
    fixed-context field correspondence, including characteristic/order and
    fixed-descriptor functional instances;
-3. the runtime short-curve bridge for descriptor-threaded `A,B`, discriminant,
+4. the runtime short-curve bridge for descriptor-threaded `A,B`, discriminant,
    point fixing, and fixed-symbol correspondence;
-4. descriptor/curve-threaded runtime-`ell` division-polynomial and quotient
+5. descriptor/curve-threaded runtime-`ell` division-polynomial and quotient
    trace execution, including bounded candidate search and exhaustive
    ordinary/exceptional branch dispatch;
-5. generic cardinality-`q` Frobenius and torsion semantics proving that the
+6. generic cardinality-`q` Frobenius and torsion semantics proving that the
    accepted residue is the cardinality-defined trace modulo `ell`; and
-6. auxiliary-prime accumulation, centered CRT, Hasse uniqueness, and final
+7. auxiliary-prime accumulation, centered CRT, Hasse uniqueness, and final
    composition with the independently specified rational-point cardinality.
 
 The older specialized sequence is retained below as historical/detail context,

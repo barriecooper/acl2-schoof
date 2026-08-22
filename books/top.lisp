@@ -281,6 +281,8 @@
 (include-book "polynomial/generic/runtime-p-xgcd-regression")
 (include-book "polynomial/generic/runtime-p-monic-remainder-coset")
 (include-book "polynomial/generic/runtime-p-monic-remainder-coset-regression")
+(include-book "polynomial/generic/runtime-p-monic-associate")
+(include-book "polynomial/generic/runtime-p-monic-associate-regression")
 (include-book "polynomial/generic/runtime-p-monic-remainder-operations")
 (include-book "polynomial/generic/runtime-p-monic-remainder-operations-regression")
 (include-book "polynomial/generic/runtime-p-monic-divmod-pfield-correspondence")
