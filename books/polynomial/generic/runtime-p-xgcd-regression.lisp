@@ -51,3 +51,39 @@
   :hints (("Goal"
            :use ((:instance runtime-p-extended-euclidean-gcd-bezout))
            :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-xgcd-minimal-normalization-client
+  (and
+   (equal
+    (mv-nth 0
+            (runtime-p-extended-euclidean-gcd
+             (runtime-p-normalize first p)
+             (runtime-p-normalize second p) p))
+    (runtime-p-euclidean-gcd first second p))
+   (equal
+    (mv-nth 1
+            (runtime-p-extended-euclidean-gcd
+             (runtime-p-normalize first p)
+             (runtime-p-normalize second p) p))
+    (mv-nth 1 (runtime-p-extended-euclidean-gcd first second p)))
+   (equal
+    (mv-nth 2
+            (runtime-p-extended-euclidean-gcd
+             (runtime-p-normalize first p)
+             (runtime-p-normalize second p) p))
+    (mv-nth 2 (runtime-p-extended-euclidean-gcd first second p)))
+   (equal
+    (runtime-p-euclidean-gcd
+     (runtime-p-normalize first p)
+     (runtime-p-normalize second p) p)
+    (runtime-p-euclidean-gcd first second p)))
+  :hints
+  (("Goal"
+    :use ((:instance runtime-p-extended-euclidean-gcd-gcd-of-normalizes)
+          (:instance
+           runtime-p-extended-euclidean-gcd-first-coefficient-of-normalizes)
+          (:instance
+           runtime-p-extended-euclidean-gcd-second-coefficient-of-normalizes)
+          (:instance runtime-p-euclidean-gcd-is-first-xgcd-projection)
+          (:instance runtime-p-euclidean-gcd-of-normalizes))
+    :in-theory (theory 'minimal-theory))))

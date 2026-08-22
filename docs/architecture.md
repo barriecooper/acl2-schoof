@@ -44,10 +44,20 @@ normalized-monic divisors give exact pair and projection correspondence with
 the recursive monic implementation.  At composite moduli the exponentiation-
 based check is deliberately not complete recognition of all units. Exact divmod, quotient, and remainder correspondence
 with fixed PFIELD long division is certified for normalized-monic divisors at
-`pfield-modulus`. These runtime seams follow the PFIELD
-and generic ascending-coefficient algorithms;
-they imply neither that the original `p` is prime nor that a quotient is a
-field.
+`pfield-modulus`. The raw runtime extended Euclidean boundary uses one
+transparent, guard-verified recursive chain, measured by the normalized current
+divisor's length.  Each active iteration binds one shared `runtime-p-divmod`
+result and reuses its quotient and remainder.  Activity additionally requires
+the current divisor to be nonempty and its leading coefficient to pass the same
+explicit inverse check used by general divmod.  Failure of that check is a total
+inactive result over composite effective moduli.  All three XGCD projections
+are canonical and depend only on normalized inputs, the raw GCD interface is
+exactly the first projection, and the Bézout identity is unconditional for the
+chain that actually executes.  Prime-effective-modulus divisibility and
+greatestness have not yet been certified, so this raw result is not currently
+claimed to be a greatest common divisor.  These runtime seams follow the PFIELD
+and generic ascending-coefficient algorithms; they imply neither that the
+original `p` is prime nor that a quotient is a field.
 
 The first descriptor slice represents a polynomial-basis descriptor as the
 transparent triple `(:polynomial-basis p modulus)`.  Structural recognition
@@ -64,10 +74,12 @@ exact `p^m` representation count are certified without operation compatibility.
 Runtime add/neg/mul remainder compatibility, reduced-operation fixer
 congruence, and the complete exact-equality commutative quotient-ring interface
 are certified for arbitrary inputs. Composite coefficient moduli and reducible
-monic polynomial moduli remain rings rather than fields. The next seam is
-polynomial-basis inversion and the prime-plus-irreducible descriptor-validity
-bridge with fixed-context field correspondence; no curve or Schoof field layer
-is yet supplied.
+monic polynomial moduli remain rings rather than fields. The next runtime seam
+is prime-effective-modulus GCD semantics, monic normalization/XGCD
+post-processing, and the conditional runtime polynomial modular inverse.
+Polynomial-basis descriptor inversion and the prime-plus-irreducible
+field-validity bridge with fixed-context field correspondence follow that
+runtime prerequisite; no curve or Schoof field layer is yet supplied.
 
 Descriptor assurance has three distinct layers.  An executable structural
 predicate recognizes and fixes representable descriptor data; a logical

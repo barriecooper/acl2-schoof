@@ -101,6 +101,71 @@
   :hints (("Goal" :in-theory (enable runtime-p-extended-euclidean-gcd))))
 
 (local
+ (defthm runtime-p-extended-euclidean-gcd-of-normalizes
+   (and
+    (equal
+     (mv-nth 0
+             (runtime-p-extended-euclidean-gcd
+              (runtime-p-normalize first p)
+              (runtime-p-normalize second p) p))
+     (mv-nth 0 (runtime-p-extended-euclidean-gcd first second p)))
+    (equal
+     (mv-nth 1
+             (runtime-p-extended-euclidean-gcd
+              (runtime-p-normalize first p)
+              (runtime-p-normalize second p) p))
+     (mv-nth 1 (runtime-p-extended-euclidean-gcd first second p)))
+    (equal
+     (mv-nth 2
+             (runtime-p-extended-euclidean-gcd
+              (runtime-p-normalize first p)
+              (runtime-p-normalize second p) p))
+     (mv-nth 2 (runtime-p-extended-euclidean-gcd first second p))))
+   :hints
+   (("Goal"
+     :induct (runtime-p-extended-euclidean-gcd first second p)
+     :in-theory
+     (e/d (runtime-p-extended-euclidean-gcd)
+          (runtime-p-divmod runtime-p-normalize)))
+    (and stable-under-simplificationp
+         '(:use ((:instance runtime-p-divmod-of-normalize
+                            (f first) (g second)))
+           :in-theory (disable runtime-p-divmod runtime-p-normalize))))))
+
+(defthm runtime-p-extended-euclidean-gcd-gcd-of-normalizes
+  (equal
+   (mv-nth 0
+           (runtime-p-extended-euclidean-gcd
+            (runtime-p-normalize first p)
+            (runtime-p-normalize second p) p))
+   (mv-nth 0 (runtime-p-extended-euclidean-gcd first second p)))
+  :hints (("Goal"
+           :use runtime-p-extended-euclidean-gcd-of-normalizes
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-extended-euclidean-gcd-first-coefficient-of-normalizes
+  (equal
+   (mv-nth 1
+           (runtime-p-extended-euclidean-gcd
+            (runtime-p-normalize first p)
+            (runtime-p-normalize second p) p))
+   (mv-nth 1 (runtime-p-extended-euclidean-gcd first second p)))
+  :hints (("Goal"
+           :use runtime-p-extended-euclidean-gcd-of-normalizes
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-extended-euclidean-gcd-second-coefficient-of-normalizes
+  (equal
+   (mv-nth 2
+           (runtime-p-extended-euclidean-gcd
+            (runtime-p-normalize first p)
+            (runtime-p-normalize second p) p))
+   (mv-nth 2 (runtime-p-extended-euclidean-gcd first second p)))
+  :hints (("Goal"
+           :use runtime-p-extended-euclidean-gcd-of-normalizes
+           :in-theory (theory 'minimal-theory))))
+
+(local
  (defthm runtime-p-xgcd-projections-canonical
    (and (runtime-p-canonical-polynomial-p
          (mv-nth 0 (runtime-p-extended-euclidean-gcd first second p)) p)
@@ -132,6 +197,30 @@
   (equal (runtime-p-euclidean-gcd first second p)
          (mv-nth 0 (runtime-p-extended-euclidean-gcd first second p)))
   :hints (("Goal" :in-theory (enable runtime-p-euclidean-gcd))))
+
+(defthm runtime-p-euclidean-gcd-of-normalizes
+  (equal (runtime-p-euclidean-gcd
+          (runtime-p-normalize first p)
+          (runtime-p-normalize second p) p)
+         (runtime-p-euclidean-gcd first second p))
+  :hints (("Goal"
+           :use ((:instance
+                  runtime-p-extended-euclidean-gcd-gcd-of-normalizes)
+                 (:instance runtime-p-euclidean-gcd-is-first-xgcd-projection)
+                 (:instance runtime-p-euclidean-gcd-is-first-xgcd-projection
+                            (first (runtime-p-normalize first p))
+                            (second (runtime-p-normalize second p))))
+           :in-theory (theory 'minimal-theory))))
+
+(defthm runtime-p-euclidean-gcd-canonical
+  (runtime-p-canonical-polynomial-p
+   (runtime-p-euclidean-gcd first second p) p)
+  :hints (("Goal"
+           :use ((:instance
+                  runtime-p-euclidean-gcd-is-first-xgcd-projection)
+                 (:instance
+                  runtime-p-extended-euclidean-gcd-gcd-canonical))
+           :in-theory (theory 'minimal-theory))))
 
 (local
  (defthm runtime-p-poly-mul-normalize-right-for-xgcd
