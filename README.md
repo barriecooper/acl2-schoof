@@ -107,8 +107,7 @@ addition, negation, and multiplication and reduced-operation fixer congruence
 are certified.  Transparent recursive runtime-`p` general divmod is also
 certified: composite-modulus execution and its final bound use the explicit
 leading-coefficient inverse check, while prime effective moduli make that check
-complete for nonzero divisors.  Runtime polynomial XGCD and modular inverse are
-the immediate next open boundary.  Logical descriptor field validity and field
+complete for nonzero divisors.  The runtime-`p` raw XGCD recursion, canonical projections, exact GCD projection, and unconditional Bézout identity are certified. Prime-only divisibility/greatestness semantics, monic post-processing, and modular inverse remain the immediate open boundary.  Logical descriptor field validity and field
 laws, fixed-descriptor `GFIELD`/finite-field instantiation, runtime curves, and
 later Schoof layers remain open.  Structurally valid composite-modulus or reducible-
 polynomial descriptors are reduced rings, not thereby finite fields.

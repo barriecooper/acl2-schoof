@@ -353,6 +353,10 @@ a certified correspondence theorem to `curve-point-nat-mul`. Focused concrete
 regressions must demonstrate that the fast branch executes with practical
 behaviour, but do not replace that correspondence proof.
 
+## Runtime-`p` raw XGCD totalisation
+
+`runtime-p-extended-euclidean-gcd` is the single authoritative runtime Euclidean remainder chain. Its measure is the length of the normalized current divisor. An iteration is active only when that divisor is nonempty and its leading coefficient satisfies the same explicit `lc * runtime-p-inv(lc) = 1` check used by general division. The iteration binds `runtime-p-divmod` once and reuses its quotient and remainder. A failed check terminates with the normalized current dividend, polynomial-one first coefficient, and zero second coefficient. Thus composite and malformed inputs execute totally, while prime effective moduli make every nonempty divisor admissible. All public definitions have guard `t` and verified guards. The certified unconditional result is canonicality plus Bézout for the executed chain; complete divisibility/greatestness semantics, monic post-processing, modular inverse, and descriptor field validity remain separate open boundaries.
+
 ## Guard and termination boundaries
 
 Recursive polynomial division uses a certified strict decrease of the
