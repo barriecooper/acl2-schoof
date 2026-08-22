@@ -280,3 +280,22 @@ Recursive general divmod is certified with conditional composite-modulus bounds
 and prime-effective-modulus completeness. Runtime raw XGCD, its projection, and unconditional Bézout are certified. Prime GCD semantics, monic XGCD, and modular inverse remain open; descriptor inversion and field validity
 remain open.  Composite moduli remain governed only by the executable explicit
 inverse check.
+
+### Runtime prime-GCD semantic prerequisite
+
+The next runtime-`p` GCD semantics boundary remains blocked on a reusable
+**general-remainder scalar-associate theorem**.  Under
+`dm::primep(runtime-p-effective-modulus(p))`, the required statement must show
+that replacing a nonzero normalized divisor by its inverse-leading-coefficient
+scale leaves `runtime-p-remainder` unchanged (equivalently, that the general
+remainder agrees with `runtime-p-monic-remainder` for that monic associate).
+The existing books prove general-divmod reconstruction and a prime-conditioned
+degree bound, and separately prove monic-remainder coset uniqueness and
+addition/negation/multiplication compatibility, but they do not yet connect a
+general divisor to its monic associate.  Opening the general divider can prove
+isolated cases such as self-remainder by expanding the existing step; it does
+not supply the reusable congruence needed for exact multiples, linear
+combinations, the Euclidean-step equivalence, and both divisibility directions
+of raw-GCD correctness.  This is a proof-interface obligation, not evidence of
+a mathematical impossibility and not permission to add another divider or GCD
+recursion.
