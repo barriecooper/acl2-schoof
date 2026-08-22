@@ -256,6 +256,19 @@ interfaces.  At arbitrary composite effective moduli the exponentiation-based
 check remains an executable admissibility test, not complete recognition of all
 units, so this boundary is not presented as a field algorithm.
 
+`runtime-p-poly-monic-normalize` is a separate transparent guard-`t`,
+guard-verified post-processing operation, not another divider.  It normalizes
+its arbitrary polynomial input and scales it by the existing total runtime
+coefficient inverse of its normalized leading coefficient.  Canonical output,
+normalization dependence, normalized fixed output, and the exact zero case hold
+for every `p`.  Under primality of `runtime-p-effective-modulus(p)` and a
+nonempty normalized input, the output is nonempty and monic, preserves length
+and degree, and scales back to the original normalized polynomial.  Under the
+same hypotheses, certified reconstruction and monic-remainder uniqueness show
+that both general and monic remainder agree modulo this associate.  Composite
+moduli retain total concrete execution only; guard verification and execution
+do not establish monicity or semantic remainder invariance there.
+
 `runtime-polynomial-basis.lisp` adds a transparent descriptor and
 representation execution slice with guard `t` throughout.  Structurally valid
 descriptors are literal `(:polynomial-basis p modulus)` triples whose original

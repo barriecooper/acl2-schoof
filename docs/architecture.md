@@ -59,6 +59,16 @@ claimed to be a greatest common divisor.  These runtime seams follow the PFIELD
 and generic ascending-coefficient algorithms; they imply neither that the
 original `p` is prime nor that a quotient is a field.
 
+The intervening `runtime-p-poly-monic-normalize` seam is transparent and total:
+it inverse-scales a normalized polynomial by its leading coefficient.  Its
+canonicality, normalization dependence, fixed-output property, and zero case
+are unconditional.  Prime effective modulus plus a nonempty normalized input
+gives a nonempty monic associate with identical length and degree and an exact
+scale-back equation.  Reconstruction through that equation and the existing
+monic-coset uniqueness theorem certify that general remainder is unchanged by
+passing to the associate.  Composite moduli execute the same definition but
+receive neither a monicity nor a remainder-invariance claim.
+
 The first descriptor slice represents a polynomial-basis descriptor as the
 transparent triple `(:polynomial-basis p modulus)`.  Structural recognition
 requires the original `p` to be an integer at least two and the polynomial to
@@ -75,8 +85,9 @@ Runtime add/neg/mul remainder compatibility, reduced-operation fixer
 congruence, and the complete exact-equality commutative quotient-ring interface
 are certified for arbitrary inputs. Composite coefficient moduli and reducible
 monic polynomial moduli remain rings rather than fields. The next runtime seam
-is prime-effective-modulus GCD semantics, monic normalization/XGCD
-post-processing, and the conditional runtime polynomial modular inverse.
+is prime-effective-modulus divisibility, Euclidean-step compatibility, and raw
+GCD semantics.  Monic XGCD post-processing and the conditional runtime
+polynomial modular inverse follow that boundary.
 Polynomial-basis descriptor inversion and the prime-plus-irreducible
 field-validity bridge with fixed-context field correspondence follow that
 runtime prerequisite; no curve or Schoof field layer is yet supplied.
